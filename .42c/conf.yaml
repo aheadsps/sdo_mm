@@ -1,0 +1,5 @@
+apis:
+  oas.yml:
+    alias: mos.metro.sdo-project
+  oas.yaml:
+    alias: orders-api

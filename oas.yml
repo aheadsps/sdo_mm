@@ -1,0 +1,425 @@
+openapi: 3.0.3
+
+info:
+  title: MOS.METRO.SDO project
+  description: Платформа удаленного обучения специалистов дорожных профессий
+  version: 0.1.0
+
+servers:
+  - url: https://localhost:8000/api/v1
+    description: Адресс Производственного сервера
+
+paths:
+
+  /profile:
+    get:
+      operationId: api_profile_retrieve
+      summary: Получение профиля пользователя
+      tags:
+        - Profile
+      responses:
+        '200':
+          description: 'JSON ответ сервера с данным профиля'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Profile'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    put:
+      operationId: api_profile_update
+      summary: Обновление данных о профиле
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Profile'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Profile'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Profile'
+        required: true
+      responses:
+        '200':
+          description: 'JSON ответ с подтверждением об Обновлении данных'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Profile'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+
+components:
+  responses:
+    NotFound:
+      description: Ресурс не был найден
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    UnprocessableEntity:
+      description: Полезная нагрузка имеет не валидные данные
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+  schemas:
+    Error:
+      type: object
+      properties:
+        detail:
+          oneOf:
+            - type: string
+            - type: array
+      required:
+        - detail
+      additionalProperties: false
+
+    User:
+      description: Сущность учетной записи
+      additionalProperties: false
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        email:
+          type: string
+          readOnly: false
+          nullable: false
+          format: email
+        password:
+          type: string
+          format: byte
+          nullable: false
+          readOnly: false
+          maxLength: 128
+        is_staff:
+          type: boolean
+          default: false
+          readOnly: true
+          nullable: false
+          description: Указатель на права методиста
+        is_active:
+          type: boolean
+          default: true
+          readOnly: true
+          nullable: false
+          description: Активность пользователя (возможность пользоваться сервисом)
+        date_joined:
+          type: string
+          format: date-time
+          nullable: false
+          description: Дата регистрации
+        last_login:
+          type: string
+          format: date-time
+          nullable: false
+          description: Дата последнего входа
+        profession:
+          type: object
+          $ref: '#/components/schemas/Profession'
+        profile:
+          type: object
+          $ref: '#/components/schemas/Profile'
+          readOnly: true
+          nullable: true
+        events:
+          type: array
+          readOnly: false
+          nullable: true
+          items:
+            $ref: '#/components/schemas/Event'
+            description: Задачи которые получил пользователь
+      required:
+        - id
+        - email
+        - password
+
+    Profile:
+      description: Сущность профиля
+      additionalProperties: false
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        user:
+          type: object
+          $ref: "#/components/schemas/User"
+          readOnly: true
+          nullable: false
+        first_name:
+          type: string
+          readOnly: false
+          maxLength: 150
+          nullable: true
+        last_name:
+          type: string
+          readOnly: false
+          maxLength: 150
+          nullable: true
+        phone:
+          type: string
+          readOnly: false
+          nullable: true
+          format: phone_number
+        image:
+          type: string
+          readOnly: false
+          nullable: true
+          format: path
+        date_birthday:
+          type: string
+          readOnly: false
+          nullable: true
+          format: date
+      required:
+        - id
+        - user
+
+    Сourse:
+      description: Сущность курса
+      additionalProperties: false
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 256
+          readOnly: false
+          nullable: false
+        description:
+          type: string
+          readOnly: false
+          nullable: true
+        create_date:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: false
+        update_date:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: false
+        image:
+          type: string
+          format: path
+          readOnly: false
+          nullable: true
+        status:
+          type: string
+          nullable: false
+          enum:
+            - expected
+            - started
+            - closed
+      required:
+        - id
+        - name
+        - start_date
+        - end_date
+
+    Lesson:
+      description: Сущность урока
+      additionalProperties: false
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 256
+          readOnly: false
+          nullable: false
+        course:
+          type: object
+          readOnly: false
+          nullable: false
+          $ref: '#/components/schemas/Сourse'
+        create_date:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: false
+        update_date:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: false
+        status:
+          description: Статус прохождения урока
+          nullable: false
+          enum:
+            - done
+            - process
+            - failed
+
+    Step:
+      description: Шаги урока
+      properties:
+        title:
+          type: string
+          maxLength: 256
+          readOnly: false
+          nullable: false
+        content_text:
+          type: string
+          readOnly: false
+          nullable: true
+
+    Question:
+      description: Сущность тестов для урока
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        text:
+          type: string
+          readOnly: false
+          nullable: false
+        image:
+          type: string
+          format: path
+          description: Изображения для тестового вопроса
+          readOnly: false
+          nullable: true
+        instance:
+          type: object
+          oneOf:
+            - $ref: '#/components/schemas/Lesson'
+            - $ref: '#/components/schemas/Сourse'
+          description: К сущности относится вопрос, если к Lesson - тогда это обычный вопрос, если к Course - финальный (экзаменационный)
+
+    Answer:
+      description: Сущность ответов на тесты
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        question:
+          type: object
+          nullable: false
+          $ref: '#/components/schemas/Question'
+        text:
+          type: string
+          nullable: false
+          readOnly: false
+        correct:
+          type: boolean
+      required:
+        - question
+        - text
+        - correct
+
+    ContentAttachment:
+      description: Сущность для множественного присвоения мультимедийных файлов к урокам
+      additionalProperties: false
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        file:
+          type: string
+          readOnly: false
+          nullable: false
+          format: path
+        file_type:
+          type: string
+          readOnly: false
+          nullable: false
+          enum:
+            - Image
+            - Video
+        step:
+          type: object
+          $ref: '#/components/schemas/Step'
+          nullable: false
+      required:
+        - file
+        - file_type
+        - lesson
+
+    Group:
+      description: Сущность группы (потока)
+      additionalProperties: false
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        profession:
+          ...
+        calendar:
+          ...
+        students:
+          type: array
+          minItems: 1
+          description: Все студенты в группе
+          nullable: true
+          items:
+            $ref: '#/components/schemas/User'
+
+    Calendar:
+      type: object
+      ...
+
+    Profession:
+      description: Профессии
+      type: object
+      properties:
+        en_name:
+          type: string
+          maxLength: 256
+          nullable: false
+        ru_name:
+          type: string
+          maxLength: 256
+          nullable: false
+
+    Event:
+      description: Сущность задачи (курс) которая присваивается пользователю
+      additionalProperties: false
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        course:
+          type: object
+          $ref: '#/components/schemas/Сourse'
+        done_lessons:
+          type: integer
+          readOnly: true
+        start_date:
+          type: string
+          format: date-time
+          readOnly: false
+          nullable: true
+        end_date:
+          type: string
+          format: date-time
+          readOnly: false
+          nullable: true
+        status:
+          description: Статус прохождения курса
+          enum:
+            - done
+            - process
+            - failed

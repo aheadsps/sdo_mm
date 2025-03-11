@@ -1,0 +1,5 @@
+{
+    "yaml.schemas": {
+        "openapi:v3": "file:///Users/pavlo/mos_metro/MOS.metro.SDO/oas.yaml"
+    }
+}
