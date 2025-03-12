@@ -111,6 +111,30 @@ paths:
                   type: string
                   minLength: 8
                   maxLength: 128
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  maxLength: 255
+                password:
+                  type: string
+                  minLength: 8
+                  maxLength: 128
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  maxLength: 255
+                password:
+                  type: string
+                  minLength: 8
+                  maxLength: 128
       responses:
         '200':
           description: JSON ответ с токеном
@@ -128,6 +152,7 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
+
   /logout:
     get:
       operationId: api_authemail_logout
@@ -143,6 +168,128 @@ paths:
                   success:
                     type: string
                     default: User logged out.
+  /event/{event_id}:
+    get:
+      operationId: api_events_get
+      parameters:
+        - in: path
+          name: event_id
+          required: true
+          schema:
+            type: integer
+      summary: Получение эвента по ID (только на текущего пользователя, в ином случае доступ только администрации или методисту)
+      responses:
+        '200':
+          description: JSON ответ с деталями данного эвента
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/Event'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    patch:
+      operationId: api_events_create
+      summary: Обновление эвента (для администрации или методиста (возможно будет реализация только в админ панели))
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: '#/components/schemas/Event'
+      responses:
+        '200':
+          description: JSON ответ с изменеными данными
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/Event'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    delete:
+      operationId: api_events_delete
+      summary: Удаление эвента (для администрации или методиста (возможно будет реализация только в админ панели))
+      responses:
+        '204':
+          description: Эвент удален успешно
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+
+  /events/currents:
+    get:
+      operationId: api_events_get_current
+      summary: Получение актуальных эвента назначенных текущему пользователю (по user_id)
+      responses:
+        '200':
+          description: Получение JSON ответа с текущими событиями, курсом, уроками.
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/Event'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+
+  /events:
+    get:
+      operationId: api_events_list
+      summary: Получение всех активированных эвентов (для администрации и методиста)
+      responses:
+        '200':
+          description: JSON ответ со списком всех эвентов
+          content:
+            application/json:
+              schema:
+                type: array
+                minItems: 0
+                items:
+                  $ref: '#/components/schemas/Event'
+    post:
+      operationId: api_events_create
+      summary: Создание Эвента (для администрации или методиста (возможно будет реализация только в админ панели))
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: '#/components/schemas/Event'
+      responses:
+        '200':
+          description: JSON ответ с изменеными данными
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/Event'
+            application/x-www-form-urlencoded:
+              schema:
+                $ref: '#/components/schemas/Event'
+            multipart/form-data:
+              schema:
+                $ref: '#/components/schemas/Event'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/BadRequest'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
 
 components:
   responses:
@@ -311,6 +458,12 @@ components:
           type: string
           readOnly: false
           nullable: true
+        lessons:
+          type: array
+          description: Уроки привязанные к данному курсу (для бэков - это поле только из сериализатора)
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/Lesson'
         create_date:
           type: string
           format: date-time
@@ -361,7 +514,7 @@ components:
         course:
           type: object
           readOnly: false
-          nullable: false
+          nullable: true
           $ref: '#/components/schemas/Сourse'
         status:
           description: Статус прохождения урока
@@ -383,6 +536,10 @@ components:
           type: string
           readOnly: false
           nullable: true
+        lesson:
+          type: object
+          nullable: true
+          $ref: '#/components/schemas/Lesson'
 
     Question:
       description: Сущность тестов для урока
@@ -404,6 +561,7 @@ components:
           nullable: true
         instance:
           type: object
+          nullable: true
           oneOf:
             - $ref: '#/components/schemas/Step'
             - $ref: '#/components/schemas/Сourse'
@@ -419,7 +577,7 @@ components:
           readOnly: true
         question:
           type: object
-          nullable: false
+          nullable: true
           $ref: '#/components/schemas/Question'
         text:
           type: string
