@@ -34,8 +34,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Profile'
-        '404':
-          $ref: '#/components/responses/NotFound'
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
     put:
@@ -60,15 +58,13 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Profile'
-        '404':
-          $ref: '#/components/responses/NotFound'
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
 
   /settings/password/change:
     post:
       operationId: api_settings_password
-      summary: Поменять пароль
+      summary: Поменять пароль, в последствии отправляется уведомление об изменении на почту
       requestBody:
         content:
           application/json:
@@ -94,15 +90,13 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
 
   /login:
     post:
       operationId: api_authemail_login
-      summary: Выполнить вход в систему
+      summary: Выполнить вход в систему (сохранение токена сессии на данного пользователя)
       requestBody:
         content:
           application/json:
@@ -112,6 +106,7 @@ paths:
                 email:
                   type: string
                   format: email
+                  maxLength: 255
                 password:
                   type: string
                   minLength: 8
@@ -127,6 +122,27 @@ paths:
                   token:
                     type: string
                     format: hex
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /logout:
+    get:
+      operationId: api_authemail_logout
+      summary: Выход из системы (поиск токена данного пользователя и в последствии - удаление)
+      responses:
+        '200':
+          description: Выход из системы - успешно
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    default: User logged out.
 
 components:
   responses:
@@ -202,13 +218,11 @@ components:
           type: boolean
           default: false
           readOnly: true
-          nullable: false
           description: Указатель на права методиста
         is_active:
           type: boolean
           default: true
           readOnly: true
-          nullable: false
           description: Активность пользователя (возможность пользоваться сервисом)
         date_joined:
           type: string
@@ -246,6 +260,7 @@ components:
         - email
         - password
         - profession
+        - date_commencement
 
     Profile:
       description: Сущность профиля
@@ -459,7 +474,7 @@ components:
           $ref: '#/components/schemas/Profession'
         students:
           type: array
-          minItems: 1
+          minItems: 0
           description: Все студенты в группе
           nullable: true
           items:
