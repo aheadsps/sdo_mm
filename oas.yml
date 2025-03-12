@@ -182,6 +182,8 @@ paths:
                   success:
                     type: string
                     default: User logged out.
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
 
   /event/{event_id}:
     get:
@@ -207,6 +209,8 @@ paths:
                 $ref: '#/components/schemas/Event'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
     put:
@@ -236,10 +240,12 @@ paths:
               schema:
                 type: object
                 $ref: '#/components/schemas/Event'
+        '400':
+          $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
-          $ref: '#/components/responses/BadRequest'
+          $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
         '422':
@@ -260,6 +266,8 @@ paths:
       responses:
         '204':
           description: Эвент удален успешно
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
         '422':
@@ -281,10 +289,10 @@ paths:
               schema:
                 type: object
                 $ref: '#/components/schemas/Event'
+        '400':
+          $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/BadRequest'
         '404':
           $ref: '#/components/responses/NotFound'
         '422':
@@ -308,6 +316,8 @@ paths:
                 minItems: 0
                 items:
                   $ref: '#/components/schemas/Event'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
     post:
@@ -337,10 +347,12 @@ paths:
             multipart/form-data:
               schema:
                 $ref: '#/components/schemas/Event'
+        '400':
+          $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
-          $ref: '#/components/responses/BadRequest'
+          $ref: '#/components/responses/Forbidden'
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
 
@@ -362,6 +374,8 @@ paths:
                 minItems: 0
                 items:
                   $ref: '#/components/schemas/Lesson'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
     post:
@@ -391,14 +405,45 @@ paths:
             multipart/form-data:
               schema:
                 $ref: '#/components/schemas/Lesson'
+        '400':
+          $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
-          $ref: '#/components/responses/BadRequest'
+          $ref: '#/components/responses/Forbidden'
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
 
-
+  /lessons/from-event/{course_id}:
+    get:
+      operationId: api_lessons_from-event-list
+      parameters:
+        - in: path
+          name: course_id
+          required: true
+          schema:
+            type: integer
+      summary: Получение всех уроков эвента по ID (только на текущего пользователя, в ином случае доступ только администрации или методисту)
+      tags:
+        - Event
+      security:
+        - Token: []
+      responses:
+        '200':
+          description: JSON ответ с массивом уроков данного курса
+          content:
+            application/json:
+              schema:
+                type: array
+                maxItems: 0
+                items:
+                  $ref: '#/components/schemas/Lesson'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
 
 components:
   responses:
@@ -422,6 +467,12 @@ components:
             $ref: '#/components/schemas/Error'
     BadRequest:
       description: Произошла ошибка при обработке данных
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Forbidden:
+      description: Нет прав доступа
       content:
         application/json:
           schema:
@@ -504,13 +555,6 @@ components:
           description: Дата начала работы (исходя из этого вычисляется динамически стаж работы)
           readOnly: true
           nullable: false
-        events:
-          type: array
-          readOnly: false
-          nullable: true
-          items:
-            $ref: '#/components/schemas/Event'
-            description: Задачи которые получил пользователь
       required:
         - id
         - email
@@ -780,6 +824,9 @@ components:
         id:
           type: integer
           readOnly: true
+        user:
+          type: object
+          $ref: '#/components/schemas/User'
         course:
           type: object
           $ref: '#/components/schemas/Сourse'
