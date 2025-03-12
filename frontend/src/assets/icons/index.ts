@@ -1,0 +1,8 @@
+export { default as ClosedEyeIcon } from './ClosedEyeIcon'
+export { default as OpenedEyeIcon } from './OpenedEyeIcon'
+export { default as LibraryIcon } from './LibraryIcon'
+export { default as MainIcon } from './MainIcon'
+export { default as NewsIcon } from './NewIcon'
+export { default as SettingsEyeIcon } from './SettingsIcon'
+export { default as StudyIcon } from './StudyIcon'
+export { default as WebinarAndSupportIcon } from './WebinarAndSupportIcon'
