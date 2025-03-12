@@ -27,6 +27,8 @@ paths:
       summary: Получение профиля пользователя
       tags:
         - Profile
+      security:
+        - Token: []
       responses:
         '200':
           description: 'JSON ответ сервера с данным профиля'
@@ -39,6 +41,10 @@ paths:
     put:
       operationId: api_profile_update
       summary: Обновление данных о профиле
+      tags:
+        - Profile
+      security:
+        - Token: []
       requestBody:
         content:
           application/json:
@@ -65,6 +71,10 @@ paths:
     post:
       operationId: api_settings_password
       summary: Поменять пароль, в последствии отправляется уведомление об изменении на почту
+      tags:
+        - Password
+      security:
+        - Token: []
       requestBody:
         content:
           application/json:
@@ -97,6 +107,8 @@ paths:
     post:
       operationId: api_authemail_login
       summary: Выполнить вход в систему (сохранение токена сессии на данного пользователя)
+      tags:
+        - Auth
       requestBody:
         content:
           application/json:
@@ -157,6 +169,8 @@ paths:
     get:
       operationId: api_authemail_logout
       summary: Выход из системы (поиск токена данного пользователя и в последствии - удаление)
+      tags:
+        - Auth
       responses:
         '200':
           description: Выход из системы - успешно
@@ -168,9 +182,10 @@ paths:
                   success:
                     type: string
                     default: User logged out.
+
   /event/{event_id}:
     get:
-      operationId: api_events_get
+      operationId: api_events_retrieve
       parameters:
         - in: path
           name: event_id
@@ -178,6 +193,10 @@ paths:
           schema:
             type: integer
       summary: Получение эвента по ID (только на текущего пользователя, в ином случае доступ только администрации или методисту)
+      tags:
+        - Event
+      security:
+        - Token: []
       responses:
         '200':
           description: JSON ответ с деталями данного эвента
@@ -190,9 +209,19 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
-    patch:
-      operationId: api_events_create
+    put:
+      operationId: api_events_patrial_update
+      parameters:
+        - in: path
+          name: event_id
+          required: true
+          schema:
+            type: integer
       summary: Обновление эвента (для администрации или методиста (возможно будет реализация только в админ панели))
+      tags:
+        - Event
+      security:
+        - Token: []
       requestBody:
         content:
           application/json:
@@ -216,8 +245,18 @@ paths:
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
     delete:
-      operationId: api_events_delete
+      operationId: api_events_destroy
       summary: Удаление эвента (для администрации или методиста (возможно будет реализация только в админ панели))
+      parameters:
+        - in: path
+          name: event_id
+          required: true
+          schema:
+            type: integer
+      tags:
+        - Event
+      security:
+        - Token: []
       responses:
         '204':
           description: Эвент удален успешно
@@ -230,6 +269,10 @@ paths:
     get:
       operationId: api_events_get_current
       summary: Получение актуальных эвента назначенных текущему пользователю (по user_id)
+      tags:
+        - Event
+      security:
+        - Token: []
       responses:
         '200':
           description: Получение JSON ответа с текущими событиями, курсом, уроками.
@@ -251,6 +294,10 @@ paths:
     get:
       operationId: api_events_list
       summary: Получение всех активированных эвентов (для администрации и методиста)
+      tags:
+        - Event
+      security:
+        - Token: []
       responses:
         '200':
           description: JSON ответ со списком всех эвентов
@@ -261,9 +308,15 @@ paths:
                 minItems: 0
                 items:
                   $ref: '#/components/schemas/Event'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
     post:
       operationId: api_events_create
       summary: Создание Эвента (для администрации или методиста (возможно будет реализация только в админ панели))
+      tags:
+        - Event
+      security:
+        - Token: []
       requestBody:
         content:
           application/json:
@@ -271,8 +324,8 @@ paths:
               type: object
               $ref: '#/components/schemas/Event'
       responses:
-        '200':
-          description: JSON ответ с изменеными данными
+        '201':
+          description: JSON ответ с новыми данными
           content:
             application/json:
               schema:
@@ -290,6 +343,62 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
+
+  /lessons:
+    get:
+      operationId: api_lessons_list
+      summary: Получение всех уроков (для администрации и методиста)
+      tags:
+        - Lesson
+      security:
+        - Token: []
+      responses:
+        '200':
+          description: JSON ответ со списком всех уроков
+          content:
+            application/json:
+              schema:
+                type: array
+                minItems: 0
+                items:
+                  $ref: '#/components/schemas/Lesson'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    post:
+      operationId: api_lessons_create
+      summary: Создание новых уроков (для администрации и методиста)
+      tags:
+        - Lesson
+      security:
+        - Token: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: '#/components/schemas/Lesson'
+      responses:
+        '201':
+          description: JSON ответ с новыми данными
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/Lesson'
+            application/x-www-form-urlencoded:
+              schema:
+                $ref: '#/components/schemas/Lesson'
+            multipart/form-data:
+              schema:
+                $ref: '#/components/schemas/Lesson'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/BadRequest'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+
+
 
 components:
   responses:
@@ -699,7 +808,3 @@ components:
       type: apiKey
       in: header
       name: token
-
-security:
-  - Token:
-    -
