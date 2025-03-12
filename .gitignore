@@ -7,6 +7,7 @@ __pycache__/
 *.so
 .42c
 .vscode
+.python-version
 
 # Distribution / packaging
 .Python

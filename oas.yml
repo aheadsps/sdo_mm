@@ -55,6 +55,62 @@ paths:
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
 
+  /settings/password:
+    post:
+      operationId: api_settings_password
+      summary: Поменять пароль
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                old_password:
+                  type: string
+                new_password:
+                  type: string
+      responses:
+        '200':
+          description: 'JSON ответ с подтверждением об Обновлении данных'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Profile'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /login:
+    post:
+      operationId: api_authemail_login
+      summary: Выполнить вход в систему
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+      responses:
+        '200':
+          description: JSON ответ с токеном
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    format: hex
+
 components:
   responses:
     NotFound:
@@ -65,6 +121,18 @@ components:
             $ref: '#/components/schemas/Error'
     UnprocessableEntity:
       description: Полезная нагрузка имеет не валидные данные
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Пользователь не авторизован или не активный (бан) или логин - пароль не правильный
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: Произошла ошибка при обработке данных
       content:
         application/json:
           schema:
@@ -90,6 +158,16 @@ components:
         id:
           type: integer
           readOnly: true
+        first_name:
+          type: string
+          readOnly: false
+          maxLength: 150
+          nullable: true
+        last_name:
+          type: string
+          readOnly: false
+          maxLength: 150
+          nullable: true
         email:
           type: string
           readOnly: false
@@ -142,6 +220,7 @@ components:
         - id
         - email
         - password
+        - profession
 
     Profile:
       description: Сущность профиля
@@ -156,16 +235,6 @@ components:
           $ref: "#/components/schemas/User"
           readOnly: true
           nullable: false
-        first_name:
-          type: string
-          readOnly: false
-          maxLength: 150
-          nullable: true
-        last_name:
-          type: string
-          readOnly: false
-          maxLength: 150
-          nullable: true
         phone:
           type: string
           readOnly: false
@@ -248,16 +317,6 @@ components:
           readOnly: false
           nullable: false
           $ref: '#/components/schemas/Сourse'
-        create_date:
-          type: string
-          format: date-time
-          readOnly: true
-          nullable: false
-        update_date:
-          type: string
-          format: date-time
-          readOnly: true
-          nullable: false
         status:
           description: Статус прохождения урока
           nullable: false
@@ -300,9 +359,9 @@ components:
         instance:
           type: object
           oneOf:
-            - $ref: '#/components/schemas/Lesson'
+            - $ref: '#/components/schemas/Step'
             - $ref: '#/components/schemas/Сourse'
-          description: К сущности относится вопрос, если к Lesson - тогда это обычный вопрос, если к Course - финальный (экзаменационный)
+          description: К сущности относится вопрос, если к Step - тогда это обычный вопрос, если к Course - финальный (экзаменационный)
 
     Answer:
       description: Сущность ответов на тесты
@@ -356,7 +415,7 @@ components:
         - file_type
         - lesson
 
-    Group:
+    ProfessionGroup:
       description: Сущность группы (потока)
       additionalProperties: false
       type: object
@@ -365,9 +424,8 @@ components:
           type: integer
           readOnly: true
         profession:
-          ...
-        calendar:
-          ...
+          type: object
+          $ref: '#/components/schemas/Profession'
         students:
           type: array
           minItems: 1
@@ -375,10 +433,6 @@ components:
           nullable: true
           items:
             $ref: '#/components/schemas/User'
-
-    Calendar:
-      type: object
-      ...
 
     Profession:
       description: Профессии
@@ -423,3 +477,13 @@ components:
             - done
             - process
             - failed
+
+  securitySchemes:
+    Token:
+      type: apiKey
+      in: header
+      name: token
+
+security:
+  - Token:
+    -
