@@ -1,25 +1,28 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 @font-face {
-    font-family: "Moscow Sans";
-    font-weight: normal;
-    font-style: normal;
-    src: 
-    local("Moscow Sans"),
-    local("Moscow-Sans"),
-    url(../src/assets/fonts/MoscowSans/moscowsansregular.ttf) format("ttf"),
-    url(../src/assets/fonts/MoscowSans/moscowsansregular.woff2) format("woff2"),
-    url(../src/assets/fonts/MoscowSans/moscowsansregular.eot) format("eot"),
-    url(../src/assets/fonts/MoscowSans/moscowsansregular.woff) format("woff");
-    font-display: swap;
+  font-family: 'Moscow Sans';
+  font-weight: normal;
+  font-style: normal;
+  src:
+    local('Moscow Sans'),
+    local('Moscow-Sans'),
+    url(../src/assets/fonts/MoscowSans/moscowsansregular.ttf) format('ttf'),
+    url(../src/assets/fonts/MoscowSans/moscowsansregular.woff2) format('woff2'),
+    url(../src/assets/fonts/MoscowSans/moscowsansregular.eot) format('eot'),
+    url(../src/assets/fonts/MoscowSans/moscowsansregular.woff) format('woff');
+  font-display: swap;
 }
 
 body {
-    font-family: 'Monrope', sans-serif;
+  font-family: 'Monrope', sans-serif;
+  background: #cd2f2f;
 }
 
 h2 {
-    font-family: 'Moscow Sans', sans-serif;
+  font-family: 'Moscow Sans', sans-serif;
 }
 
-
+.moscow-sans {
+  font-family: 'Moscow Sans', sans-serif;
+}
