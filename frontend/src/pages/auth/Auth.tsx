@@ -9,6 +9,9 @@ import {
   WebinarAndSupportIcon,
 } from '@assets/icons'
 
+import { Typography } from '../../shared/components/Typography'
+import { cn } from '../../shared/utils/cn.ts'
+
 export const Auth = () => {
   return (
     <>
@@ -22,6 +25,24 @@ export const Auth = () => {
       <WebinarAndSupportIcon color="black" width={40} height={40} />
       <OpenedEyeIcon color="black" width={40} height={40} />
       <ClosedEyeIcon color="black" width={40} height={40} />
+      <Typography variant={'header_1'}>Typography</Typography>
+      <Typography variant={'header_2'}>Typography</Typography>
+      <Typography variant={'header_3'}>Typography</Typography>
+      <Typography variant={'header_4'}>Typography</Typography>
+      <Typography variant={'header_5'}>Typography</Typography>
+      <Typography variant={'header_6'}>Typography</Typography>
+      <Typography variant={'body_1'} className={'moscow-sans'}>
+        Typography
+      </Typography>
+      <Typography variant={'body_2'} className={cn('moscow-sans', 'text-blue-200')}>
+        Typography
+      </Typography>
+      <Typography variant={'btn_links'} className={'moscow-sans'}>
+        Typography
+      </Typography>
+      <Typography variant={'caption'} className={'moscow-sans'}>
+        Typography
+      </Typography>
     </>
   )
 }

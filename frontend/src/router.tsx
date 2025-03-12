@@ -9,6 +9,6 @@ export const router = createBrowserRouter([
   },
   {
     path: '/',
-    element: <div>Hello App</div>,
+    element: <div className={'text-center'}>Hello App</div>,
   },
 ])
