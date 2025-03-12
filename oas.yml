@@ -632,6 +632,8 @@ components:
           format: path
           readOnly: false
           nullable: true
+        profession:
+          ...
         status:
           type: string
           nullable: false
@@ -738,6 +740,7 @@ components:
           readOnly: false
         correct:
           type: boolean
+          readOnly: true
       required:
         - question
         - text
@@ -815,6 +818,23 @@ components:
           type: integer
           minimum: 0
           maximum: 60
+
+    StoryAnswer:
+      description: История ответов на вопросы
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        user:
+          type: object
+          $ref: '#/components/schemas/User'
+        question:
+          type: object
+          $ref: '#/components/schemas/Question'
+        answer:
+          type: object
+          $ref: '#/components/schemas/Answer'
 
     Event:
       description: Сущность задачи (курс) которая присваивается пользователю
