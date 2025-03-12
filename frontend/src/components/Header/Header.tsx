@@ -6,7 +6,7 @@ type HeaderProps = {
   title: string;
 };
 
-const Header: React.FC<HeaderProps> = ({title}) => {
+const Header: React.FC<HeaderProps> = () => {
   return (
     <header className='bg-gray-100 w-full px-4 sm:px-14 md:px-14 py-4 sm:py-5 flex flex-row justify-between items-center border-b border-red-100 fixed top-0 left-0 z-10'>
       <div className='flex flex-row justify-between items-center gap-2.5'>
