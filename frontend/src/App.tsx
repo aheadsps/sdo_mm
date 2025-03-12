@@ -15,6 +15,8 @@ import WebinarAndSupportIcon from './assets/icons/WebinarAndSupportIcon';
 import OpenedEyeIcon from './assets/icons/OpenedEyeIcon';
 import ClosedEyeIcon from './assets/icons/ClosedEyeIcon';
 import LogoIcon from './assets/icons/LogoIcon';
+import Header from './components/Header/Header';
+import MobileVersionHeaderIcon from './assets/icons/MobileVersionHeaderIcon';
 
 function App() {
 
@@ -30,7 +32,9 @@ function App() {
       <WebinarAndSupportIcon color="black" width={40} height={40} /> 
       <OpenedEyeIcon color="black" width={40} height={40} />
       <ClosedEyeIcon color="black" width={40} height={40} />
-      <LogoIcon  color="white" width={40} height={40}/>
+      <LogoIcon  color="orange" width={40} height={40}/>
+      <MobileVersionHeaderIcon color="white" width={40} height={40} />
+      <Header title='Корпоративный университет Транспортного комплекса' />
     </>
   )
 }
