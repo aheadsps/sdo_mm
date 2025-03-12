@@ -266,6 +266,8 @@ paths:
       responses:
         '204':
           description: Эвент удален успешно
+        '401':
+          $ref: '#/components/responses/Unauthorized'
         '403':
           $ref: '#/components/responses/Forbidden'
         '404':
@@ -425,7 +427,7 @@ paths:
             type: integer
       summary: Получение всех уроков эвента по ID (только на текущего пользователя, в ином случае доступ только администрации или методисту)
       tags:
-        - Event
+        - Lesson
       security:
         - Token: []
       responses:
@@ -442,6 +444,98 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '403':
           $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+
+  /lessons/{lesson_id}:
+    get:
+      summary: Получение конкретного урока по ID
+      parameters:
+        - in: path
+          name: lesson_id
+          required: true
+          schema:
+            type: integer
+      operationId: api_lessons_retrieve
+      tags:
+        - Lesson
+      security:
+        - Token: []
+      responses:
+        '200':
+          description: JSON ответ с уроком
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/Lesson'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    put:
+      operationId: api_lessons_patrial_update
+      parameters:
+        - in: path
+          name: lesson_id
+          required: true
+          schema:
+            type: integer
+      summary: Обновление урока (для администрации или методиста (возможно будет реализация только в админ панели))
+      tags:
+        - Lesson
+      security:
+        - Token: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: '#/components/schemas/Lesson'
+      responses:
+        '200':
+          description: JSON ответ с изменеными данными
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/Lesson'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    delete:
+      operationId: api_lessons_destroy
+      summary: Удаление урока (для администрации или методиста (возможно будет реализация только в админ панели))
+      parameters:
+        - in: path
+          name: lesson_id
+          required: true
+          schema:
+            type: integer
+      tags:
+        - Lesson
+      security:
+        - Token: []
+      responses:
+        '204':
+          description: Урок удален успешно
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
 
