@@ -14,6 +14,7 @@ import NewsIcon from './assets/icons/NewIcon';
 import WebinarAndSupportIcon from './assets/icons/WebinarAndSupportIcon';
 import OpenedEyeIcon from './assets/icons/OpenedEyeIcon';
 import ClosedEyeIcon from './assets/icons/ClosedEyeIcon';
+import LogoIcon from './assets/icons/LogoIcon';
 
 function App() {
 
@@ -29,8 +30,9 @@ function App() {
       <WebinarAndSupportIcon color="black" width={40} height={40} /> 
       <OpenedEyeIcon color="black" width={40} height={40} />
       <ClosedEyeIcon color="black" width={40} height={40} />
+      <LogoIcon  color="white" width={40} height={40}/>
     </>
   )
 }
 
-export default App
+export default App;
