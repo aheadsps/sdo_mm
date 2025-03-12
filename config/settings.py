@@ -58,7 +58,6 @@ PROJECT_APPS = [
 
 # Приложения из вне.
 THIRD_PARTY_APPS = [
-    'drf_yasg',
     'rest_framework',
 ]
 
