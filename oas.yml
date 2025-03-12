@@ -4,6 +4,16 @@ info:
   title: MOS.METRO.SDO project
   description: Платформа удаленного обучения специалистов дорожных профессий
   version: 0.1.0
+  x-speakeasy-retries:
+    strategy: backoff
+    backoff:
+      initialInterval: 500
+      maxInterval: 60000
+      maxElapsedTime: 3600000
+      exponent: 1.5
+    statusCodes:
+    - 5XX
+    retryConnectionErrors: true
 
 servers:
   - url: https://localhost:8000/api/v1
@@ -55,7 +65,7 @@ paths:
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
 
-  /settings/password:
+  /settings/password/change:
     post:
       operationId: api_settings_password
       summary: Поменять пароль
@@ -67,8 +77,12 @@ paths:
               properties:
                 old_password:
                   type: string
+                  minLength: 8
+                  maxLength: 128
                 new_password:
                   type: string
+                  minLength: 8
+                  maxLength: 128
       responses:
         '200':
           description: 'JSON ответ с подтверждением об Обновлении данных'
@@ -84,6 +98,7 @@ paths:
           $ref: '#/components/responses/NotFound'
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
+
   /login:
     post:
       operationId: api_authemail_login
@@ -99,6 +114,8 @@ paths:
                   format: email
                 password:
                   type: string
+                  minLength: 8
+                  maxLength: 128
       responses:
         '200':
           description: JSON ответ с токеном
@@ -161,23 +178,25 @@ components:
         first_name:
           type: string
           readOnly: false
-          maxLength: 150
+          maxLength: 30
           nullable: true
         last_name:
           type: string
           readOnly: false
-          maxLength: 150
+          maxLength: 30
           nullable: true
         email:
           type: string
           readOnly: false
           nullable: false
           format: email
+          maxLength: 255
         password:
           type: string
           format: byte
           nullable: false
           readOnly: false
+          minLength: 8
           maxLength: 128
         is_staff:
           type: boolean
@@ -209,6 +228,12 @@ components:
           $ref: '#/components/schemas/Profile'
           readOnly: true
           nullable: true
+        date_commencement:
+          type: string
+          format: date-time
+          description: Дата начала работы (исходя из этого вычисляется динамически стаж работы)
+          readOnly: true
+          nullable: false
         events:
           type: array
           readOnly: false
@@ -293,6 +318,12 @@ components:
             - expected
             - started
             - closed
+        experiences:
+          type: array
+          description: Список стажевых интервалов для которых подходит данный курс
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/WorkExperience'
       required:
         - id
         - name
@@ -446,6 +477,18 @@ components:
           type: string
           maxLength: 256
           nullable: false
+
+    WorkExperience:
+      description: Стаж работы
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        years:
+          type: integer
+          minimum: 0
+          maximum: 60
 
     Event:
       description: Сущность задачи (курс) которая присваивается пользователю
