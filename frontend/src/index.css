@@ -1,5 +1,72 @@
 @import 'tailwindcss';
 
+/* index.css or styles.css */
+
+:root {
+  /* Font families */
+  --font-family-primary: 'Monrope', sans-serif;
+  --font-family-secondary: 'Moscow Sans', sans-serif;
+
+ /* background colors*/
+  --color-bg-main: #FFFFFF;
+  --color-bg-lightblue: #CFE1FE;
+  --color-bg-gray100: #F8F9FA;
+  --color-bg-gray200: #E9ECEF;
+  --color-bg-red700: #831F29;
+  --color-bg-1: #831F291A;
+  --color-bg-2: #831F2999;
+
+  /* text colors*/
+  --color-text-primary: #2C0B0F;
+  --color-text-secondary: #6C757D;
+  --color-text-disabled: #485056;
+  --color-text-button: #F8F9FA;
+  --color-text-link: #B02A37;
+  --color-link-hovered: #831F29;
+  --color-link-focused: #58151C;
+
+  /* additional colors */
+  --color-additional-border100: #F8D7D9;
+  --color-additional-border700: #831F29;
+  --color-additional-grey: #F2EDF4;
+  --color-additional-purple: #4D233F;
+  --color-additional-red800: #58151C;
+  --color-additional-button: #F8F9FA;
+  --color-additional-icons-red: #B02A37;
+  --color-additional-icons-grey: #ACB5BD;
+
+  /* accent colors */
+  --color-accent-red500: #DC3444;
+  --color-accent-success: #4DD4AC;
+  --color-accent-negative: #E35C6A;
+  --color-accent-orange: #FD9843;
+  --color-accent-info: #3D8BFD;
+
+  /* Font sizes */
+  --font-size-xs: 0.875rem;  /* 14px */
+  --font-size-s: 1rem;       /* 16px */
+  --font-size-m: 1.125rem;   /* 18px */
+  --font-size-l: 1.5rem;     /* 24px */
+  --font-size-xl: 1.75rem;   /* 28px */
+  --font-size-xxl: 2rem;     /* 32px */
+  --font-size-xxxl: 2.5rem;  /* 40px */
+  --font-size-super-large: 3rem; /* 48px */
+
+  /* Line heights */
+  --line-height-xxs: 100%;
+  --line-height-xs: 120%;
+  --line-height-s: 125%;
+  --line-height-m: 130%;
+  --line-height-l: 135%;
+  --line-height-xl: 140%;
+
+  /* Font weights */
+  --font-weight-light: 300;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+}
+
+
 @font-face {
   font-family: 'Moscow Sans';
   font-weight: normal;
@@ -15,14 +82,11 @@
 }
 
 body {
-  font-family: 'Monrope', sans-serif;
-  background: #cd2f2f;
+  font-family: var(--font-family-primary);
+  background: var(--color-accent-info);
 }
 
 h2 {
-  font-family: 'Moscow Sans', sans-serif;
+  font-family: var(--font-family-secondary);
 }
 
-.moscow-sans {
-  font-family: 'Moscow Sans', sans-serif;
-}

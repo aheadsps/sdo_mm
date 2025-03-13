@@ -1,10 +1,19 @@
-import { cn } from '@shared/utils/cn'
-import { VariantProps } from 'class-variance-authority'
+import clsx from 'clsx'
 import { ComponentPropsWithoutRef, ElementType } from 'react'
 
-import { typographyVariants } from './typographyVariants'
+import s from './typography.module.scss'
 
-export type Variant = NonNullable<VariantProps<typeof typographyVariants>['variant']>
+type Variant =
+  | 'body_1'
+  | 'header_1'
+  | 'header_2'
+  | 'header_3'
+  | 'header_4'
+  | 'header_5'
+  | 'header_6'
+  | 'body_2'
+  | 'btn_links'
+  | 'caption'
 
 const typographyTags: Record<Variant, ElementType> = {
   header_1: 'h1',
@@ -19,13 +28,12 @@ const typographyTags: Record<Variant, ElementType> = {
   caption: 'span',
 }
 
-type Props = ComponentPropsWithoutRef<ElementType> &
-  VariantProps<typeof typographyVariants> & {
-    className?: string
-  }
+type Props = {
+  variant: Variant
+} & ComponentPropsWithoutRef<ElementType>
 
 export const Typography = ({ className, variant = 'body_1', ...props }: Props) => {
   const Component = variant ? typographyTags[variant] : 'p'
 
-  return <Component className={cn(typographyVariants({ variant }), className)} {...props} />
+  return <Component className={clsx(s[variant], className as string)} {...props} />
 }
