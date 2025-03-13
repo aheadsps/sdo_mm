@@ -1,6 +1,7 @@
 import { createBrowserRouter } from 'react-router-dom'
 
 import { Auth } from '@pages/auth'
+import { Main } from '@pages/main'
 
 export const router = createBrowserRouter([
   {
@@ -8,7 +9,11 @@ export const router = createBrowserRouter([
     element: <Auth />,
   },
   {
+    path: '/main',
+    element: <Main />,
+  },
+  {
     path: '/',
-    element: <div className={'text-center'}>Hello App</div>,
+    element: <div>hello App</div>,
   },
 ])
