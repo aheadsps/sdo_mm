@@ -58,8 +58,8 @@ PROJECT_APPS = [
 
 # Приложения из вне.
 THIRD_PARTY_APPS = [
-    'drf_yasg',
     'rest_framework',
+    'drf_spectacular',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + PROJECT_APPS + THIRD_PARTY_APPS
@@ -161,3 +161,37 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# Settings spectacular
+
+REST_FRAMEWORK = {
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'MOS.METRO project',
+    'DESCRIPTION': 'Learn platform',
+    'VERSION': '0.1.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+    'OAS_VERSION': '3.0.3',
+    "SERVERS": [
+        {
+            "url": "http://127.0.0.1:8000/",
+            "description": "Development server",
+        },
+    ],
+    # OTHER SETTINGS
+    'EXTENSIONS_INFO': {
+        'x-speakeasy-retries': {
+            'strategy': 'backoff',
+            'backoff': {
+                'initialInterval': 500,
+                'maxInterval': 60000,
+                'maxElapsedTime': 3600000,
+                'exponent': 1.5,
+            },
+            'statusCodes': ['5XX'],
+            'retryConnectionErrors': True,
+        },
+    },
+}
