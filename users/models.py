@@ -8,7 +8,7 @@ class User(EmailAbstractUser):
     last_name = models.CharField(max_length=30, null=True, blank=True, verbose_name="Фамилия пользователя")
     date_joined = models.DateTimeField(auto_now_add=True, verbose_name="Дата регистрации")
     last_login = models.DateTimeField(auto_now=True, verbose_name="Время последнего входа")
-    date_commencement = models.DateTimeField(null=False, verbose_name="Стаж работы")
+    date_commencement = models.DateField(null=False, verbose_name="Стаж работы")
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['date_commencement']
