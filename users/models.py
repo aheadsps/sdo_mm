@@ -6,9 +6,6 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 
 class Profession(models.Model):
     """ Модель Профессии """
-    id = models.AutoField(primary_key=True,
-                          verbose_name="profession_id"
-                          )
     en_name = models.CharField(max_length=256,
                                null=True,
                                blank=True,
@@ -77,9 +74,6 @@ class IntegerRangeField(models.IntegerField):
 
 class WorkExperience(models.Model):
     """ Модель стаж"""
-    id = models.AutoField(primary_key=True,
-                          verbose_name="work_experience_id"
-                          )
     years = IntegerRangeField(min_value=1,
                               max_value=60,
                               default=0,
@@ -92,3 +86,4 @@ class WorkExperience(models.Model):
 
     def __str__(self):
         return self.years
+
