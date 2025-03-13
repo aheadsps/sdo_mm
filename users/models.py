@@ -7,13 +7,13 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 class Profession(models.Model):
     """ Модель Профессии """
     en_name = models.CharField(max_length=256,
-                               null=True,
-                               blank=True,
+                               null=False,
+                               blank=False,
                                verbose_name="Название профессии"
                                )
     ru_name = models.CharField(max_length=256,
-                               null=True,
-                               blank=True,
+                               null=False,
+                               blank=False,
                                verbose_name="Name Profession"
                                )
 
@@ -69,9 +69,6 @@ class IntegerRangeField(models.IntegerField):
         super().__init__(**kwargs)
 
 
-
-
-
 class WorkExperience(models.Model):
     """ Модель стаж"""
     years = IntegerRangeField(min_value=1,
@@ -87,3 +84,11 @@ class WorkExperience(models.Model):
     def __str__(self):
         return self.years
 
+
+class ProfessionGroup(models.Model):
+    """ Модель группы (потока) """
+    id = models.AutoField(primary_key=True,
+                          verbose_name="profession_group_id"
+                          )
+    profession
+    students
