@@ -40,12 +40,15 @@ class Profile(models.Model):
 
 class IntegerRangeField(models.IntegerField):
     """ класс поля модели IntegerField с ограничением по макс и мин заначению"""
+
     def __init__(self, min_value=None, max_value=None, **kwargs):
-        self.validators = [MinValueValidator(min_value), MaxValueValidator(max_value)]
+        self.validators = [MinValueValidator(min_value),
+                           MaxValueValidator(max_value)]
         super().__init__(**kwargs)
 
 
 class Profession(models.Model):
+    """ Модель Профессии """
     id = models.AutoField(primary_key=True,
                           verbose_name="profession_id"
                           )
@@ -69,6 +72,7 @@ class Profession(models.Model):
 
 
 class WorkExperience(models.Model):
+    """ Модель стаж"""
     id = models.AutoField(primary_key=True,
                           verbose_name="work_experience_id"
                           )
