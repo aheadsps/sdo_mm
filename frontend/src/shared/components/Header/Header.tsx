@@ -1,9 +1,11 @@
 import React from 'react'
 
+import MobileVersionHeaderIcon from '@assets/icons/MobileVersionHeaderIcon'
+
 import LogoIcon from '../../../assets/icons/LogoIcon'
 
 import '@fontsource/manrope/600.css'
-import styles from './header.module.css'
+import styles from './header.module.scss'
 
 type HeaderProps = {
   title: string
@@ -12,16 +14,17 @@ type HeaderProps = {
 const Header: React.FC<HeaderProps> = ({ title }) => {
   return (
     <header className={styles.header}>
-      <div className={styles.logo__container}>
+      <div className={styles.header__logoContainer}>
         <LogoIcon width={36} height={43} color="red" />
-        <p className={styles.logo__text}>
+        <p className={styles.header__logoText}>
           Московский <br />
           транспорт
         </p>
       </div>
-      <div className={styles.title__container}>
-        <p className={styles.title__text}>{title}</p>
+      <div className={styles.header__titleContainer}>
+        <p className={styles.header__titleText}>{title}</p>
       </div>
+      <MobileVersionHeaderIcon className={styles.header__mobileIcon} width={40} height={40} />
     </header>
   )
 }

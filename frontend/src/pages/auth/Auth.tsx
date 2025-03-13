@@ -1,4 +1,5 @@
 import { Typography } from '@shared/components'
+import Header from '@shared/components/Header/Header'
 
 import {
   LibraryIcon,
@@ -16,7 +17,6 @@ import s from './auth.module.scss'
 export const Auth = () => {
   return (
     <>
-      <Header title="Корпоративный университет Транспортного комплекса" />
       <h2>Lorem ipsum dolor sit amet.</h2>
       <h3>Lorem ipsum dolor sit amet.</h3>
       <LibraryIcon color="blue" width={40} height={40} />
@@ -41,6 +41,7 @@ export const Auth = () => {
       <Typography variant={'body_2'}>Typography</Typography>
       <Typography variant={'btn_links'}>Typography</Typography>
       <Typography variant={'caption'}>Typography</Typography>
+      <Header title="Корпоративный университет Транспортного комплекса" />
     </>
   )
 }
