@@ -83,5 +83,3 @@ class WorkExperience(models.Model):
 
     def __str__(self):
         return self.years
-
-
