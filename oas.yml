@@ -194,7 +194,7 @@ paths:
           required: true
           schema:
             type: integer
-      summary: Получение эвента по ID (только на текущего пользователя, в ином случае доступ только администрации или методисту)
+      summary: Получение эвента по ID (только для текущего пользователя, в ином случае доступ только администрации или методисту)
       tags:
         - Event
       security:
@@ -221,7 +221,7 @@ paths:
           required: true
           schema:
             type: integer
-      summary: Обновление эвента (для администрации или методиста (возможно будет реализация только в админ панели))
+      summary: Обновление эвента (для администрации или методиста)
       tags:
         - Event
       security:
@@ -324,7 +324,7 @@ paths:
           $ref: '#/components/responses/UnprocessableEntity'
     post:
       operationId: api_events_create
-      summary: Создание Эвента (для администрации или методиста (возможно будет реализация только в админ панели))
+      summary: Создание Эвента (для администрации или методиста)
       tags:
         - Event
       security:
@@ -425,7 +425,7 @@ paths:
           required: true
           schema:
             type: integer
-      summary: Получение всех уроков эвента по ID (только на текущего пользователя, в ином случае доступ только администрации или методисту)
+      summary: Получение всех уроков эвента по ID (только для текущего пользователя, в ином случае доступ только администрации или методисту)
       tags:
         - Lesson
       security:
@@ -485,7 +485,7 @@ paths:
           required: true
           schema:
             type: integer
-      summary: Обновление урока (для администрации или методиста (возможно будет реализация только в админ панели))
+      summary: Обновление урока (для администрации или методиста)
       tags:
         - Lesson
       security:
@@ -536,6 +536,64 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+
+  /step:
+    get:
+      operationId: api_steps_list
+      summary: Получение всего списка шагов (для администрации и методиста)
+      tags:
+        - Step
+      security:
+        - Token: []
+      responses:
+        '200':
+          description: JSON ответ со списком всех шагов из уроков
+          content:
+            application/json:
+              schema:
+                type: array
+                minItems: 0
+                items:
+                  $ref: '#/components/schemas/Step'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+    post:
+      operationId: api_steps_create
+      summary: Создание новых шагов (для администрации и методиста)
+      tags:
+        - Step
+      security:
+        - Token: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: '#/components/schemas/Step'
+      responses:
+        '201':
+          description: JSON ответ с новыми данными
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/Step'
+            application/x-www-form-urlencoded:
+              schema:
+                $ref: '#/components/schemas/Step'
+            multipart/form-data:
+              schema:
+                $ref: '#/components/schemas/Step'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
 
