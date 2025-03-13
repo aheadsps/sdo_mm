@@ -1,6 +1,7 @@
 from authemail.models import EmailAbstractUser, EmailUserManager
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 
 class User(EmailAbstractUser):
@@ -35,3 +36,51 @@ class Profile(models.Model):
 
     def __str__(self):
         return f"Profile of {self.user.email}"
+
+
+class IntegerRangeField(models.IntegerField):
+    """ класс поля модели IntegerField с ограничением по макс и мин заначению"""
+    def __init__(self, min_value=None, max_value=None, **kwargs):
+        self.validators = [MinValueValidator(min_value), MaxValueValidator(max_value)]
+        super().__init__(**kwargs)
+
+
+class Profession(models.Model):
+    id = models.AutoField(primary_key=True,
+                          verbose_name="profession_id"
+                          )
+    en_name = models.CharField(max_length=256,
+                               null=True,
+                               blank=True,
+                               verbose_name="Название профессии"
+                               )
+    ru_name = models.CharField(max_length=256,
+                               null=True,
+                               blank=True,
+                               verbose_name="Name Profession"
+                               )
+
+    class Meta:
+        verbose_name = "Профессия"
+        verbose_name_plural = "Профессии"
+
+    def __str__(self):
+        return self.ru_name
+
+
+class WorkExperience(models.Model):
+    id = models.AutoField(primary_key=True,
+                          verbose_name="work_experience_id"
+                          )
+    years = IntegerRangeField(min_value=1,
+                              max_value=60,
+                              default=0,
+                              verbose_name="Стаж"
+                              )
+
+    class Meta:
+        verbose_name = "Стаж"
+        verbose_name_plural = "Стаж"
+
+    def __str__(self):
+        return self.years
