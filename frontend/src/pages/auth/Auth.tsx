@@ -9,12 +9,14 @@ import {
   WebinarAndSupportIcon,
 } from '@assets/icons'
 
+import Header from '../../shared/components/Header/Header.tsx'
 import { Typography } from '../../shared/components/Typography'
 import { cn } from '../../shared/utils/cn.ts'
 
 export const Auth = () => {
   return (
     <>
+      <Header title="Корпоративный университет Транспортного комплекса" />
       <h2>Lorem ipsum dolor sit amet.</h2>
       <h3>Lorem ipsum dolor sit amet.</h3>
       <LibraryIcon color="blue" width={40} height={40} />
