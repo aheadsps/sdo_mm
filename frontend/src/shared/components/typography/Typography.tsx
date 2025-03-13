@@ -1,9 +1,8 @@
+import { cn } from '@shared/utils/cn'
 import { VariantProps } from 'class-variance-authority'
 import { ComponentPropsWithoutRef, ElementType } from 'react'
 
-import { cn } from '../utils/cn.ts'
-
-import { typographyVariants } from './typographyVariants.ts'
+import { typographyVariants } from './typographyVariants'
 
 export type Variant = NonNullable<VariantProps<typeof typographyVariants>['variant']>
 

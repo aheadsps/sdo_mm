@@ -1,3 +1,5 @@
+import { Typography } from '@shared/components'
+
 import {
   LibraryIcon,
   MainIcon,
@@ -8,9 +10,6 @@ import {
   ClosedEyeIcon,
   WebinarAndSupportIcon,
 } from '@assets/icons'
-
-import { Typography } from '../../shared/components/Typography'
-import { cn } from '../../shared/utils/cn.ts'
 
 export const Auth = () => {
   return (
@@ -34,15 +33,9 @@ export const Auth = () => {
       <Typography variant={'body_1'} className={'moscow-sans'}>
         Typography
       </Typography>
-      <Typography variant={'body_2'} className={cn('moscow-sans', 'text-blue-200')}>
-        Typography
-      </Typography>
-      <Typography variant={'btn_links'} className={'moscow-sans'}>
-        Typography
-      </Typography>
-      <Typography variant={'caption'} className={'moscow-sans'}>
-        Typography
-      </Typography>
+      <Typography variant={'body_2'}>Typography</Typography>
+      <Typography variant={'btn_links'}>Typography</Typography>
+      <Typography variant={'caption'}>Typography</Typography>
     </>
   )
 }
