@@ -904,11 +904,6 @@ paths:
         "422":
           $ref: "#/components/responses/UnprocessableEntity"
 
-  /ai/send-answer:
-    post:
-      operationId: api_ai_send-andswer
-      summary: AI асистент. Задать вопрос асистенту
-
 components:
   responses:
     NotFound:
@@ -1085,6 +1080,7 @@ components:
           type: string
           description: Текст вопроса
           nullable: false
+          maxLength: 500
         response_text:
           type: string
           description: Текст ответа
