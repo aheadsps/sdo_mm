@@ -4,12 +4,37 @@ from phonenumber_field.modelfields import PhoneNumberField
 from django.core.validators import MaxValueValidator, MinValueValidator
 
 
+class Profession(models.Model):
+    """ Модель Профессии """
+    id = models.AutoField(primary_key=True,
+                          verbose_name="profession_id"
+                          )
+    en_name = models.CharField(max_length=256,
+                               null=True,
+                               blank=True,
+                               verbose_name="Название профессии"
+                               )
+    ru_name = models.CharField(max_length=256,
+                               null=True,
+                               blank=True,
+                               verbose_name="Name Profession"
+                               )
+
+    class Meta:
+        verbose_name = "Профессия"
+        verbose_name_plural = "Профессии"
+
+    def __str__(self):
+        return self.ru_name
+
+
 class User(EmailAbstractUser):
     first_name = models.CharField(max_length=30, null=True, blank=True, verbose_name="Имя пользователя")
     last_name = models.CharField(max_length=30, null=True, blank=True, verbose_name="Фамилия пользователя")
     date_joined = models.DateTimeField(auto_now_add=True, verbose_name="Дата регистрации")
     last_login = models.DateTimeField(auto_now=True, verbose_name="Время последнего входа")
     date_commencement = models.DateField(null=False, verbose_name="Стаж работы")
+    profession = models.ForeignKey(Profession, unique=False, on_delete=models.PROTECT,)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['date_commencement']
@@ -47,28 +72,7 @@ class IntegerRangeField(models.IntegerField):
         super().__init__(**kwargs)
 
 
-class Profession(models.Model):
-    """ Модель Профессии """
-    id = models.AutoField(primary_key=True,
-                          verbose_name="profession_id"
-                          )
-    en_name = models.CharField(max_length=256,
-                               null=True,
-                               blank=True,
-                               verbose_name="Название профессии"
-                               )
-    ru_name = models.CharField(max_length=256,
-                               null=True,
-                               blank=True,
-                               verbose_name="Name Profession"
-                               )
 
-    class Meta:
-        verbose_name = "Профессия"
-        verbose_name_plural = "Профессии"
-
-    def __str__(self):
-        return self.ru_name
 
 
 class WorkExperience(models.Model):
