@@ -1,4 +1,4 @@
-from authemail.models import EmailAbstractUser
+from authemail.models import EmailAbstractUser, EmailUserManager
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
 
@@ -12,6 +12,8 @@ class User(EmailAbstractUser):
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['date_commencement']
+
+    objects = EmailUserManager()
 
     class Meta:
         verbose_name = "Пользователь"
