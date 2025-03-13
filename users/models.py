@@ -85,10 +85,3 @@ class WorkExperience(models.Model):
         return self.years
 
 
-class ProfessionGroup(models.Model):
-    """ Модель группы (потока) """
-    id = models.AutoField(primary_key=True,
-                          verbose_name="profession_group_id"
-                          )
-    profession
-    students
