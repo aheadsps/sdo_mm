@@ -29,7 +29,9 @@ export const Auth = () => {
       <Typography variant={'header_1'} className={s.red}>
         Typography
       </Typography>
-      <Typography variant={'header_2'}>Typography</Typography>
+      <Typography variant={'header_2'} className={s.green}>
+        Typography
+      </Typography>
       <Typography variant={'header_3'}>Typography</Typography>
       <Typography variant={'header_4'}>Typography</Typography>
       <Typography variant={'header_5'}>Typography</Typography>
