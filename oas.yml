@@ -94,7 +94,11 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Profile"
+                type: object
+                properties:
+                  detail:
+                    type: string
+                    default: Пароль был успешно изменен
         "400":
           $ref: "#/components/responses/BadRequest"
         "401":
@@ -193,6 +197,7 @@ paths:
           required: true
           schema:
             type: integer
+            minimum: 1
       summary: Получение эвента по ID (только для текущего пользователя, в ином случае доступ только администрации или методисту)
       tags:
         - Event
@@ -621,7 +626,7 @@ paths:
             application/json:
               schema:
                 type: array
-                maxItems: 0
+                maxItems: 1
                 items:
                   $ref: "#/components/schemas/Lesson"
         "401":
@@ -957,6 +962,7 @@ components:
         id:
           type: integer
           readOnly: true
+          minimum: 1
         first_name:
           type: string
           readOnly: false
@@ -969,7 +975,7 @@ components:
           nullable: true
         email:
           type: string
-          readOnly: false
+          readOnly: true
           nullable: false
           format: email
           maxLength: 255
@@ -977,7 +983,7 @@ components:
           type: string
           format: byte
           nullable: false
-          readOnly: false
+          readOnly: true
           minLength: 8
           maxLength: 128
         is_staff:
@@ -995,19 +1001,16 @@ components:
           format: date-time
           nullable: false
           description: Дата регистрации
+          readOnly: true
         last_login:
           type: string
           format: date-time
           nullable: false
           description: Дата последнего входа
+          readOnly: true
         profession:
           type: object
           $ref: "#/components/schemas/Profession"
-        profile:
-          type: object
-          $ref: "#/components/schemas/Profile"
-          readOnly: true
-          nullable: true
         date_commencement:
           type: string
           format: date-time
@@ -1029,6 +1032,7 @@ components:
         id:
           type: integer
           readOnly: true
+          minimum: 1
         user:
           type: object
           $ref: "#/components/schemas/User"
@@ -1061,11 +1065,7 @@ components:
         id:
           type: integer
           readOnly: true
-        user:
-          type: object
-          $ref: '#/components/schemas/User'
-          description: Пользователь который взаимодействовал
-          nullable: false
+          minimum: 1
         request_time:
           type: string
           format: date-time
@@ -1094,6 +1094,7 @@ components:
         id:
           type: integer
           readOnly: true
+          minimum: 1
         name:
           type: string
           maxLength: 256
@@ -1109,12 +1110,6 @@ components:
           minItems: 1
           items:
             $ref: "#/components/schemas/Lesson"
-        answer_story:
-          type: array
-          description: История ответов пользователя на вопросы. Только в логике сериализатора, в модели не реализуем!
-          minItems: 0
-          items:
-            $ref: "#/components/schemas/StoryAnswer"
         create_date:
           type: string
           format: date-time
@@ -1164,16 +1159,18 @@ components:
         id:
           type: integer
           readOnly: true
+          minimum: 1
         name:
           type: string
           maxLength: 256
           readOnly: false
           nullable: false
-        course:
-          type: object
-          readOnly: false
-          nullable: true
-          $ref: "#/components/schemas/Сourse"
+        steps:
+          type: array
+          description: Шаги урока
+          minItems: 0
+          items:
+            $ref: "#/components/schemas/Step"
         status:
           description: Статус прохождения урока
           nullable: false
@@ -1185,6 +1182,10 @@ components:
     Step:
       description: Шаги урока
       properties:
+        id:
+          type: integer
+          readOnly: true
+          minimum: 1
         title:
           type: string
           maxLength: 256
@@ -1193,11 +1194,6 @@ components:
         content_text:
           type: string
           readOnly: false
-          nullable: true
-        lesson:
-          type: object
-          nullable: true
-          $ref: "#/components/schemas/Lesson"
         questions:
           type: array
           description: Вопросы для данного шага. (Только в логике сериализатора, в модели не реализуем!)
@@ -1225,6 +1221,7 @@ components:
         id:
           type: integer
           readOnly: true
+          minimum: 1
         text:
           type: string
           readOnly: false
@@ -1241,13 +1238,6 @@ components:
           minItems: 0
           items:
             $ref: "#/components/schemas/Answer"
-        instance:
-          type: object
-          nullable: true
-          oneOf:
-            - $ref: "#/components/schemas/Step"
-            - $ref: "#/components/schemas/Сourse"
-          description: К сущности относится вопрос, если к Step - тогда это обычный вопрос, если к Course - финальный (экзаменационный)
 
     Answer:
       description: Сущность ответов на тесты
@@ -1257,10 +1247,7 @@ components:
         id:
           type: integer
           readOnly: true
-        question:
-          type: object
-          nullable: true
-          $ref: "#/components/schemas/Question"
+          minimum: 1
         text:
           type: string
           nullable: false
@@ -1281,6 +1268,7 @@ components:
         id:
           type: integer
           readOnly: true
+          minimum: 1
         file:
           type: string
           readOnly: false
@@ -1293,10 +1281,6 @@ components:
           enum:
             - Image
             - Video
-        step:
-          type: object
-          $ref: "#/components/schemas/Step"
-          nullable: false
       required:
         - file
         - file_type
@@ -1310,6 +1294,7 @@ components:
         id:
           type: integer
           readOnly: true
+          minimum: 1
         profession:
           type: object
           $ref: "#/components/schemas/Profession"
@@ -1325,6 +1310,10 @@ components:
       description: Профессии
       type: object
       properties:
+        id:
+          type: integer
+          readOnly: true
+          minimum: 1
         en_name:
           type: string
           maxLength: 256
@@ -1341,6 +1330,7 @@ components:
         id:
           type: integer
           readOnly: true
+          minimum: 1
         years:
           type: integer
           minimum: 0
@@ -1353,9 +1343,7 @@ components:
         id:
           type: integer
           readOnly: true
-        user:
-          type: object
-          $ref: "#/components/schemas/User"
+          minimum: 1
         question:
           type: object
           $ref: "#/components/schemas/Question"
@@ -1371,11 +1359,14 @@ components:
         id:
           type: integer
           readOnly: true
+          minimum: 1
         user:
           type: object
+          readOnly: true
           $ref: "#/components/schemas/User"
         course:
           type: object
+          readOnly: false
           $ref: "#/components/schemas/Сourse"
         done_lessons:
           type: integer
@@ -1401,6 +1392,7 @@ components:
             - done
             - process
             - failed
+          readOnly: true
 
   securitySchemes:
     Token:
