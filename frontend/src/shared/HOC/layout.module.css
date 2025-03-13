@@ -1,6 +1,6 @@
 .header {
     color: var(--color-accent-red500);
-    border: 1px solid var(--color-accent-red500);
+    border: 1px solid var(--color-additional-border100);;
     padding: 10px 20px;
     text-align: center;
     position: fixed;

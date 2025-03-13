@@ -2,6 +2,7 @@ import { createBrowserRouter } from 'react-router-dom'
 
 import { Auth } from '@pages/auth'
 import { Main } from '@pages/main'
+import { MyLearning } from '@pages/my-learning/MyLearning'
 
 export const router = createBrowserRouter([
   {
@@ -13,7 +14,7 @@ export const router = createBrowserRouter([
     element: <Main />,
   },
   {
-    path: '/',
-    element: <div>hello App</div>,
+    path: '/learning',
+    element: <MyLearning />,
   },
 ])
