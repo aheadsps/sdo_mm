@@ -62,7 +62,6 @@
   --font-weight-bold: 700;
 }
 
-
 @font-face {
   font-family: 'Moscow Sans';
   font-weight: normal;
@@ -77,9 +76,18 @@
   font-display: swap;
 }
 
+*,
+*::before,
+*::after {
+  margin: 0; 
+  padding: 0;
+  box-sizing: border-box;
+}
+
 body {
   font-family: var(--font-family-primary);
   background: var(--color-accent-info);
+  color: var()
 }
 
 h2 {
