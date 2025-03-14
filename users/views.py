@@ -1,4 +1,4 @@
-from authemail.models import send_multi_format_email
+from authemail.views import PasswordChange, Logout, UserMe, Login
 
 from django.contrib.auth import authenticate
 
@@ -8,18 +8,19 @@ from rest_framework import status
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
-from rest_framework.views import APIView
 
-from users.serializers import LoginSerializer, CustomPasswordChangeSerializer
-from users.serializers import PasswordChangeSerializer
-from users.serializers import UserSerializer
+from users.serializers import LoginSerializer, CustomPasswordChangeSerializer, CustomUserSerializer
+from users.utils import custom_send_multi_format_email
 
 
-class Login(APIView):
+class CustomLogin(Login):
+	""" Кастомный класс для входа пользователя. """
 	permission_classes = (AllowAny,)
 	serializer_class = LoginSerializer
 
 	def post(self, request, format=None):
+		""" Обрабатывает POST-запрос для изменения пароля пользователя. """
+		# Валидация данных
 		serializer = self.serializer_class(data=request.data)
 
 		if serializer.is_valid():
@@ -31,12 +32,10 @@ class Login(APIView):
 				if user.is_verified:
 					if user.is_active:
 						token, created = Token.objects.get_or_create(user=user)
-						return Response({'token': token.key},
-										status=status.HTTP_200_OK)
+						return Response({'token': token.key}, status=status.HTTP_200_OK)
 					else:
 						content = {'detail': _('User account not active.')}
-						return Response(content,
-										status=status.HTTP_401_UNAUTHORIZED)
+						return Response(content, status=status.HTTP_401_UNAUTHORIZED)
 				else:
 					content = {'detail': _('User account not verified.')}
 					return Response(content, status=status.HTTP_401_UNAUTHORIZED)
@@ -45,28 +44,29 @@ class Login(APIView):
 				return Response(content, status=status.HTTP_401_UNAUTHORIZED)
 
 		else:
-			return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+			return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class Logout(APIView):
+class CustomLogout(Logout):
+	""" Кастомный класс для выхода пользователя. """
 	permission_classes = (IsAuthenticated,)
 
 	def get(self, request, format=None):
-		"""
-		Remove all auth tokens owned by request.user.
-		"""
+		"""Обрабатывает GET-запрос для выхода пользователя."""
 		tokens = Token.objects.filter(user=request.user)
 		for token in tokens:
 			token.delete()
-		content = {'success': _('User logged out.')}
+		content = {'success': _('Юзер вышел из профиля.')}
 		return Response(content, status=status.HTTP_200_OK)
 
 
-class PasswordChange(APIView):
+class CustomPasswordChange(PasswordChange):
+	""" Кастомный класс для изменения пароля пользователя. """
 	permission_classes = (IsAuthenticated,)
 	serializer_class = CustomPasswordChangeSerializer
 
 	def post(self, request, format=None):
+		""" Обрабатывает POST-запрос для изменения пароля пользователя. """
 		serializer = self.serializer_class(data=request.data, context={'request': request})
 
 		if serializer.is_valid():
@@ -76,21 +76,20 @@ class PasswordChange(APIView):
 			user.set_password(new_password)
 			user.save()
 
-			send_multi_format_email('change_email',
-									{'email': user.email, },
-									target_email=user.email)
+			custom_send_multi_format_email('change_password',
+										   {'email': user.email, },
+										   target_email=user.email)
 
 			content = {'success': _('Пароль успешно изменен.')}
 			return Response(content, status=status.HTTP_200_OK)
 
 		else:
-			return Response(serializer.errors,
-							status=status.HTTP_400_BAD_REQUEST)
+			return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class UserMe(APIView):
+class CustomUserMe(UserMe):
 	permission_classes = (IsAuthenticated,)
-	serializer_class = UserSerializer
+	serializer_class = CustomUserSerializer
 
 	def get(self, request, format=None):
 		return Response(self.serializer_class(request.user).data)
