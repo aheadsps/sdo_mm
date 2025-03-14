@@ -8,8 +8,12 @@ export const withLayout = <T extends object>(Component: ComponentType<T>) => {
     return (
       <>
         <header className={s.header}>Hello</header>
-        <Sidebar />
-        <Component {...props} />
+        <div className={s.appWrapper}>
+          <Sidebar />
+          <main className={s.main}>
+            <Component {...props} />
+          </main>
+        </div>
       </>
     )
   }

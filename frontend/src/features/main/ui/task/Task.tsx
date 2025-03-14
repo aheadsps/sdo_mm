@@ -24,9 +24,11 @@ export const Task = ({ daysLeft }: Props) => {
         </Typography>
         <ArrowRightIcon width={'8px'} height={'14px'} className={s.icon} />
       </div>
-      <Typography variant="caption" className={s.subtitle}>
-        Осталось {daysLeft} дня
-      </Typography>
+      {daysLeft && (
+        <Typography variant="caption" className={s.subtitle}>
+          Осталось {daysLeft} дня
+        </Typography>
+      )}
     </div>
   )
 }

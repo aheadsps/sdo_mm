@@ -6,7 +6,7 @@ import s from './main.module.scss'
 
 const MainComp = () => {
   return (
-    <main className={s.main}>
+    <>
       <Typography variant="header_4" className={s.title}>
         Ваши актуальные задачи
       </Typography>
@@ -14,7 +14,7 @@ const MainComp = () => {
       <Task daysLeft={4} />
       <Task daysLeft={7} />
       <Task />
-    </main>
+    </>
   )
 }
 

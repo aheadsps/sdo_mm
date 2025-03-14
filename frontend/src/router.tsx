@@ -18,6 +18,14 @@ export const router = createBrowserRouter([
     element: <MyLearning />,
   },
   {
+    path: '/library',
+    element: <MyLearning />,
+  },
+  {
+    path: '/news',
+    element: <Main />,
+  },
+  {
     path: '/',
     element: <div>Hello App</div>,
   },

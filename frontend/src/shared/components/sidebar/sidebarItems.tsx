@@ -25,13 +25,13 @@ export const sidebarItems = [
     id: 'knowledge-library',
     icon: <LibraryIcon width={24} height={24} />,
     text: 'Библиотека знаний',
-    path: '/',
+    path: '/library',
   },
   {
     id: 'news',
     icon: <NewsIcon width={24} height={24} />,
     text: 'Новости',
-    path: '/',
+    path: '/news',
   },
   {
     id: 'webinars',
