@@ -11,4 +11,6 @@ COPY ./frontend/ .
 
 EXPOSE 5000
 
-CMD [ "npm", "run", "dev" ]
+COPY ./frontend/docker/react/start /start
+RUN sed -i 's/\r$//g' /start
+RUN chmod +x /start
