@@ -1476,7 +1476,7 @@ components:
           maximum: 60
 
     UserStory:
-      description: История ответов на вопросы и открытия уроков
+      description: История ответов на вопросы и открытия уроков (должно быть либо урок, либо вопрос - ответ)
       type: object
       properties:
         id:
@@ -1496,14 +1496,16 @@ components:
           description: Текущий вопрос (внутри варианты ответа)
           nullable: true
           $ref: "#/components/schemas/Question"
-        answer:
-          type: object
+        answer_id:
+          type: integer
           description: Текущий ответ
           nullable: true
-          $ref: "#/components/schemas/Answer"
-        lesson:
-          type: object
+          minimum: 1
+        lesson_id:
+          type: integer
           description: Текущий пройденный урок
+          nullable: true
+          minimum: 1
 
     EventView:
       description: Сущность задачи (курс) которая присваивается пользователю
