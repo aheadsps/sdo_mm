@@ -19,4 +19,5 @@ docker-compose build
 docker-compose up
 ```
 
-По адрессу localhost:8080 будет бэкенд проект
+- По адрессу localhost:8080 Backend
+- По адрессу localhost:5000 Frontend
