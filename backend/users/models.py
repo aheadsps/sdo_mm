@@ -31,7 +31,7 @@ class User(EmailAbstractUser):
     date_joined = models.DateTimeField(auto_now_add=True, verbose_name="Дата регистрации")
     last_login = models.DateTimeField(auto_now=True, verbose_name="Время последнего входа")
     date_commencement = models.DateField(null=False, verbose_name="Стаж работы")
-    profession = models.ForeignKey(Profession, unique=False, on_delete=models.PROTECT,)
+    profession = models.ForeignKey(Profession, unique=False, null=True, on_delete=models.PROTECT,)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['date_commencement']

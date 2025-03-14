@@ -27,9 +27,26 @@ services:
     env_file:
       - ./backend/.env
 
+  react:
+    container_name: react
+    build:
+      context: .
+      dockerfile: ./frontend/docker/react/Dockerfile
+    volumes:
+      - './frontend/:/app'
+      - '/app/node_modules'
+    ports:
+      - 3000:3000
+    stdin_open: true
+    tty: true
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+
 volumes:
   postgres_data:
 
 networks:
   backend:
+    driver: bridge
+  frontend:
     driver: bridge
