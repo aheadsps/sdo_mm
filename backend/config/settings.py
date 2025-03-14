@@ -23,16 +23,17 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv("SECRET_KEY")
+SECRET_KEY = get_random_secret_key()
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True if os.getenv('DEBUG') else False
+
 
 if not DEBUG:
 	HOST = os.getenv('DJANGO_ALLOWED_HOSTS')
 	ALLOWED_HOSTS = [HOST if HOST else 'example.com']
 else:
-	ALLOWED_HOSTS = ['*']
+  	ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -106,11 +107,11 @@ OAS_PATH = BASE_DIR.joinpath('oas.yml')
 DATABASES = {
 	"default": {
 		"ENGINE": os.getenv("ENGINE"),
-		"NAME": os.getenv("NAME"),
-		"USER": 'postgres',
-		"PASSWORD": os.getenv("PASSWORD"),
-		"HOST": os.getenv("HOST"),
-		"PORT": os.getenv("PORT"),
+		"NAME": os.getenv("DB_NAME"),
+		"USER": os.getenv("DB_USER"),
+		"PASSWORD": os.getenv("DB_PASSWORD"),
+		"HOST": os.getenv("DB_HOST"),
+		"PORT": os.getenv("DB_PORT"),
 	}
 }
 
