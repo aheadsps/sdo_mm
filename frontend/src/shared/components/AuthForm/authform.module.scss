@@ -1,5 +1,5 @@
 .auth {
-  &__container{
+  &__container {
     max-width: 300px;
     background: white;
     position: absolute;
@@ -8,9 +8,9 @@
   }
 
   &__heading {
-    display: block; 
-    padding-left: 10px; 
-    border-left: 4px solid #DC3444;
+    display: block;
+    padding-left: 10px;
+    border-left: 4px solid #dc3444;
     border-radius: 3px;
     margin-bottom: 48px;
   }
@@ -20,7 +20,7 @@
   &__input {
     width: 100%;
     outline: 0;
-    border-bottom: 2px solid #831F29;
+    border-bottom: 2px solid #831f29;
     border-radius: 2px;
     padding: 9px 12px;
     &:first-child {
@@ -40,17 +40,17 @@
     line-height: 100%;
     letter-spacing: 0.25px;
     &:first-child {
-      color: #6C757D;
+      color: #6c757d;
     }
   }
-  &__button{
+  &__button {
     width: 100%;
     height: 40px;
-    background-color: #DC3444; 
-    color: #fff; 
+    background-color: #dc3444;
+    color: #fff;
     border: none;
-    border-radius: 8px; 
-    cursor: pointer; 
+    border-radius: 8px;
+    cursor: pointer;
     font-size: 14px;
     text-align: center;
   }
@@ -58,4 +58,3 @@
 .auth__input::placeholder {
   font-family: 'Moscow Sans', sans-serif;
 }
-
