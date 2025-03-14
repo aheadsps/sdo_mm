@@ -6,7 +6,6 @@
     left: 250px;
     top: 153px;
   }
-
   &__heading {
     display: block;
     padding-left: 10px;
@@ -23,10 +22,16 @@
     border-bottom: 2px solid #831f29;
     border-radius: 2px;
     padding: 9px 12px;
+    position: relative;
     &:first-child {
       margin-bottom: 24px;
     }
   }
+  &__passwordWrapper {
+    position: relative;
+    width: 300px;
+  }
+
   &__links {
     display: flex;
     justify-content: space-between;
@@ -54,7 +59,25 @@
     font-size: 14px;
     text-align: center;
   }
+  &__error {
+    color: #dc3444;
+    font-family: 'Moscow Sans', sans-serif;
+    font-weight: 300;
+    font-size: 14px;
+    line-height: 130%;
+    letter-spacing: 0.25px;
+    padding: 0 12px;
+    text-align: center;
+  }
+  &__eyeIconWrapper {
+    position: absolute;
+    top: 45%;
+    right: 12px;
+    transform: translateY(-50%);
+    cursor: pointer;
+  }
 }
 .auth__input::placeholder {
   font-family: 'Moscow Sans', sans-serif;
 }
+

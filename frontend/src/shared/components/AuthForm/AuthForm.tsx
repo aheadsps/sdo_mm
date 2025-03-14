@@ -1,5 +1,8 @@
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { Link } from 'react-router-dom'
+
+import { ClosedEyeIcon, OpenedEyeIcon } from '@assets/icons'
 
 import styles from '../AuthForm/authform.module.scss'
 import { Typography } from '../Typography'
@@ -10,13 +13,16 @@ interface AuthFormData {
 }
 
 const AuthForm = () => {
-  const { register, handleSubmit, formState } = useForm<AuthFormData>({
+  const { register, handleSubmit, formState, reset } = useForm<AuthFormData>({
     mode: 'onChange',
     delayError: 2000,
   })
 
+  const [showPassword, setShowPassword] = useState(false)
+
   const onSubmit = (data: AuthFormData) => {
     console.log(data)
+    reset()
   }
 
   return (
@@ -32,31 +38,41 @@ const AuthForm = () => {
             placeholder="Email"
             required
             {...register('email', {
-              required: '*Заполните все поля',
+              required: 'Заполните все поля',
               pattern: {
                 value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
-                message: 'Введите корректный адрес эл. почты',
+                message: 'Некорректный email',
               },
             })}
           />
-          {/* Отображение ошибки для email */}
           {formState.errors.email && (
             <span className={styles.auth__error}>{formState.errors.email.message}</span>
           )}
-          <input
-            type="password"
-            className={styles.auth__input}
-            placeholder="Пароль"
-            required
-            {...register('password', {
-              required: '*Заполните все поля',
-              minLength: {
-                value: 6,
-                message: 'Неверный логин или пароль',
-              },
-            })}
-          />
-          {/* Отображение ошибки для пароля */}
+          <div className={styles.auth__passwordWrapper}>
+            <input
+              type={showPassword ? 'text' : 'password'}
+              className={styles.auth__input}
+              placeholder="Пароль"
+              required
+              {...register('password', {
+                required: 'Заполните все поля',
+                minLength: {
+                  value: 6,
+                  message: 'Минимум 6 символов',
+                },
+              })}
+            />
+            <div
+              className={styles.auth__eyeIconWrapper}
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              {showPassword ? (
+                <OpenedEyeIcon className={styles.auth__eyeIcon} width={18} height={18} />
+              ) : (
+                <ClosedEyeIcon className={styles.auth__eyeIcon} width={18} height={18} />
+              )}
+            </div>
+          </div>
           {formState.errors.password && (
             <span className={styles.auth__error}>{formState.errors.password.message}</span>
           )}
