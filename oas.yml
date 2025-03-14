@@ -1165,6 +1165,12 @@ components:
           maxLength: 256
           readOnly: false
           nullable: false
+        serial:
+          type: integer
+          description: Порядковый номер урока (1 урок всегда открыт)
+          minimum: 1
+          readOnly: false
+          nullable: false
         steps:
           type: array
           description: Шаги урока
@@ -1194,24 +1200,44 @@ components:
         content_text:
           type: string
           readOnly: false
-        questions:
-          type: array
-          description: Вопросы для данного шага. (Только в логике сериализатора, в модели не реализуем!)
-          minItems: 0
-          items:
-            $ref: "#/components/schemas/Question"
+        serial:
+          type: integer
+          description: Порядковый номер шага (1 шаг всегда открыт)
+          minimum: 1
+          readOnly: false
+          nullable: false
         media_attachment:
           type: array
           description: Медиа вложения. (Только в логике сериализатора, в модели не реализуем!)
           minItems: 0
           items:
             $ref: "#/components/schemas/ContentAttachment"
-        answer_story:
+        test_block:
+          type: object
+          description: Тестовый блок для этого шага
+          nullable: true
+          $ref: "#/components/schemas/TestBlock"
+
+    TestBlock:
+      description: Блок с вопросами
+      additionalProperties: false
+      type: object
+      properties:
+        id:
+          type: integer
+          minimum: 1
+          readOnly: true
+        questions:
           type: array
-          description: История ответов пользователя на вопросы. (Только в логике сериализатора, в модели не реализуем!)
+          description: Вопросы для данного шага. (Только в логике сериализатора, в модели не реализуем!)
           minItems: 0
           items:
-            $ref: "#/components/schemas/StoryAnswer"
+            $ref: "#/components/schemas/Question"
+        user_story:
+          type: object
+          description: Список уже пройденых вопросов
+          nullable: false
+          $ref: "#/components/schemas/UserStory"
 
     Question:
       description: Сущность тестов для урока
@@ -1336,8 +1362,8 @@ components:
           minimum: 0
           maximum: 60
 
-    StoryAnswer:
-      description: История ответов на вопросы
+    UserStory:
+      description: История ответов на вопросы и открытия уроков
       type: object
       properties:
         id:
@@ -1346,9 +1372,11 @@ components:
           minimum: 1
         question:
           type: object
+          description: Текущий вопрос (внутри варианты ответа)
           $ref: "#/components/schemas/Question"
         answer:
           type: object
+          description: Текущий ответ
           $ref: "#/components/schemas/Answer"
 
     Event:
