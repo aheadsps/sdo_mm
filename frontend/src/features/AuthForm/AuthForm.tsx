@@ -4,8 +4,8 @@ import { Link } from 'react-router-dom'
 
 import { ClosedEyeIcon, OpenedEyeIcon } from '@assets/icons'
 
+import { Typography } from '../../shared/components/Typography'
 import styles from '../AuthForm/authform.module.scss'
-import { Typography } from '../Typography'
 
 interface AuthFormData {
   email: string

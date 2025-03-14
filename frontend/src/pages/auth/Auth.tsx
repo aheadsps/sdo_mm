@@ -9,7 +9,7 @@ import {
   WebinarAndSupportIcon,
 } from '@assets/icons'
 
-import AuthForm from '../../../src/shared/components/AuthForm/AuthForm.tsx'
+import AuthForm from '../../features/AuthForm/AuthForm.tsx'
 import { Typography } from '../../shared/components/Typography'
 import { cn } from '../../shared/utils/cn.ts'
 
