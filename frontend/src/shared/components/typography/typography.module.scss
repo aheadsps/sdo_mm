@@ -37,10 +37,20 @@
     @include typogaphy(var(--line-height-m), var(--font-size-s), var(--font-weight-light), var(--font-family-secondary));
   }
 
-  .btn_links {
-    @include typogaphy(var(--line-height-s), var(--font-size-xs), var(--font-weight-light), var(--font-family-secondary));
-  }
-  
-  .caption {
-    @include typogaphy(var(--line-height-s), var(--font-size-xs), var(--font-weight-light), var(--font-family-secondary));
-  }
+.btn_links {
+  @include typogaphy(
+    var(--line-height-s),
+    var(--font-size-xs),
+    var(--font-weight-light),
+    var(--font-family-secondary)
+  );
+}
+
+.caption {
+  @include typogaphy(
+    var(--line-height-s),
+    var(--font-size-xs),
+    var(--font-weight-light),
+    var(--font-family-secondary)
+  );
+}

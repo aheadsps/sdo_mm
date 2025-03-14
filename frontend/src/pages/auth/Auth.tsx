@@ -1,4 +1,5 @@
 import { Typography } from '@shared/components'
+import Header from '@shared/components/Header/Header'
 
 import {
   LibraryIcon,
@@ -40,6 +41,7 @@ export const Auth = () => {
       <Typography variant={'body_2'}>Typography</Typography>
       <Typography variant={'btn_links'}>Typography</Typography>
       <Typography variant={'caption'}>Typography</Typography>
+      <Header title="Корпоративный университет Транспортного комплекса" />
     </>
   )
 }
