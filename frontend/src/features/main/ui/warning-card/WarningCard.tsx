@@ -1,4 +1,5 @@
 import { Typography } from '@shared/components'
+import { Button } from '@shared/components/button/Button'
 
 import s from './warning-card.module.scss'
 
@@ -16,6 +17,9 @@ export const WarningCard = () => {
         <Typography variant="caption" className={s.caption}>
           Остался 1 день, пройдите до 12.03.2025
         </Typography>
+        <Button type="button" className={s.button}>
+          Перейти к инструктажу
+        </Button>
       </div>
     </div>
   )
