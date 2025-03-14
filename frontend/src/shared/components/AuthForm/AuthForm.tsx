@@ -34,7 +34,7 @@ const AuthForm = () => {
         <div className={styles.auth__inputs}>
           <input
             type="email"
-            className={styles.auth__input}
+            className={`${styles.auth__input} ${formState.errors.password ? styles.auth__inputError : ''}`}
             placeholder="Email"
             required
             {...register('email', {
@@ -51,7 +51,7 @@ const AuthForm = () => {
           <div className={styles.auth__passwordWrapper}>
             <input
               type={showPassword ? 'text' : 'password'}
-              className={styles.auth__input}
+              className={`${styles.auth__input} ${formState.errors.email ? styles.auth__inputError : ''}`}
               placeholder="Пароль"
               required
               {...register('password', {

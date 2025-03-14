@@ -23,15 +23,19 @@
     border-radius: 2px;
     padding: 9px 12px;
     position: relative;
+    transition: color 0.3s ease, border-color 0.3s ease;
     &:first-child {
       margin-bottom: 24px;
     }
+  }
+  &__inputError {
+    color: #dc3444; 
+    border-bottom: 2px solid #dc3444;
   }
   &__passwordWrapper {
     position: relative;
     width: 300px;
   }
-
   &__links {
     display: flex;
     justify-content: space-between;
