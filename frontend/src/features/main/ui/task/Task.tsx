@@ -1,24 +1,26 @@
 import { Typography } from '@shared/components'
-import { ReactNode } from 'react'
+import clsx from 'clsx'
+import { ComponentPropsWithRef, ReactNode } from 'react'
 
 import ArrowRightIcon from '@assets/icons/ArrowRightIcon'
 
 import s from './task.module.scss'
 
+const getBackgroundColor = (days?: number) => {
+  if (days === undefined) return 'var(--color-accent-info)'
+  if (days < 3) return 'var(--color-accent-negative)'
+  if (days >= 3 && days <= 6) return 'var(--color-accent-orange)'
+  if (days >= 7) return 'var(--color-accent-success)'
+}
+
 type Props = {
   daysLeft?: number
   children: ReactNode
-}
-export const Task = ({ daysLeft, children }: Props) => {
-  const getBackgroundColor = (days?: number) => {
-    if (days === undefined) return 'var(--color-accent-info)'
-    if (days < 3) return 'var(--color-accent-negative)'
-    if (days >= 3 && days <= 6) return 'var(--color-accent-orange)'
-    if (days >= 7) return 'var(--color-accent-success)'
-  }
+} & ComponentPropsWithRef<'div'>
 
+export const Task = ({ daysLeft, children, className }: Props) => {
   return (
-    <div className={s.card}>
+    <div className={clsx(s.card, className)}>
       <span className={s.leftBar} style={{ backgroundColor: getBackgroundColor(daysLeft) }}></span>
       <div className={s.content}>
         <Typography variant="body_1" className={s.title}>

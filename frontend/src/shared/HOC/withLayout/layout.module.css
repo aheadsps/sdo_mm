@@ -14,13 +14,15 @@
 
 .appWrapper {
     max-width: 1350px;
+    padding-left: 20px;
+    padding-right: 20px;
     display: flex;
     margin: 0 auto;
 }
 
 .main {
     margin-top: 93px;
-    padding: 25px;
+    padding: 30px;
     width: 100%;
     border-left: 1px solid var(--color-additional-border100);
 }
