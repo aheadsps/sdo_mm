@@ -18,7 +18,7 @@
   }
   
   .header_4 {
-    @include typogaphy(var(--line-height-m), var(--font-size-m), var(--font-weight-bold), var(--font-family-primary));
+    @include typogaphy(var(--line-height-m), var(--font-size-xl), var(--font-weight-bold), var(--font-family-primary));
   }
   
   .header_5 {

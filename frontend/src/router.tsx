@@ -17,4 +17,8 @@ export const router = createBrowserRouter([
     path: '/learning',
     element: <MyLearning />,
   },
+  {
+    path: '/',
+    element: <div>Hello App</div>,
+  },
 ])
