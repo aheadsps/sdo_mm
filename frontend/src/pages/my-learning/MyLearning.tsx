@@ -1,4 +1,4 @@
-import { withLayout } from '@shared/HOC/withLayout'
+import { withLayout } from '@shared/HOC/withLayout/withLayout'
 
 const MyLearningComp = () => {
   return <main>My Learning</main>

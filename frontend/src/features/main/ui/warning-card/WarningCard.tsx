@@ -1,0 +1,22 @@
+import { Typography } from '@shared/components'
+
+import s from './warning-card.module.scss'
+
+export const WarningCard = () => {
+  return (
+    <div className={s.warningCard}>
+      <Typography variant="header_6" className={s.warningIndicator}>
+        Время на прохождение истекает!
+      </Typography>
+
+      <div className={s.textBlock}>
+        <Typography variant="body_1" className={s.text}>
+          Работа с опасными веществами
+        </Typography>
+        <Typography variant="caption" className={s.caption}>
+          Остался 1 день, пройдите до 12.03.2025
+        </Typography>
+      </div>
+    </div>
+  )
+}

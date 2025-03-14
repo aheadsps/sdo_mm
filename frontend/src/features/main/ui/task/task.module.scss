@@ -3,13 +3,13 @@
     flex-direction: column;
     background-color: var(--color-bg-main);
     border: 1px solid var(--color-accent-negative);
-    border-radius: 8px;
+    border-radius: 9px;
     padding: 12px 16px;
     position: relative;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     transition: transform 0.2s ease-in-out;
     width: 415px;
-    height: 79px;
+    min-height: 79px;
     margin-bottom: 12px;
   
     &:hover {

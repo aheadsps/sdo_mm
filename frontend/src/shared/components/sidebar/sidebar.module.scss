@@ -2,13 +2,11 @@
     width: 294px;
     background-color: var(--color-bg-main);
     border-color: var(--color-additional-border100);
-    padding: 15px;
     height: calc(100vh - 93px);
     position: relative;
-    top: 93px;
+    top: 103px;
     left: 0;
     z-index: 999;
-    border-right: 1px solid var(--color-additional-border100);
 }
 
 .sidebarContent {

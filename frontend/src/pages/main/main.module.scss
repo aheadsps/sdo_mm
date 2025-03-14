@@ -3,6 +3,16 @@
     padding: 20px;
 }
 
+.contentBlock {
+    display: flex;
+    justify-content: space-between;
+}
+
 .title {
     margin-bottom: 20px;
+    color: var(--color-text-primary);
+}
+
+.taskBlock {
+    margin-top: 40px;
 }
