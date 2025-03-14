@@ -36,7 +36,7 @@ services:
       - '/app/node_modules'
       - './frontend:/app'
     ports:
-      - 5173:5173
+      - 5173:5000
     stdin_open: true
     tty: true
     environment:
