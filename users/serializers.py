@@ -1,27 +1,16 @@
-from authemail.serializers import PasswordChangeSerializer
+from authemail.serializers import PasswordChangeSerializer, UserSerializer, LoginSerializer, SignupSerializer
 from django.contrib.auth import get_user_model, authenticate
 from rest_framework import serializers
 
+from users.models import User
 
-class SignupSerializer(serializers.Serializer):
+
+class CustomPasswordChangeSerializer(serializers.Serializer):
     """
-    Don't require email to be unique so visitor can signup multiple times,
-    if misplace verification email.  Handle in view.
+    Кастомный сериализатор для изменения пароля пользователя.
+    Проверяет старый пароль и устанавливает новый.
     """
-    email = serializers.EmailField(max_length=255)
-    password = serializers.CharField(max_length=128)
-    first_name = serializers.CharField(max_length=30, default='',
-                                       required=False)
-    last_name = serializers.CharField(max_length=30, default='',
-                                      required=False)
 
-
-class LoginSerializer(serializers.Serializer):
-    email = serializers.EmailField(max_length=255)
-    password = serializers.CharField(max_length=128)
-
-
-class CustomPasswordChangeSerializer(PasswordChangeSerializer):
     old_password = serializers.CharField(required=True, min_length=8, max_length=128)
     new_password = serializers.CharField(required=True, min_length=8, max_length=128)
 
@@ -32,7 +21,11 @@ class CustomPasswordChangeSerializer(PasswordChangeSerializer):
         return value
 
 
-class UserSerializer(serializers.ModelSerializer):
+class CustomUserSerializer(UserSerializer):
+    """
+    Кастомный сериализатор для модели User.
+    """
     class Meta:
-        model = get_user_model()
-        fields = ('id', 'email', 'first_name', 'last_name')
+        model = User
+        fields = ['id', 'email', 'first_name', 'last_name', 'date_joined', 'profession', 'date_commencement']
+        read_only_fields = ['id', 'is_staff', 'is_active', 'date_joined', 'last_login']
