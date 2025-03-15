@@ -1,6 +1,8 @@
 import { createBrowserRouter } from 'react-router-dom'
 
 import { Auth } from '@pages/auth'
+import { Main } from '@pages/main'
+import { MyLearning } from '@pages/my-learning/MyLearning'
 
 export const router = createBrowserRouter([
   {
@@ -8,7 +10,23 @@ export const router = createBrowserRouter([
     element: <Auth />,
   },
   {
+    path: '/main',
+    element: <Main />,
+  },
+  {
+    path: '/learning',
+    element: <MyLearning />,
+  },
+  {
+    path: '/library',
+    element: <MyLearning />,
+  },
+  {
+    path: '/news',
+    element: <Main />,
+  },
+  {
     path: '/',
-    element: <div className={'text-center'}>Hello App</div>,
+    element: <div>Hello App</div>,
   },
 ])

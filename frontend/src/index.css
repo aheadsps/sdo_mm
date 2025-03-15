@@ -39,13 +39,14 @@
   --color-accent-info: #3d8bfd;
 
   /* Font sizes */
-  --font-size-xs: 0.875rem; /* 14px */
-  --font-size-s: 1rem; /* 16px */
-  --font-size-m: 1.125rem; /* 18px */
-  --font-size-l: 1.5rem; /* 24px */
-  --font-size-xl: 1.75rem; /* 28px */
-  --font-size-xxl: 2rem; /* 32px */
-  --font-size-xxxl: 2.5rem; /* 40px */
+  --font-size-xs: 0.875rem;  /* 14px */
+  --font-size-s: 1rem;       /* 16px */
+  --font-size-m: 1.125rem;   /* 18px */
+  --font-size-h6: 1.25rem;    /* 20px */
+  --font-size-l: 1.5rem;     /* 24px */
+  --font-size-xl: 1.75rem;   /* 28px */
+  --font-size-xxl: 2rem;     /* 32px */
+  --font-size-xxxl: 2.5rem;  /* 40px */
   --font-size-super-large: 3rem; /* 48px */
 
   /* Line heights */
@@ -60,6 +61,10 @@
   --font-weight-light: 300;
   --font-weight-semibold: 600;
   --font-weight-bold: 700;
+
+  /* effects */
+  --transition-effect: transform 0.2s ease-in-out;
+  --transform-effect: scale(1.02);
 }
 
 @font-face {
@@ -86,7 +91,7 @@
 
 body {
   font-family: var(--font-family-primary);
-  /* background: var(--color-accent-info); */
+  background: var(--color-bg-main);
 }
 
 h2 {

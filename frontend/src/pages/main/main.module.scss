@@ -1,0 +1,27 @@
+.main {
+    margin-top: 93px;
+    padding: 20px;
+}
+
+.contentBlock {
+    display: flex;
+    justify-content: space-between;
+}
+
+.tasks {
+    display: flex;
+    flex-direction: column;
+}
+
+.title {
+    margin-bottom: 24px;
+    color: var(--color-text-primary);
+}
+
+.expiredTasks {
+    margin-top: 40px;
+}
+
+.appointedTask {
+    width: 100%;
+}

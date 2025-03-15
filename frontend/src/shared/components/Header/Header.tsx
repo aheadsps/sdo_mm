@@ -6,6 +6,7 @@ import LogoIcon from '../../../assets/icons/LogoIcon'
 
 import '@fontsource/manrope/600.css'
 import styles from './header.module.scss'
+import { HeaderAvatar } from './HeaderAvatar'
 
 type HeaderProps = {
   title: string
@@ -24,6 +25,7 @@ const Header: React.FC<HeaderProps> = ({ title }) => {
       <div className={styles.header__titleContainer}>
         <p className={styles.header__titleText}>{title}</p>
       </div>
+      <HeaderAvatar />
       <MobileVersionHeaderIcon className={styles.header__mobileIcon} width={40} height={40} />
     </header>
   )
