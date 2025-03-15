@@ -1,6 +1,5 @@
-import { Sidebar } from '@shared/components'
-import Header from '@shared/components/Header/Header'
-import { useScreenWidth } from '@shared/hooks/useScreenWidth'
+import { Sidebar, Header } from '@shared/components'
+import { useScreenWidth } from '@shared/hooks'
 import { ComponentType } from 'react'
 
 import s from './layout.module.css'

@@ -1,7 +1,6 @@
-import { MainComp } from '@features/main'
-import { MainResponsive } from '@features/main/ui/main/MainResponsive'
+import { MainComp, MainResponsive } from '@features/main'
 import { withLayout } from '@shared/HOC'
-import { useScreenWidth } from '@shared/hooks/useScreenWidth'
+import { useScreenWidth } from '@shared/hooks'
 
 const MainPage = () => {
   const { isDesktop } = useScreenWidth()
