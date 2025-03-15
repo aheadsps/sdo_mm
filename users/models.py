@@ -102,44 +102,5 @@ class ProfessionGroup(models.Model):
         return self.profession
 
 
-@receiver(post_save, sender=Profession)
-def add_group_profession(sender, instance, created, **kwargs):
-    """
-    Это срабатывает при сохранении Profession
-    Добавляет, если нет, группу профессий
-    """
-    if created:
-        profession_group, create = ProfessionGroup.objects.get_or_create(profession=instance)
-
-
-@receiver(post_save, sender=User)
-def add_in_group_profession(sender, instance, created, **kwargs):
-    """
-    При создании Юзера он попадает в группу согласно профессии
-    """
-    if created and instance.profession:
-        print("создание")
-        profession_group = ProfessionGroup.objects.order_by('-id').filter(profession=instance.profession_id).first()
-        profession_group.students.add(instance)
-        profession_group.save()
-
-
-@receiver(pre_save, sender=User)
-def change_in_group_profession(sender, instance, update_fields, **kwargs):
-    """
-        При изменении у Юзера профессии он
-         удаляется из группы профессий и добавляется в новую
-    """
-    print("изменение")
-    old_instance = sender.objects.get(id=instance.id)
-    if old_instance.profession != instance.profession:
-        # Удалить user в старой ProfessionGroup
-        profession_group = ProfessionGroup.objects.get(students=old_instance.pk)
-        profession_group.students.remove(instance)
-        profession_group.save()
-        # Добавить user в новую ProfessionGroup
-        profession_group = ProfessionGroup.objects.order_by('-id').filter(profession=instance.profession_id).first()
-        profession_group.students.add(instance)
-        profession_group.save()
 
 
