@@ -1395,7 +1395,6 @@ components:
           type: boolean
           readOnly: true
       required:
-        - question
         - text
         - correct
 
