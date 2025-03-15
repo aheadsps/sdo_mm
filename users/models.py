@@ -2,6 +2,8 @@ from authemail.models import EmailAbstractUser, EmailUserManager
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
 from django.core.validators import MaxValueValidator, MinValueValidator
+from django.db.models.signals import post_save, pre_save
+from django.dispatch import receiver
 
 
 class Profession(models.Model):
@@ -9,12 +11,12 @@ class Profession(models.Model):
     en_name = models.CharField(max_length=256,
                                null=False,
                                blank=False,
-                               verbose_name="Название профессии"
+                               verbose_name="Name Profession"
                                )
     ru_name = models.CharField(max_length=256,
                                null=False,
                                blank=False,
-                               verbose_name="Name Profession"
+                               verbose_name="Название профессии"
                                )
 
     class Meta:
@@ -98,5 +100,46 @@ class ProfessionGroup(models.Model):
 
     def __str__(self):
         return self.profession
+
+
+@receiver(post_save, sender=Profession)
+def add_group_profession(sender, instance, created, **kwargs):
+    """
+    Это срабатывает при сохранении Profession
+    Добавляет, если нет, группу профессий
+    """
+    if created:
+        profession_group, create = ProfessionGroup.objects.get_or_create(profession=instance)
+
+
+@receiver(post_save, sender=User)
+def add_in_group_profession(sender, instance, created, **kwargs):
+    """
+    При создании Юзера он попадает в группу согласно профессии
+    """
+    if created and instance.profession:
+        print("создание")
+        profession_group = ProfessionGroup.objects.order_by('-id').filter(profession=instance.profession_id).first()
+        profession_group.students.add(instance)
+        profession_group.save()
+
+
+@receiver(pre_save, sender=User)
+def change_in_group_profession(sender, instance, update_fields, **kwargs):
+    """
+        При изменении у Юзера профессии он
+         удаляется из группы профессий и добавляется в новую
+    """
+    print("изменение")
+    old_instance = sender.objects.get(id=instance.id)
+    if old_instance.profession != instance.profession:
+        # Удалить user в старой ProfessionGroup
+        profession_group = ProfessionGroup.objects.get(students=old_instance.pk)
+        profession_group.students.remove(instance)
+        profession_group.save()
+        # Добавить user в новую ProfessionGroup
+        profession_group = ProfessionGroup.objects.order_by('-id').filter(profession=instance.profession_id).first()
+        profession_group.students.add(instance)
+        profession_group.save()
 
 

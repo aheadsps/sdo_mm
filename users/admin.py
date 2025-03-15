@@ -1,8 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth import get_user_model
 from authemail.admin import EmailUserAdmin, SignupCodeInline, EmailChangeCodeInline, PasswordResetCodeInline
-from users.forms import CastomEmailUserChangeForm
-from users.models import Profile, Profession
+from users.models import Profile, Profession, ProfessionGroup, User
 
 
 class ProfileInline(admin.StackedInline):
@@ -29,7 +28,38 @@ class UserAdmin(EmailUserAdmin):
 		}),
 	)
 	readonly_fields = ('date_joined', 'last_login')
-	form = CastomEmailUserChangeForm
+
+	def save_model(self, request, obj, form, change):
+		"""
+		При изменении у Юзера профессии он
+		удаляется из группы профессий и добавляется в новую
+		"""
+		if change:
+			old_instance = User.objects.get(id=form.instance.id)
+			if old_instance.profession != form.instance.profession:
+				# Удалить user в старой ProfessionGroup
+				profession_group = ProfessionGroup.objects.get(
+					students=old_instance.pk
+				)
+				profession_group.students.remove(form.instance)
+				profession_group.save()
+				# Добавить user в новую ProfessionGroup
+				profession_group = ProfessionGroup.objects.order_by('-id').filter(
+					profession=form.instance.profession_id
+				).first()
+				profession_group.students.add(form.instance)
+				profession_group.save()
+
+		obj.save()
+		if not change:
+			"""
+			При создании Юзера он попадает в группу согласно профессии
+			"""
+			profession_group = ProfessionGroup.objects.order_by('-id').filter(
+				profession=form.instance.profession_id
+			).first()
+			profession_group.students.add(form.instance)
+			profession_group.save()
 
 
 admin.site.unregister(get_user_model())
@@ -49,7 +79,22 @@ class ProfileAdmin(admin.ModelAdmin):
 		('Personal Info', {'fields': ('image', 'date_birthday')}),
 	)
 
+
 @admin.register(Profession)
 class ProfessionAdmin(admin.ModelAdmin):
-	list_display = ('en_name', 'ru_name')
-	search_fields = ('en_name', 'ru_name')
+	list_display = ( 'ru_name', 'en_name',)
+	search_fields = ( 'ru_name', 'en_name')
+	#form = ProfessionForm
+
+
+	def save_model(self, request, obj, form, change):
+		"""
+        Given a model instance save it to the database.
+        При сохранениии данных о профессии проверяем есть ли группа профессий
+        Если нет - создаем
+        """
+		obj.save()
+		if not change:
+			profession_group, create = ProfessionGroup.objects.get_or_create(
+				profession=form.instance
+			)
