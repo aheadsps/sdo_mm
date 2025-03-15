@@ -8,6 +8,7 @@ class Answer(models.Model):
     """
     Модель представления Ответа
     """
+
     text = models.TextField(verbose_name='текст ответа',
                             help_text='Текст ответа',
                             )
@@ -28,6 +29,10 @@ class Answer(models.Model):
 
 
 class Question(models.Model):
+    """
+    Модель представления Вопроса
+    """
+
     text = models.TextField(verbose_name='текст вопроса',
                             help_text='Текст вопроса',
                             )
