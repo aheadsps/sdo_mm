@@ -65,6 +65,12 @@
   /* effects */
   --transition-effect: transform 0.2s ease-in-out;
   --transform-effect: scale(1.02);
+
+  /* breakpoints */
+  --xl-screen: 1350px;
+  --l-screen: 1024px; 
+  --m-screen: 768px; 
+  --s-screen: 340px;
 }
 
 @font-face {

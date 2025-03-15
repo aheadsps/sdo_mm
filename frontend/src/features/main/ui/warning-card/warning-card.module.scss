@@ -1,5 +1,5 @@
 .warningCard {
-    min-width: 520px;
+    width: 520px;
     min-height: 199px;
     position: relative;
     background-color: var(--color-bg-main);
@@ -7,6 +7,11 @@
     border-radius: 9px;
     margin-top: 58px;
     margin-bottom: 40px;
+
+    @media screen and (max-width: 1350px) {
+        max-width: 415px;
+        margin-top: 0;
+    }
 }
 
 .warningIndicator {

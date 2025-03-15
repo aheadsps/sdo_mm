@@ -24,4 +24,13 @@
 
 .appointedTask {
     width: 100%;
+
+    @media screen and (max-width: 1350px) {
+        max-width: 415px;
+    }
+}
+
+.responsive {
+    display: flex;
+    flex-direction: column;
 }
