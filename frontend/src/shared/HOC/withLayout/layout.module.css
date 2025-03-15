@@ -1,17 +1,3 @@
-.header {
-    color: var(--color-accent-red500);
-    border: 1px solid var(--color-additional-border100);;
-    padding: 10px 20px;
-    text-align: center;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: 1000;
-    height: 93px;
-    background-color: var(--color-bg-gray100);
-}
-
 .appWrapper {
     max-width: 1350px;
     padding-left: 20px;
@@ -21,8 +7,9 @@
 }
 
 .main {
-    margin-top: 93px;
     padding: 30px;
+    padding-top: 123px;
     width: 100%;
+    height: 100vh;
     border-left: 1px solid var(--color-additional-border100);
 }

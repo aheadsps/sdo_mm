@@ -2,12 +2,13 @@
     width: 294px;
     background-color: var(--color-bg-main);
     border-color: var(--color-additional-border100);
-    height: calc(100vh - 93px);
+    height: calc(100vh - 103px);
     position: relative;
     top: 103px;
     left: 0;
     z-index: 999;
     margin-right: 20px;
+    padding-top: 10px;
 }
 
 .sidebarContent {
@@ -16,7 +17,6 @@
 
 .fixedContainer {
     position: fixed;
-    /* height: 100%; */
     height: calc(100vh - 103px);
     display: flex;
     flex-direction: column;

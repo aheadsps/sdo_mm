@@ -8,7 +8,6 @@ export const withLayout = <T extends object>(Component: ComponentType<T>) => {
   return (props: T) => {
     return (
       <>
-        {/* <header className={s.header}>Hello</header> */}
         <Header title="Корпоративный университет Транспортного комплекса" />
         <div className={s.appWrapper}>
           <Sidebar />
