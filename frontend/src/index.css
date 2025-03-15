@@ -61,6 +61,10 @@
   --font-weight-light: 300;
   --font-weight-semibold: 600;
   --font-weight-bold: 700;
+
+  /* effects */
+  --transition-effect: transform 0.2s ease-in-out;
+  --transform-effect: scale(1.02);
 }
 
 @font-face {

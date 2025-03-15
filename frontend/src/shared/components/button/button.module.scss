@@ -1,10 +1,10 @@
 .button {
     padding: 13px 18px;
     border-radius: 8px;
-    transition: transform 0.2s ease-in-out;
+    transition: var(--transition-effect);
     
     &:hover {
-        transform: scale(1.02);
+        transform: var(--transform-effect);
     }
 }
 

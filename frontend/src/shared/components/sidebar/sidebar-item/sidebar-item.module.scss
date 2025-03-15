@@ -8,6 +8,12 @@
     height: 45px;
     padding: 12px;
     border-radius: 8px;
+    transition: var(--transition-effect);
+
+    &:hover {
+        color: var(--color-accent-red500);
+        transform: var(--transform-effect);
+    }
 }
 
 .sidebarItemLink.active {

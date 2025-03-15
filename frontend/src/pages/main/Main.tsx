@@ -7,22 +7,25 @@ import s from './main.module.scss'
 const MainComp = () => {
   return (
     <div className={s.contentBlock}>
-      <div>
-        <Typography variant="header_4" className={s.title}>
-          Ваши актуальные задачи
-        </Typography>
-        <Task daysLeft={2}>Охрана труда</Task>
-        <Task daysLeft={4}>Работа с электроинструментом</Task>
-        <Task daysLeft={7}>Пожарная безопасность</Task>
-        <Task>Охрана труда</Task>
-
-        <div className={s.taskBlock}>
+      <div className={s.tasks}>
+        <div>
           <Typography variant="header_4" className={s.title}>
-            Оказание первой помощи
+            Ваши актуальные задачи
+          </Typography>
+          <Task daysLeft={2}>Охрана труда</Task>
+          <Task daysLeft={4}>Работа с электроинструментом</Task>
+          <Task daysLeft={7}>Пожарная безопасность</Task>
+          <Task>Охрана труда</Task>
+        </div>
+
+        <div className={s.expiredTasks}>
+          <Typography variant="header_4" className={s.title}>
+            Просроченные задачи
           </Typography>
           <Task daysLeft={0}>Экстренные ситуации на рабочем месте</Task>
         </div>
       </div>
+
       <div>
         <WarningCard />
         <Typography variant="header_4" className={s.title}>

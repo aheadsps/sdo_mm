@@ -18,4 +18,9 @@
     display: flex;
     align-items: center;
     gap: 20px;
+    transition: var(--transition-effect);
+
+    &:hover {
+        transform: var(--transform-effect);
+    }
 }

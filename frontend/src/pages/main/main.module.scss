@@ -8,12 +8,17 @@
     justify-content: space-between;
 }
 
+.tasks {
+    display: flex;
+    flex-direction: column;
+}
+
 .title {
     margin-bottom: 24px;
     color: var(--color-text-primary);
 }
 
-.taskBlock {
+.expiredTasks {
     margin-top: 40px;
 }
 
