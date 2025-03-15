@@ -160,7 +160,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 AUTH_USER_MODEL = "users.User"
-AUTH_EMAIL_VERIFICATION = False
 
 REST_FRAMEWORK = {
 	'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -177,8 +176,12 @@ SPECTACULAR_SETTINGS = {
 }
 
 EMAIL_FROM = os.getenv('DEFAULT_EMAIL_FROM')
+EMAIL_BCC = os.getenv('DEFAULT_EMAIL_BCC')
 
-EMAIL_BACKEND = os.getenv('EMAIL_BACKEND')
+if DEBUG:
+	EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+else:
+	EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = os.getenv('EMAIL_HOST')
 EMAIL_PORT = os.getenv('EMAIL_PORT')
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')

@@ -1,5 +1,9 @@
+from datetime import timedelta
+
 from authemail.models import EmailAbstractUser, EmailUserManager
+from django.core.exceptions import ValidationError
 from django.db import models
+from django.utils import timezone
 from phonenumber_field.modelfields import PhoneNumberField
 
 
@@ -12,7 +16,7 @@ class User(EmailAbstractUser):
     last_name = models.CharField(max_length=30, null=True, blank=True, verbose_name="Фамилия пользователя")
     date_joined = models.DateTimeField(auto_now_add=True, verbose_name="Дата регистрации")
     last_login = models.DateTimeField(auto_now=True, verbose_name="Время последнего входа")
-    date_commencement = models.DateField(null=False, verbose_name="Стаж работы")
+    date_commencement = models.DateField(null=False, verbose_name="Дата начала работы")
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['date_commencement']
@@ -38,8 +42,8 @@ class Profile(models.Model):
     date_birthday = models.DateField(null=True, blank=True, verbose_name="Дата рождения")
 
     class Meta:
-        verbose_name = "Пользователь инфо"
-        verbose_name_plural = "Пользователи инфо"
+        verbose_name = "Профиль пользователя"
+        verbose_name_plural = "Профиль пользователя"
 
     def __str__(self):
         return f"Profile of {self.user.email}"

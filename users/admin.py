@@ -1,9 +1,14 @@
+from authemail.models import EmailChangeCode, PasswordResetCode
 from django.contrib import admin
 from django.contrib.auth import get_user_model
-from authemail.admin import EmailUserAdmin, SignupCodeInline, EmailChangeCodeInline, PasswordResetCodeInline
+from authemail.admin import EmailUserAdmin, SignupCodeInline
 
 from users.forms import CustomUserCreationForm
 from users.models import Profile
+
+# Отключение регистрации моделей в админке
+admin.site.unregister(EmailChangeCode)
+admin.site.unregister(PasswordResetCode)
 
 
 class ProfileInline(admin.StackedInline):
@@ -22,28 +27,28 @@ class UserAdmin(EmailUserAdmin):
 	Использует форму CustomUserCreationForm для создания пользователей.
 	Пароль генерируется автоматически и отправляется на почту, нужно ввести только email
 	"""
-	add_form = CustomUserCreationForm  # Используем кастомную форму
+	add_form = CustomUserCreationForm
 	add_fieldsets = (
 		(None, {
 			'classes': ('wide',),
-			'fields': ('email',  'date_commencement'),  # Указываем только то что обязательны при заполнении
+			'fields': ('email',  'date_commencement'),
 		}),
 	)
 	# Встраиваемые модели
-	inlines = (ProfileInline, SignupCodeInline, EmailChangeCodeInline, PasswordResetCodeInline,)
+	inlines = (ProfileInline, SignupCodeInline,)
 	fieldsets = (
 		(None, {'fields': ('email', 'password')}),
 		('Personal Info', {'fields': ('first_name', 'last_name')}),
-		('Important dates', {'fields': ('date_joined', 'last_login')}),
+		('Important dates', {'fields': ('date_joined', 'last_login', 'date_commencement')}),
 		('Permissions', {'fields': ('is_active', 'is_staff',
 									'is_superuser', 'is_verified',
 									'groups', 'user_permissions')}),
 	)
 
-	readonly_fields = ('date_joined', 'last_login')
+	readonly_fields = ('date_joined', 'last_login',)
 
 
-# Отменяем регистрацию стандартной модели пользователя
+# Отключаем регистрацию стандартной модели пользователя
 admin.site.unregister(get_user_model())
 # Регистрируем кастомную админку для модели пользователя
 admin.site.register(get_user_model(), UserAdmin)
