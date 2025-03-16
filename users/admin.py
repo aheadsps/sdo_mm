@@ -31,8 +31,9 @@ class UserAdmin(EmailUserAdmin):
 
 	def save_model(self, request, obj, form, change):
 		"""
+		Сохранение сущности User
 		При изменении у Юзера профессии он
-		удаляется из группы профессий и добавляется в новую
+		удаляется из группы профессий и добавляется в новую группу
 		"""
 		if change:
 			old_instance = User.objects.get(id=form.instance.id)
@@ -42,24 +43,37 @@ class UserAdmin(EmailUserAdmin):
 					students=old_instance.pk
 				)
 				profession_group.students.remove(form.instance)
-				profession_group.save()
-				# Добавить user в новую ProfessionGroup
+				try:
+					profession_group.save()
+				except Exception:
+					# обработка ошибки удаления юзера из группы профессий
+					pass
+				# Добавить user в созданную последней ProfessionGroup
 				profession_group = ProfessionGroup.objects.order_by('-id').filter(
 					profession=form.instance.profession_id
 				).first()
 				profession_group.students.add(form.instance)
-				profession_group.save()
-
+				try:
+					profession_group.save()
+				except Exception:
+					# обработка ошибки добавления юзера в группу профессий
+					pass
 		obj.save()
 		if not change:
 			"""
 			При создании Юзера он попадает в группу согласно профессии
+			Если групп такой профессии несколько он попадает в группу 
+			созданную последней (с более высоким ID)
 			"""
 			profession_group = ProfessionGroup.objects.order_by('-id').filter(
 				profession=form.instance.profession_id
 			).first()
 			profession_group.students.add(form.instance)
-			profession_group.save()
+			try:
+				profession_group.save()
+			except Exception:
+				# обработка ошибки добавления юзера в группу профессий
+				pass
 
 
 admin.site.unregister(get_user_model())
@@ -90,11 +104,13 @@ class ProfessionAdmin(admin.ModelAdmin):
 	def save_model(self, request, obj, form, change):
 		"""
         Given a model instance save it to the database.
-        При сохранениии данных о профессии проверяем есть ли группа профессий
-        Если нет - создаем
+        При создании сущности Profession создается связанная сущность GroupProfession
         """
 		obj.save()
 		if not change:
 			profession_group, create = ProfessionGroup.objects.get_or_create(
 				profession=form.instance
 			)
+			if not create:
+				# обработка ошибки добавления новой группы профессий
+				pass
