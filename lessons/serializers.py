@@ -17,7 +17,8 @@ class QuestionSerializer(serializers.ModelSerializer):
     """
     Сериализатор Question
     """
-    answers = AnswerSerializer(many=True)
+
+    answers = serializers.RelatedField(many=True)
 
     class Meta:
         model = models.Question

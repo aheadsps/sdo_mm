@@ -17,6 +17,7 @@ class Answer(models.Model):
                                   )
     question = models.ForeignKey("lessons.Question",
                                  verbose_name=_("ответ"),
+                                 related_name='answers',
                                  on_delete=models.CASCADE,
                                  )
 
