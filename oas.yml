@@ -809,7 +809,7 @@ paths:
             application/json:
               schema:
                 type: array
-                maxItems: 0
+                maxItems: 1
                 items:
                   $ref: "#/components/schemas/Step"
         "401":
