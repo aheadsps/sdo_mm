@@ -7,6 +7,7 @@ class AnswerSerializer(serializers.ModelSerializer):
     """
     Сериализатор Answer
     """
+    correct = serializers.BooleanField(write_only=True)
 
     class Meta:
         model = models.Answer
