@@ -176,3 +176,10 @@ SPECTACULAR_SETTINGS = {
 	'VERSION': '1.0.0',
 	'SERVE_INCLUDE_SCHEMA': False,
 }
+
+STATUS_EVENTS = [
+	('done', 'Успешно',),
+	('process', 'В процессе',),
+	('failed', 'Провалено',),
+	('expected', 'Ожидает начало',),
+]

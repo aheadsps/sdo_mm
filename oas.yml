@@ -1340,6 +1340,11 @@ components:
           type: integer
           minimum: 1
           readOnly: true
+        step_id:
+          description: В модели делаем полноценную связь, в сериализаторе только id
+          type: integer
+          minimum: 1
+          readOnly: true
         questions:
           type: array
           description: Вопросы для данного шага. (Только в логике сериализатора, в модели не реализуем!)
@@ -1570,6 +1575,7 @@ components:
         done_lessons:
           type: integer
           readOnly: true
+          default: 0
         start_date:
           type: string
           format: date-time
@@ -1591,7 +1597,9 @@ components:
             - done
             - process
             - failed
+            - expected
           readOnly: true
+          default: expected
 
   securitySchemes:
     Token:
