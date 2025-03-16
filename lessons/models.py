@@ -22,5 +22,14 @@ class Step(models.Model):
                                  default=1,
                                  verbose_name="Порядковый номер шага"
                               )
+    # media_attachment Медиа вложения. (Только в логике сериализатора, в модели не реализуем!)
+
     # Тестовый блок для этого шага #/components/schemas/TestBlock
     # test_block = models.OneToOneField(TestBlock, on_delete=models.CASCADE, related_name='step')
+
+    class Meta:
+        verbose_name = "Шаг урока"
+        verbose_name_plural = "Шаги урока"
+
+    def __str__(self):
+        return f"Шаг: {self.title}"
