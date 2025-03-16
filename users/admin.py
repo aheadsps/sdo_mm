@@ -98,19 +98,3 @@ class ProfileAdmin(admin.ModelAdmin):
 class ProfessionAdmin(admin.ModelAdmin):
 	list_display = ( 'ru_name', 'en_name',)
 	search_fields = ( 'ru_name', 'en_name')
-	#form = ProfessionForm
-
-
-	def save_model(self, request, obj, form, change):
-		"""
-        Given a model instance save it to the database.
-        При создании сущности Profession создается связанная сущность GroupProfession
-        """
-		obj.save()
-		if not change:
-			profession_group, create = ProfessionGroup.objects.get_or_create(
-				profession=form.instance
-			)
-			if not create:
-				# обработка ошибки добавления новой группы профессий
-				pass
