@@ -1,7 +1,6 @@
 const AuthPage: React.FC = () => {
   return (
     <>
-    <
     </>
   )
 }
