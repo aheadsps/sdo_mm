@@ -6,7 +6,7 @@ from django.contrib.auth.base_user import BaseUserManager
 from django.utils import timezone
 
 
-class EmailUserManagerAddProf(EmailUserManager, BaseUserManager):
+class EmailUserManagerAddProf(EmailUserManager):
     def _create_user(self, email, password, is_staff, is_superuser,
                      is_verified, **extra_fields):
         """
