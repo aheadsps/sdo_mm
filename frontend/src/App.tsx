@@ -1,4 +1,3 @@
-import './App.css'
 import '@fontsource/manrope/200.css'
 import '@fontsource/manrope/300.css'
 import '@fontsource/manrope/400.css'
