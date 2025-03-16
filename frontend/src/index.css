@@ -99,7 +99,3 @@ body {
   font-family: var(--font-family-primary);
   background: var(--color-bg-main);
 }
-
-h2 {
-  font-family: var(--font-family-secondary);
-}
