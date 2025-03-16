@@ -8,6 +8,8 @@ __pycache__/
 .42c
 .vscode
 .python-version
+*media
+*/migrations/
 
 # Distribution / packaging
 .Python
