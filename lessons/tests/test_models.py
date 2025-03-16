@@ -22,6 +22,4 @@ class TestModels(APITestCase):
                 text='some_question',
                 image=File(image)
                 )
-        self.assertEqual(question.image.path,
-                         '/Users/pavlo/mos_metro/sdo_mm2/media/some_quest/Users/pavlo/mos_metro/sdo_mm2/lessons/tests/image.png',
-                         )
+        self.assertIn('some_quest', question.image.path,)
