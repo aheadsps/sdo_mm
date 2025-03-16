@@ -40,6 +40,7 @@ class Question(models.Model):
     image = models.ImageField(upload_to=path_maker_text,
                               verbose_name='картинка',
                               help_text='Картинка для вопроса',
+                              null=True,
                               )
 
     class Meta:

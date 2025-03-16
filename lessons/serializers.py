@@ -9,7 +9,7 @@ class AnswerSerializer(serializers.ModelSerializer):
     """
 
     class Meta:
-        model = models.Question
+        model = models.Answer
         fields = ('id', 'text', 'correct',)
 
 
@@ -18,13 +18,14 @@ class QuestionSerializer(serializers.ModelSerializer):
     Сериализатор Question
     """
 
-    answers = serializers.RelatedField(many=True)
+    answers = AnswerSerializer(many=True)
+    image = serializers.ImageField(required=False)
 
     class Meta:
         model = models.Question
         fields = ('id', 'text', 'image', 'answers')
 
-    def create(self, validated_data):
+    def create(self, validated_data: dict[str, str]):
         """
         Получение возможности создавать вопрос сразу с ответами
         """
