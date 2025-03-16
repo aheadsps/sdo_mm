@@ -2,9 +2,7 @@ from authemail.models import EmailAbstractUser, EmailUserManager
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
 from django.core.validators import MaxValueValidator, MinValueValidator
-from django.db.models.signals import post_save, pre_save
-from django.dispatch import receiver
-
+from users.manadgers import EmailUserManagerAddProf
 
 class Profession(models.Model):
     """ Модель Профессии """
@@ -38,7 +36,7 @@ class User(EmailAbstractUser):
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['date_commencement']
 
-    objects = EmailUserManager()
+    objects = EmailUserManagerAddProf()
 
     class Meta:
         verbose_name = "Пользователь"
@@ -100,7 +98,3 @@ class ProfessionGroup(models.Model):
 
     def __str__(self):
         return self.profession
-
-
-
-
