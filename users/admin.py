@@ -82,7 +82,7 @@ admin.site.register(get_user_model(), UserAdmin)
 
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
-	list_display = ('user',  'phone', 'date_birthday')
+	list_display = ('user', 'phone', 'date_birthday')
 	list_filter = ('date_birthday',)
 	search_fields = ('user__email', 'phone')
 	raw_id_fields = ('user',)
