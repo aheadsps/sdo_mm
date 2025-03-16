@@ -1205,15 +1205,8 @@ components:
         profession:
           type: object
           description: Для какой профессии предназначен курс
-          nullable: false
+          nullable: true
           $ref: "#/components/schemas/Profession"
-        status:
-          type: string
-          nullable: false
-          enum:
-            - expected
-            - started
-            - closed
         experiences:
           type: array
           description: Список стажевых интервалов для которых подходит данный курс

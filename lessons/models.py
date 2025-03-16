@@ -2,7 +2,10 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth import get_user_model
 
-from lessons.utils import path_maker_text, get_event_status
+from lessons.utils import (path_maker_question,
+                           path_maker_course,
+                           get_event_status,
+                           )
 
 
 class Answer(models.Model):
@@ -38,7 +41,7 @@ class Question(models.Model):
     text = models.TextField(verbose_name='текст вопроса',
                             help_text='Текст вопроса',
                             )
-    image = models.ImageField(upload_to=path_maker_text,
+    image = models.ImageField(upload_to=path_maker_question,
                               verbose_name='картинка',
                               help_text='Картинка для вопроса',
                               null=True,
@@ -106,7 +109,39 @@ class Course(models.Model):
     """
     Модель представления курса
     """
-
+    name = models.CharField(_("Название"),
+                            max_length=256,
+                            help_text='Название курса',
+                            )
+    description = models.TextField(_("Описание"),
+                                   help_text='Описание курса',
+                                   )
+    beginer = models.BooleanField(_("Начинающий"),
+                                  help_text='Курс для начинающих',
+                                  default=False,
+                                  )
+    create_date = models.DateTimeField(_("Дата создания"),
+                                       auto_now_add=True,
+                                       help_text='Дата создания курса',
+                                       )
+    update_date = models.DateTimeField(_("Дата обновления"),
+                                       auto_now=True,
+                                       help_text='Дата обновления курса',
+                                       )
+    image = models.ImageField(_("Превью"),
+                              upload_to=path_maker_course,
+                              null=True,
+                              )
+    profession = models.ForeignKey("users.Profession",
+                                   verbose_name=_("профессия"),
+                                   on_delete=models.SET_NULL,
+                                   null=True,
+                                   )
+    experiences = models.ManyToManyField("users.WorkExperience",
+                                         verbose_name=_("Стаж"),
+                                         help_text='На какие стажи расчитан '
+                                         'курс',
+                                         )
 
     class Meta:
         verbose_name = _("Course")
