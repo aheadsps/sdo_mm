@@ -74,7 +74,8 @@ class WorkExperience(models.Model):
     years = IntegerRangeField(min_value=1,
                               max_value=60,
                               default=0,
-                              verbose_name="Стаж"
+                              verbose_name="Стаж",
+                              unique=True,
                               )
 
     class Meta:
@@ -92,11 +93,10 @@ class ProfessionGroup(models.Model):
                                    related_name="profession"
                                    )
     students = models.ManyToManyField(User, related_name="users")
+
     class Meta:
         verbose_name = "Группа"
         verbose_name_plural = "Группы"
 
     def __str__(self):
         return self.profession
-
-

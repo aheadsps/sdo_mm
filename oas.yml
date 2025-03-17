@@ -1138,13 +1138,6 @@ components:
           description: Для какой профессии предназначен курс
           nullable: false
           $ref: "#/components/schemas/Profession"
-        status:
-          type: string
-          nullable: false
-          enum:
-            - expected
-            - started
-            - closed
         experiences:
           type: array
           description: Список стажевых интервалов для которых подходит данный курс
@@ -1472,6 +1465,7 @@ components:
           type: integer
           minimum: 0
           maximum: 60
+          uniqueItems: true
 
     UserStory:
       description: История ответов на вопросы и открытия уроков (должно быть либо урок, либо вопрос - ответ)

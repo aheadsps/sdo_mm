@@ -7,6 +7,7 @@ class AnswerSerializer(serializers.ModelSerializer):
     """
     Сериализатор Answer
     """
+
     correct = serializers.BooleanField(write_only=True)
 
     class Meta:
@@ -38,3 +39,40 @@ class QuestionSerializer(serializers.ModelSerializer):
                           in answers]
         models.Answer._default_manager.bulk_create(answers_models)
         return question
+
+
+class CreateUpdateCourseSerializer(serializers.ModelSerializer):
+    """
+    Сериализатор на обработку создания и обновления курсов
+    """
+
+    # ПОСЛЕ ДОБАВЛЕНИЕ LESSON ОБЯЗАТЕЛЬНО ДОБАВИТЬ И ТУТ
+    class Meta:
+        model = models.Course
+        field = ('name',
+                 'description',
+                 'beginer',
+                 'image',
+                 'profession',
+                 'experiences',
+                 )
+
+
+class ViewCourseSerializer(serializers.ModelSerializer):
+    """
+    Сериализатор вывода курса
+    """
+
+    # ПОСЛЕ ДОБАВЛЕНИЕ LESSON ОБЯЗАТЕЛЬНО ДОБАВИТЬ И ТУТ
+    class Meta:
+        model = models.Course
+        field = ('id',
+                 'name',
+                 'description',
+                 'beginer',
+                 'create_date',
+                 'update_date',
+                 'image',
+                 'profession',
+                 'experiences',
+                 )
