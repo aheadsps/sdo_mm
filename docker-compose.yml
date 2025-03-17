@@ -1,5 +1,5 @@
 services:
- django:
+  django:
     restart: always
     build:
       context: .
