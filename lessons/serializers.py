@@ -88,4 +88,11 @@ class EventSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Event
-        field =
+        field = ('id',
+                 'course',
+                 'done_lessons',
+                 'start_date',
+                 'end_date',
+                 'favorite',
+                 'status',
+                 )
