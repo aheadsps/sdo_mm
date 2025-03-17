@@ -19,11 +19,13 @@ load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+TEST_IMAGE_PATH = BASE_DIR.joinpath(*('lessons', 'tests', 'image.png'))
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv("SECRET_KEY")
+SECRET_KEY = get_random_secret_key()
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True if os.getenv('DEBUG') else False
@@ -105,6 +107,7 @@ OAS_PATH = BASE_DIR.joinpath('oas.yml')
 
 DATABASES = {
 	"default": {
+
 		'ENGINE': 'django.db.backends.postgresql_psycopg2',
 		"NAME": os.getenv("NAME"),
 		"USER": os.getenv("USER"),

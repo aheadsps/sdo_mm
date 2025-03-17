@@ -9,7 +9,9 @@
     "baseUrl": "src",
     "paths": {
       "@pages/*": ["pages/*"],
-      "@assets/*": ["assets/*"]
+      "@assets/*": ["assets/*"],
+      "@shared/*": ["shared/*"],
+      "@features/*": ["features/*"]
     },
 
     /* Bundler mode */
