@@ -82,7 +82,7 @@ const AuthForm = () => {
             Забыли пароль?
           </Link>
           <Link to="/signup" className={styles.auth__link}>
-            Регистрация
+            Восстановить
           </Link>
         </div>
         <button className={styles.auth__button}>Войти</button>
