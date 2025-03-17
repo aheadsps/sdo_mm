@@ -86,3 +86,7 @@
   font-weight: bold;
   color: var(--color-text-primary);
 }
+
+.open {
+  transform: translateX(0);
+}

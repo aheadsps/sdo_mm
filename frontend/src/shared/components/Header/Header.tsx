@@ -40,7 +40,7 @@ const Header: React.FC<HeaderProps> = ({ title }) => {
         height={40}
         onClick={onToggleMobileSidebar}
       />
-      {isMobile && isMobileSidebarOpen && <Sidebar />}
+      {isMobile && <Sidebar className={isMobileSidebarOpen ? styles.open : ''} />}
     </header>
   )
 }
