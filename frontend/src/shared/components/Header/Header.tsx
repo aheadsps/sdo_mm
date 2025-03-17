@@ -5,11 +5,13 @@ import MobileVersionHeaderIcon from '@assets/icons/MobileVersionHeaderIcon'
 import LogoIcon from '../../../assets/icons/LogoIcon'
 
 import '@fontsource/manrope/600.css'
+import { Typography } from '../typography'
+
 import styles from './header.module.scss'
 import { HeaderAvatar } from './HeaderAvatar'
 
 const Header: React.FC = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
   return (
     <header className={styles.header}>
       <div className={styles.header__content}>
@@ -21,16 +23,15 @@ const Header: React.FC = () => {
           </p>
         </div>
         <div className={styles.header__titleContainer}>
-          <p className={styles.header__titleText}>
+          <Typography className={styles.header__titleText} variant={'header_6'}>
             Корпоративный университет Транспортного комплекса
-          </p>
+          </Typography>
         </div>
         {isLoggedIn && <HeaderAvatar />}
         <MobileVersionHeaderIcon className={styles.header__mobileIcon} width={40} height={40} />
       </div>
     </header>
-  );
-};
-
+  )
+}
 
 export default Header
