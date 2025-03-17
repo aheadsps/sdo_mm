@@ -7,8 +7,6 @@ export const useScreenWidth = () => {
   const isMobile = width < 768
   const isDesktop = width >= 1350
 
-  console.log(width)
-
   useEffect(() => {
     const onWindowResize = () => setWidth(window.innerWidth)
 

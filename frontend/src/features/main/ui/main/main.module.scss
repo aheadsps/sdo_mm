@@ -22,15 +22,19 @@
   margin-top: 40px;
 }
 
-.appointedTask {
-  width: 100%;
+.rightBlock {
+  margin-left: 32px;
+}
 
-  @media screen and (max-width: 1349px) {
-    max-width: 415px;
-  }
+.appointedTask {
+  max-width: 100%;
 }
 
 .responsive {
   display: flex;
   flex-direction: column;
+
+  @media screen and (min-width: 768px) and (max-width: 1024px) {
+    max-width: 415px;
+  }
 }

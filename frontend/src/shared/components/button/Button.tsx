@@ -10,7 +10,7 @@ type Props<T extends ElementType = 'button'> = {
 } & ComponentPropsWithRef<T>
 
 export const Button = <T extends ElementType = 'button'>({
-  variant,
+  variant = 'primary',
   as: Component = 'button',
   className,
   children,

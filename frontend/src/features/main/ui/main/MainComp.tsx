@@ -12,7 +12,7 @@ export const MainComp = () => {
         <CurrentTasks />
         <ExpiredTasks />
       </div>
-      <div>
+      <div className={s.rightBlock}>
         <WarningCard />
         <AssignedCourses />
       </div>

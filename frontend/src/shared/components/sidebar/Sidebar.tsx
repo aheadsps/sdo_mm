@@ -7,7 +7,7 @@ export const Sidebar = () => {
   return (
     <aside className={s.sidebar}>
       <div className={s.sidebarContent}>
-        <div className={s.fixedContainer}>
+        <div className={s.container}>
           <div>
             {sidebarItems.map((item) => (
               <SidebarItem key={item.id} text={item.text} path={item.path}>
