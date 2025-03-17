@@ -19,6 +19,7 @@
   &__input {
     width: 100%;
     outline: 0;
+    border: 0;
     border-bottom: 2px solid #831f29;
     border-radius: 2px;
     padding: 9px 12px;
@@ -48,6 +49,7 @@
     font-style: 14px;
     line-height: 100%;
     letter-spacing: 0.25px;
+    color: #2C0B0F;
     &:first-child {
       color: #6c757d;
     }

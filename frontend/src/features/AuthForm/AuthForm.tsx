@@ -4,8 +4,8 @@ import { Link } from 'react-router-dom'
 
 import { ClosedEyeIcon, OpenedEyeIcon } from '@assets/icons'
 
+import styles from '../../features/AuthForm/authform.module.scss'
 import { Typography } from '../../shared/components/Typography'
-import styles from '../AuthForm/authform.module.scss'
 
 interface AuthFormData {
   email: string
@@ -33,7 +33,7 @@ const AuthForm = () => {
         </Typography>
         <div className={styles.auth__inputs}>
           <input
-            type="email"
+            type="text"
             className={`${styles.auth__input} ${formState.errors.password ? styles.auth__inputError : ''}`}
             placeholder="Email"
             required

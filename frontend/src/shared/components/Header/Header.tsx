@@ -8,11 +8,7 @@ import '@fontsource/manrope/600.css'
 import styles from './header.module.scss'
 import { HeaderAvatar } from './HeaderAvatar'
 
-type HeaderProps = {
-  title: string
-}
-
-const Header: React.FC<HeaderProps> = ({ title }) => {
+const Header: React.FC = () => {
   return (
     <header className={styles.header}>
       <div className={styles.header__logoContainer}>
@@ -23,7 +19,9 @@ const Header: React.FC<HeaderProps> = ({ title }) => {
         </p>
       </div>
       <div className={styles.header__titleContainer}>
-        <p className={styles.header__titleText}>{title}</p>
+        <p className={styles.header__titleText}>
+          Корпоративный университет Транспортного комплекса
+        </p>
       </div>
       <HeaderAvatar />
       <MobileVersionHeaderIcon className={styles.header__mobileIcon} width={40} height={40} />
