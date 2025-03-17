@@ -107,9 +107,10 @@ OAS_PATH = BASE_DIR.joinpath('oas.yml')
 
 DATABASES = {
 	"default": {
-		"ENGINE": os.getenv("ENGINE"),
-		"NAME": 'test',
-		"USER": 'postgres',
+
+		'ENGINE': 'django.db.backends.postgresql_psycopg2',
+		"NAME": os.getenv("NAME"),
+		"USER": os.getenv("USER"),
 		"PASSWORD": os.getenv("PASSWORD"),
 		"HOST": os.getenv("HOST"),
 		"PORT": os.getenv("PORT"),
