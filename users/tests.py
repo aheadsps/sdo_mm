@@ -23,7 +23,6 @@ class TestEmailUserManagerAddProf(APITestCase):
         # Проверка создания группы профессий и попадания в эту группу """
         self.assertEqual(users[0].email, 'email@emial.ru')
 
-
         """ Создаем второго superuser """
         User.objects.create_superuser(email = "email2@emial.ru",
                                       password = "superuser",
