@@ -11,7 +11,7 @@ import styles from './header.module.scss'
 import { HeaderAvatar } from './HeaderAvatar'
 
 const Header: React.FC = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [isLoggedIn] = useState(false)
   return (
     <header className={styles.header}>
       <div className={styles.header__content}>

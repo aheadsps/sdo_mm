@@ -1,14 +1,14 @@
 .authPage__container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    min-height: 100vh;
-    width: 100%;
-    max-width: 1350px;
-    margin: 0 auto;
-    position: relative;
-    overflow: hidden; 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 100vh;
+  width: 100%;
+  max-width: 1350px;
+  margin: 0 auto;
+  position: relative;
+  overflow: hidden; 
     &__content {
       width: 100%;
       max-width: 1350px;
@@ -34,5 +34,5 @@
       width: 100%;
       max-width: 1350px;
       margin: 0 auto;
-    }
+  }
 }
