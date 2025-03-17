@@ -4,7 +4,7 @@
   padding: 16px;
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   border-bottom: 1px solid #f8d7d9;
   position: fixed;
@@ -12,6 +12,14 @@
   left: 0;
   z-index: 1000;
   height: 93px;
+  &__content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    max-width: 1350px; 
+    margin: 0 auto; 
+  }
 
   &__logoContainer {
     display: flex;
