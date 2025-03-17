@@ -2,6 +2,7 @@ from users.models import Profession, ProfessionGroup, User
 import datetime
 from rest_framework.test import APITestCase
 
+
 class TestEmailUserManagerAddProf(APITestCase):
     def test_create_superuser_is_incorrect(self):
         """ Создаем первого superuser """
