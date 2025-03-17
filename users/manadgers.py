@@ -7,38 +7,50 @@ from django.utils import timezone
 
 
 class EmailUserManagerAddProf(EmailUserManager):
-    def _create_user(self, email, password, is_staff, is_superuser,
-                     is_verified, **extra_fields):
+    """
+    Менеджер для корректной работый специфицеских частей программы
+    """
+
+    def _create_user(self, email: str,
+                     password: str,
+                     is_staff: bool,
+                     is_superuser: bool,
+                     is_verified: bool,
+                     **extra_fields):
         """
-        Creates and saves a User with a given email and password.
+        Кастомное добавление профессии
+        При команде createsuperuser создание профессии 'admin'
+        если ее нет, а иначе пропустить,
+        а затем группу под эту профессию.
+        Учетная запись должна получить новосозданную профессию
+        и попасть в группу по этой профессии.
         """
+
         from users.models import Profession, ProfessionGroup, User
+
         now = timezone.now()
         if not email:
             raise ValueError('Users must have an email address')
         email = self.normalize_email(email)
-        """Кастомное добавление профессии
-        При команде createsuperuser создание профессии 'admin' 
-        если ее нет, а иначе пропустить, 
-        а затем группу под эту профессию. 
-        Учетная запись должна получить новосозданную профессию 
-        и попасть в группу по этой профессии."""
-        # ищем профессию admin
-        profession_id = None
+
         try:
             profession = Profession.objects.get(en_name='admin')
         except Profession.DoesNotExist:
             # если не создаем группу админ и профессию админ
-            profession = Profession.objects.create(en_name='admin', ru_name='admin')
-            profession_group = ProfessionGroup.objects.create(profession=profession)
+            profession = Profession.objects.create(
+                en_name='admin',
+                ru_name='admin',
+                )
+            profession_group = ProfessionGroup.objects.create(
+                profession=profession,
+                )
         else:
             # Ищем группу для этой профессии
             profession_group = ProfessionGroup.objects.order_by('-id').filter(
                 profession=profession.pk
             ).first()
-            # Юзеру назначаем профессию
 
-
+        # Юзеру назначаем профессию
         user = self.model(email=email,
                           is_staff=is_staff, is_active=True,
                           is_superuser=is_superuser, is_verified=is_verified,
