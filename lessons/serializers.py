@@ -42,7 +42,7 @@ class QuestionSerializer(serializers.ModelSerializer):
         return question
 
 
-class CreateUpdateCourseSerializer(serializers.ModelSerializer):
+class CourseSerializer(serializers.ModelSerializer):
     """
     Сериализатор на обработку создания и обновления курсов
     """
@@ -79,3 +79,13 @@ class ViewCourseSerializer(serializers.ModelSerializer):
                  'profession',
                  'experiences',
                  )
+
+
+class EventSerializer(serializers.ModelSerializer):
+    """
+    Сериализатор Курса
+    """
+
+    class Meta:
+        model = models.Event
+        field =
