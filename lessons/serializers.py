@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from lessons import models
+from users import serializers as user_serializers
 
 
 class AnswerSerializer(serializers.ModelSerializer):
@@ -62,6 +63,8 @@ class ViewCourseSerializer(serializers.ModelSerializer):
     """
     Сериализатор вывода курса
     """
+    experiences = user_serializers.WorkExperienceSerializer(many=True)
+    profession = user_serializers.ProfessionSerializer()
 
     # ПОСЛЕ ДОБАВЛЕНИЕ LESSON ОБЯЗАТЕЛЬНО ДОБАВИТЬ И ТУТ
     class Meta:
