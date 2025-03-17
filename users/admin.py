@@ -74,7 +74,6 @@ class UserAdmin(EmailUserAdmin):
 			Если групп такой профессии несколько он попадает в группу
 			созданную последней (с более высоким ID)
 			"""
-            print("***********",form.instance.profession_id)
             profession_group = ProfessionGroup.objects.order_by('-id').filter(
                 profession=form.instance.profession_id).first()
             profession_group.students.add(form.instance)
