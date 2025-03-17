@@ -1,5 +1,5 @@
 services:
-  django:
+ django:
     restart: always
     build:
       context: .
@@ -33,11 +33,11 @@ services:
       context: .
       dockerfile: ./frontend/docker/react/Dockerfile
     volumes:
-      - '/app/node_modules'
-      - './frontend:/app'
+     - '/app/node_modules'
+     #- './frontend:/app'
     ports:
-      - 5173:5000
-    command: /start
+      - 5173:5173
+    command: ash -x /app/start
     stdin_open: true
     tty: true
     environment:
