@@ -102,6 +102,8 @@ WSGI_APPLICATION = "config.wsgi.application"
 
 OAS_PATH = BASE_DIR.joinpath('oas.yml')
 
+API_VERSION = 'api/v1/'
+
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
