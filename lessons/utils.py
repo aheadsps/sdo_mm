@@ -22,13 +22,3 @@ def path_maker_course(instance: 'Course', filename: str) -> str:
     """
     text_tranc = instance.name
     return f'course/{text_tranc}/{filename}'
-
-
-def get_event_status() -> dict[str, str]:
-    """
-    Получение словаря с статусами для choise
-    в поле модели
-    """
-    return {status: status
-            for status
-            in settings.STATUS_EVENTS}

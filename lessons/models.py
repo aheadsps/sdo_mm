@@ -1,10 +1,10 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth import get_user_model
+from django.conf import settings
 
 from lessons.utils import (path_maker_question,
                            path_maker_course,
-                           get_event_status,
                            )
 
 
@@ -90,7 +90,7 @@ class Event(models.Model):
                                    default=False,
                                    help_text='Указатель является ли данный'
                                    'ивент избранным')
-    status = models.CharField(choices=get_event_status,
+    status = models.CharField(choices=settings.STATUS_EVENTS,
                               null=True,
                               default='expected',
                               verbose_name='статус ивента',
