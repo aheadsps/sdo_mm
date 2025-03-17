@@ -1,19 +1,31 @@
 from django.contrib import admin
 from django.contrib.auth import get_user_model
-from authemail.admin import EmailUserAdmin, SignupCodeInline, EmailChangeCodeInline, PasswordResetCodeInline
-from users.models import Profile, Profession, ProfessionGroup, User
+from authemail.admin import (EmailUserAdmin,
+                             SignupCodeInline,
+                             EmailChangeCodeInline,
+                             PasswordResetCodeInline,
+                             )
+from users.models import (Profile,
+                          Profession,
+                          ProfessionGroup,
+                          User,
+                          )
 
 
 class ProfileInline(admin.StackedInline):
-	model = Profile
-	can_delete = False
-	verbose_name_plural = 'Profile'
-	fk_name = 'user'
+    model = Profile
+    can_delete = False
+    verbose_name_plural = 'Profile'
+    fk_name = 'user'
 
 
 class UserAdmin(EmailUserAdmin):
-	inlines = ( ProfileInline, SignupCodeInline, EmailChangeCodeInline, PasswordResetCodeInline,)
-	fieldsets = (
+    inlines = (ProfileInline,
+               SignupCodeInline,
+               EmailChangeCodeInline,
+               PasswordResetCodeInline,
+               )
+    fieldsets = (
 		(None, {'fields': ('email', 'password', 'date_commencement', 'profession')}),
 		('Personal Info', {'fields': ('first_name', 'last_name')}),
 		('Permissions', {'fields': ('is_active', 'is_staff',
@@ -21,13 +33,13 @@ class UserAdmin(EmailUserAdmin):
 									'groups', 'user_permissions')}),
 		('Important dates', {'fields': ('date_joined', 'last_login')}),
 	)
-	add_fieldsets = (
+    add_fieldsets = (
 		(None, {
 			'classes': ('wide',),
 			'fields': ('email', 'password1', 'password2',  'date_commencement', 'profession'),
 		}),
 	)
-	readonly_fields = ('date_joined', 'last_login')
+    readonly_fields = ('date_joined', 'last_login')
 
 	def save_model(self, request, obj, form, change):
 		"""
@@ -62,7 +74,7 @@ class UserAdmin(EmailUserAdmin):
 		if not change:
 			"""
 			При создании Юзера он попадает в группу согласно профессии
-			Если групп такой профессии несколько он попадает в группу 
+			Если групп такой профессии несколько он попадает в группу
 			созданную последней (с более высоким ID)
 			"""
 			profession_group = ProfessionGroup.objects.order_by('-id').filter(
