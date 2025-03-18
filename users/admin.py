@@ -1,10 +1,18 @@
 from authemail.models import EmailChangeCode, PasswordResetCode
 from django.contrib import admin
 from django.contrib.auth import get_user_model
-from authemail.admin import EmailUserAdmin, SignupCodeInline
 
+from authemail.admin import (EmailUserAdmin,
+                             SignupCodeInline,
+                             EmailChangeCodeInline,
+                             PasswordResetCodeInline,
+                             )
+from users.models import (Profile,
+                          Profession,
+                          ProfessionGroup,
+                          User,
+                          )
 from users.forms import CustomUserCreationForm
-from users.models import Profile
 
 # Отключение регистрации моделей в админке
 admin.site.unregister(EmailChangeCode)
@@ -12,6 +20,7 @@ admin.site.unregister(PasswordResetCode)
 
 
 class ProfileInline(admin.StackedInline):
+
 	"""
 	Определяем встроенный класс для отображения модели Profile в админке у User
 	"""
@@ -47,6 +56,49 @@ class UserAdmin(EmailUserAdmin):
 
 	readonly_fields = ('date_joined', 'last_login',)
 
+  def save_model(self, request, obj, form, change):
+      """
+  Сохранение сущности User
+  При изменении у Юзера профессии он
+  удаляется из группы профессий и добавляется в новую группу
+  """
+  if change:
+    old_instance = User.objects.get(id=form.instance.id)
+    # если профессия изменилась
+    if old_instance.profession != form.instance.profession:
+        # Удалить user в старой ProfessionGroup
+        profession_group = ProfessionGroup.objects.get(
+            students=old_instance.pk
+        )
+        profession_group.students.remove(form.instance)
+        # Добавить user в созданную последней ProfessionGroup
+        profession_group = ProfessionGroup.objects.order_by('-id').filter(
+            profession=form.instance.profession_id
+        ).first()
+        profession_group.students.add(form.instance)
+        try:
+            profession_group.save()
+        except Exception:
+            # обработка ошибки добавления юзера в группу профессий
+            pass
+
+  obj.save()
+  if not change:
+    """
+    При создании Юзера он попадает в группу согласно профессии
+    Если групп такой профессии несколько он попадает в группу
+    созданную последней (с более высоким ID)
+    """
+    profession_group = ProfessionGroup.objects.order_by('-id').filter(
+        profession=form.instance.profession_id).first()
+    profession_group.students.add(form.instance)
+    try:
+        profession_group.save()
+    except Exception:
+        # обработка ошибки добавления юзера в группу профессий
+        pass
+
+
 
 # Отключаем регистрацию стандартной модели пользователя
 admin.site.unregister(get_user_model())
@@ -67,3 +119,18 @@ class ProfileAdmin(admin.ModelAdmin):
 		('Contact Info', {'fields': ('phone',)}),
 		('Personal Info', {'fields': ('image', 'date_birthday')}),
 	)
+
+@admin.register(Profession)
+class ProfessionAdmin(admin.ModelAdmin):
+  list_display = ('ru_name', 'en_name',)
+  search_fields = ('ru_name', 'en_name')
+
+  def save_model(self, request, obj, form, change):
+    """
+    Given a model instance save it to the database.
+    При сохранениии данных о профессии проверяем есть ли группа профессий
+    Если нет - создаем
+    """
+    obj.save()
+    if not change:
+        profession_group, create = ProfessionGroup.objects.get_or_create(profession=form.instance)

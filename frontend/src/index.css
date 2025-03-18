@@ -1,4 +1,71 @@
-@import 'tailwindcss';
+:root {
+  /* Font families */
+  --font-family-primary: 'Monrope', sans-serif;
+  --font-family-secondary: 'Moscow Sans', sans-serif;
+
+  /* background colors*/
+  --color-bg-main: #ffffff;
+  --color-bg-lightblue: #cfe1fe;
+  --color-bg-gray100: #f8f9fa;
+  --color-bg-gray200: #e9ecef;
+  --color-bg-red700: #831f29;
+  --color-bg-1: #831f291a;
+  --color-bg-2: #831f2999;
+
+  /* text colors*/
+  --color-text-primary: #2c0b0f;
+  --color-text-secondary: #6c757d;
+  --color-text-disabled: #485056;
+  --color-text-button: #f8f9fa;
+  --color-text-link: #b02a37;
+  --color-link-hovered: #831f29;
+  --color-link-focused: #58151c;
+
+  /* additional colors */
+  --color-additional-border100: #f8d7d9;
+  --color-additional-border700: #831f29;
+  --color-additional-grey: #f2edf4;
+  --color-additional-purple: #4d233f;
+  --color-additional-red800: #58151c;
+  --color-additional-button: #f8f9fa;
+  --color-additional-icons-red: #b02a37;
+  --color-additional-icons-grey: #acb5bd;
+
+  /* accent colors */
+  --color-accent-red500: #dc3444;
+  --color-accent-success: #4dd4ac;
+  --color-accent-negative: #e35c6a;
+  --color-accent-orange: #fd9843;
+  --color-accent-info: #3d8bfd;
+
+  /* Font sizes */
+  --font-size-xs: 0.875rem;  /* 14px */
+  --font-size-s: 1rem;       /* 16px */
+  --font-size-m: 1.125rem;   /* 18px */
+  --font-size-h6: 1.25rem;    /* 20px */
+  --font-size-l: 1.5rem;     /* 24px */
+  --font-size-xl: 1.75rem;   /* 28px */
+  --font-size-xxl: 2rem;     /* 32px */
+  --font-size-xxxl: 2.5rem;  /* 40px */
+  --font-size-super-large: 3rem; /* 48px */
+
+  /* Line heights */
+  --line-height-xxs: 100%;
+  --line-height-xs: 120%;
+  --line-height-s: 125%;
+  --line-height-m: 130%;
+  --line-height-l: 135%;
+  --line-height-xl: 140%;
+
+  /* Font weights */
+  --font-weight-light: 300;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /* effects */
+  --transition-effect: transform 0.2s ease-in-out;
+  --transform-effect: scale(1.02);
+}
 
 @font-face {
   font-family: 'Moscow Sans';
@@ -14,15 +81,19 @@
   font-display: swap;
 }
 
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 body {
-  font-family: 'Monrope', sans-serif;
-  background: #cd2f2f;
+  font-family: var(--font-family-primary);
+  background: var(--color-bg-main);
 }
 
 h2 {
-  font-family: 'Moscow Sans', sans-serif;
-}
-
-.moscow-sans {
-  font-family: 'Moscow Sans', sans-serif;
+  font-family: var(--font-family-secondary);
 }
