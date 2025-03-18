@@ -432,99 +432,11 @@
         }
     },
     {
-        "model": "contenttypes.contenttype",
+        "model": "users.profession",
         "pk": 1,
         "fields": {
-            "app_label": "admin",
-            "model": "logentry"
-        }
-    },
-    {
-        "model": "contenttypes.contenttype",
-        "pk": 2,
-        "fields": {
-            "app_label": "auth",
-            "model": "permission"
-        }
-    },
-    {
-        "model": "contenttypes.contenttype",
-        "pk": 3,
-        "fields": {
-            "app_label": "auth",
-            "model": "group"
-        }
-    },
-    {
-        "model": "contenttypes.contenttype",
-        "pk": 4,
-        "fields": {
-            "app_label": "contenttypes",
-            "model": "contenttype"
-        }
-    },
-    {
-        "model": "contenttypes.contenttype",
-        "pk": 5,
-        "fields": {
-            "app_label": "sessions",
-            "model": "session"
-        }
-    },
-    {
-        "model": "contenttypes.contenttype",
-        "pk": 6,
-        "fields": {
-            "app_label": "users",
-            "model": "user"
-        }
-    },
-    {
-        "model": "contenttypes.contenttype",
-        "pk": 7,
-        "fields": {
-            "app_label": "users",
-            "model": "profile"
-        }
-    },
-    {
-        "model": "contenttypes.contenttype",
-        "pk": 8,
-        "fields": {
-            "app_label": "authtoken",
-            "model": "token"
-        }
-    },
-    {
-        "model": "contenttypes.contenttype",
-        "pk": 9,
-        "fields": {
-            "app_label": "authtoken",
-            "model": "tokenproxy"
-        }
-    },
-    {
-        "model": "contenttypes.contenttype",
-        "pk": 10,
-        "fields": {
-            "app_label": "authemail",
-            "model": "passwordresetcode"
-        }
-    },
-    {
-        "model": "contenttypes.contenttype",
-        "pk": 11,
-        "fields": {
-            "app_label": "authemail",
-            "model": "signupcode"
-        }
-    },
-    {
-        "model": "contenttypes.contenttype",
-        "pk": 12,
-        "fields": {
-            "app_label": "authemail",
-            "model": "emailchangecode"
+            "en_name": "admin",
+            "ru_name": "админ"
         }
     },
     {
@@ -542,6 +454,7 @@
             "date_joined": "2025-03-17T06:12:30.791Z",
             "last_login": "2025-03-17T06:12:30.791Z",
             "date_commencement": "2024-01-01",
+            "profession_id": 1,
             "groups": [],
             "user_permissions": []
         }
