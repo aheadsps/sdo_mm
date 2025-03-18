@@ -37,3 +37,9 @@ class QuestionSerializer(serializers.ModelSerializer):
                           in answers]
         models.Answer._default_manager.bulk_create(answers_models)
         return question
+
+
+class StepSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Step
+        fields = "__all__"

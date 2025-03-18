@@ -50,8 +50,6 @@ class Question(models.Model):
     def __str__(self):
         return self.text[0:10] + '...'
 
-from django.core.validators import MinValueValidator
-
 
 class Step(models.Model):
     """
