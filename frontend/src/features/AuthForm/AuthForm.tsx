@@ -1,3 +1,5 @@
+import { Button } from '@shared/components'
+import { Input } from '@shared/components/input/Input'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { Link } from 'react-router-dom'
@@ -32,9 +34,9 @@ const AuthForm = () => {
           Авторизация
         </Typography>
         <div className={styles.auth__inputs}>
-          <input
+          <Input
             type="text"
-            className={`${styles.auth__input} ${formState.errors.password ? styles.auth__inputError : ''}`}
+            className={`${styles.auth__input} ${formState.errors.email ? styles.auth__inputError : ''}`}
             placeholder="Email"
             required
             {...register('email', {
@@ -49,9 +51,9 @@ const AuthForm = () => {
             <span className={styles.auth__error}>{formState.errors.email.message}</span>
           )}
           <div className={styles.auth__passwordWrapper}>
-            <input
+            <Input
               type={showPassword ? 'text' : 'password'}
-              className={`${styles.auth__input} ${formState.errors.email ? styles.auth__inputError : ''}`}
+              className={`${styles.auth__input} ${formState.errors.password ? styles.auth__inputError : ''}`}
               placeholder="Пароль"
               required
               {...register('password', {
@@ -85,7 +87,7 @@ const AuthForm = () => {
             Восстановить
           </Link>
         </div>
-        <button className={styles.auth__button}>Войти</button>
+        <Button className={styles.auth__button}>Войти</Button>
       </form>
     </div>
   )
