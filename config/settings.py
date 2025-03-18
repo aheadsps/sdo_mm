@@ -19,11 +19,13 @@ load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+TEST_IMAGE_PATH = BASE_DIR.joinpath(*('lessons', 'tests', 'image.png'))
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv("SECRET_KEY")
+SECRET_KEY = get_random_secret_key()
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True if os.getenv('DEBUG') else False
@@ -105,9 +107,10 @@ OAS_PATH = BASE_DIR.joinpath('oas.yml')
 
 DATABASES = {
 	"default": {
-		"ENGINE": os.getenv("ENGINE"),
+
+		'ENGINE': 'django.db.backends.postgresql_psycopg2',
 		"NAME": os.getenv("NAME"),
-		"USER": 'postgres',
+		"USER": os.getenv("USER"),
 		"PASSWORD": os.getenv("PASSWORD"),
 		"HOST": os.getenv("HOST"),
 		"PORT": os.getenv("PORT"),
@@ -174,3 +177,17 @@ SPECTACULAR_SETTINGS = {
 	'VERSION': '1.0.0',
 	'SERVE_INCLUDE_SCHEMA': False,
 }
+
+EMAIL_FROM = os.getenv('DEFAULT_EMAIL_FROM')
+EMAIL_BCC = os.getenv('DEFAULT_EMAIL_BCC')
+
+if DEBUG:
+	EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+else:
+	EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = os.getenv('EMAIL_HOST')
+EMAIL_PORT = os.getenv('EMAIL_PORT')
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
