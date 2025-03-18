@@ -109,9 +109,10 @@ API_VERSION = 'api/v1/'
 
 DATABASES = {
 	"default": {
-		"ENGINE": os.getenv("ENGINE"),
-		"NAME": 'test',
-		"USER": 'postgres',
+
+		'ENGINE': 'django.db.backends.postgresql_psycopg2',
+		"NAME": os.getenv("NAME"),
+		"USER": os.getenv("USER"),
 		"PASSWORD": os.getenv("PASSWORD"),
 		"HOST": os.getenv("HOST"),
 		"PORT": os.getenv("PORT"),
@@ -191,10 +192,23 @@ SPECTACULAR_SETTINGS = {
 	'VERSION': '1.0.0',
 	'SERVE_INCLUDE_SCHEMA': False,
 }
-
 STATUS_EVENTS = [
 	('done', 'Успешно',),
 	('process', 'В процессе',),
 	('failed', 'Провалено',),
 	('expected', 'Ожидает начало',),
 ]
+
+EMAIL_FROM = os.getenv('DEFAULT_EMAIL_FROM')
+EMAIL_BCC = os.getenv('DEFAULT_EMAIL_BCC')
+
+if DEBUG:
+	EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+else:
+	EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = os.getenv('EMAIL_HOST')
+EMAIL_PORT = os.getenv('EMAIL_PORT')
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False

@@ -31,6 +31,6 @@ urlpatterns = [
     path('swagger/',
          SpectacularSwaggerView.as_view(url_name='schema'),
          name='swagger-ui'),
-    path(settings.API_VERSION, include('users.urls', namespace='users')),
+    path('api/v1/', include("users.urls", namespace="users")),
     path(settings.API_VERSION, include('lessons.urls', namespace='lessons')),
 ]
