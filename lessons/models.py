@@ -50,16 +50,7 @@ class Question(models.Model):
     def __str__(self):
         return self.text[0:10] + '...'
 
-
-# Create your models here.
-class IntegerRangeField(models.IntegerField):
-    """
-    класс поля модели IntegerField с ограничением
-    по макс и мин заначению"""
-    def __init__(self, min_value=None, max_value=None, **kwargs):
-        self.validators = [MinValueValidator(min_value),
-                           MaxValueValidator(max_value)]
-        super().__init__(**kwargs)
+from django.core.validators import MinValueValidator
 
 
 class Step(models.Model):
