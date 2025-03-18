@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from rest_framework.viewsets import ModelViewSet
 from rest_framework.generics import (CreateAPIView,
                                      ListAPIView,
                                      RetrieveAPIView,
@@ -10,7 +11,12 @@ from lessons.models import Step
 
 
 # Create your views here.
-class StepCreateViewSet(CreateAPIView):
+class StepViewSet(ModelViewSet):
+    queryset = Step.objects.all()
+    serializer_class = StepSerializer
+
+
+"""class StepCreateViewSet(CreateAPIView):
     queryset = Step.objects.all()
     serializer_class = StepSerializer
 
@@ -32,4 +38,4 @@ class StepUpdateViewSet(UpdateAPIView):
 
 class StepDeleteViewSet(DestroyAPIView):
         queryset = Step.objects.all()
-        serializer_class = StepSerializer
+        serializer_class = StepSerializer"""

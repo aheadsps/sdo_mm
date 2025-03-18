@@ -5,4 +5,4 @@ from lessons.models import Step
 class StepSerializer(serializers.ModelSerializer):
     class Meta:
         model = Step
-        fields = ['serial', 'title', 'content_text']
+        fields = "__all__"
