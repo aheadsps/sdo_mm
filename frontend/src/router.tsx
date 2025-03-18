@@ -8,7 +8,7 @@ import { MyLearning } from '@pages/my-learning/MyLearning'
 export const router = createBrowserRouter([
   {
     path: '/auth',
-    element: <Auth />,
+    element: <AuthPage />,
   },
   {
     path: '/main',
@@ -25,10 +25,6 @@ export const router = createBrowserRouter([
   {
     path: '/news',
     element: <Main />,
-  },
-  {
-    path: '/authform',
-    element: <AuthPage />,
   },
   {
     path: '/',
