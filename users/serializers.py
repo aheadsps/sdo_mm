@@ -1,5 +1,5 @@
-from authemail.serializers import PasswordChangeSerializer, UserSerializer, LoginSerializer, SignupSerializer
-from django.contrib.auth import get_user_model, authenticate
+from authemail.serializers import UserSerializer
+from django.contrib.auth import authenticate
 from rest_framework import serializers
 
 from users.models import User, Profile

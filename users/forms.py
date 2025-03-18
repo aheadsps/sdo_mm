@@ -6,7 +6,6 @@ from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
 from django.core.exceptions import ValidationError
-from django.db import transaction
 from django.utils import timezone
 from django.utils.translation import gettext as _
 
@@ -99,4 +98,3 @@ class CustomUserCreationForm(EmailUserCreationForm):
     def save_m2m(self):
         """ Пустой метод для совместимости с Django. """
         pass
-
