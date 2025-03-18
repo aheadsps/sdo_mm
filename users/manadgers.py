@@ -1,8 +1,4 @@
-from django.contrib.auth.models import UserManager
-from django.apps import apps
-from django.contrib.auth.hashers import make_password
 from authemail.models import EmailUserManager
-from django.contrib.auth.base_user import BaseUserManager
 from django.utils import timezone
 
 
