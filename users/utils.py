@@ -19,7 +19,8 @@ def generate_random_password(length=12):
     return password
 
 
-def custom_send_multi_format_email(template_prefix, template_ctxt, target_email):
+def custom_send_multi_format_email(template_prefix, template_ctxt,
+                                   target_email):
     """
     Отправляет email с использованием шаблонов.
     :param template_prefix: Префикс шаблона (например, 'welcome_email').
@@ -43,7 +44,8 @@ def custom_send_multi_format_email(template_prefix, template_ctxt, target_email)
     text_content = render_to_string(txt_file, template_ctxt)
     html_content = render_to_string(html_file, template_ctxt)
     # Создаем объект письма с текстовым и HTML-содержимым
-    msg = EmailMultiAlternatives(subject, text_content, from_email, [to], bcc=[bcc_email])
+    msg = EmailMultiAlternatives(subject, text_content, from_email, [to],
+                                 bcc=[bcc_email])
     # Добавляем HTML-содержимое как альтернативу
     msg.attach_alternative(html_content, 'text/html')
     # Отправляем письмо
