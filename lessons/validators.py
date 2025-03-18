@@ -9,24 +9,24 @@ class UserStoryValidator:
     requires_context = True
 
 
-def __init__(self, filed, lesson: str, question: str, answer: str, step: str) -> None:
-    if not all(isinstance(filed, str) for field in (lesson, question, answer, step)):
-        raise TypeError("Аргументы должны быть именами полей (str)")
+    def __init__(self, lesson: str, question: str, answer: str, step: str) -> None:
+        if not all(isinstance(field, str) for field in (lesson, question, answer, step)):
+            raise TypeError("Аргументы должны быть именами полей (str)")
 
-    self.lesson = lesson
-    self.question = question
-    self.answer = answer
-    self.step = step
+        self.lesson = lesson
+        self.question = question
+        self.answer = answer
+        self.step = step
 
-def _check_valid_structure(self, attrs: Dict) -> None:
-    has_lesson = self.lesson in attrs
-    has_group = all(field in attrs for field in (self.question, self.answer, self.step))
+    def _check_valid_structure(self, attrs: Dict) -> Any:
+        has_lesson = self.lesson in attrs
+        has_group = all(field in attrs for field in (self.question, self.answer, self.step))
 
-    if not(has_lesson or has_group):
-        raise ValidationError({"detail": "Необходимо передать либо 'lesson' либо группу 'question', 'answer', 'step'"})
+        if not(has_lesson or has_group):
+            raise ValidationError({"detail": "Необходимо передать либо 'lesson' либо группу 'question', 'answer', 'step'"})
 
-def __call__(self, attrs) -> Any:
-    self._heck_valid_structure(attrs)
+    def __call__(self, attrs) -> Any:
+        self._check_valid_structure(attrs)
 
 
 #class UserStorySerializer(serializers.Serializer):
