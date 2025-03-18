@@ -28,6 +28,7 @@
     align-items: center;
     gap: 10px;
     cursor: pointer;
+    margin-right: 140px;
   }
 
   &__logoText {
@@ -92,4 +93,8 @@
   font-size: 20px;
   font-weight: bold;
   color: var(--color-text-primary);
+}
+
+.open {
+  transform: translateX(0);
 }

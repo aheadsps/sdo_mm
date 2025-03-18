@@ -1,16 +1,18 @@
-import { Sidebar } from '@shared/components'
-import Header from '@shared/components/Header/Header'
+import { Sidebar, Header } from '@shared/components'
+import { useScreenWidth } from '@shared/hooks'
 import { ComponentType } from 'react'
 
 import s from './layout.module.css'
 
 export const withLayout = <T extends object>(Component: ComponentType<T>) => {
   return (props: T) => {
+    const { isMobile } = useScreenWidth()
+
     return (
       <>
         <Header title="Корпоративный университет Транспортного комплекса" />
         <div className={s.appWrapper}>
-          <Sidebar />
+          {!isMobile && <Sidebar />}
           <main className={s.main}>
             <Component {...props} />
           </main>
