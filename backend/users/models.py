@@ -1,12 +1,9 @@
-from datetime import timedelta
-
-from authemail.models import EmailAbstractUser, EmailUserManager
-from django.core.exceptions import ValidationError
+from authemail.models import EmailAbstractUser
 from django.db import models
-from django.utils import timezone
 from phonenumber_field.modelfields import PhoneNumberField
 from django.core.validators import MaxValueValidator, MinValueValidator
 from users.manadgers import EmailUserManagerAddProf
+
 
 class Profession(models.Model):
     """ Модель Профессии """
@@ -38,13 +35,8 @@ class User(EmailAbstractUser):
     last_name = models.CharField(max_length=30, null=True, blank=True, verbose_name="Фамилия пользователя")
     date_joined = models.DateTimeField(auto_now_add=True, verbose_name="Дата регистрации")
     last_login = models.DateTimeField(auto_now=True, verbose_name="Время последнего входа")
-<<<<<<< HEAD:backend/users/models.py
-    date_commencement = models.DateField(null=False, verbose_name="Стаж работы")
-    profession = models.ForeignKey(Profession, unique=False, null=True, on_delete=models.PROTECT,)
-=======
     date_commencement = models.DateField(null=False, verbose_name="Дата начала работы")
     profession = models.ForeignKey(Profession, unique=False, null=False, on_delete=models.PROTECT,)
->>>>>>> develop:users/models.py
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['date_commencement']
@@ -100,8 +92,6 @@ class WorkExperience(models.Model):
 
     def __str__(self):
         return self.years
-<<<<<<< HEAD:backend/users/models.py
-=======
 
 
 class ProfessionGroup(models.Model):
@@ -111,10 +101,10 @@ class ProfessionGroup(models.Model):
                                    related_name="profession"
                                    )
     students = models.ManyToManyField(User, related_name="users")
+
     class Meta:
         verbose_name = "Группа"
         verbose_name_plural = "Группы"
 
     def __str__(self):
         return self.profession
->>>>>>> develop:users/models.py

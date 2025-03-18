@@ -1,4 +1,5 @@
 from authemail.views import PasswordChange, Logout, UserMe, Login
+from authemail.serializers import LoginSerializer
 
 from django.contrib.auth import authenticate
 
@@ -10,7 +11,6 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
 from users.serializers import (
-    LoginSerializer,
     CustomPasswordChangeSerializer,
     CustomUserSerializer,
 )
