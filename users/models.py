@@ -1,12 +1,9 @@
-from datetime import timedelta
-
-from authemail.models import EmailAbstractUser, EmailUserManager
-from django.core.exceptions import ValidationError
+from authemail.models import EmailAbstractUser
 from django.db import models
-from django.utils import timezone
 from phonenumber_field.modelfields import PhoneNumberField
 from django.core.validators import MaxValueValidator, MinValueValidator
 from users.manadgers import EmailUserManagerAddProf
+
 
 class Profession(models.Model):
     """ Модель Профессии """
@@ -86,8 +83,7 @@ class WorkExperience(models.Model):
     years = IntegerRangeField(min_value=1,
                               max_value=60,
                               default=0,
-                              verbose_name="Стаж",
-                              unique=True,
+                              verbose_name="Стаж"
                               )
 
     class Meta:
@@ -105,7 +101,6 @@ class ProfessionGroup(models.Model):
                                    related_name="profession"
                                    )
     students = models.ManyToManyField(User, related_name="users")
-
     class Meta:
         verbose_name = "Группа"
         verbose_name_plural = "Группы"
