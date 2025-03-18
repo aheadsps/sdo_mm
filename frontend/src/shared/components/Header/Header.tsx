@@ -1,22 +1,21 @@
 import { useScreenWidth } from '@shared/hooks'
 import React, { useState } from 'react'
 
-import MobileVersionHeaderIcon from '@assets/icons/MobileVersionHeaderIcon'
+import { LogoIcon, MobileVersionHeaderIcon } from '@assets/icons'
 
-import LogoIcon from '../../../assets/icons/LogoIcon'
 import '@fontsource/manrope/600.css'
-import { Typography } from '../typography'
-
 import { Sidebar } from '../sidebar'
+import { Typography } from '../typography'
 
 import styles from './header.module.scss'
 import { HeaderAvatar } from './HeaderAvatar'
 
-
 const Header: React.FC = () => {
-  const [isLoggedIn] = useState(false)
-  const { isMobile } = useScreenWidth()
+  const [isLoggedIn] = useState()
+
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false)
+
+  const { isMobile } = useScreenWidth()
 
   const onToggleMobileSidebar = () => {
     setIsMobileSidebarOpen(!isMobileSidebarOpen)
@@ -37,15 +36,13 @@ const Header: React.FC = () => {
           </Typography>
         </div>
         {isLoggedIn && <HeaderAvatar />}
-        <MobileVersionHeaderIcon className={styles.header__mobileIcon} width={40} height={40} />
+        <MobileVersionHeaderIcon
+          className={styles.header__mobileIcon}
+          width={40}
+          height={40}
+          onClick={onToggleMobileSidebar}
+        />
       </div>
-      <HeaderAvatar />
-      <MobileVersionHeaderIcon
-        className={styles.header__mobileIcon}
-        width={40}
-        height={40}
-        onClick={onToggleMobileSidebar}
-      />
       {isMobile && <Sidebar className={isMobileSidebarOpen ? styles.open : ''} />}
     </header>
   )

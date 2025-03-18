@@ -3,9 +3,9 @@ import { useState, useEffect } from 'react'
 export const useScreenWidth = () => {
   const [width, setWidth] = useState(window.innerWidth)
 
-  const isTablet = width <= 1024
-  const isMobile = width < 768
-  const isDesktop = width >= 1350
+  const isTablet: boolean = width <= 1024
+  const isMobile: boolean = width < 768
+  const isDesktop: boolean = width >= 1350
 
   useEffect(() => {
     const onWindowResize = () => setWidth(window.innerWidth)
