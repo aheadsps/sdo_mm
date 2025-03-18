@@ -12,36 +12,38 @@ class TestEndpointsEvents(APITestCase):
     """
     Тесты Эндпоинтов
     """
+
     def setUp(self):
-        profession = users_models.Profession._default_manager.create(
-            en_name='prof',
-            ru_name='проф',
+        self.profession = users_models.Profession._default_manager.create(
+            en_name="prof",
+            ru_name="проф",
         )
-        experience = users_models.WorkExperience._default_manager.create(
+        self.experience = users_models.WorkExperience._default_manager.create(
             years=0,
         )
-        date_commencement = datetime.date(year=2023,
-                                          month=1,
-                                          day=1,
-                                          )
+        date_commencement = datetime.date(
+            year=2023,
+            month=1,
+            day=1,
+        )
         self.user = get_user_model()._default_manager.create(
-            email='user@gmail.com',
-            profession=profession,
-            password='password',
+            email="user@gmail.com",
+            profession=self.profession,
+            password="password",
             date_commencement=date_commencement,
         )
         group_profession = users_models.ProfessionGroup._default_manager.create(
-            profession=profession,
+            profession=self.profession,
         )
         group_profession.students.add(self.user)
         group_profession.save()
         self.course = lessons_models.Course._default_manager.create(
-            name='course',
-            description='some',
-            profession=profession,
+            name="course",
+            description="some",
+            profession=self.profession,
         )
         self.course.experiences.add(
-            experience,
+            self.experience,
         )
         self.course.save()
         self.event = lessons_models.Event._default_manager.create(
@@ -54,9 +56,32 @@ class TestEndpointsEvents(APITestCase):
 
     def test_get_course(self):
         """
-        Тест получение курса по ID
+        Тест получение Эвента по ID
         """
-        url = reverse('lessons:event-detail',
-                      kwargs={'event_id': self.event.pk})
+        url = reverse("lessons:event-detail", kwargs={"event_id": self.event.pk})
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            response.json(),
+            {
+                "id": self.event.pk,
+                "course": {
+                    "beginer": False,
+                    "description": "some",
+                    "experiences": [self.experience.pk],
+                    "image": None,
+                    "name": "course",
+                    "profession": self.profession.pk,
+                },
+                "done_lessons": 0,
+                "end_date": None,
+                "favorite": False,
+                "start_date": None,
+                "status": "expected",
+            },
+        )
+
+    def test_get_list_currect_events(self):
+        """
+        Тест получения актуальных эвентов на пользователе
+        """

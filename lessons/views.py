@@ -1,4 +1,5 @@
-from rest_framework import generics, viewsets, permissions
+from rest_framework import generics, permissions
+from rest_framework.decorators import action
 
 from lessons import models
 from lessons import serializers
@@ -21,3 +22,9 @@ class EventViewSet(own_viewsets.GetUpdateDeleteViewSet):
         else:
             permission_classes = [permissions.IsAuthenticated]
         return [permission() for permission in permission_classes]
+
+    @action(detail=False)
+    def currents(self, request):
+        """
+        Получение текущих эвентов на пользователя
+        """

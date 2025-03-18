@@ -13,7 +13,11 @@ class AnswerSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Answer
-        fields = ('id', 'text', 'correct',)
+        fields = (
+            "id",
+            "text",
+            "correct",
+        )
 
 
 class QuestionSerializer(serializers.ModelSerializer):
@@ -26,18 +30,18 @@ class QuestionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Question
-        fields = ('id', 'text', 'image', 'answers')
+        fields = ("id", "text", "image", "answers")
 
     def create(self, validated_data: dict[str, str]):
         """
         Получение возможности создавать вопрос сразу с ответами
         """
 
-        answers = validated_data.pop('answers')
+        answers = validated_data.pop("answers")
         question = models.Question._default_manager.create(**validated_data)
-        answers_models = [models.Answer(**answer, question=question)
-                          for answer
-                          in answers]
+        answers_models = [
+            models.Answer(**answer, question=question) for answer in answers
+        ]
         models.Answer._default_manager.bulk_create(answers_models)
         return question
 
@@ -50,35 +54,38 @@ class CourseSerializer(serializers.ModelSerializer):
     # ПОСЛЕ ДОБАВЛЕНИЕ LESSON ОБЯЗАТЕЛЬНО ДОБАВИТЬ И ТУТ
     class Meta:
         model = models.Course
-        fields = ('name',
-                 'description',
-                 'beginer',
-                 'image',
-                 'profession',
-                 'experiences',
-                 )
+        fields = (
+            "name",
+            "description",
+            "beginer",
+            "image",
+            "profession",
+            "experiences",
+        )
 
 
 class ViewCourseSerializer(serializers.ModelSerializer):
     """
     Сериализатор вывода курса
     """
+
     experiences = user_serializers.WorkExperienceSerializer(many=True)
     profession = user_serializers.ProfessionSerializer()
 
     # ПОСЛЕ ДОБАВЛЕНИЕ LESSON ОБЯЗАТЕЛЬНО ДОБАВИТЬ И ТУТ
     class Meta:
         model = models.Course
-        fields = ('id',
-                 'name',
-                 'description',
-                 'beginer',
-                 'create_date',
-                 'update_date',
-                 'image',
-                 'profession',
-                 'experiences',
-                 )
+        fields = (
+            "id",
+            "name",
+            "description",
+            "beginer",
+            "create_date",
+            "update_date",
+            "image",
+            "profession",
+            "experiences",
+        )
 
 
 class EventSerializer(serializers.ModelSerializer):
@@ -86,13 +93,16 @@ class EventSerializer(serializers.ModelSerializer):
     Сериализатор Курса
     """
 
+    course = CourseSerializer()
+
     class Meta:
         model = models.Event
-        fields = ('id',
-                 'course',
-                 'done_lessons',
-                 'start_date',
-                 'end_date',
-                 'favorite',
-                 'status',
-                 )
+        fields = (
+            "id",
+            "course",
+            "done_lessons",
+            "start_date",
+            "end_date",
+            "favorite",
+            "status",
+        )

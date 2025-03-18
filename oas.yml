@@ -1504,10 +1504,11 @@ components:
       additionalProperties: false
       type: object
       properties:
-        course_id:
-          type: integer
+        course:
+          type: object
           readOnly: false
           minimum: 1
+          $ref: "#/components/schemas/СourseView"
         done_lessons:
           type: integer
           readOnly: true
