@@ -12,7 +12,5 @@ router = routers.SimpleRouter(
 router.register(prefix=r'events', viewset=views.EventViewSet)
 
 urlpatterns = [
-    path(
-        include(router.urls),
-    ),
+    path('', include(router.urls)),
 ]

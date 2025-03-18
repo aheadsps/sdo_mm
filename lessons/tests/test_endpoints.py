@@ -1,5 +1,6 @@
 from rest_framework.test import APITestCase
 from django.contrib.auth import get_user_model
+from django.urls import reverse
 
 from lessons import models as lessons_models
 from users import models as users_models
@@ -33,7 +34,16 @@ class TestEndpointsEvents(APITestCase):
             profession=profession,
         )
         self.course.experiences.add(
-            experience
+            experience,
         )
         self.course.save()
         self.client.force_authenticate(self.user)
+
+    def test_get_course(self):
+        """
+        Тест получение курса по ID
+        """
+        url = reverse('lessons:course_retrieve',
+                      kwargs={'pk': self.course.pk})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code == '200')

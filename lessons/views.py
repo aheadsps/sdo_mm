@@ -10,7 +10,7 @@ class EventViewSet(own_viewsets.GetUpdateDeleteViewSet):
     """
     Виювсет эвента
     """
-    models = models.Event._default_manager.get_queryset()
+    queryset = models.Event._default_manager.get_queryset()
     serializers = serializers.EventSerializer
 
     def get_permissions(self):
