@@ -331,7 +331,7 @@ paths:
                 type: array
                 minItems: 0
                 items:
-                  $ref: "#/components/schemas/EventView"
+                  $ref: "#/components/schemas/Event"
         "400":
           $ref: "#/components/responses/BadRequest"
         "401":
@@ -358,7 +358,7 @@ paths:
                 type: array
                 minItems: 0
                 items:
-                  $ref: "#/components/schemas/EventView"
+                  $ref: "#/components/schemas/Event"
         "403":
           $ref: "#/components/responses/Forbidden"
         "422":
@@ -478,7 +478,7 @@ paths:
             application/json:
               schema:
                 type: object
-                $ref: "#/components/schemas/Сourse"
+                $ref: "#/components/schemas/СourseView"
         "401":
           $ref: "#/components/responses/Unauthorized"
         "403":
@@ -607,37 +607,6 @@ paths:
         "422":
           $ref: "#/components/responses/UnprocessableEntity"
 
-  /lessons/from-event/{course_id}:
-    get:
-      operationId: api_lessons_from-event_list
-      parameters:
-        - in: path
-          name: course_id
-          required: true
-          schema:
-            type: integer
-      summary: Получение всех уроков эвента по ID (только для текущего пользователя, в ином случае доступ только администрации или методисту)
-      tags:
-        - Lesson
-      security:
-        - Token: []
-      responses:
-        "200":
-          description: JSON ответ с массивом уроков данного курса
-          content:
-            application/json:
-              schema:
-                type: array
-                maxItems: 1
-                items:
-                  $ref: "#/components/schemas/Lesson"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        "422":
-          $ref: "#/components/responses/UnprocessableEntity"
-
   /lessons/{lesson_id}:
     get:
       summary: Получение конкретного урока по ID
@@ -659,7 +628,7 @@ paths:
             application/json:
               schema:
                 type: object
-                $ref: "#/components/schemas/Lesson"
+                $ref: "#/components/schemas/LessonView"
         "401":
           $ref: "#/components/responses/Unauthorized"
         "403":
@@ -747,7 +716,7 @@ paths:
                 type: array
                 minItems: 0
                 items:
-                  $ref: "#/components/schemas/Step"
+                  $ref: "#/components/schemas/StepView"
         "403":
           $ref: "#/components/responses/Forbidden"
         "422":
@@ -809,7 +778,7 @@ paths:
             application/json:
               schema:
                 type: array
-                maxItems: 0
+                maxItems: 1
                 items:
                   $ref: "#/components/schemas/Step"
         "401":
@@ -902,6 +871,56 @@ paths:
       responses:
         "204":
           description: Шаг удален успешно
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+
+  /test-block/{lesson_id}:
+    get:
+      summary: Получение тестового блока с историей ответов
+      parameters:
+        - in: path
+          name: lesson_id
+          required: true
+          schema:
+            type: integer
+      operationId: api_test-block_retrieve
+      tags:
+        - TestBlock
+      security:
+        - Token: []
+      responses:
+        "200":
+          description: JSON ответ с шагом
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/TestBlockView"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+
+  /test-block/{lesson_id}/reset:
+    delete:
+      summary: Сброс ответов под данный урок
+      tags:
+        - TestBlock
+      security:
+        - Token: []
+      responses:
+        "204":
+          description: Успешно обнулен
         "401":
           $ref: "#/components/responses/Unauthorized"
         "403":
@@ -1111,9 +1130,8 @@ components:
           description: Уроки привязанные к данному курсу (для бэков - это поле только из сериализатора)
           minItems: 1
           items:
-            type: integer
-            minimum: 1
-            readOnly: true
+            type: object
+            $ref: '#/components/schemas/LessonView'
         beginer:
           type: boolean
           default: false
@@ -1138,36 +1156,18 @@ components:
           description: Для какой профессии предназначен курс
           nullable: false
           $ref: "#/components/schemas/Profession"
-        status:
-          type: string
-          nullable: false
-          enum:
-            - expected
-            - started
-            - closed
         experiences:
           type: array
           description: Список стажевых интервалов для которых подходит данный курс
           minItems: 1
           items:
             $ref: "#/components/schemas/WorkExperience"
-      required:
-        - id
-        - name
-        - start_date
-        - end_date
-        - profession
-        - experiences
 
     Сourse:
       description: Сущность курса
       additionalProperties: false
       type: object
       properties:
-        id:
-          type: integer
-          readOnly: true
-          minimum: 1
         name:
           type: string
           maxLength: 256
@@ -1187,44 +1187,26 @@ components:
           type: boolean
           default: false
           description: Является ли курс для начинающих?
-        create_date:
-          type: string
-          format: date-time
-          readOnly: true
-          nullable: false
-        update_date:
-          type: string
-          format: date-time
-          readOnly: true
-          nullable: false
         image:
           type: string
           format: path
           readOnly: false
           nullable: true
-        profession:
-          type: object
+        profession_id:
+          type: integer
           description: Для какой профессии предназначен курс
-          nullable: false
-          $ref: "#/components/schemas/Profession"
-        status:
-          type: string
-          nullable: false
-          enum:
-            - expected
-            - started
-            - closed
+          nullable: true
+          minimum: 1
         experiences:
           type: array
           description: Список стажевых интервалов для которых подходит данный курс
           minItems: 1
           items:
-            $ref: "#/components/schemas/WorkExperience"
+            type: integer
+            minimum: 1
       required:
         - id
         - name
-        - start_date
-        - end_date
         - profession
         - experiences
 
@@ -1233,10 +1215,6 @@ components:
       additionalProperties: false
       type: object
       properties:
-        id:
-          type: integer
-          readOnly: true
-          minimum: 1
         name:
           type: string
           maxLength: 256
@@ -1287,8 +1265,13 @@ components:
           description: Шаги урока
           minItems: 0
           items:
-            type: integer
+            type: object
             minimum: 1
+            $ref: "#/components/schemas/StepView"
+        test_block_id:
+          type: integer
+          description: Тестовый блок
+          minimum: 1
         status:
           description: Статус прохождения урока
           nullable: false
@@ -1297,8 +1280,8 @@ components:
             - process
             - failed
 
-    Step:
-      description: Шаги урока
+    StepView:
+      description: Шаги урока просмотр
       properties:
         id:
           type: integer
@@ -1324,19 +1307,45 @@ components:
           nullable: true
           minItems: 0
           items:
-            $ref: "#/components/schemas/ContentAttachment"
-        test_block:
-          type: object
-          description: Тестовый блок для этого шага
-          nullable: true
-          $ref: "#/components/schemas/TestBlock"
+            type: integer
+            minimum: 1
 
-    TestBlock:
+    Step:
+      description: Шаги урока создание, редактирование
+      properties:
+        title:
+          type: string
+          maxLength: 256
+          readOnly: false
+          nullable: false
+        content_text:
+          type: string
+          readOnly: false
+        serial:
+          type: integer
+          description: Порядковый номер шага (1 шаг всегда открыт)
+          minimum: 1
+          readOnly: false
+          nullable: false
+        media_attachment:
+          type: array
+          description: Медиа вложения. (Только в логике сериализатора, в модели не реализуем!)
+          nullable: true
+          minItems: 0
+          items:
+            $ref: "#/components/schemas/ContentAttachment"
+
+    TestBlockView:
       description: Блок с вопросами
       additionalProperties: false
       type: object
       properties:
         id:
+          type: integer
+          minimum: 1
+          readOnly: true
+        lesson_id:
+          description: В модели делаем полноценную связь, в сериализаторе только id
           type: integer
           minimum: 1
           readOnly: true
@@ -1347,10 +1356,33 @@ components:
           items:
             $ref: "#/components/schemas/Question"
         user_story:
-          type: object
+          type: array
           description: Список уже пройденых вопросов
           nullable: true
-          $ref: "#/components/schemas/UserStory"
+          minItems: 0
+          items:
+            $ref: "#/components/schemas/UserStory"
+
+    TestBlock:
+      description: Блок с вопросами
+      additionalProperties: false
+      type: object
+      properties:
+        id:
+          type: integer
+          minimum: 1
+          readOnly: true
+        lesson_id:
+          description: В модели делаем полноценную связь, в сериализаторе только id
+          type: integer
+          minimum: 1
+          readOnly: true
+        questions:
+          type: array
+          description: Вопросы для данного шага. (Только в логике сериализатора, в модели не реализуем!)
+          minItems: 0
+          items:
+            $ref: "#/components/schemas/Question"
 
     Question:
       description: Сущность тестов для урока
@@ -1393,7 +1425,7 @@ components:
           readOnly: false
         correct:
           type: boolean
-          readOnly: true
+          readOnly: false
       required:
         - question
         - text
@@ -1474,6 +1506,7 @@ components:
           type: integer
           minimum: 0
           maximum: 60
+          uniqueItems: true
 
     UserStory:
       description: История ответов на вопросы и открытия уроков (должно быть либо урок, либо вопрос - ответ)
@@ -1487,89 +1520,29 @@ components:
           type: integer
           readOnly: true
           minimum: 1
-        step_id:
+        lesson_id:
           type: integer
           readOnly: true
           minimum: 1
-        question:
-          type: object
-          description: Текущий вопрос (внутри варианты ответа)
-          nullable: true
-          $ref: "#/components/schemas/Question"
         answer_id:
           type: integer
           description: Текущий ответ
           nullable: true
           minimum: 1
-        lesson_id:
-          type: integer
-          description: Текущий пройденный урок
-          nullable: true
-          minimum: 1
-
-    EventView:
-      description: Сущность задачи (курс) которая присваивается пользователю
-      additionalProperties: false
-      type: object
-      properties:
-        id:
-          type: integer
-          readOnly: true
-          minimum: 1
-        user_id:
-          type: integer
-          readOnly: true
-          minimum: 1
-        course:
-          type: object
-          readOnly: false
-          $ref: "#/components/schemas/СourseView"
-        done_lessons:
-          type: integer
-          readOnly: true
-        start_date:
-          type: string
-          format: date-time
-          readOnly: false
-          nullable: true
-        end_date:
-          type: string
-          format: date-time
-          readOnly: false
-          nullable: true
-        favorite:
-          type: boolean
-          description: Флаг избранного
-          default: false
-          readOnly: false
-        status:
-          description: Статус прохождения курса
-          enum:
-            - done
-            - process
-            - failed
-          readOnly: true
 
     Event:
       description: Сущность задачи (курс) которая присваивается пользователю
       additionalProperties: false
       type: object
       properties:
-        id:
+        course_id:
           type: integer
-          readOnly: true
-          minimum: 1
-        user:
-          type: object
-          readOnly: true
-          $ref: "#/components/schemas/User"
-        course:
-          type: object
           readOnly: false
-          $ref: "#/components/schemas/Сourse"
+          minimum: 1
         done_lessons:
           type: integer
           readOnly: true
+          default: 0
         start_date:
           type: string
           format: date-time
@@ -1591,10 +1564,12 @@ components:
             - done
             - process
             - failed
+            - expected
           readOnly: true
+          default: expected
 
   securitySchemes:
     Token:
       type: apiKey
       in: header
-      name: token
+      name: Authorization
