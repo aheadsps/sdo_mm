@@ -1,5 +1,6 @@
 from rest_framework import generics, permissions
 from rest_framework.decorators import action
+from rest_framework.response import Response
 
 from lessons import models
 from lessons import serializers
@@ -23,8 +24,17 @@ class EventViewSet(own_viewsets.GetUpdateDeleteViewSet):
             permission_classes = [permissions.IsAuthenticated]
         return [permission() for permission in permission_classes]
 
-    @action(detail=False)
+    @action(detail=False, permission_classes=[permissions.IsAuthenticated])
     def currents(self, request):
         """
         Получение текущих эвентов на пользователя
         """
+        user = request.user
+        queryset = self.filter_queryset(self.get_queryset())
+        events = queryset.filter(user=user)
+        page = self.paginate_queryset(events)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)

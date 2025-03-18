@@ -341,6 +341,10 @@ paths:
         "422":
           $ref: "#/components/responses/UnprocessableEntity"
 
+  /events/main:
+    get:
+    ...
+
   /events:
     get:
       operationId: api_events_list
