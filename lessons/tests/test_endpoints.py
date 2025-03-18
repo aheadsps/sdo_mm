@@ -1,3 +1,5 @@
+import datetime
+
 from rest_framework.test import APITestCase
 from django.contrib.auth import get_user_model
 from django.urls import reverse
@@ -18,10 +20,15 @@ class TestEndpointsEvents(APITestCase):
         experience = users_models.WorkExperience._default_manager.create(
             years=0,
         )
+        date_commencement = datetime.date(year=2023,
+                                          month=1,
+                                          day=1,
+                                          )
         self.user = get_user_model()._default_manager.create(
             email='user@gmail.com',
             profession=profession,
             password='password',
+            date_commencement=date_commencement,
         )
         group_profession = users_models.ProfessionGroup._default_manager.create(
             profession=profession,
@@ -37,13 +44,19 @@ class TestEndpointsEvents(APITestCase):
             experience,
         )
         self.course.save()
+        self.event = lessons_models.Event._default_manager.create(
+            user=self.user,
+            course=self.course,
+            start_date=None,
+            end_date=None,
+        )
         self.client.force_authenticate(self.user)
 
     def test_get_course(self):
         """
         Тест получение курса по ID
         """
-        url = reverse('lessons:course_retrieve',
-                      kwargs={'pk': self.course.pk})
+        url = reverse('lessons:event-detail',
+                      kwargs={'event_id': self.event.pk})
         response = self.client.get(url)
-        self.assertEqual(response.status_code == '200')
+        self.assertEqual(response.status_code, 200)

@@ -80,11 +80,13 @@ class Event(models.Model):
                                       help_text='Дата начала ивента, '
                                       'нужно для Celery что бы в рассписании '
                                       'поставить дату выдачи ивента',
+                                      default=None,
                                       )
     end_date = models.DateTimeField(verbose_name='дедлайн',
                                     null=True,
                                     help_text='Дедлайн ивента, если'
                                     'дедлайна нет тогда бессрочно',
+                                    default=None,
                                     )
     favorite = models.BooleanField(_("Избранный ивент"),
                                    default=False,

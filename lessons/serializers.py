@@ -50,7 +50,7 @@ class CourseSerializer(serializers.ModelSerializer):
     # ПОСЛЕ ДОБАВЛЕНИЕ LESSON ОБЯЗАТЕЛЬНО ДОБАВИТЬ И ТУТ
     class Meta:
         model = models.Course
-        field = ('name',
+        fields = ('name',
                  'description',
                  'beginer',
                  'image',
@@ -69,7 +69,7 @@ class ViewCourseSerializer(serializers.ModelSerializer):
     # ПОСЛЕ ДОБАВЛЕНИЕ LESSON ОБЯЗАТЕЛЬНО ДОБАВИТЬ И ТУТ
     class Meta:
         model = models.Course
-        field = ('id',
+        fields = ('id',
                  'name',
                  'description',
                  'beginer',
@@ -88,7 +88,7 @@ class EventSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Event
-        field = ('id',
+        fields = ('id',
                  'course',
                  'done_lessons',
                  'start_date',

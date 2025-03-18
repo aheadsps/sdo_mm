@@ -11,7 +11,9 @@ class EventViewSet(own_viewsets.GetUpdateDeleteViewSet):
     Виювсет эвента
     """
     queryset = models.Event._default_manager.get_queryset()
-    serializers = serializers.EventSerializer
+    serializer_class = serializers.EventSerializer
+    lookup_field = 'pk'
+    lookup_url_kwarg = 'event_id'
 
     def get_permissions(self):
         if not self.action == 'retrieve':
