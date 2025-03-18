@@ -1,7 +1,6 @@
 from django.db import models
-from django.core.validators import MinValueValidator
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.utils.translation import gettext_lazy as _
-
 from lessons.utils import path_maker_text
 
 
@@ -28,7 +27,6 @@ class Answer(models.Model):
 
     def __str__(self):
         return self.text[0:10] + '...'
-from django.core.validators import MaxValueValidator, MinValueValidator
 
 
 class Question(models.Model):
@@ -51,14 +49,18 @@ class Question(models.Model):
 
     def __str__(self):
         return self.text[0:10] + '...'
+
+
 # Create your models here.
 class IntegerRangeField(models.IntegerField):
-    """ класс поля модели IntegerField с ограничением по макс и мин заначению"""
-
+    """
+    класс поля модели IntegerField с ограничением
+    по макс и мин заначению"""
     def __init__(self, min_value=None, max_value=None, **kwargs):
         self.validators = [MinValueValidator(min_value),
                            MaxValueValidator(max_value)]
         super().__init__(**kwargs)
+
 
 class Step(models.Model):
     """
