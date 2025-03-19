@@ -29,19 +29,23 @@
     cursor: pointer;
     margin-right: 140px;
   }
+
   &__logoText {
     color: var( --color-accent-red500);
     font-weight: 900;
     line-height: 1.2;
     font-size: 14px;
   }
+
   &__titleContainer {
     display: none;
-  
+  }
+
   &__mobileIcon {
     display: block;
     cursor: pointer;
   }
+
   &__titleText {
     font-size: 20px;
     line-height: 1.3;
