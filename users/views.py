@@ -1,4 +1,5 @@
 from authemail.views import PasswordChange, Logout, UserMe, Login
+from authemail.serializers import LoginSerializer
 
 from django.contrib.auth import authenticate
 

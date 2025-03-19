@@ -1,9 +1,5 @@
-from datetime import timedelta
-
-from authemail.models import EmailAbstractUser, EmailUserManager
-from django.core.exceptions import ValidationError
+from authemail.models import EmailAbstractUser
 from django.db import models
-from django.utils import timezone
 from phonenumber_field.modelfields import PhoneNumberField
 from django.core.validators import MaxValueValidator, MinValueValidator
 from users.manadgers import EmailUserManagerAddProf

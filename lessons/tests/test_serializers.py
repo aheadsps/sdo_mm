@@ -9,11 +9,8 @@ class TestSerializers(APITestCase):
     Тесты Сериализаторов
     """
 
-    def test_create_question_with_answer(self):
-        """
-        Тест создания вопроса с ответами
-        """
-        data = dict(
+    def setUp(self):
+        self.question_date = dict(
             text='Question',
             answers=[
                 dict(text='answer_1',
@@ -27,7 +24,12 @@ class TestSerializers(APITestCase):
                      ),
             ]
         )
-        serializer = serializers.QuestionSerializer(data=data)
+
+    def test_create_question_with_answer(self):
+        """
+        Тест создания вопроса с ответами
+        """
+        serializer = serializers.QuestionSerializer(data=self.question_date)
         self.assertTrue(serializer.is_valid())
         instance = serializer.save()
         self.assertEqual(models.Question._default_manager.count(), 1)
