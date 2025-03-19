@@ -8,14 +8,12 @@
   max-width: 1350px;
   margin: 0 auto;
   position: relative;  
-
   &__content {
     width: 100%;
     max-width: 1350px;
     margin: 0 auto; 
     position: relative;  
   }
-
   &__img {
     position: absolute;
     top: 85px;
@@ -27,7 +25,6 @@
     height: 100%;
     object-fit: cover;
   }
-
   &__img__content {
     display: flex;
     justify-content: center;
@@ -35,7 +32,6 @@
     width: 100%;
     max-width: 1350px;
     margin: 0 auto;
-
   }
 }
 

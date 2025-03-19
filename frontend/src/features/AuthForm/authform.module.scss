@@ -36,6 +36,7 @@
   }
   &__inputs {
     margin-bottom: 12px;
+
     @media (max-width: 767px) {
       width: 320px;
     }
@@ -43,6 +44,7 @@
   &__input {
     font-size: 16px;
     position: relative;
+
     &:first-child {
       margin-bottom: 24px;
     }
@@ -50,7 +52,6 @@
     @media (max-width: 768px) {
       font-size: 14px;
     }
-    
   }
   &__inputError {
     color: var(--color-accent-red500); 
@@ -59,6 +60,7 @@
   &__passwordWrapper {
     position: relative;
     width: 300px;
+
     @media (max-width: 767px) {
       width: 320px;
     }
@@ -77,6 +79,7 @@
     letter-spacing: 0.25px;
     text-decoration: none;
     color: var(--color-text-primary);
+
     &:first-child {
       color: var(--color-text-secondary);
     }
@@ -91,6 +94,7 @@
     cursor: pointer;
     font-size: 14px;
     text-align: center;
+    
     @media (max-width: 767px) {
       width: 320px;
     }
