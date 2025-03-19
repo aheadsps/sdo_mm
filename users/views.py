@@ -11,6 +11,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
 from users.serializers import (
+    CustomLoginSerializer,
     CustomPasswordChangeSerializer,
     CustomUserSerializer,
 )
@@ -21,7 +22,7 @@ class CustomLogin(Login):
     """Кастомный класс для входа пользователя."""
 
     permission_classes = (AllowAny,)
-    serializer_class = LoginSerializer
+    serializer_class = CustomLoginSerializer
 
     def post(self, request, format=None):
         """Обрабатывает POST-запрос для изменения пароля пользователя."""
@@ -37,19 +38,24 @@ class CustomLogin(Login):
                 if user.is_verified:
                     if user.is_active:
                         token, created = Token.objects.get_or_create(user=user)
-                        return Response({"token": token.key}, status=status.HTTP_200_OK)
+                        return Response({"token": token.key},
+                                        status=status.HTTP_200_OK)
                     else:
                         content = {"detail": _("User account not active.")}
-                        return Response(content, status=status.HTTP_401_UNAUTHORIZED)
+                        return Response(content,
+                                        status=status.HTTP_401_UNAUTHORIZED)
                 else:
                     content = {"detail": _("User account not verified.")}
-                    return Response(content, status=status.HTTP_401_UNAUTHORIZED)
+                    return Response(content,
+                                    status=status.HTTP_401_UNAUTHORIZED)
             else:
-                content = {"detail": _("Unable to login with provided credentials.")}
+                content = {
+                    "detail": _("Unable to login with provided credentials.")}
                 return Response(content, status=status.HTTP_401_UNAUTHORIZED)
 
         else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response(serializer.errors,
+                            status=status.HTTP_400_BAD_REQUEST)
 
 
 class CustomLogout(Logout):
@@ -97,7 +103,8 @@ class CustomPasswordChange(PasswordChange):
             return Response(content, status=status.HTTP_200_OK)
 
         else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response(serializer.errors,
+                            status=status.HTTP_400_BAD_REQUEST)
 
 
 class CustomUserMe(UserMe):
