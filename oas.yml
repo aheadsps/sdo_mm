@@ -343,6 +343,10 @@ paths:
         "422":
           $ref: "#/components/responses/UnprocessableEntity"
 
+  /events/main:
+    get:
+    ...
+
   /events:
     get:
       operationId: api_events_list
@@ -1577,10 +1581,11 @@ components:
       additionalProperties: false
       type: object
       properties:
-        course_id:
-          type: integer
+        course:
+          type: object
           readOnly: false
           minimum: 1
+          $ref: "#/components/schemas/СourseView"
         done_lessons:
           type: integer
           readOnly: true

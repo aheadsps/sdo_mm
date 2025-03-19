@@ -16,6 +16,7 @@ Including another URLconf
 """
 
 from django.contrib import admin
+from django.conf import settings
 from django.urls import path, include
 
 from drf_spectacular.views import (
@@ -30,5 +31,6 @@ urlpatterns = [
     path('swagger/',
          SpectacularSwaggerView.as_view(url_name='schema'),
          name='swagger-ui'),
-    path('api/v1/', include("users.urls", namespace="users"))
+    path('api/v1/', include("users.urls", namespace="users")),
+    path(settings.API_VERSION, include('lessons.urls', namespace='lessons')),
 ]

@@ -2,7 +2,7 @@ from authemail.serializers import UserSerializer
 from django.contrib.auth import authenticate
 from rest_framework import serializers
 
-from users.models import User, Profile
+from users import models
 
 
 class CustomPasswordChangeSerializer(serializers.Serializer):
@@ -24,7 +24,7 @@ class CustomPasswordChangeSerializer(serializers.Serializer):
 class ProfileSerializer(serializers.ModelSerializer):
     """ Сериализатор для модели UserInfo """
     class Meta:
-        model = Profile
+        model = models.Profile
         fields = ['phone', 'image', 'date_birthday',]
 
 
@@ -33,6 +33,30 @@ class CustomUserSerializer(UserSerializer):
     profile = ProfileSerializer()
 
     class Meta:
-        model = User
+        model = models.User
         fields = ['id', 'email', 'first_name', 'last_name', 'date_joined', 'date_commencement', 'profile']
         read_only_fields = ['id', 'is_staff', 'is_active', 'date_joined',]
+
+
+class WorkExperienceSerializer(serializers.ModelSerializer):
+    """
+    Сериализатор стажа работы
+    """
+    class Meta:
+        model = models.WorkExperience
+        field = ('id',
+                 'years',
+                 )
+
+
+class ProfessionSerializer(serializers.ModelSerializer):
+    """
+    Сериализатор Профессии
+    """
+
+    class Meta:
+        model = models.Profession
+        field = ('id',
+                 'en_name',
+                 'ru_name',
+                 )
