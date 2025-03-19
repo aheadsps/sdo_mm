@@ -1,10 +1,22 @@
 .auth {
   &__container {
     max-width: 300px;
-    // background: white;
     position: absolute;
     left: 250px;
     top: 153px;
+
+    @media (max-width: 768px) {
+      max-width: 300px;
+      position: absolute;
+      left: 40px;
+      top: 153px;
+    }
+    
+    @media (max-width: 767px) {
+      max-width: 320px;
+      left: 50%;  
+      transform: translateX(-50%);
+    }
   }
   &__heading {
     display: block;
@@ -12,27 +24,29 @@
     border-left: 4px solid var(--color-accent-red500);
     border-radius: 3px;
     margin-bottom: 48px;
-    @media (min-width: 768px) {
-      font-size: 24px;
+    font-size: 32px !important;
+
+    @media (max-width: 768px) {
+      font-size: 24px !important;
+    }
+
+    @media (max-width: 767px) {
+      font-size: 20px !important;
     }
   }
   &__inputs {
     margin-bottom: 12px;
   }
   &__input {
-    // width: 100%;
-    // outline: 0;
-    // border: 0;
-    // border-bottom: 2px solid var(--color-bg-red700);
-    // border-radius: 2px;
-    // padding: 9px 12px;
+    font-size: 16px;
     position: relative;
     &:first-child {
       margin-bottom: 24px;
     }
-    @media (max-width: 767px) {
-  font-size: 14px;
-}
+
+    @media (max-width: 768px) {
+      font-size: 14px;
+    }
   }
   &__inputError {
     color: var(--color-accent-red500); 
@@ -89,7 +103,7 @@
     cursor: pointer;
   }
 }
+
 .auth__input::placeholder {
   font-family: 'Moscow Sans', sans-serif;
 }
-
