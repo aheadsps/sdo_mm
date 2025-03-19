@@ -416,7 +416,7 @@ paths:
                 type: array
                 minItems: 0
                 items:
-                  $ref: "#/components/schemas/СourseView"
+                  $ref: "#/components/schemas/Сourse"
         "403":
           $ref: "#/components/responses/Forbidden"
         "422":
@@ -433,7 +433,7 @@ paths:
           application/json:
             schema:
               type: object
-              $ref: "#/components/schemas/Сourse"
+              $ref: "#/components/schemas/СourseView"
       responses:
         "201":
           description: JSON ответ с новыми данными
@@ -441,13 +441,13 @@ paths:
             application/json:
               schema:
                 type: object
-                $ref: "#/components/schemas/Сourse"
+                $ref: "#/components/schemas/СourseView"
             application/x-www-form-urlencoded:
               schema:
-                $ref: "#/components/schemas/Сourse"
+                $ref: "#/components/schemas/СourseView"
             multipart/form-data:
               schema:
-                $ref: "#/components/schemas/Сourse"
+                $ref: "#/components/schemas/СourseView"
         "400":
           $ref: "#/components/responses/BadRequest"
         "401":
@@ -505,7 +505,7 @@ paths:
           application/json:
             schema:
               type: object
-              $ref: "#/components/schemas/Сourse"
+              $ref: "#/components/schemas/СourseView"
       responses:
         "200":
           description: JSON ответ с изменеными данными
@@ -513,7 +513,7 @@ paths:
             application/json:
               schema:
                 type: object
-                $ref: "#/components/schemas/Сourse"
+                $ref: "#/components/schemas/СourseView"
         "400":
           $ref: "#/components/responses/BadRequest"
         "401":
@@ -566,7 +566,7 @@ paths:
                 type: array
                 minItems: 0
                 items:
-                  $ref: "#/components/schemas/LessonView"
+                  $ref: "#/components/schemas/Lesson"
         "403":
           $ref: "#/components/responses/Forbidden"
         "422":
@@ -583,7 +583,7 @@ paths:
           application/json:
             schema:
               type: object
-              $ref: "#/components/schemas/Lesson"
+              $ref: "#/components/schemas/LessonView"
       responses:
         "201":
           description: JSON ответ с новыми данными
@@ -591,13 +591,13 @@ paths:
             application/json:
               schema:
                 type: object
-                $ref: "#/components/schemas/Lesson"
+                $ref: "#/components/schemas/LessonView"
             application/x-www-form-urlencoded:
               schema:
-                $ref: "#/components/schemas/Lesson"
+                $ref: "#/components/schemas/LessonView"
             multipart/form-data:
               schema:
-                $ref: "#/components/schemas/Lesson"
+                $ref: "#/components/schemas/LessonView"
         "400":
           $ref: "#/components/responses/BadRequest"
         "401":
@@ -655,7 +655,7 @@ paths:
           application/json:
             schema:
               type: object
-              $ref: "#/components/schemas/Lesson"
+              $ref: "#/components/schemas/LessonView"
       responses:
         "200":
           description: JSON ответ с изменеными данными
@@ -663,7 +663,7 @@ paths:
             application/json:
               schema:
                 type: object
-                $ref: "#/components/schemas/Lesson"
+                $ref: "#/components/schemas/LessonView"
         "400":
           $ref: "#/components/responses/BadRequest"
         "401":
@@ -716,7 +716,7 @@ paths:
                 type: array
                 minItems: 0
                 items:
-                  $ref: "#/components/schemas/StepView"
+                  $ref: "#/components/schemas/Step"
         "403":
           $ref: "#/components/responses/Forbidden"
         "422":
@@ -733,7 +733,7 @@ paths:
           application/json:
             schema:
               type: object
-              $ref: "#/components/schemas/Step"
+              $ref: "#/components/schemas/StepView"
       responses:
         "201":
           description: JSON ответ с новыми данными
@@ -741,46 +741,15 @@ paths:
             application/json:
               schema:
                 type: object
-                $ref: "#/components/schemas/Step"
+                $ref: "#/components/schemas/StepView"
             application/x-www-form-urlencoded:
               schema:
-                $ref: "#/components/schemas/Step"
+                $ref: "#/components/schemas/StepView"
             multipart/form-data:
               schema:
-                $ref: "#/components/schemas/Step"
+                $ref: "#/components/schemas/StepView"
         "400":
           $ref: "#/components/responses/BadRequest"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        "422":
-          $ref: "#/components/responses/UnprocessableEntity"
-
-  /step/from-lesson/{lesson_id}:
-    get:
-      operationId: api_steps_from-lesson_list
-      parameters:
-        - in: path
-          name: course_id
-          required: true
-          schema:
-            type: integer
-      summary: Получение всех шагов урока по ID (только для текущего пользователя, в ином случае доступ только администрации или методисту)
-      tags:
-        - Step
-      security:
-        - Token: []
-      responses:
-        "200":
-          description: JSON ответ с массивом шагов данного курса
-          content:
-            application/json:
-              schema:
-                type: array
-                maxItems: 1
-                items:
-                  $ref: "#/components/schemas/Step"
         "401":
           $ref: "#/components/responses/Unauthorized"
         "403":
@@ -809,7 +778,7 @@ paths:
             application/json:
               schema:
                 type: object
-                $ref: "#/components/schemas/Step"
+                $ref: "#/components/schemas/StepView"
         "401":
           $ref: "#/components/responses/Unauthorized"
         "403":
@@ -836,7 +805,7 @@ paths:
           application/json:
             schema:
               type: object
-              $ref: "#/components/schemas/Step"
+              $ref: "#/components/schemas/StepView"
       responses:
         "200":
           description: JSON ответ с изменеными данными
@@ -844,7 +813,7 @@ paths:
             application/json:
               schema:
                 type: object
-                $ref: "#/components/schemas/Step"
+                $ref: "#/components/schemas/StepView"
         "400":
           $ref: "#/components/responses/BadRequest"
         "401":
@@ -1108,7 +1077,7 @@ components:
           nullable: false
 
     СourseView:
-      description: Сущность курса
+      description: Сущность курса детальный
       additionalProperties: false
       type: object
       properties:
@@ -1164,7 +1133,7 @@ components:
             $ref: "#/components/schemas/WorkExperience"
 
     Сourse:
-      description: Сущность курса
+      description: Сущность курса упрощеная
       additionalProperties: false
       type: object
       properties:
@@ -1210,8 +1179,8 @@ components:
         - profession
         - experiences
 
-    Lesson:
-      description: Сущность урока
+    LessonView:
+      description: Сущность урока детальный
       additionalProperties: false
       type: object
       properties:
@@ -1231,16 +1200,13 @@ components:
           description: Шаги урока
           minItems: 0
           items:
-            $ref: "#/components/schemas/Step"
-        status:
-          description: Статус прохождения урока
-          nullable: false
-          enum:
-            - done
-            - process
-            - failed
+            $ref: "#/components/schemas/StepView"
+        test-block:
+          type: object
+          description: Тестовый блок
+          $ref: '#/components/schemas/TestBlockView'
 
-    LessonView:
+    Lesson:
       description: Сущность урока
       additionalProperties: false
       type: object
@@ -1267,21 +1233,14 @@ components:
           items:
             type: object
             minimum: 1
-            $ref: "#/components/schemas/StepView"
+            $ref: "#/components/schemas/Step"
         test_block_id:
           type: integer
           description: Тестовый блок
           minimum: 1
-        status:
-          description: Статус прохождения урока
-          nullable: false
-          enum:
-            - done
-            - process
-            - failed
 
-    StepView:
-      description: Шаги урока просмотр
+    Step:
+      description: Шаги урока упрощеный
       properties:
         id:
           type: integer
@@ -1310,8 +1269,8 @@ components:
             type: integer
             minimum: 1
 
-    Step:
-      description: Шаги урока создание, редактирование
+    StepView:
+      description: Шаги урока детальный
       properties:
         title:
           type: string
@@ -1336,7 +1295,7 @@ components:
             $ref: "#/components/schemas/ContentAttachment"
 
     TestBlockView:
-      description: Блок с вопросами
+      description: Блок с вопросами детальный
       additionalProperties: false
       type: object
       properties:
@@ -1364,7 +1323,7 @@ components:
             $ref: "#/components/schemas/UserStory"
 
     TestBlock:
-      description: Блок с вопросами
+      description: Блок с вопросами упрощенный
       additionalProperties: false
       type: object
       properties:
@@ -1382,7 +1341,8 @@ components:
           description: Вопросы для данного шага. (Только в логике сериализатора, в модели не реализуем!)
           minItems: 0
           items:
-            $ref: "#/components/schemas/Question"
+            type: integer
+            minimum: 1
 
     Question:
       description: Сущность тестов для урока
