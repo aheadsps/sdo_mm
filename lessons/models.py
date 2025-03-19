@@ -65,8 +65,7 @@ class Step(models.Model):
                                  default=1,
                                  validators=[MinValueValidator(1)],
                                  verbose_name="Порядковый номер шага"
-                              )
-    # media_attachment Медиа вложения. (Только в логике сериализатора, в модели не реализуем!)
+                                 )
 
     # Тестовый блок для этого шага #/components/schemas/TestBlock
     # test_block = models.OneToOneField(TestBlock, on_delete=models.CASCADE, related_name='steps')
@@ -77,3 +76,30 @@ class Step(models.Model):
 
     def __str__(self):
         return f"Шаг: {self.title}"
+
+
+TYPE_CONTENT = [
+        ("Image", "Изображение"),
+        ("Video", "Видео"),
+    ]
+
+class ContentAttachment(models.Model):
+    file = models.FileField(upload_to ='media/content_step', null=True, blank=True)
+    file_type = models.CharField(max_length=10,
+                                 choices=TYPE_CONTENT,
+                                 default="Image",
+                                 verbose_name="Тип файла"
+                                )
+    content_attachment = models.ForeignKey(Step,
+                               unique=False,
+                               on_delete=models.CASCADE,
+                               related_name='content_attachment'
+                               )
+
+    class Meta:
+        verbose_name = "Контент для шага урока"
+        verbose_name_plural = "Контент для шага урока"
+
+    def __str__(self):
+        return self.file
+

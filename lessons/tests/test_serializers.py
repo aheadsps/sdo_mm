@@ -35,3 +35,23 @@ class TestSerializers(APITestCase):
         self.assertEqual(models.Answer._default_manager.first().question,
                          instance,
                          )
+
+    def test_create_step(self):
+        """
+        Тест создания шагов урока
+        """
+        data = dict(
+            serial=3,
+            title='Step 1',
+            content_text='Описание шага',
+            content_attachment=[
+                dict(file=None, file_type='Video' )
+            ]
+
+        )
+        serializer_step = serializers.StepSerializer(data=data)
+        self.assertTrue(serializer_step.is_valid())
+        instance = serializer_step.save()
+        self.assertEqual(models.Step._default_manager.count(), 1)
+        self.assertEqual(models.Step._default_manager.first(),instance)
+

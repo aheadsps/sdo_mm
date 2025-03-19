@@ -10,11 +10,11 @@ app_name = "lessons"
 
 urlpatterns = [
     # url: step/ только list и create
-    path('/', StepViewSet.as_view({'get':'list',
+    path('', StepViewSet.as_view({'get':'list',
                                   'post':'create'}),
                                     name='step'),
     # url: step/[0-9]+ retrieve partial_update destroy
-    path('/<int:pk>/', StepEditViewSet.as_view({'get':'retrieve',
+    path('<int:pk>/', StepEditViewSet.as_view({'get':'retrieve',
                                                'patch':'partial_update',
                                                'delete':'destroy'
                                                }),name='step_detail'),
