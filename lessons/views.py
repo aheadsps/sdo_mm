@@ -1,5 +1,5 @@
-from rest_framework.viewsets import ModelViewSet
-from lessons.serializer import StepSerializer
+from rest_framework.viewsets import ModelViewSet, GenericViewSet, mixins
+from lessons.serializers import StepSerializer, StepEditSerializer
 from lessons.models import Step
 
 
@@ -7,3 +7,9 @@ from lessons.models import Step
 class StepViewSet(ModelViewSet):
     queryset = Step.objects.all()
     serializer_class = StepSerializer
+
+class StepEditViewSet(ModelViewSet):
+    queryset = Step.objects.all()
+    serializer_class = StepSerializer
+
+
