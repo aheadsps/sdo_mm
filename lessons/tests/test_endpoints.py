@@ -58,7 +58,9 @@ class TestEndpointsEvents(APITestCase):
         """
         Тест получение Эвента по ID
         """
-        url = reverse("lessons:event-detail", kwargs={"event_id": self.event.pk})
+        url = reverse("lessons:event-detail",
+                      kwargs={"event_id": self.event.pk},
+                      )
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
@@ -80,6 +82,23 @@ class TestEndpointsEvents(APITestCase):
                 "status": "expected",
             },
         )
+
+    def test_create_evetn(self):
+        """
+        Тест создания эвента
+        """
+        url = '/api/v1/events'
+        data = dict(
+            course=self.course.pk,
+            done_lessons=0,
+            favorite=True,
+            status='done',
+        )
+        response = self.client.post(
+            path=url,
+            data=data,
+        )
+        self.assertEqual(response.content, 204)
 
     def test_get_list_current_events(self):
         """

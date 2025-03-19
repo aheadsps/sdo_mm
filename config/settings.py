@@ -111,7 +111,7 @@ API_VERSION = "api/v1/"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql_psycopg2",
-        "NAME": os.getenv("NAME"),
+        "NAME": 'postgres',
         "USER": "postgres",
         "PASSWORD": os.getenv("PASSWORD"),
         "HOST": os.getenv("HOST"),
