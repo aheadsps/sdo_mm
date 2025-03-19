@@ -81,7 +81,29 @@ class TestEndpointsEvents(APITestCase):
             },
         )
 
-    def test_get_list_currect_events(self):
+    def test_get_list_current_events(self):
         """
         Тест получения актуальных эвентов на пользователе
         """
+        url = '/api/v1/events/currents'
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            response.json(),
+            {'count': 1,
+             'next': None,
+             'previous': None,
+             'results': [
+                 {'course': {'beginer': False,
+                             'description': 'some',
+                             'experiences': [self.experience.pk],
+                             'image': None,
+                             'name': 'course',
+                             'profession': self.profession.pk},
+                  'done_lessons': 0,
+                  'end_date': None,
+                  'favorite': False,
+                  'id': self.event.pk,
+                  'start_date': None,
+                  'status': 'expected'}]}
+            )
