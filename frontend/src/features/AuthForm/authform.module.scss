@@ -13,7 +13,7 @@
     }
     
     @media (max-width: 767px) {
-      max-width: 320px;
+      width: 320px;
       left: 50%;  
       transform: translateX(-50%);
     }
@@ -36,6 +36,9 @@
   }
   &__inputs {
     margin-bottom: 12px;
+    @media (max-width: 767px) {
+      width: 320px;
+    }
   }
   &__input {
     font-size: 16px;
@@ -47,6 +50,7 @@
     @media (max-width: 768px) {
       font-size: 14px;
     }
+    
   }
   &__inputError {
     color: var(--color-accent-red500); 
@@ -55,6 +59,9 @@
   &__passwordWrapper {
     position: relative;
     width: 300px;
+    @media (max-width: 767px) {
+      width: 320px;
+    }
   }
   &__links {
     display: flex;
@@ -84,6 +91,9 @@
     cursor: pointer;
     font-size: 14px;
     text-align: center;
+    @media (max-width: 767px) {
+      width: 320px;
+    }
   }
   &__error {
     color: var(--color-accent-red500);
