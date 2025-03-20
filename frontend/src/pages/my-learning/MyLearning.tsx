@@ -8,7 +8,8 @@ import s from './myLearning.module.scss'
 
 const MyLearningComp = () => {
   const [mode, setMode] = useState('Назначенные курсы')
-  const [openTooltipe, isOpenTooltipe] = useState(true);
+  const [isTooltipe, setIsTooltipe] = useState(true)
+  const [isCount, setIsCount] = useState(3)
 
   const buttons = [
     'Назначенные курсы',
@@ -17,30 +18,41 @@ const MyLearningComp = () => {
     'Завершённые курсы',
   ]
 
-  return (<>
-    {openTooltipe && <Tooltipe />}
-    <main className={s.container}>
-      <div className={s.headBox}>
-        <div className={s.btnBox}>
-          {buttons.map((btn, index) => {
-            return (
-              <Button
-              className={s.btn}
-                key={index}
-                children={btn}
-                variant={mode === btn ? 'primary' : 'secondary'}
-                onClick={() => setMode(btn)}
-              />
-            )
-          })}
+  return (
+    <>
+      {isTooltipe && <Tooltipe />}
+      <main className={s.container}>
+        <div className={s.container__headBox}>
+          <div className={s.container__btnBox}>
+            {/* <div className={s.container__counterBox}>
+              <p className={s.container__counter}>3</p>
+            </div> */}
+            {buttons.map((btn, index) => {
+              return (
+                <>
+                  {isCount && (
+                    <div className={s.container__counterBox}>
+                      <p className={s.container__counter}>3</p>
+                    </div>
+                  )}
+                  <Button
+                    className={s.container__btn}
+                    key={index}
+                    children={btn}
+                    variant={mode === btn ? 'primary' : 'secondary'}
+                    onClick={() => setMode(btn)}
+                  />
+                </>
+              )
+            })}
+          </div>
+          <Button
+            children="ИИ"
+            variant={mode === 'ИИ' ? 'primary' : 'secondary'}
+            onClick={() => setMode('ИИ')}
+          />
         </div>
-        <Button
-          children="ИИ"
-          variant={mode === 'ИИ' ? 'primary' : 'secondary'}
-          onClick={() => setMode('ИИ')}
-        />
-      </div>
-    </main>
+      </main>
     </>
   )
 }

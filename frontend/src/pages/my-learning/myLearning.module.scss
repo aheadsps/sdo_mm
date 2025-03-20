@@ -1,25 +1,54 @@
 .container {
   width: 100%;
   height: 100vh;
-  background-color: #fff;
+  background-color: var(--color-bg-main);
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
   padding: 30px;
-}
-.headBox {
-  width: 100%;
-  height: 45px;
-  display: flex;
-  gap: 14px;
-}
-.btnBox {
-  width: 924px;
-  height: 45px;
-  display: flex;
-  gap: 24px;
-}
-.btn {
-  width: 213px;
-  height: 45px;
-  border-radius: 8px;
-  border: none;
-  padding: 10px 20px;
+  &__headBox {
+    width: 100%;
+    height: 45px;
+    display: flex;
+    gap: 14px;
+  }
+  &__btnBox {
+    width: 924px;
+    width: 94%;
+    height: 45px;
+    display: flex;
+    gap: 24px;
+  }
+  &__btn {
+    width: 213px;
+    // width: fit-content;
+    height: 45px;
+    border-radius: 8px;
+    border: none;
+    padding: 10px 20px;
+  }
+  &__counterBox {
+    width: 32px;
+    height: 32px;
+    top: 135px;
+    left: 990px;
+    z-index: 100;
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 20px;
+    background: var(--color-accent-red500);
+  }
+  &__counter {
+    width: 9px;
+    height: 18px;
+    font-family: Moscow Sans;
+    font-weight: 300;
+    font-size: var(--font-size-xs);
+    line-height: 130%;
+    letter-spacing: 0.25px;
+    vertical-align: middle;
+    color: var(--color-text-button);
+  }
 }
