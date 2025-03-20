@@ -10,7 +10,7 @@ export const withLayout = <T extends object>(Component: ComponentType<T>) => {
 
     return (
       <>
-        <Header title="Корпоративный университет Транспортного комплекса" />
+        <Header />
         <div className={s.appWrapper}>
           {!isMobile && <Sidebar />}
           <main className={s.main}>
