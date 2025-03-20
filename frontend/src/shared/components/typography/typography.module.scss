@@ -1,41 +1,81 @@
 @mixin typogaphy($lineHeights, $fontSize, $fontWeight, $fontFamily) {
-    font-weight: $fontWeight;
-    line-height: $lineHeights;
-    font-size: $fontSize;
-    font-family: $fontFamily;
-  }
-  
-  .header_1 {
-    @include typogaphy(var(--line-height-xs), var(--font-size-super-large), var(--font-weight-bold), var(--font-family-primary));
-  }
-  
-  .header_2 {
-    @include typogaphy(var(--line-height-l), var(--font-size-xl), var(--font-weight-bold), var(--font-family-primary));
-  }
-  
-  .header_3 {
-    @include typogaphy(var(--line-height-m), var(--font-size-l), var(--font-weight-bold), var(--font-family-primary));
-  }
-  
-  .header_4 {
-    @include typogaphy(var(--line-height-m), var(--font-size-xl), var(--font-weight-bold), var(--font-family-primary));
-  }
-  
-  .header_5 {
-    @include typogaphy(var(--line-height-m), var(--font-size-m), var(--font-weight-semibold), var(--font-family-primary));
-  }
-  
-  .header_6 {
-    @include typogaphy(var(--line-height-m), var(--font-size-h6), var(--font-weight-semibold), var(--font-family-secondary));
-  }
-  
-  .body_1 {
-    @include typogaphy(var(--line-height-m), var(--font-size-m), var(--font-weight-light), var(--font-family-secondary));
-  }
-  
-  .body_2 {
-    @include typogaphy(var(--line-height-m), var(--font-size-s), var(--font-weight-light), var(--font-family-secondary));
-  }
+  font-weight: $fontWeight;
+  line-height: $lineHeights;
+  font-size: $fontSize;
+  font-family: $fontFamily;
+}
+
+.header_1 {
+  @include typogaphy(
+    var(--line-height-xs),
+    var(--font-size-super-large),
+    var(--font-weight-bold),
+    var(--font-family-primary)
+  );
+}
+
+.header_2 {
+  @include typogaphy(
+    var(--line-height-l),
+    var(--font-size-xl),
+    var(--font-weight-bold),
+    var(--font-family-primary)
+  );
+}
+
+.header_3 {
+  @include typogaphy(
+    var(--line-height-m),
+    var(--font-size-l),
+    var(--font-weight-bold),
+    var(--font-family-primary)
+  );
+}
+
+.header_4 {
+  @include typogaphy(
+    var(--line-height-m),
+    var(--font-size-xl),
+    var(--font-weight-bold),
+    var(--font-family-primary)
+  );
+}
+
+.header_5 {
+  @include typogaphy(
+    var(--line-height-m),
+    var(--font-size-m),
+    var(--font-weight-semibold),
+    var(--font-family-primary)
+  );
+}
+
+.header_6 {
+  @include typogaphy(
+    var(--line-height-m),
+    var(--font-size-h6),
+    var(--font-weight-semibold),
+    var(--font-family-secondary)
+  );
+}
+
+.body_1 {
+  @include typogaphy(
+    var(--line-height-m),
+    var(--font-size-m),
+    var(--font-weight-light),
+    var(--font-family-secondary)
+  );
+}
+
+.body_2 {
+  @include typogaphy(
+    var(--line-height-m),
+    var(--font-size-s),
+    var(--font-weight-light),
+    var(--font-family-secondary)
+  );
+}
 
 .btn_links {
   @include typogaphy(

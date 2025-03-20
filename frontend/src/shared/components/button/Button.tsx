@@ -1,13 +1,25 @@
 import clsx from 'clsx'
 import { ComponentPropsWithRef } from 'react'
+import { ElementType } from 'react'
 
 import s from './button.module.scss'
 
-type Props = {
+type Props<T extends ElementType = 'button'> = {
   variant?: 'primary' | 'secondary'
-} & ComponentPropsWithRef<'button'>
+  as?: T
+} & ComponentPropsWithRef<T>
 
-export const Button = ({ children, className, variant = 'primary' }: Props) => {
+export const Button = <T extends ElementType = 'button'>({
+  variant = 'primary',
+  as: Component = 'button',
+  className,
+  children,
+  ...restProps
+}: Props<T>) => {
   const chosenButton = variant === 'secondary' ? s.secondary : s.primary
-  return <button className={clsx(s.button, chosenButton, className)}>{children}</button>
+  return (
+    <Component className={clsx(s.button, chosenButton, className as string)} {...restProps}>
+      {children}
+    </Component>
+  )
 }

@@ -1,5 +1,5 @@
-import { Typography } from '@shared/components'
-import Header from '@shared/components/Header/Header'
+import { Typography, Button, Header } from '@shared/components'
+import { NavLink } from 'react-router-dom'
 
 import {
   LibraryIcon,
@@ -41,7 +41,12 @@ export const Auth = () => {
       <Typography variant={'body_2'}>Typography</Typography>
       <Typography variant={'btn_links'}>Typography</Typography>
       <Typography variant={'caption'}>Typography</Typography>
-      <Header title="Корпоративный университет Транспортного комплекса" />
+      <Header />
+      <div style={{ marginTop: '200px', marginLeft: '200px' }}>
+        <Button as={NavLink} to={'/'}>
+          Hello Link
+        </Button>
+      </div>
     </>
   )
 }

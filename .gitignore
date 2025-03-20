@@ -1,4 +1,6 @@
 # Byte-compiled / optimized / DLL files
+
+docker-compose.yml_bkp
 __pycache__/
 *.py[cod]
 *$py.class
@@ -8,8 +10,8 @@ __pycache__/
 .42c
 .vscode
 .python-version
-*media
 */migrations/
+media
 
 # Distribution / packaging
 .Python
