@@ -1,0 +1,64 @@
+.container {
+  width: 100%;
+  height: -moz-fit-content;
+  height: fit-content;
+  background-color: var(--color-bg-main);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  gap: 30px;
+}
+.container__headBox {
+  width: 100%;
+  height: 45px;
+  display: flex;
+  gap: 14px;
+}
+.container__btnBox {
+  width: 924px;
+  width: 94%;
+  height: 45px;
+  display: flex;
+  gap: 24px;
+}
+.container__boxbtn {
+  position: relative;
+}
+.container__btn {
+  width: 213px;
+  height: 45px;
+  border-radius: 8px;
+  border: none;
+  padding: 10px 20px;
+}
+.container__counterBox {
+  width: 32px;
+  height: 32px;
+  position: fixed;
+  top: 110px;
+  left: 990px;
+  position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 20px;
+  background: var(--color-accent-red500);
+}
+.container__counter {
+  width: 9px;
+  height: 18px;
+  font-family: Moscow Sans;
+  font-weight: 300;
+  font-size: var(--font-size-xs);
+  line-height: 130%;
+  letter-spacing: 0.25px;
+  vertical-align: middle;
+  color: var(--color-text-button);
+}
+.container__content {
+  width: 997px;
+  height: 675px;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}/*# sourceMappingURL=myLearning.module.css.map */

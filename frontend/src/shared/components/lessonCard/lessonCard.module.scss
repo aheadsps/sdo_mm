@@ -4,6 +4,7 @@
   border-radius: 8px;
   display: flex;
   flex-direction: column;
+  position: relative;
   &__top {
     width: 483px;
     height: 341px;
@@ -15,10 +16,9 @@
     width: 141px;
     height: 44px;
     margin: 10px;
-    position: fixed;
-    top: 240px;
-    left: 680px;
-    //  z-index: 1000;
+    position: absolute;
+    top: -2px;
+    left: 325px;
     display: flex;
     align-items: center;
     justify-content: flex-start;

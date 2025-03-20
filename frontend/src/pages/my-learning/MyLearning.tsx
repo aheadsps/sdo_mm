@@ -8,9 +8,9 @@ import { useState } from 'react'
 import s from './myLearning.module.scss'
 
 const MyLearningComp = () => {
-  const [mode, setMode] = useState('Назначенные курсы')
-  const [isTooltipe, setIsTooltipe] = useState(true)
-  const [isCount, setIsCount] = useState(3)
+  const [mode, setMode] = useState<string>('Назначенные курсы')
+  const [isTooltipe, setIsTooltipe] = useState<boolean>(false)
+  // const [isCount, setIsCount] = useState(3)
 
   const buttons = [
     'Назначенные курсы',
@@ -27,20 +27,17 @@ const MyLearningComp = () => {
           <div className={s.container__btnBox}>
             {buttons.map((btn, index) => {
               return (
-                <>
-                  {isCount && (
-                    <div className={s.container__counterBox}>
-                      <p className={s.container__counter}>3</p>
-                    </div>
-                  )}
+                <div className={s.container__boxbtn} key={index}>
+                  <div className={s.container__counterBox}>
+                    <p className={s.container__counter}>{index}</p>
+                  </div>
                   <Button
                     className={s.container__btn}
-                    key={index}
                     children={btn}
                     variant={mode === btn ? 'primary' : 'secondary'}
                     onClick={() => setMode(btn)}
                   />
-                </>
+                </div>
               )
             })}
           </div>
@@ -51,12 +48,12 @@ const MyLearningComp = () => {
           />
         </div>
         <div className={s.container__content}>
-          <LessonCard />
-          <LessonCard />
+          <LessonCard isFav={false}/>
+          <LessonCard isFav={true}/>
         </div>
         <div className={s.container__content}>
-        <LessonCard />
-        <LessonCard />
+        <LessonCard isFav={true}/>
+        <LessonCard isFav={false}/>
         </div>
       </main>
     </>

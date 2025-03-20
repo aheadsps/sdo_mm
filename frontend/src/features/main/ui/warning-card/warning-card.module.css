@@ -1,5 +1,5 @@
 .warningCard {
-  min-width: 520px;
+  width: 520px;
   min-height: 199px;
   position: relative;
   background-color: var(--color-bg-main);
@@ -7,6 +7,12 @@
   border-radius: 9px;
   margin-top: 58px;
   margin-bottom: 40px;
+}
+@media screen and (max-width: 1349px) {
+  .warningCard {
+    margin-top: 0;
+    max-width: 100%;
+  }
 }
 
 .warningIndicator {
@@ -22,6 +28,11 @@
   padding-left: 20px;
   display: flex;
   align-items: center;
+}
+@media screen and (max-width: 767px) {
+  .warningIndicator {
+    font-size: var(--font-size-s);
+  }
 }
 
 .textBlock {

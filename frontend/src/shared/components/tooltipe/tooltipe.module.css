@@ -1,0 +1,59 @@
+.tooltipe {
+  width: 322px;
+  height: 119px;
+  position: absolute;
+  top: 46px;
+  left: 50px;
+  gap: 8px;
+  border-radius: 4px;
+  padding: 12px 0;
+  z-index: 1000;
+  background: rgb(248, 249, 250);
+  box-shadow: 0px 0px 15px 0px rgba(44, 11, 15, 0.04);
+}
+.tooltipe__topBox {
+  width: 322px;
+  height: 35px;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 12px 8px;
+  border-bottom: 1px solid var(--color-additional-border100);
+}
+.tooltipe__titleImg {
+  width: 27px;
+  height: 27px;
+  border-radius: 2px;
+  padding: 5px 4px;
+}
+.tooltipe__rightBox {
+  width: 139px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.tooltipe__txt {
+  width: 107px;
+  height: 18px;
+  font-family: Moscow Sans;
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 130%;
+  letter-spacing: 0.25px;
+  vertical-align: middle;
+  color: rgb(108, 117, 125);
+}
+.tooltipe__bottomBox {
+  width: 298px;
+  height: -moz-fit-content;
+  height: fit-content;
+  gap: 10px;
+  padding: 16px 12px 20px;
+  font-family: Moscow Sans;
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 130%;
+  letter-spacing: 0.25px;
+  vertical-align: middle;
+  color: var(--color-text-primary);
+}/*# sourceMappingURL=tooltipe.module.css.map */
