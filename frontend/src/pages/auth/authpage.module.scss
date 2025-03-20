@@ -36,3 +36,14 @@
       margin: 0 auto;
   }
 }
+
+.authPage__image {
+  @media (max-width: 767px) {
+    width: 69%;    
+    position: absolute; 
+    bottom: 0;   
+    right: 0;         
+    z-index: 1;      
+  }
+}
+

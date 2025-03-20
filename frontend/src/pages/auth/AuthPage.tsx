@@ -12,7 +12,7 @@ export const AuthPage: React.FC = () => {
       </div>
       <div className={styles.authPage__img}>
         <div className={styles.authPage__img__content}>
-          <ImageComponent src="/img/img_tmp/bg_train.png" />
+          <ImageComponent className={styles.authPage__image} src="/img/img_tmp/bg_train.png" />
         </div>
       </div>
     </div>
