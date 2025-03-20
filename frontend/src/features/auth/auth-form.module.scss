@@ -1,11 +1,11 @@
 .auth {
   &__container {
     max-width: 300px;
-    // background: white;
     position: absolute;
     left: 250px;
     top: 153px;
   }
+
   &__heading {
     display: block;
     padding-left: 10px;
@@ -13,9 +13,11 @@
     border-radius: 3px;
     margin-bottom: 48px;
   }
+
   &__inputs {
     margin-bottom: 12px;
   }
+
   &__input {
     width: 100%;
     outline: 0;
@@ -24,25 +26,30 @@
     border-radius: 2px;
     padding: 9px 12px;
     position: relative;
+
     // transition: color 0.3s ease, border-color 0.3s ease;
     &:first-child {
       margin-bottom: 24px;
     }
   }
+
   &__inputError {
     color: var(--color-accent-red500); 
     border-bottom: 2px solid var(--color-accent-red500);
   }
+
   &__passwordWrapper {
     position: relative;
     width: 300px;
   }
+
   &__links {
     display: flex;
     justify-content: space-between;
     padding: 0 12px;
     margin-bottom: 48px;
   }
+
   &__link {
     font-family: 'Moscow Sans', sans-serif;
     font-weight: 300;
@@ -51,10 +58,12 @@
     letter-spacing: 0.25px;
     text-decoration: none;
     color: var(--color-text-primary);
+
     &:first-child {
       color: var(--color-text-secondary);
     }
   }
+
   &__button {
     width: 100%;
     height: 40px;
@@ -66,6 +75,7 @@
     font-size: 14px;
     text-align: center;
   }
+
   &__error {
     color: var(--color-accent-red500);
     font-family: 'Moscow Sans', sans-serif;
@@ -76,6 +86,7 @@
     padding: 0 12px;
     text-align: center;
   }
+
   &__eyeIconWrapper {
     position: absolute;
     top: 40%;
@@ -84,6 +95,7 @@
     cursor: pointer;
   }
 }
+
 .auth__input::placeholder {
   font-family: 'Moscow Sans', sans-serif;
 }

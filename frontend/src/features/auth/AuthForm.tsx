@@ -5,15 +5,14 @@ import { Link } from 'react-router-dom'
 
 import { ClosedEyeIcon, OpenedEyeIcon } from '@assets/icons'
 
-import styles from '../../features/AuthForm/authform.module.scss'
-
+import styles from './auth-form.module.scss'
 
 interface AuthFormData {
   email: string
   password: string
 }
 
-const AuthForm = () => {
+export const AuthForm = () => {
   const { register, handleSubmit, formState, reset } = useForm<AuthFormData>({
     mode: 'onChange',
     delayError: 2000,
@@ -28,7 +27,7 @@ const AuthForm = () => {
 
   return (
     <div className={styles.auth}>
-      <form className={styles.auth__container} onSubmit={handleSubmit(onSubmit)}>
+      <form className={styles.auth__container} onSubmit={() => void handleSubmit(onSubmit)}>
         <Typography className={styles.auth__heading} variant={'header_3'}>
           Авторизация
         </Typography>
@@ -91,5 +90,3 @@ const AuthForm = () => {
     </div>
   )
 }
-
-export default AuthForm

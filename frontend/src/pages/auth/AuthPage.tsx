@@ -1,10 +1,9 @@
-import AuthForm from '@features/AuthForm/AuthForm'
-import Header from '@shared/components/Header/Header'
-import ImageComponent from '@shared/components/img/ImageComponent'
+import { AuthForm } from '@features/auth'
+import { Header, ImageComponent } from '@shared/components'
 
-import styles from '../AuthPage/authpage.module.scss'
+import styles from './authpage.module.scss'
 
-const AuthPage: React.FC = () => {
+export const AuthPage: React.FC = () => {
   return (
     <div className={styles.authPage__container}>
       <Header />
@@ -19,5 +18,3 @@ const AuthPage: React.FC = () => {
     </div>
   )
 }
-
-export default AuthPage
