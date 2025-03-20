@@ -16,6 +16,7 @@ class TimeValidator:
     def __init__(self, start_date: str, end_date: str) -> None:
         self.start_date = str(start_date)
         self.end_date = str(end_date)
+        self.error_detail = dict()
 
     def _check_up_time(self,
                        start_date: datetime.datetime,
@@ -31,12 +32,16 @@ class TimeValidator:
         Raises:
             exceptions.UnprocessableEntityError: Исключение в случае не соотвествия
         """
-        error_detail = dict()
         time_now = timezone.now()
         if start_date and time_now > start_date:
-            error_detail.update(dict(start_date='Не может быть указано задним числом'))
+            self.error_detail.update(dict(start_date='Не может быть указано задним числом'))
         if end_date and time_now > end_date:
-            error_detail.update(dict(end_date='Не может быть указано задним числом'))
+            self.error_detail.update(dict(end_date='Не может быть указано задним числом'))
+        if (start_date and end_date) and (start_date >= end_date):
+            self.error_detail.update(dict(date='start_date не может быть позже чем end_date'))
+        self._process_error(error_detail=self.error_detail)
+
+    def _process_error(self, error_detail: dict[str, str]) -> None:
         if error_detail:
             raise exceptions.UnprocessableEntityError(
                 error_detail,

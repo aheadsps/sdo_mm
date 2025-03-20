@@ -109,6 +109,64 @@ class TestEndpointsEvents(APITestCase):
         )
         self.assertEqual(response.status_code, 422)
 
+    def test_create_event_end_date_fail(self):
+        """
+        Тест создания эвента
+        """
+        url = '/api/v1/events'
+        data = dict(
+            course=self.course.pk,
+            done_lessons=0,
+            favorite=True,
+            end_date=datetime.datetime(
+                year=2023,
+                month=1,
+                day=1,
+                hour=23,
+                minute=1,
+                second=1,
+            ),
+        )
+        response = self.client.post(
+            path=url,
+            data=data,
+            format='json',
+        )
+        self.assertEqual(response.status_code, 422)
+
+    def test_create_event_reverse_dates(self):
+        """
+        Тест создания эвента
+        """
+        url = '/api/v1/events'
+        data = dict(
+            course=self.course.pk,
+            done_lessons=0,
+            favorite=True,
+            start_date=datetime.datetime(
+                year=2026,
+                month=1,
+                day=1,
+                hour=23,
+                minute=1,
+                second=1,
+            ),
+            end_date=datetime.datetime(
+                year=2025,
+                month=1,
+                day=1,
+                hour=23,
+                minute=1,
+                second=1,
+            ),
+        )
+        response = self.client.post(
+            path=url,
+            data=data,
+            format='json',
+        )
+        self.assertEqual(response.status_code, 422)
+
     def test_create_event(self):
         """
         Тест создания эвента c ошибкой
@@ -120,6 +178,14 @@ class TestEndpointsEvents(APITestCase):
             favorite=True,
             start_date=datetime.datetime(
                 year=2026,
+                month=1,
+                day=1,
+                hour=23,
+                minute=1,
+                second=1,
+            ),
+            end_date=datetime.datetime(
+                year=2027,
                 month=1,
                 day=1,
                 hour=23,
