@@ -1,5 +1,4 @@
 from rest_framework import serializers
-
 from lessons import models
 
 
@@ -42,16 +41,17 @@ class QuestionSerializer(serializers.ModelSerializer):
 class ContentAttachmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.ContentAttachment
-        fields = ('file', 'file_type',)
+        fields = ('id', 'file', 'file_type',)
 
 
 class StepSerializer(serializers.ModelSerializer):
     content_attachment = ContentAttachmentSerializer(many=True)
-    #test_block = TestBlock(many=True)
+    #test_block = TestBlock(many=True) добавить позже
 
     class Meta:
         model = models.Step
-        fields = ('serial','title','content_text', 'content_attachment')
+        fields = ('id','serial','title','content_text', 'content_attachment')
+
 
     def create(self, validated_data: dict[int, str, str, dict]):
         content_attachment = validated_data.pop('content_attachment')
@@ -64,9 +64,25 @@ class StepSerializer(serializers.ModelSerializer):
                                         for item_content_attachment
                                         in content_attachment
                                     ]
+
         models.ContentAttachment._default_manager.bulk_create(
                                             content_attachment_models
                                         )
         return step
 
 
+    def update(self, instance, validated_data):
+        """
+        Обработка обновления Step
+        Определаяем поля доступные для редактирования
+        ContentAttachment обновляется отдельно
+        """
+        instance.serial = validated_data.get(
+                                    'serial', instance.serial)
+        instance.title = validated_data.get(
+                                    'title', instance.title)
+        instance.content_text = validated_data.get(
+                                    'content_text', instance.content_text)
+        instance.save()
+
+        return instance
