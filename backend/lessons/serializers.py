@@ -90,7 +90,7 @@ class ViewCourseSerializer(serializers.ModelSerializer):
 
 class EventSerializer(serializers.ModelSerializer):
     """
-    Сериализатор Курса
+    Сериализатор Эвента
     """
 
     course = CourseSerializer()
@@ -99,6 +99,25 @@ class EventSerializer(serializers.ModelSerializer):
         model = models.Event
         fields = (
             "id",
+            'user',
+            "course",
+            "done_lessons",
+            "start_date",
+            "end_date",
+            "favorite",
+            "status",
+        )
+
+
+class EventSerializerCreate(serializers.ModelSerializer):
+    """
+    Сериализатор Создания в Изменения Эвента
+    """
+
+    class Meta:
+        model = models.Event
+        fields = (
+            'user',
             "course",
             "done_lessons",
             "start_date",

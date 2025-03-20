@@ -80,15 +80,17 @@ class TestEndpointsEvents(APITestCase):
                 "favorite": False,
                 "start_date": None,
                 "status": "expected",
+                'user': self.user.pk,
             },
         )
 
-    def test_create_evetn(self):
+    def test_create_event(self):
         """
         Тест создания эвента
         """
         url = '/api/v1/events'
         data = dict(
+            user=self.user.pk,
             course=self.course.pk,
             done_lessons=0,
             favorite=True,
@@ -97,8 +99,9 @@ class TestEndpointsEvents(APITestCase):
         response = self.client.post(
             path=url,
             data=data,
+            format='json',
         )
-        self.assertEqual(response.content, 204)
+        self.assertEqual(response.status_code, 201)
 
     def test_get_list_current_events(self):
         """
@@ -113,7 +116,9 @@ class TestEndpointsEvents(APITestCase):
              'next': None,
              'previous': None,
              'results': [
-                 {'course': {'beginer': False,
+                 {'user': self.user.pk,
+                  'id': self.event.pk,
+                  'course': {'beginer': False,
                              'description': 'some',
                              'experiences': [self.experience.pk],
                              'image': None,
@@ -122,7 +127,7 @@ class TestEndpointsEvents(APITestCase):
                   'done_lessons': 0,
                   'end_date': None,
                   'favorite': False,
-                  'id': self.event.pk,
                   'start_date': None,
-                  'status': 'expected'}]}
+                  'status': 'expected',
+                  }]}
             )

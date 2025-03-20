@@ -1,7 +1,5 @@
 from typing import TYPE_CHECKING
 
-from django.conf import settings
-
 if TYPE_CHECKING:
     from lessons.models import Question, Course
 
