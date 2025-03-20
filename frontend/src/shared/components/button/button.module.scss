@@ -8,6 +8,10 @@
   }
 }
 
+.disabled {
+  opacity: 0.5;
+}
+
 .primary {
   background-color: var(--color-accent-red500);
   color: var(--color-text-button);

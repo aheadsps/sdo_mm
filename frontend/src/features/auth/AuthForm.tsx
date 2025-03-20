@@ -1,3 +1,4 @@
+import { zodResolver } from '@hookform/resolvers/zod'
 import { Button, Typography, Input } from '@shared/components'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -6,6 +7,7 @@ import { Link } from 'react-router-dom'
 import { ClosedEyeIcon, OpenedEyeIcon } from '@assets/icons'
 
 import styles from './auth-form.module.scss'
+import { authFormSchema } from './authFormSchema'
 
 interface AuthFormData {
   email: string
@@ -13,54 +15,49 @@ interface AuthFormData {
 }
 
 export const AuthForm = () => {
-  const { register, handleSubmit, formState, reset } = useForm<AuthFormData>({
-    mode: 'onChange',
-    delayError: 2000,
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting, isValid },
+    reset,
+  } = useForm<AuthFormData>({
+    defaultValues: {
+      email: '',
+      password: '',
+    },
+    resolver: zodResolver(authFormSchema),
+    mode: 'onBlur',
   })
 
   const [showPassword, setShowPassword] = useState(false)
 
-  const onSubmit = (data: AuthFormData) => {
+  const onFormSubmit = (data: AuthFormData) => {
     console.log(data)
     reset()
   }
 
   return (
     <div className={styles.auth}>
-      <form className={styles.auth__container} onSubmit={() => void handleSubmit(onSubmit)}>
+      <form className={styles.auth__container} onSubmit={(e) => void handleSubmit(onFormSubmit)(e)}>
         <Typography className={styles.auth__heading} variant={'header_3'}>
           Авторизация
         </Typography>
         <div className={styles.auth__inputs}>
           <Input
             type="text"
-            className={`${styles.auth__input} ${formState.errors.email ? styles.auth__inputError : ''}`}
+            className={`${styles.auth__input} ${errors.email ? styles.auth__inputError : ''}`}
             placeholder="Email"
             required
-            {...register('email', {
-              required: 'Заполните все поля',
-              pattern: {
-                value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
-                message: 'Некорректный email',
-              },
-            })}
+            {...register('email')}
           />
-          {formState.errors.email && (
-            <span className={styles.auth__error}>{formState.errors.email.message}</span>
-          )}
+          {errors.email && <span className={styles.auth__error}>{errors.email.message}</span>}
           <div className={styles.auth__passwordWrapper}>
             <Input
               type={showPassword ? 'text' : 'password'}
-              className={`${styles.auth__input} ${formState.errors.password ? styles.auth__inputError : ''}`}
+              className={`${styles.auth__input} ${errors.password ? styles.auth__inputError : ''}`}
               placeholder="Пароль"
               required
-              {...register('password', {
-                required: 'Заполните все поля',
-                minLength: {
-                  value: 6,
-                  message: 'Минимум 6 символов',
-                },
-              })}
+              {...register('password')}
             />
             <div
               className={styles.auth__eyeIconWrapper}
@@ -73,9 +70,7 @@ export const AuthForm = () => {
               )}
             </div>
           </div>
-          {formState.errors.password && (
-            <span className={styles.auth__error}>{formState.errors.password.message}</span>
-          )}
+          {errors.password && <span className={styles.auth__error}>{errors.password.message}</span>}
         </div>
         <div className={styles.auth__links}>
           <Link to="/forgot-password" className={styles.auth__link}>
@@ -85,7 +80,9 @@ export const AuthForm = () => {
             Восстановить
           </Link>
         </div>
-        <Button className={styles.auth__button}>Войти</Button>
+        <Button className={styles.auth__button} disabled={!isValid || isSubmitting}>
+          Войти
+        </Button>
       </form>
     </div>
   )
