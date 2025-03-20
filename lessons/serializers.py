@@ -50,7 +50,7 @@ class StepSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Step
-        fields = ('id','serial','title','content_text', 'content_attachment')
+        fields = ('serial','title','content_text', 'content_attachment')
 
 
     def create(self, validated_data: dict[int, str, str, dict]):
