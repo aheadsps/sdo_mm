@@ -90,7 +90,6 @@ class TestEndpointsEvents(APITestCase):
         """
         url = '/api/v1/events'
         data = dict(
-            user=self.user.pk,
             course=self.course.pk,
             done_lessons=0,
             favorite=True,

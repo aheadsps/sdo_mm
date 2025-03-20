@@ -117,7 +117,6 @@ class EventSerializerCreate(serializers.ModelSerializer):
     class Meta:
         model = models.Event
         fields = (
-            'user',
             "course",
             "done_lessons",
             "start_date",

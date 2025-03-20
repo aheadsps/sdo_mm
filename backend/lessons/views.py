@@ -28,6 +28,9 @@ class EventViewSet(own_viewsets.GetUpdateDeleteViewSet):
         self.serializer_class = serializers.EventSerializerCreate
         return super().create(request, *args, **kwargs)
 
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
     @action(detail=False, permission_classes=[permissions.IsAuthenticated])
     def currents(self, request):
         """
@@ -42,6 +45,3 @@ class EventViewSet(own_viewsets.GetUpdateDeleteViewSet):
             return self.get_paginated_response(serializer.data)
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
-
-    def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
