@@ -6,25 +6,48 @@ from lessons.utils import get_value, tigger_to_check
 from lessons import exceptions
 
 
-class UpTimeValidator:
+class TimeValidator:
     """
     Валидатор на проверку времени (не меньше текущего)
     """
 
     requires_context = True
 
-    def __init__(self, time: datetime.datetime) -> None:
-        self.time = str(time)
+    def __init__(self, start_date: str, end_date: str) -> None:
+        self.start_date = str(start_date)
+        self.end_date = str(end_date)
 
-    def _check_up_time(self, time: datetime.datetime) -> None:
+    def _check_up_time(self,
+                       start_date: datetime.datetime,
+                       end_date: datetime.datetime,
+                       ) -> None:
+        """
+        Проверка корректности временых рамок
+
+        Args:
+            start_date (datetime.datetime): Дата начала
+            end_date (datetime.datetime): Дата конечная
+
+        Raises:
+            exceptions.UnprocessableEntityError: Исключение в случае не соотвествия
+        """
+        error_detail = dict()
         time_now = timezone.now()
-        if time_now and time_now > time:
+        if start_date and time_now > start_date:
+            error_detail.update(dict(start_date='Не может быть указано задним числом'))
+        if end_date and time_now > end_date:
+            error_detail.update(dict(end_date='Не может быть указано задним числом'))
+        if error_detail:
             raise exceptions.UnprocessableEntityError(
-                dict(start_date='Не может быть указано задним числом'),
-                )
+                error_detail,
+            )
 
     def __call__(self, attrs, serializer):
-        need_check = tigger_to_check(attrs, self.time)
+        need_check = tigger_to_check(attrs, self.start_date, self.end_date)
         if need_check:
-            time = get_value(self.time, attrs, serializer)
-            self._check_up_time(time=time)
+            start_date = get_value(self.start_date, attrs, serializer)
+            end_date = get_value(self.end_date, attrs, serializer)
+            self._check_up_time(
+                start_date=start_date,
+                end_date=end_date,
+                )

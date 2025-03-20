@@ -124,7 +124,7 @@ class EventSerializerCreate(serializers.ModelSerializer):
             "end_date",
             "favorite",
         )
-        validators = (validators.UpTimeValidator('start_date'),)
+        validators = (validators.TimeValidator('start_date', 'end_date'),)
 
     def create(self, validated_data):
         return super().create(validated_data)

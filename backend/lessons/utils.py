@@ -40,12 +40,15 @@ def get_value(field: str,
             field = instance._meta.get_field(field)
             value = field.value_from_object(instance)
         else:
-            field = instance.model._meta.get_field(field)
-            if field.has_default():
-                value = field.default
-            else:
+            field = serializer.get_fields()[field]
+            try:
+                has_default = field.has_default()
+                if has_default:
+                    value = field.default
+                else:
+                    value = None
+            except AttributeError:
                 value = None
-
     return value
 
 
