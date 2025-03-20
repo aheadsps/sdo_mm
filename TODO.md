@@ -1,15 +1,21 @@
 # Install
 
-## Нужно заполнить файл .env всеми неоходимыми данными:
+## Enviroments
+
+Необходимо заполнить **.env.sample** и в последствии перемеиновать его в **.env**
 
 ```python
-DB_PASSWORD=password # Пароль Базы данных (использование).
-POSTGRES_PASSWORD=password # Пароль Базы данных (настройка).
+# .env.sample
+POSTGRES_PASSWORD=password # Пароль от базы данных (Настройка)
+DB_PASSWORD=password # Пароль от базы данных (Использование)
 ```
 
-## Необходимо ввести команды:
+## Docker
 
-Проект находится под контролем системы контеризации Docker.
+Проект находится под системой управления и контеризации - **Docker**.
+Если у вас нет Docker - вы можете установить его с официального сайта: [Docker](https://www.docker.com/get-started/)
+
+Необходимо ввести команды:
 
 ```bash
 docker-compose build
@@ -20,4 +26,4 @@ docker-compose up
 ```
 
 - По адрессу localhost:8080 Backend
-- По адрессу localhost:5000 Frontend
+- По адрессу localhost:5173 Frontend
