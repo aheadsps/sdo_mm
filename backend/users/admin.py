@@ -43,7 +43,7 @@ class UserAdmin(EmailUserAdmin):
             None,
             {
                 "classes": ("wide",),
-                "fields": ("email", "date_commencement"),
+                "fields": ("email", "date_commencement", "profession"),
             },
         ),
     )
@@ -54,7 +54,8 @@ class UserAdmin(EmailUserAdmin):
     )
     fieldsets = (
         (None, {"fields": ("email", "password")}),
-        ("Personal Info", {"fields": ("first_name", "last_name")}),
+        ("Personal Info",
+         {"fields": ("first_name", "last_name", "profession")}),
         (
             "Important dates",
             {"fields": ("date_joined", "last_login", "date_commencement")},
@@ -80,6 +81,12 @@ class UserAdmin(EmailUserAdmin):
     )
 
 
+# Отключаем регистрацию стандартной модели пользователя
+admin.site.unregister(get_user_model())
+# Регистрируем кастомную админку для модели пользователя
+admin.site.register(get_user_model(), UserAdmin)
+
+
 def save_model(self, request, obj, form, change):
     """
     Сохранение сущности User
@@ -91,7 +98,8 @@ def save_model(self, request, obj, form, change):
         # если профессия изменилась
         if old_instance.profession != form.instance.profession:
             # Удалить user в старой ProfessionGroup
-            profession_group = ProfessionGroup.objects.get(students=old_instance.pk)
+            profession_group = ProfessionGroup.objects.get(
+                students=old_instance.pk)
             profession_group.students.remove(form.instance)
             # Добавить user в созданную последней ProfessionGroup
             profession_group = (
@@ -124,12 +132,6 @@ def save_model(self, request, obj, form, change):
         except Exception:
             # обработка ошибки добавления юзера в группу профессий
             pass
-
-
-# Отключаем регистрацию стандартной модели пользователя
-admin.site.unregister(get_user_model())
-# Регистрируем кастомную админку для модели пользователя
-admin.site.register(get_user_model(), UserAdmin)
 
 
 @admin.register(Profile)

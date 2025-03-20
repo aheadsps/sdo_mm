@@ -31,12 +31,18 @@ class User(EmailAbstractUser):
     Модель пользователя, расширяющая EmailAbstractUser.
     Содержит дополнительные поля для хранения информации о пользователе.
     """
-    first_name = models.CharField(max_length=30, null=True, blank=True, verbose_name="Имя пользователя")
-    last_name = models.CharField(max_length=30, null=True, blank=True, verbose_name="Фамилия пользователя")
-    date_joined = models.DateTimeField(auto_now_add=True, verbose_name="Дата регистрации")
-    last_login = models.DateTimeField(auto_now=True, verbose_name="Время последнего входа")
-    date_commencement = models.DateField(null=False, verbose_name="Дата начала работы")
-    profession = models.ForeignKey(Profession, unique=False, null=False, on_delete=models.PROTECT,)
+    first_name = models.CharField(max_length=30, null=True, blank=True,
+                                  verbose_name="Имя пользователя")
+    last_name = models.CharField(max_length=30, null=True, blank=True,
+                                 verbose_name="Фамилия пользователя")
+    date_joined = models.DateTimeField(auto_now_add=True,
+                                       verbose_name="Дата регистрации")
+    last_login = models.DateTimeField(auto_now=True,
+                                      verbose_name="Время последнего входа")
+    date_commencement = models.DateField(null=False,
+                                         verbose_name="Дата начала работы")
+    profession = models.ForeignKey(Profession, unique=False, null=False,
+                                   on_delete=models.PROTECT, )
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['date_commencement']
@@ -56,10 +62,14 @@ class Profile(models.Model):
     Модель профиля пользователя.
     Содержит дополнительные данные, связанные с пользователем.
     """
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
-    phone = PhoneNumberField(max_length=20, null=True, blank=True, verbose_name="Телефон")
-    image = models.ImageField(upload_to='profile_images/', null=True, blank=True, verbose_name="Аватар")
-    date_birthday = models.DateField(null=True, blank=True, verbose_name="Дата рождения")
+    user = models.OneToOneField(User, on_delete=models.CASCADE,
+                                related_name='profile')
+    phone = PhoneNumberField(max_length=20, null=True, blank=True,
+                             verbose_name="Телефон")
+    image = models.ImageField(upload_to='profile_images/', null=True,
+                              blank=True, verbose_name="Аватар")
+    date_birthday = models.DateField(null=True, blank=True,
+                                     verbose_name="Дата рождения")
 
     class Meta:
         verbose_name = "Профиль пользователя"

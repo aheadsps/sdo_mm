@@ -32,7 +32,7 @@ class CustomUserCreationForm(EmailUserCreationForm):
 
     class Meta:
         model = get_user_model()
-        fields = ('email', 'date_commencement')
+        fields = ('email', 'date_commencement', "profession")
 
     def clean_email(self):
         """
@@ -41,7 +41,8 @@ class CustomUserCreationForm(EmailUserCreationForm):
         try:
             return super().clean_email()
         except forms.ValidationError:
-            raise forms.ValidationError(_('Пользователь с таким email уже существует.'))
+            raise forms.ValidationError(
+                _('Пользователь с таким email уже существует.'))
 
     def clean_date_commencement(self):
         """ Валидация поля date_commencement по ограничениям стажа """
@@ -51,11 +52,14 @@ class CustomUserCreationForm(EmailUserCreationForm):
         today = timezone.now().date()
 
         if date_commencement > today:
-            raise ValidationError('Дата начала работы не может быть больше текущей даты.')
+            raise ValidationError(
+                'Дата начала работы не может быть больше текущей даты.')
 
-        max_commencement_date = today - timedelta(days=365 * MAX_WORK_EXPERIENCE_YEARS)
+        max_commencement_date = today - timedelta(
+            days=365 * MAX_WORK_EXPERIENCE_YEARS)
         if date_commencement < max_commencement_date:
-            raise ValidationError(f'Стаж не может быть больше {MAX_WORK_EXPERIENCE_YEARS} лет.')
+            raise ValidationError(
+                f'Стаж не может быть больше {MAX_WORK_EXPERIENCE_YEARS} лет.')
 
         return date_commencement
 
@@ -91,7 +95,8 @@ class CustomUserCreationForm(EmailUserCreationForm):
             )
 
         except Exception as e:
-            raise Exception(f"Ошибка при сохранении пользователя или отправке email: {str(e)}")
+            raise Exception(
+                f"Ошибка при сохранении пользователя или отправке email: {str(e)}")
 
         return user
 

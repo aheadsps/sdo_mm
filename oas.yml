@@ -225,6 +225,7 @@ paths:
           required: true
           schema:
             type: integer
+            minimum: 1
       summary: Обновление эвента (для администрации или методиста)
       tags:
         - Event
@@ -289,6 +290,7 @@ paths:
           required: true
           schema:
             type: integer
+            minimum: 1
       tags:
         - Event
       security:
@@ -340,6 +342,10 @@ paths:
           $ref: "#/components/responses/NotFound"
         "422":
           $ref: "#/components/responses/UnprocessableEntity"
+
+  /events/main:
+    get:
+    ...
 
   /events:
     get:
@@ -466,6 +472,7 @@ paths:
           required: true
           schema:
             type: integer
+            minimum: 1
       operationId: api_courses_retrieve
       tags:
         - Course
@@ -495,6 +502,7 @@ paths:
           required: true
           schema:
             type: integer
+            minimum: 1
       summary: Обновление курса (для администрации или методиста)
       tags:
         - Course
@@ -533,6 +541,7 @@ paths:
           required: true
           schema:
             type: integer
+            minimum: 1
       tags:
         - Course
       security:
@@ -616,6 +625,7 @@ paths:
           required: true
           schema:
             type: integer
+            minimum: 1
       operationId: api_lessons_retrieve
       tags:
         - Lesson
@@ -645,6 +655,7 @@ paths:
           required: true
           schema:
             type: integer
+            minimum: 1
       summary: Обновление урока (для администрации или методиста)
       tags:
         - Lesson
@@ -683,6 +694,7 @@ paths:
           required: true
           schema:
             type: integer
+            minimum: 1
       tags:
         - Lesson
       security:
@@ -766,6 +778,7 @@ paths:
           required: true
           schema:
             type: integer
+            minimum: 1
       operationId: api_steps_retrieve
       tags:
         - Step
@@ -795,6 +808,7 @@ paths:
           required: true
           schema:
             type: integer
+            minimum: 1
       summary: Обновление шага (для администрации или методиста)
       tags:
         - Step
@@ -833,6 +847,7 @@ paths:
           required: true
           schema:
             type: integer
+            minimum: 1
       tags:
         - Step
       security:
@@ -849,15 +864,16 @@ paths:
         "422":
           $ref: "#/components/responses/UnprocessableEntity"
 
-  /test-block/{lesson_id}:
+  /test-block/{block_id}:
     get:
-      summary: Получение тестового блока с историей ответов
+      summary: Получение конкретного тестового блока по ID
       parameters:
         - in: path
-          name: lesson_id
+          name: block_id
           required: true
           schema:
             type: integer
+            minimum: 1
       operationId: api_test-block_retrieve
       tags:
         - TestBlock
@@ -879,10 +895,80 @@ paths:
           $ref: "#/components/responses/NotFound"
         "422":
           $ref: "#/components/responses/UnprocessableEntity"
+    put:
+      operationId: api_test-block_update
+      parameters:
+        - in: path
+          name: block_id
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+      summary: Обновление тестового блока (для администрации или методиста)
+      tags:
+        - TestBlock
+      security:
+        - Token: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: "#/components/schemas/TestBlockView"
+      responses:
+        "200":
+          description: JSON ответ с изменеными данными
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/TestBlockView"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+    delete:
+      operationId: api_test-block_destroy
+      summary: Удаление тестового блока (для администрации или методиста (возможно будет реализация только в админ панели))
+      parameters:
+        - in: path
+          name: block_id
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+      tags:
+        - TestBlock
+      security:
+        - Token: []
+      responses:
+        "204":
+          description: Шаг удален успешно
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
 
-  /test-block/{lesson_id}/reset:
+  /test-block/{block_id}/reset:
     delete:
       summary: Сброс ответов под данный урок
+      parameters:
+        - in: path
+          name: block_id
+          required: true
+          schema:
+            type: integer
+            minimum: 1
       tags:
         - TestBlock
       security:
@@ -1495,10 +1581,11 @@ components:
       additionalProperties: false
       type: object
       properties:
-        course_id:
-          type: integer
+        course:
+          type: object
           readOnly: false
           minimum: 1
+          $ref: "#/components/schemas/СourseView"
         done_lessons:
           type: integer
           readOnly: true

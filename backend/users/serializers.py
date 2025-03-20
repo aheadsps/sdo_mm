@@ -2,7 +2,12 @@ from authemail.serializers import UserSerializer
 from django.contrib.auth import authenticate
 from rest_framework import serializers
 
-from users.models import User, Profile
+from users import models
+
+
+class CustomLoginSerializer(serializers.Serializer):
+    email = serializers.EmailField(max_length=255)
+    password = serializers.CharField(max_length=128)
 
 
 class CustomPasswordChangeSerializer(serializers.Serializer):
@@ -11,8 +16,10 @@ class CustomPasswordChangeSerializer(serializers.Serializer):
     Проверяет старый пароль и устанавливает новый.
     """
 
-    old_password = serializers.CharField(required=True, min_length=8, max_length=128)
-    new_password = serializers.CharField(required=True, min_length=8, max_length=128)
+    old_password = serializers.CharField(required=True, min_length=8,
+                                         max_length=128)
+    new_password = serializers.CharField(required=True, min_length=8,
+                                         max_length=128)
 
     def validate_old_password(self, value):
         user = self.context['request'].user
@@ -23,8 +30,9 @@ class CustomPasswordChangeSerializer(serializers.Serializer):
 
 class ProfileSerializer(serializers.ModelSerializer):
     """ Сериализатор для модели UserInfo """
+
     class Meta:
-        model = Profile
+        model = models.Profile
         fields = ['phone', 'image', 'date_birthday',]
 
 
@@ -33,6 +41,31 @@ class CustomUserSerializer(UserSerializer):
     profile = ProfileSerializer()
 
     class Meta:
-        model = User
-        fields = ['id', 'email', 'first_name', 'last_name', 'date_joined', 'date_commencement', 'profile']
+        model = models.User
+        fields = ['id', 'email', 'first_name', 'last_name',
+                  'date_commencement', "profession", 'profile']
         read_only_fields = ['id', 'is_staff', 'is_active', 'date_joined',]
+
+
+class WorkExperienceSerializer(serializers.ModelSerializer):
+    """
+    Сериализатор стажа работы
+    """
+    class Meta:
+        model = models.WorkExperience
+        field = ('id',
+                 'years',
+                 )
+
+
+class ProfessionSerializer(serializers.ModelSerializer):
+    """
+    Сериализатор Профессии
+    """
+
+    class Meta:
+        model = models.Profession
+        field = ('id',
+                 'en_name',
+                 'ru_name',
+                 )
