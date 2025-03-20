@@ -27,8 +27,8 @@
   padding-left: 20px;
   display: flex;
   align-items: center;
-  
-  @media screen  and (max-width: 767px) {
+
+  @media screen and (max-width: 767px) {
     font-size: var(--font-size-s);
   }
 }

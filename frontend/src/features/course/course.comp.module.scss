@@ -1,0 +1,55 @@
+.backToPage {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 30px;
+  text-decoration: none;
+
+  &:visited {
+    color: var(--color-text-secondary);
+  }
+
+  &:active {
+    color: var(--color-additional-icons-red);
+  }
+}
+
+.backText {
+  color: var(--color-text-secondary);
+}
+
+.backIcon {
+  color: var(--color-additional-icons-red);
+}
+
+.titleBlock {
+  width: auto;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 40px;
+
+  @media screen and (max-width: 1349px) {
+    flex-direction: column;
+    gap: 20px;
+  }
+}
+
+.buttonsBlock {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+
+  @media screen and (max-width: 1349px) {
+    gap: 24px;
+  }
+
+  @media screen and (max-width: 767px) {
+    gap: 16px;
+  }
+}
+
+.button {
+  @media screen and (max-width: 1349px) {
+    width: 100%;
+  }
+}

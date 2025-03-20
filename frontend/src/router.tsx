@@ -1,6 +1,7 @@
 import { createBrowserRouter } from 'react-router-dom'
 
 import { AuthPage } from '@pages/auth'
+import { CoursePage } from '@pages/course/CoursePage'
 import { MainPage } from '@pages/main'
 import { MyLearning } from '@pages/my-learning/MyLearning'
 
@@ -12,6 +13,10 @@ export const router = createBrowserRouter([
   {
     path: '/learning',
     element: <MyLearning />,
+  },
+  {
+    path: '/learning/course',
+    element: <CoursePage />,
   },
   {
     path: '/library',

@@ -11,10 +11,10 @@
       left: 40px;
       top: 153px;
     }
-    
+
     @media (max-width: 767px) {
       width: 320px;
-      left: 50%;  
+      left: 50%;
       transform: translateX(-50%);
     }
   }
@@ -59,7 +59,7 @@
   }
 
   &__inputError {
-    color: var(--color-accent-red500); 
+    color: var(--color-accent-red500);
     border-bottom: 2px solid var(--color-accent-red500);
   }
 
@@ -88,7 +88,6 @@
     text-decoration: none;
     color: var(--color-text-primary);
 
-
     &:first-child {
       color: var(--color-text-secondary);
     }
@@ -104,7 +103,7 @@
     cursor: pointer;
     font-size: 14px;
     text-align: center;
-    
+
     @media (max-width: 767px) {
       width: 320px;
     }
@@ -129,7 +128,6 @@
     cursor: pointer;
   }
 }
-
 
 .auth__input::placeholder {
   font-family: 'Moscow Sans', sans-serif;

@@ -6,15 +6,17 @@
   border-radius: 9px;
   padding: 12px 16px;
   position: relative;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px rgb(0 0 0 / 10%);
   transition: var(--transition-effect);
   width: 415px;
   min-height: 79px;
   margin-bottom: 12px;
 }
+
 .card:hover {
   transform: var(--transform-effect);
 }
+
 .card .leftBar {
   position: absolute;
   left: 0;
@@ -23,6 +25,7 @@
   width: 20px;
   border-radius: 8px 0 0 8px;
 }
+
 .card .content {
   display: flex;
   justify-content: space-between;
@@ -30,20 +33,25 @@
   width: 100%;
   padding-left: 15px;
 }
+
 .card .title {
   color: var(--color-text-primary);
 }
+
 .card .subtitle {
   color: var(--color-text-secondary);
   margin-top: 10px;
   padding-left: 15px;
 }
+
 .card .icon {
   color: var(--color-additional-red800);
 }
+
 .card .urgent {
   background-color: var(--color-accent-negative);
 }
+
 .card .warning {
   background-color: var(--color-accent-orange);
-}/*# sourceMappingURL=task.module.css.map */
+}
