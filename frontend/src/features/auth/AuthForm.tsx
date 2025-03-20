@@ -1,12 +1,11 @@
-import styles from '@features/AuthForm/authform.module.scss'
-import { Button } from '@shared/components'
-import { Input } from '@shared/components/input/Input'
-import { Typography } from '@shared/components/Typography'
+import { Button, Typography, Input } from '@shared/components'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { Link } from 'react-router-dom'
 
 import { ClosedEyeIcon, OpenedEyeIcon } from '@assets/icons'
+
+import styles from './auth-form.module.scss'
 
 interface AuthFormData {
   email: string
