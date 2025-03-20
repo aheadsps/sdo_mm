@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from lessons import models
+from lessons import validators
 from users import serializers as user_serializers
 
 
@@ -122,5 +123,8 @@ class EventSerializerCreate(serializers.ModelSerializer):
             "start_date",
             "end_date",
             "favorite",
-            "status",
         )
+        validators = (validators.UpTimeValidator('start_date'),)
+
+    def create(self, validated_data):
+        return super().create(validated_data)
