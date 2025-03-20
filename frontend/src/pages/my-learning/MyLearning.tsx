@@ -1,5 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { Button } from '@shared/components'
+import { LessonCard } from '@shared/components/lessonCard/LessonCard'
 import { Tooltipe } from '@shared/components/tooltipe/Tooltipe'
 import { withLayout } from '@shared/HOC/withLayout/withLayout'
 import { useState } from 'react'
@@ -24,9 +25,6 @@ const MyLearningComp = () => {
       <main className={s.container}>
         <div className={s.container__headBox}>
           <div className={s.container__btnBox}>
-            {/* <div className={s.container__counterBox}>
-              <p className={s.container__counter}>3</p>
-            </div> */}
             {buttons.map((btn, index) => {
               return (
                 <>
@@ -51,6 +49,14 @@ const MyLearningComp = () => {
             variant={mode === 'ИИ' ? 'primary' : 'secondary'}
             onClick={() => setMode('ИИ')}
           />
+        </div>
+        <div className={s.container__content}>
+          <LessonCard />
+          <LessonCard />
+        </div>
+        <div className={s.container__content}>
+        <LessonCard />
+        <LessonCard />
         </div>
       </main>
     </>
