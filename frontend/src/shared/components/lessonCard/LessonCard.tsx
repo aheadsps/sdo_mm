@@ -16,12 +16,7 @@ interface Props {
 
 export const LessonCard: React.FC<Props> = (props) => {
   const item = props.course
-  const status = item.status
-  //   : () => string | undefined = () => {
-  //     if (item.status === 0) return 's.container__circle_green'
-  //     if (item.status === 1) return 's.container__circle_orange'
-  //     if (item.status === 2) return 's.container__circle_red'
-  //   }
+  const status = Number(item.status)
   const [isFav, setIsFav] = useState(false)
   return (
     <div className={s.container}>
@@ -42,8 +37,16 @@ export const LessonCard: React.FC<Props> = (props) => {
           <div className={s.container__description}>
             <div className={s.container__data}>
               <div className={s.container__param}>
-                <div className={`${s.container__circle} ${s.container__circle_green}`}></div>
-                <p className={s.container__paramTxt}>{item.days}</p>
+                <div
+                  className={
+                    status > 1
+                      ? s.container__circle_red
+                      : status < 1
+                        ? s.container__circle_green
+                        : s.container__circle_orange
+                  }
+                ></div>
+                <p className={s.container__paramTxt}>{status > 1 ? 'Просрочен' : item.days}</p>
               </div>
               <div className={s.container__param}>
                 <StickersIcon />

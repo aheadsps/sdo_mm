@@ -8,10 +8,12 @@ import { useState } from 'react'
 import { courses, lessons } from './mockData'
 import s from './myLearning.module.scss'
 import { Course, Lesson } from './types'
+import { AIComponent } from '@shared/components/ai-component/AIComponent'
 
 const MyLearningComp: React.FC = () => {
   const [mode, setMode] = useState<string>('Назначенные курсы')
-  const [isTooltipe, setIsTooltipe] = useState<boolean>(false)
+  const [isTooltipe, setIsTooltipe] = useState<boolean>(true)
+  const [isAIOpen, setIsAIOpen] = useState<boolean>(true)
 
   const buttons = [
     'Назначенные курсы',
@@ -19,10 +21,11 @@ const MyLearningComp: React.FC = () => {
     'Избранные курсы',
     'Завершённые курсы',
   ]
-  
+
   return (
     <>
       {isTooltipe && <Tooltipe />}
+      {isAIOpen && <AIComponent />}
       <main className={s.container}>
         <div className={s.container__headBox}>
           <div className={s.container__btnBox}>

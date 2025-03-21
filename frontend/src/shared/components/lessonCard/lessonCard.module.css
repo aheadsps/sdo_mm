@@ -96,18 +96,28 @@
   gap: 8px;
   align-items: center;
 }
-.container__circle {
+.container__circle_blue {
   width: 24px;
   height: 24px;
   border-radius: 50%;
+  background-color: var(--color-accent-info);
 }
 .container__circle_green {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
   background-color: var(--color-accent-success);
 }
 .container__circle_orange {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
   background-color: var(--color-accent-orange);
 }
 .container__circle_red {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
   background-color: var(--color-accent-red500);
 }
 .container__depiction {

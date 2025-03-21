@@ -94,18 +94,28 @@
     gap: 8px;
     align-items: center;
   }
-  &__circle {
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
+  &__circle_blue {
+   width: 24px;
+   height: 24px;
+   border-radius: 50%;
+   background-color: var(--color-accent-info);
   }
   &__circle_green {
+   width: 24px;
+   height: 24px;
+   border-radius: 50%;
    background-color: var(--color-accent-success);
   }
   &__circle_orange {
+   width: 24px;
+   height: 24px;
+   border-radius: 50%;
    background-color: var(--color-accent-orange);
   }
   &__circle_red {
+   width: 24px;
+   height: 24px;
+   border-radius: 50%;
    background-color: var(--color-accent-red500);
   }
   &__depiction {
