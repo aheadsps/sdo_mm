@@ -3,6 +3,8 @@ import { ComponentPropsWithoutRef } from 'react'
 
 import { ArrowUpRightIcon } from '@assets/icons'
 
+import { LessonItemTitle } from '../lesson-item-title/LessonItemTitle'
+
 import s from './lesson-item-card.module.scss'
 
 type Props = ComponentPropsWithoutRef<'div'>
@@ -10,15 +12,9 @@ type Props = ComponentPropsWithoutRef<'div'>
 export const LessonItemCard = ({ children }: Props) => {
   return (
     <div className={s.lessonItemCard}>
-      <div className={s.lessonItem}>
-        <Typography variant="body_1" className={s.lessonItemTitle}>
-          Урок 1. Проверка стартового уровня
-        </Typography>
+      <LessonItemTitle title="Урок 1. Проверка стартового уровня" blocks="2 блока">
         <ArrowUpRightIcon className={s.icon} />
-      </div>
-      <Typography variant="caption" className={s.caption}>
-        2 блока
-      </Typography>
+      </LessonItemTitle>
       <Typography variant="caption" className={s.lessonProgress}>
         Прогресс: <span className={s.lessonProgressSuccess}>100%</span>
       </Typography>

@@ -5,23 +5,8 @@
   box-shadow: 0 0 15px 0 #2c0b0f0a;
 }
 
-.caption {
-  color: var(--color-text-secondary);
-}
-
-.lessonItem {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.lessonItemTitle {
-  color: var(--color-text-primary);
-}
-
 .icon {
-    color: var(--color-additional-red800);
+  color: var(--color-additional-red800);
 }
 
 .lessonProgress {

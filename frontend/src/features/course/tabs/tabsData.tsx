@@ -1,4 +1,5 @@
 import { AboutCourse } from './about-course/AboutCourse'
+import { CourseContent } from './course-content/CourseContent'
 
 export const tabsData = [
   {
@@ -7,7 +8,7 @@ export const tabsData = [
   },
   {
     label: 'Содержание',
-    content: 'Содержание',
+    content: <CourseContent />,
   },
   {
     label: 'Материалы',

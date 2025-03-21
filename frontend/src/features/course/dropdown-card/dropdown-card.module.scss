@@ -1,0 +1,32 @@
+.dropdownCard {
+  margin-bottom: 10px;
+  overflow: hidden;
+  min-height: 90px;
+  position: relative;
+
+  &::after {
+    position: absolute;
+    content: '';
+    height: 1px;
+    background-color: var(--color-additional-border100);
+    width: 50%;
+    left: 25%;
+    bottom: 0;
+  }
+}
+
+.dropdownHeader {
+  padding: 10px 20px;
+  color: var(--color-additional-red800);
+  cursor: pointer;
+}
+
+.dropdownContent {
+  padding: 40px;
+  background-color: #fff;
+  border-top: 1px solid var(--color-additional-border700);
+}
+
+.dropdownTitle {
+  color: var(--color-text-primary);
+}
