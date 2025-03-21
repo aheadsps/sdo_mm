@@ -9,8 +9,19 @@
   color: var(--color-text-secondary);
 }
 
+.lessonItem {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
 .lessonItemTitle {
   color: var(--color-text-primary);
+}
+
+.icon {
+    color: var(--color-additional-red800);
 }
 
 .lessonProgress {

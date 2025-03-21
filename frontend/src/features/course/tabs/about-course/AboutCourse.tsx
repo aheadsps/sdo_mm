@@ -1,5 +1,5 @@
 import { LessonItemCard } from '@features/course'
-import { Card, Typography } from '@shared/components'
+import { Button, Card, Typography } from '@shared/components'
 import { calculateProgress } from '@shared/utils'
 
 import { HeartFilledIcon } from '@assets/icons'
@@ -37,7 +37,11 @@ export const AboutCourse = () => {
         <div className={s.lessonItems}>
           <LessonItemCard />
           <LessonItemCard />
-          <LessonItemCard />
+          <LessonItemCard>
+            <Button variant="secondary" className={s.lessonItemButton}>
+              Продолжить
+            </Button>
+          </LessonItemCard>
           <LessonItemCard />
         </div>
       </Card>

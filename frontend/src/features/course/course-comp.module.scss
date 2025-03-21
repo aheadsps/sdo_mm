@@ -19,8 +19,8 @@
   color: var(--color-text-secondary);
 }
 
-.backIcon {
-  color: var(--color-additional-icons-red);
+.icon {
+  color: var(--color-additional-red800);
 }
 
 .titleBlock {
@@ -33,6 +33,10 @@
     flex-direction: column;
     gap: 20px;
   }
+}
+
+.title {
+  color: var(--color-text-primary);
 }
 
 .buttonsBlock {
