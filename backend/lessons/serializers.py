@@ -1,8 +1,20 @@
+import datetime
 from rest_framework import serializers
+from django.utils import timezone
+
+from loguru import logger
 
 from lessons import models
 from lessons import validators
+from lessons.d_types import VD
+from lessons.patrials import set_status
 from users import serializers as user_serializers
+
+
+PROCESS = 'process'
+EXPECTED = 'expected'
+DONE = 'done'
+FAILED = 'failed'
 
 
 class AnswerSerializer(serializers.ModelSerializer):
@@ -115,16 +127,63 @@ class EventSerializerCreate(serializers.ModelSerializer):
     Сериализатор Создания в Изменения Эвента
     """
 
+    status = serializers.CharField(read_only=True)
+
     class Meta:
         model = models.Event
         fields = (
             "course",
-            "done_lessons",
             "start_date",
             "end_date",
             "favorite",
+            "status",
         )
         validators = (validators.TimeValidator('start_date', 'end_date'),)
 
-    def create(self, validated_data):
-        return super().create(validated_data)
+    def _is_process(self, start_date: datetime.datetime) -> bool:
+        """
+        Определение является курс запущенным
+        """
+        time_now = timezone.now()
+        return time_now > start_date
+
+    def _change_status(self, validated_data: VD, process: bool) -> None:
+        """
+        Изменение статуса
+        """
+        if process:
+            set_status(
+                dict_data=validated_data,
+                value=PROCESS,
+            )
+        else:
+            set_status(
+                dict_data=validated_data,
+                value=EXPECTED,
+            )
+
+    def _correct_status(self, validated_data: VD) -> VD:
+        """
+        Корректировка статуса исходя от даты начала
+        """
+        start_date = validated_data.get('start_date')
+        if start_date:
+            is_process = self._is_process(start_date=start_date)
+            if self.instance:
+                if self.instance.status not in [DONE, FAILED]:
+                    self._change_status(
+                        validated_data=validated_data,
+                        process=is_process,
+                        )
+                return
+            else:
+                self._change_status(
+                    validated_data=validated_data,
+                    process=is_process,
+                )
+
+    def save(self, **kwargs):
+        logger.debug(f'before {self.validated_data}')
+        self._correct_status(self.validated_data)
+        logger.debug(f'after {self.validated_data}')
+        return super().save(**kwargs)

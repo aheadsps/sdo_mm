@@ -62,3 +62,10 @@ def tigger_to_check(attrs: dict[str, Any],
         if field in attrs:
             need_check = True
     return need_check
+
+
+def set_value(dict_data: dict[str, Any],
+              key: str,
+              value: str,
+              ) -> None:
+    dict_data[key] = value

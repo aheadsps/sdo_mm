@@ -49,7 +49,7 @@ class TestEndpointsEvents(APITestCase):
         self.event = lessons_models.Event._default_manager.create(
             user=self.user,
             course=self.course,
-            start_date=None,
+            start_date=datetime.datetime(year=2026, month=1, day=1),
             end_date=None,
         )
         self.client.force_authenticate(self.user)
@@ -58,9 +58,10 @@ class TestEndpointsEvents(APITestCase):
         """
         Тест получение Эвента по ID
         """
-        url = reverse("lessons:event-detail",
-                      kwargs={"event_id": self.event.pk},
-                      )
+        url = reverse(
+            "lessons:event-detail",
+            kwargs={"event_id": self.event.pk},
+        )
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
@@ -78,9 +79,9 @@ class TestEndpointsEvents(APITestCase):
                 "done_lessons": 0,
                 "end_date": None,
                 "favorite": False,
-                "start_date": None,
-                "status": "expected",
-                'user': self.user.pk,
+                "start_date": "2026-01-01T00:00:00+03:00",
+                "status": "process",
+                "user": self.user.pk,
             },
         )
 
@@ -88,10 +89,9 @@ class TestEndpointsEvents(APITestCase):
         """
         Тест создания эвента
         """
-        url = '/api/v1/events'
+        url = "/api/v1/events"
         data = dict(
             course=self.course.pk,
-            done_lessons=0,
             favorite=True,
             start_date=datetime.datetime(
                 year=2023,
@@ -105,7 +105,7 @@ class TestEndpointsEvents(APITestCase):
         response = self.client.post(
             path=url,
             data=data,
-            format='json',
+            format="json",
         )
         self.assertEqual(response.status_code, 422)
 
@@ -113,10 +113,9 @@ class TestEndpointsEvents(APITestCase):
         """
         Тест создания эвента
         """
-        url = '/api/v1/events'
+        url = "/api/v1/events"
         data = dict(
             course=self.course.pk,
-            done_lessons=0,
             favorite=True,
             end_date=datetime.datetime(
                 year=2023,
@@ -130,7 +129,7 @@ class TestEndpointsEvents(APITestCase):
         response = self.client.post(
             path=url,
             data=data,
-            format='json',
+            format="json",
         )
         self.assertEqual(response.status_code, 422)
 
@@ -138,10 +137,9 @@ class TestEndpointsEvents(APITestCase):
         """
         Тест создания эвента
         """
-        url = '/api/v1/events'
+        url = "/api/v1/events"
         data = dict(
             course=self.course.pk,
-            done_lessons=0,
             favorite=True,
             start_date=datetime.datetime(
                 year=2026,
@@ -163,7 +161,7 @@ class TestEndpointsEvents(APITestCase):
         response = self.client.post(
             path=url,
             data=data,
-            format='json',
+            format="json",
         )
         self.assertEqual(response.status_code, 422)
 
@@ -171,10 +169,9 @@ class TestEndpointsEvents(APITestCase):
         """
         Тест создания эвента c ошибкой
         """
-        url = '/api/v1/events'
+        url = "/api/v1/events"
         data = dict(
             course=self.course.pk,
-            done_lessons=0,
             favorite=True,
             start_date=datetime.datetime(
                 year=2026,
@@ -196,35 +193,50 @@ class TestEndpointsEvents(APITestCase):
         response = self.client.post(
             path=url,
             data=data,
-            format='json',
+            format="json",
         )
         self.assertEqual(response.status_code, 201)
+        self.assertEqual(
+            response.json(),
+            {'course': 1,
+             'start_date': '2026-01-01T23:01:01+03:00',
+             'end_date': '2027-01-01T23:01:01+03:00',
+             'favorite': True,
+             'status': 'expected',
+             }
+        )
 
     def test_get_list_current_events(self):
         """
         Тест получения актуальных эвентов на пользователе
         """
-        url = '/api/v1/events/currents'
+        url = "/api/v1/events/currents"
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
             response.json(),
-            {'count': 1,
-             'next': None,
-             'previous': None,
-             'results': [
-                 {'user': self.user.pk,
-                  'id': self.event.pk,
-                  'course': {'beginer': False,
-                             'description': 'some',
-                             'experiences': [self.experience.pk],
-                             'image': None,
-                             'name': 'course',
-                             'profession': self.profession.pk},
-                  'done_lessons': 0,
-                  'end_date': None,
-                  'favorite': False,
-                  'start_date': None,
-                  'status': 'expected',
-                  }]}
-            )
+            {
+                "count": 1,
+                "next": None,
+                "previous": None,
+                "results": [
+                    {
+                        "user": self.user.pk,
+                        "id": self.event.pk,
+                        "course": {
+                            "beginer": False,
+                            "description": "some",
+                            "experiences": [self.experience.pk],
+                            "image": None,
+                            "name": "course",
+                            "profession": self.profession.pk,
+                        },
+                        "done_lessons": 0,
+                        "end_date": None,
+                        "favorite": False,
+                        "start_date": "2026-01-01T00:00:00+03:00",
+                        "status": "process",
+                    }
+                ],
+            },
+        )
