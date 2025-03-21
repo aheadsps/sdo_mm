@@ -11,7 +11,7 @@ class TestModels(APITestCase):
     Тесты основных функций модели
     """
 
-    def _test_path_image_question(self):
+    def test_path_image_question(self):
         """
         Тест сохранения файлов по пути
         Будет двойной путь изза разположения файла в тестовой среде
