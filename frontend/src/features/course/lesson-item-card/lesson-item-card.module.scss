@@ -3,6 +3,12 @@
   border-radius: 8px;
   padding: 10px 20px;
   box-shadow: 0 0 15px 0 #2c0b0f0a;
+  cursor: pointer;
+  transition: var(--transition-effect);
+
+  &:hover {
+    transform: var(--transform-effect);
+  }
 }
 
 .icon {

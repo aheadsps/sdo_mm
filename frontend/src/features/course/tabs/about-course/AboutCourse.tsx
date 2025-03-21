@@ -26,7 +26,7 @@ export const AboutCourse = () => {
             ></div>
           </div>
         </div>
-        <HeartFilledIcon width={'34px'} height={'34px'} />
+        <HeartFilledIcon width={'34px'} height={'34px'} className={s.icon} />
       </Card>
 
       <Card className={s.lessons}>

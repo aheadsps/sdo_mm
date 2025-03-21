@@ -1,2 +1,1 @@
-export * from './MainComp'
-export * from './MainResponsive'
+export * from './Main'
