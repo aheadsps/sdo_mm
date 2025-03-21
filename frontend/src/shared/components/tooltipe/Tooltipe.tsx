@@ -2,7 +2,7 @@ import { CloseIcon, TooltipeCheckboxIcon } from '@assets/icons'
 
 import s from './tooltipe.module.scss'
 
-export const Tooltipe = () => {
+export const Tooltipe: React.FC = () => {
   return (
     <div className={s.tooltipe}>
       <div className={s.tooltipe__topBox}>

@@ -4,9 +4,8 @@
   background-color: var(--color-bg-main);
   display: flex;
   flex-direction: column;
-  position: relative;
+  // position: relative;
   gap: 30px;
-  // padding: 30px;
   &__headBox {
     width: 100%;
     height: 45px;
@@ -27,7 +26,6 @@
     width: 213px;
     // width: fit-content;
     height: 45px;
-    // position: relative;
     border-radius: 8px;
     border: none;
     padding: 10px 20px;
@@ -35,10 +33,10 @@
   &__counterBox {
     width: 32px;
     height: 32px;
-    position: fixed;
-    top: 110px;
-    left: 990px;
-    position: fixed;
+    position: absolute;
+    top: -15px;
+    left: 200px;
+    z-index: 100;
     display: flex;
     align-items: center;
     justify-content: center;
