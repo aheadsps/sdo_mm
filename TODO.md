@@ -27,3 +27,15 @@ docker-compose up
 
 - По адрессу localhost:8080 Backend
 - По адрессу localhost:5173 Frontend
+
+### Admin
+
+email: <admin@admin.com>
+
+password: 2101
+
+### User
+
+email: <y@mail.ru>
+
+password: 12345678

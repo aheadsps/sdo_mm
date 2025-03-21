@@ -11,6 +11,7 @@ from users.models import (
     Profession,
     ProfessionGroup,
     User,
+    WorkExperience,
 )
 from users.forms import CustomUserCreationForm
 
@@ -132,6 +133,14 @@ def save_model(self, request, obj, form, change):
         except Exception:
             # обработка ошибки добавления юзера в группу профессий
             pass
+
+
+@admin.register(WorkExperience)
+class AdminWorkExperience(admin.ModelAdmin):
+    """
+    Админ панель стажа
+    """
+    list_display = ('years',)
 
 
 @admin.register(Profile)
