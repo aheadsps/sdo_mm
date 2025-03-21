@@ -1,7 +1,6 @@
-import { CourseMaterials } from '../course-materials/CourseMaterials'
-
 import { AboutCourse } from './about-course/AboutCourse'
 import { CourseContent } from './course-content/CourseContent'
+import { Materials } from './materials/Materials'
 
 export const tabsData = [
   {
@@ -14,6 +13,6 @@ export const tabsData = [
   },
   {
     label: 'Материалы',
-    content: <CourseMaterials />,
+    content: <Materials />,
   },
 ]

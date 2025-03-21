@@ -1,14 +1,3 @@
-.courseMaterials {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 30px;
-}
-
-.materialsButton {
-    margin: 0 auto;
-}
-
 .allMaterials {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(13rem, auto));
