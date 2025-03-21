@@ -9,7 +9,6 @@ import s from './about-course.module.scss'
 export const AboutCourse = () => {
   return (
     <div className={s.container}>
-      {/* Progress Section */}
       <Card className={s.progress}>
         <div className={s.progressInfo}>
           <div className={s.progressTexts}>
@@ -30,7 +29,6 @@ export const AboutCourse = () => {
         <HeartFilledIcon width={'34px'} height={'34px'} />
       </Card>
 
-      {/* Lessons Section */}
       <Card className={s.lessons}>
         <Typography variant="header_6">Уроки курса</Typography>
         <Typography variant="body_2" className={s.body2Text}>
@@ -44,10 +42,13 @@ export const AboutCourse = () => {
         </div>
       </Card>
 
-      {/* Course Goal Section */}
       <Card className={s.goal}>
-        <h2>Цель курса:</h2>
-        <p>Этот курс поможет тебе понять, на каком уровне ты находишься...</p>
+        <Typography variant="header_6" className={s.courseGoalTitle}>
+          Цель курса
+        </Typography>
+        <Typography variant="body_2" className={s.courseGoalDescription}>
+          Этот курс поможет тебе понять, на каком уровне ты находишься...
+        </Typography>
       </Card>
     </div>
   )

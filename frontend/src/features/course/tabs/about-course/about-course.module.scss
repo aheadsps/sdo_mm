@@ -76,6 +76,15 @@
   grid-area: goal;
 }
 
+.courseGoalTitle {
+  margin-bottom: 30px;
+  color: var(--color-text-primary);
+}
+
+.courseGoalDescription {
+  color: var(--color-text-primary);;
+}
+
 .body2Text {
   color: var(--color-text-secondary);
 }
