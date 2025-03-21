@@ -16,3 +16,14 @@ class QuestionAdmin(admin.ModelAdmin):
     Админ панель Вопроса
     """
     list_display = ('text', 'image')
+
+
+@admin.register(models.Step)
+class StepAdmin(admin.ModelAdmin):
+    list_display = (
+        "serial",
+        "title",
+    )
+    search_fields = (
+        "title",
+    )
