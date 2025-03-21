@@ -92,6 +92,7 @@ class TestEndpointsEvents(APITestCase):
         """
         url = "/api/v1/events"
         data = dict(
+            user=self.user.pk,
             course=self.course.pk,
             favorite=True,
             start_date=datetime.datetime(
@@ -116,6 +117,7 @@ class TestEndpointsEvents(APITestCase):
         """
         url = "/api/v1/events"
         data = dict(
+            user=self.user.pk,
             course=self.course.pk,
             favorite=True,
             end_date=datetime.datetime(
@@ -140,6 +142,7 @@ class TestEndpointsEvents(APITestCase):
         """
         url = "/api/v1/events"
         data = dict(
+            user=self.user.pk,
             course=self.course.pk,
             favorite=True,
             start_date=datetime.datetime(
@@ -172,6 +175,7 @@ class TestEndpointsEvents(APITestCase):
         """
         url = "/api/v1/events"
         data = dict(
+            user=self.user.pk,
             course=self.course.pk,
             favorite=True,
             start_date=datetime.datetime(
@@ -199,7 +203,8 @@ class TestEndpointsEvents(APITestCase):
         self.assertEqual(response.status_code, 201)
         self.assertEqual(
             response.json(),
-            {'course': 1,
+            {'user': self.user.pk,
+             'course': self.course.pk,
              'start_date': '2026-01-01T23:01:01+03:00',
              'end_date': '2027-01-01T23:01:01+03:00',
              'favorite': True,
@@ -275,3 +280,14 @@ class TestEndpointsEvents(APITestCase):
                 ],
             },
         )
+
+    def test_change_favorite(self):
+        """
+        Тест изменения избраного
+        """
+        url = f'/api/v1/events/{self.event.pk}/toggle-favorite'
+        self.assertFalse(self.event.favorite)
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        event = lessons_models.Event.objects.get(pk=self.event.pk)
+        self.assertTrue(event.favorite)
