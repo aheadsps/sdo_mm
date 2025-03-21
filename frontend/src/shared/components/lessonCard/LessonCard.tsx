@@ -1,4 +1,4 @@
-import { ComponentPropsWithRef, useState } from 'react'
+import { ComponentPropsWithRef, ReactNode, useState } from 'react'
 
 import { DislikeIcon, LikeIcon } from '@assets/icons'
 
@@ -18,10 +18,28 @@ type Course = {
   lessons: string
   time: string
   progress: string
-  // isFav: boolean,
+  src: string
+}
+type Lesson = {
+  id: string
+  name: string
+  discription: string
+  expired: boolean
+  days: string
+  lessons: string
+  time: string
+  progress: string
+  src: string
 }
 
-export const LessonCard: React.FC = ({ course }: Course) => {
+interface Props {
+  course: Course | Lesson
+  children?: ReactNode // Универсальный тип для children
+}
+
+export const LessonCard: React.FC<Props> = (props) => {
+  const item = props.course
+  console.log(item);
   const [isFav, setIsFav] = useState(false)
   return (
     <div className={s.container}>
@@ -34,7 +52,7 @@ export const LessonCard: React.FC = ({ course }: Course) => {
             {isFav ? <LikeIcon /> : <DislikeIcon />}
           </button>
         </div>
-        <ImageComponent src="/img/svg/lesson.svg" alt="course" className={s.container__img} />
+        <ImageComponent src={item.src} alt="course" className={s.container__img} />
       </div>
       <div className={s.container__bottom}></div>
     </div>

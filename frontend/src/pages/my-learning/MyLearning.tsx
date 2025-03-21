@@ -27,7 +27,7 @@ const MyLearningComp: React.FC = () => {
     lessons: string,
     time: string,
     progress: string,
-    // isFav: boolean,
+    src: string,
   }
   type Lesson =  {
     id: string,
@@ -38,12 +38,13 @@ const MyLearningComp: React.FC = () => {
     lessons: string,
     time: string,
     progress: string,
-    // isFav: boolean,
+    src: string,
   }
-  const courses: [Course] = [
+  const courses: Course[] = [
     {
       id: '001',
       name: 'English Check-Up: База и первые шаги',
+      src:"/img/svg/course-01.svg",
       discription:
         'Чувствуешь, что в английском чего‑то не хватает? Пройди этот курс и пойми, какие темы уже освоены, а где есть пробелы. Мы разберём твои ошибки и дадим персональные рекомендации, чтобы ты учил язык быстрее и увереннее.',
       days: '6 недель',
@@ -54,6 +55,7 @@ const MyLearningComp: React.FC = () => {
     {
       id: '002',
       name: 'English Check-Up: Продвинутый разбор',
+      src:"/img/svg/course-02.svg",
       discription:
         'Этот курс выявит слабые места: сложные времена, фразовые глаголы, нюансы словоупотребления. Ты получишь детальный разбор ошибок и советы, которые помогут говорить свободнее.',
       days: '4 дня',
@@ -62,10 +64,11 @@ const MyLearningComp: React.FC = () => {
       progress: '0%',
     },
   ]
-  const lessons: [Lesson] = [
+  const lessons: Lesson[] = [
     {
       id: '368',
       name: 'Безопасность на рабочем месте: охрана труда в метрополитене',
+      src: "/img/svg/lesson-01.svg",
       discription:
         'Этот курс поможет вам разобраться с основными правилами охраны труда в метрополитене. Вы узнаете о ключевых требованиях безопасности, инструкциях по предотвращению несчастных случаев и правильных действиях в экстренных ситуациях.',
       expired: true,
@@ -77,6 +80,7 @@ const MyLearningComp: React.FC = () => {
     {
       id: '593',
       name: 'Безопасность при работе с электроинструментом',
+      src: "/img/svg/lesson-02.svg",
       discription:
         'Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorem explicabo dicta magnam neque modi officia!',
       expired: false,
@@ -116,15 +120,14 @@ const MyLearningComp: React.FC = () => {
           />
         </div>
         <div className={s.container__content}>
-          {courses.map((course: {}) => {
-            return <LessonCard course={course}/>
+          {courses.map((course: Course) => {
+            return <LessonCard course={course} key={course.id}/>
           })}
-          {/* <LessonCard isFav={false} />
-          <LessonCard isFav={true} /> */}
         </div>
         <div className={s.container__content}>
-          <LessonCard isFav={true} />
-          <LessonCard isFav={false} />
+        {lessons.map((lesson) => {
+            return <LessonCard course={lesson} key={lesson.id}/>
+          })}
         </div>
       </main>
     </>
