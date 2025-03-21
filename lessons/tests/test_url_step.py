@@ -42,13 +42,14 @@ class TestStepUrl(APITestCase):
         Group.objects.create(name='admin')
         group = Group.objects.create(name='methodist')
         group.user_set.add(self.user)
+        # Даём разрешение на редактирование
         ct = ContentType.objects.get_for_model(Step)
         permission = Permission.objects.create(
             codename="can_change_step",
             name="Модерировать Step",
             content_type=ct,
         )
-        #group.permissions.add(permission)
+        group.permissions.add(permission)
         group.save()
 
         self.client = APIClient()
