@@ -1,3 +1,5 @@
+import { CourseMaterials } from '../course-materials/CourseMaterials'
+
 import { AboutCourse } from './about-course/AboutCourse'
 import { CourseContent } from './course-content/CourseContent'
 
@@ -12,6 +14,6 @@ export const tabsData = [
   },
   {
     label: 'Материалы',
-    content: 'Материалы',
+    content: <CourseMaterials />,
   },
 ]

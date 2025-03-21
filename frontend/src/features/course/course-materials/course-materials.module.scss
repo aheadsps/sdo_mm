@@ -1,0 +1,21 @@
+.courseMaterials {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 30px;
+}
+
+.materialsButton {
+    margin: 0 auto;
+}
+
+.allMaterials {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(13rem, auto));
+    gap: 30px 58px;
+
+  @media screen and (max-width: 655px) {
+    grid-template-columns: repeat(auto-fill, minmax(7rem, auto));
+    place-items: center center;
+  }
+}
