@@ -58,7 +58,8 @@
     grid-template-areas:
       "warning"
       "tasks"
-      "courses"
+      "courses";
+    max-width: 520px;
   }
 
   @media screen and (min-width: 1350px) {

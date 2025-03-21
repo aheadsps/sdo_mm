@@ -11,7 +11,7 @@ export const CourseContent = () => {
           <Typography variant="body_2">
             Цель урока: проверить словарный запас и научиться избегать ложных друзей переводчика.
           </Typography>
-          <Button>Открыть урок</Button>
+          <Button className={s.lessonButton}>Открыть урок</Button>
         </div>
         <Typography variant="body_2">1. Введение: Почему мы путаем слова?</Typography>
       </DropdownCard>
@@ -21,7 +21,7 @@ export const CourseContent = () => {
           <Typography variant="body_2">
             Цель урока: проверить словарный запас и научиться избегать ложных друзей переводчика.
           </Typography>
-          <Button>Открыть урок</Button>
+          <Button className={s.lessonButton}>Открыть урок</Button>
         </div>
         <Typography variant="body_2">1. Введение: Почему мы путаем слова?</Typography>
       </DropdownCard>
@@ -31,7 +31,7 @@ export const CourseContent = () => {
           <Typography variant="body_2">
             Цель урока: проверить словарный запас и научиться избегать ложных друзей переводчика.
           </Typography>
-          <Button>Открыть урок</Button>
+          <Button className={s.lessonButton}>Открыть урок</Button>
         </div>
         <Typography variant="body_2">1. Введение: Почему мы путаем слова?</Typography>
       </DropdownCard>
