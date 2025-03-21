@@ -9,9 +9,6 @@
     width: 483px;
     height: 341px;
   }
-  //   &__img {
-
-  //   }
   &__likeBox {
     width: 141px;
     height: 44px;
@@ -57,5 +54,75 @@
     gap: 24px;
     padding: 20px;
     background: var(--color-bg-gray100);
+  }
+  &__card {
+    width: 443px;
+    height: 230px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+  &__title {
+    width: 443px;
+    height: 56px;
+    font-family: Manrope;
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 130%;
+    letter-spacing: 0.25px;
+    vertical-align: middle;
+    color: var(--color-text-primary);
+  }
+  &__description {
+    width: 443px;
+    height: 150px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  &__data {
+    width: 443px;
+    height: 24px;
+    display: flex;
+    justify-content: space-between;
+  }
+  &__param {
+    width: 100px;
+    width: fit-content;
+    height: 24px;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+  &__circle {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+  }
+  &__circle_green {
+   background-color: var(--color-accent-success);
+  }
+  &__circle_orange {
+   background-color: var(--color-accent-orange);
+  }
+  &__circle_red {
+   background-color: var(--color-accent-red500);
+  }
+  &__depiction {
+    width: 443px;
+    height: 110px;
+    font-family: Moscow Sans;
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 140%;
+    letter-spacing: 0.25px;
+    vertical-align: middle;
+    color: var(--color-text-secondary);
+  }
+  &__btn {
+    width: 443px;
+    height: 40px;
+    border-radius: 8px;
+    padding: 13px 18px;
   }
 }

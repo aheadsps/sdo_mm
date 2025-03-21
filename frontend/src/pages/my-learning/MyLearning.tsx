@@ -5,12 +5,13 @@ import { Tooltipe } from '@shared/components/tooltipe/Tooltipe'
 import { withLayout } from '@shared/HOC/withLayout/withLayout'
 import { useState } from 'react'
 
+import { courses, lessons } from './mockData'
 import s from './myLearning.module.scss'
+import { Course, Lesson } from './types'
 
 const MyLearningComp: React.FC = () => {
   const [mode, setMode] = useState<string>('Назначенные курсы')
   const [isTooltipe, setIsTooltipe] = useState<boolean>(false)
-  // const [isCount, setIsCount] = useState(3)
 
   const buttons = [
     'Назначенные курсы',
@@ -18,78 +19,7 @@ const MyLearningComp: React.FC = () => {
     'Избранные курсы',
     'Завершённые курсы',
   ]
-
-  type Course = {
-    id: string,
-    name: string,
-    discription: string,
-    days: string,
-    lessons: string,
-    time: string,
-    progress: string,
-    src: string,
-  }
-  type Lesson =  {
-    id: string,
-    name: string,
-    discription: string,
-    expired: boolean,
-    days: string,
-    lessons: string,
-    time: string,
-    progress: string,
-    src: string,
-  }
-  const courses: Course[] = [
-    {
-      id: '001',
-      name: 'English Check-Up: База и первые шаги',
-      src:"/img/svg/course-01.svg",
-      discription:
-        'Чувствуешь, что в английском чего‑то не хватает? Пройди этот курс и пойми, какие темы уже освоены, а где есть пробелы. Мы разберём твои ошибки и дадим персональные рекомендации, чтобы ты учил язык быстрее и увереннее.',
-      days: '6 недель',
-      lessons: '4 урока',
-      time: '~120 минут',
-      progress: '50%',
-    },
-    {
-      id: '002',
-      name: 'English Check-Up: Продвинутый разбор',
-      src:"/img/svg/course-02.svg",
-      discription:
-        'Этот курс выявит слабые места: сложные времена, фразовые глаголы, нюансы словоупотребления. Ты получишь детальный разбор ошибок и советы, которые помогут говорить свободнее.',
-      days: '4 дня',
-      lessons: '6 уроков',
-      time: '~200 минут',
-      progress: '0%',
-    },
-  ]
-  const lessons: Lesson[] = [
-    {
-      id: '368',
-      name: 'Безопасность на рабочем месте: охрана труда в метрополитене',
-      src: "/img/svg/lesson-01.svg",
-      discription:
-        'Этот курс поможет вам разобраться с основными правилами охраны труда в метрополитене. Вы узнаете о ключевых требованиях безопасности, инструкциях по предотвращению несчастных случаев и правильных действиях в экстренных ситуациях.',
-      expired: true,
-      days: '2 дня',
-      lessons: '1 урок',
-      time: '~50 минут',
-      progress: '0%',
-    },
-    {
-      id: '593',
-      name: 'Безопасность при работе с электроинструментом',
-      src: "/img/svg/lesson-02.svg",
-      discription:
-        'Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorem explicabo dicta magnam neque modi officia!',
-      expired: false,
-      days: '2 дня',
-      lessons: '1 урок',
-      time: '~120 минут',
-      progress: '10%',
-    },
-  ]
+  
   return (
     <>
       {isTooltipe && <Tooltipe />}
@@ -121,12 +51,12 @@ const MyLearningComp: React.FC = () => {
         </div>
         <div className={s.container__content}>
           {courses.map((course: Course) => {
-            return <LessonCard course={course} key={course.id}/>
+            return <LessonCard course={course} key={course.id} />
           })}
         </div>
         <div className={s.container__content}>
-        {lessons.map((lesson) => {
-            return <LessonCard course={lesson} key={lesson.id}/>
+          {lessons.map((lesson: Lesson) => {
+            return <LessonCard course={lesson} key={lesson.id} />
           })}
         </div>
       </main>

@@ -55,4 +55,75 @@
   gap: 24px;
   padding: 20px;
   background: var(--color-bg-gray100);
+}
+.container__card {
+  width: 443px;
+  height: 230px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.container__title {
+  width: 443px;
+  height: 56px;
+  font-family: Manrope;
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 130%;
+  letter-spacing: 0.25px;
+  vertical-align: middle;
+  color: var(--color-text-primary);
+}
+.container__description {
+  width: 443px;
+  height: 150px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.container__data {
+  width: 443px;
+  height: 24px;
+  display: flex;
+  justify-content: space-between;
+}
+.container__param {
+  width: 100px;
+  width: -moz-fit-content;
+  width: fit-content;
+  height: 24px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.container__circle {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+}
+.container__circle_green {
+  background-color: var(--color-accent-success);
+}
+.container__circle_orange {
+  background-color: var(--color-accent-orange);
+}
+.container__circle_red {
+  background-color: var(--color-accent-red500);
+}
+.container__depiction {
+  width: 443px;
+  height: 110px;
+  font-family: Moscow Sans;
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 140%;
+  letter-spacing: 0.25px;
+  vertical-align: middle;
+  color: var(--color-text-secondary);
+}
+.container__btn {
+  width: 443px;
+  height: 40px;
+  border-radius: 8px;
+  padding: 13px 18px;
 }/*# sourceMappingURL=lessonCard.module.css.map */
