@@ -93,7 +93,8 @@ class Event(models.Model):
                                    default=False,
                                    help_text='Указатель является ли данный'
                                    'ивент избранным')
-    status = models.CharField(choices=settings.STATUS_EVENTS,
+    status = models.CharField(max_length=100,
+                              choices=settings.STATUS_EVENTS,
                               null=True,
                               default='expected',
                               verbose_name='статус ивента',
@@ -170,8 +171,6 @@ class Step(models.Model):
                                  verbose_name="Порядковый номер шага"
                                  )
 
-    # Тестовый блок для этого шага #/components/schemas/TestBlock
-    # test_block = models.OneToOneField(TestBlock, on_delete=models.CASCADE, related_name='steps')
 
     class Meta:
         verbose_name = "Шаг урока"
