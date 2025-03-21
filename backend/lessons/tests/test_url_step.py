@@ -107,8 +107,8 @@ class TestStepUrl(APITestCase):
         Выводим все объекты Step
         """
         url = reverse("lessons:step")
-        #response = self.client.get(url, data, format='json')
-        #self.assertEqual(response.status_code, status.HTTP_200_OK)
+        response = self.client.get(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         """
         Удаляем объект Step 204_NO_CONTENT

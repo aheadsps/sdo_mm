@@ -175,6 +175,7 @@ class Step(models.Model):
     class Meta:
         verbose_name = "Шаг урока"
         verbose_name_plural = "Шаги урока"
+        ordering = ["title"]
 
     def __str__(self):
         return f"Шаг: {self.title}"
