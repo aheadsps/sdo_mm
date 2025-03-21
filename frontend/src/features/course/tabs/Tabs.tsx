@@ -4,16 +4,16 @@ import React, { useState } from 'react'
 
 import s from './tabs.module.scss'
 
-interface Tab {
+type Tab = {
   label: string
   content: React.ReactNode
 }
 
-interface TabsProps {
+type Props = {
   tabs: Tab[]
 }
 
-export const Tabs: React.FC<TabsProps> = ({ tabs }) => {
+export const Tabs = ({ tabs }: Props) => {
   const [activeTab, setActiveTab] = useState(0)
 
   return (

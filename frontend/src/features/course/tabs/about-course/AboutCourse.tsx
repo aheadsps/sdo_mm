@@ -1,5 +1,6 @@
-import { LessonItemCard } from '@features/course/lesson-item-card/LessonItemCard'
+import { LessonItemCard } from '@features/course'
 import { Card, Typography } from '@shared/components'
+import { calculateProgress } from '@shared/utils'
 
 import { HeartFilledIcon } from '@assets/icons'
 
@@ -10,15 +11,23 @@ export const AboutCourse = () => {
     <div className={s.container}>
       {/* Progress Section */}
       <Card className={s.progress}>
-        <Typography variant="body_2" className={s.body2Text}>
-          Общий прогресс: <span>50%</span>
-        </Typography>
-        <Typography variant="body_2" className={s.body2Text}>
-          2 урока из 4
-        </Typography>
-        <div className={s.heartBlock}>
-          <HeartFilledIcon width={'16px'} height={'16px'} color="white" />
+        <div className={s.progressInfo}>
+          <div className={s.progressTexts}>
+            <Typography variant="body_2" className={s.body2Text}>
+              Общий прогресс: <span>50%</span>
+            </Typography>
+            <Typography variant="body_2" className={s.body2Text}>
+              2 урока из 4
+            </Typography>
+          </div>
+          <div className={s.progressBar}>
+            <div
+              className={s.progressBarIndicator}
+              style={{ width: `${calculateProgress(2, 4)}%` }}
+            ></div>
+          </div>
         </div>
+        <HeartFilledIcon width={'34px'} height={'34px'} />
       </Card>
 
       {/* Lessons Section */}
