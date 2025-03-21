@@ -1,0 +1,32 @@
+.lessonItemCard {
+  border: 1px solid var(--color-additional-border100);
+  border-radius: 8px;
+  padding: 10px 20px;
+  box-shadow: 0 0 15px 0 #2c0b0f0a;
+}
+
+.caption {
+  color: var(--color-text-secondary);
+}
+
+.lessonItemTitle {
+  color: var(--color-text-primary);
+}
+
+.lessonProgress {
+  display: block;
+  color: var(--color-text-secondary);
+  text-align: right;
+
+  span {
+    margin-left: 4px;
+  }
+}
+
+.lessonProgressSuccess {
+  color: var(--color-accent-success);
+}
+
+.lessonProgressOngoing {
+  color: var(--color-accent-orange);
+}

@@ -4,13 +4,14 @@
   gap: 15px;
   margin-bottom: 30px;
   text-decoration: none;
+  transition: var(--transition-effect);
 
   &:visited {
     color: var(--color-text-secondary);
   }
 
-  &:active {
-    color: var(--color-additional-icons-red);
+  &:hover {
+    transform: var(--transform-effect);
   }
 }
 

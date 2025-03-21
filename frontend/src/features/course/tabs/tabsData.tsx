@@ -1,7 +1,9 @@
+import { AboutCourse } from './about-course/AboutCourse'
+
 export const tabsData = [
   {
     label: 'О курсе',
-    content: 'О курсе',
+    content: <AboutCourse />,
   },
   {
     label: 'Содержание',
