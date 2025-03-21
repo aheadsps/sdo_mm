@@ -8,14 +8,15 @@
   position: relative;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: var(--transition-effect);
-  width: 415px;
+  max-width: 100%;
   min-height: 79px;
   margin-bottom: 12px;
 }
 .card:hover {
   transform: var(--transform-effect);
 }
-.card .leftBar {
+
+.leftBar {
   position: absolute;
   left: 0;
   top: 0;
@@ -23,27 +24,25 @@
   width: 20px;
   border-radius: 8px 0 0 8px;
 }
-.card .content {
+
+.content {
   display: flex;
   justify-content: space-between;
   align-items: center;
   width: 100%;
   padding-left: 15px;
 }
-.card .title {
+
+.title {
   color: var(--color-text-primary);
 }
-.card .subtitle {
+
+.subtitle {
   color: var(--color-text-secondary);
   margin-top: 10px;
   padding-left: 15px;
 }
-.card .icon {
+
+.icon {
   color: var(--color-additional-red800);
-}
-.card .urgent {
-  background-color: var(--color-accent-negative);
-}
-.card .warning {
-  background-color: var(--color-accent-orange);
 }/*# sourceMappingURL=task.module.css.map */

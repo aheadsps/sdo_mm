@@ -31,6 +31,7 @@ class TestEndpointsEvents(APITestCase):
             profession=self.profession,
             password="password",
             date_commencement=date_commencement,
+            is_staff=True,
         )
         group_profession = users_models.ProfessionGroup._default_manager.create(
             profession=self.profession,
@@ -54,7 +55,7 @@ class TestEndpointsEvents(APITestCase):
         )
         self.client.force_authenticate(self.user)
 
-    def test_get_course(self):
+    def test_get_event(self):
         """
         Тест получение Эвента по ID
         """
@@ -167,7 +168,7 @@ class TestEndpointsEvents(APITestCase):
 
     def test_create_event(self):
         """
-        Тест создания эвента c ошибкой
+        Тест создания эвента
         """
         url = "/api/v1/events"
         data = dict(
@@ -205,6 +206,40 @@ class TestEndpointsEvents(APITestCase):
              'status': 'expected',
              }
         )
+
+    def test_update_event(self):
+        """
+        Тест обновления эвента
+        """
+        url = f"/api/v1/events/{self.event.pk}"
+        data = dict(start_date=datetime.datetime(
+            year=2028,
+            month=1,
+            day=1,
+            ),
+                    end_date=datetime.datetime(
+                        year=2029,
+                        month=1,
+                        day=1,
+                    ),
+                    favorite=True,
+                    )
+        response = self.client.patch(
+            path=url,
+            data=data,
+            format='json',
+        )
+        self.assertEqual(response.status_code, 200)
+
+    def test_delete_event(self):
+        """
+        Тест удаления эвента
+        """
+        url = f"/api/v1/events/{self.event.pk}"
+        response = self.client.delete(
+            path=url,
+        )
+        self.assertEqual(response.status_code, 204)
 
     def test_get_list_current_events(self):
         """
