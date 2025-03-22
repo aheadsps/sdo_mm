@@ -1,22 +1,22 @@
 import { createBrowserRouter } from 'react-router-dom'
 
-import { Auth } from '@pages/auth'
-import AuthPage from '@pages/AuthPage/AuthPage'
-import { Main } from '@pages/main'
+import { AuthPage } from '@pages/auth'
+import { CoursePage } from '@pages/course/CoursePage'
+import { MainPage } from '@pages/main'
 import { MyLearning } from '@pages/my-learning/MyLearning'
 
 export const router = createBrowserRouter([
   {
-    path: '/auth',
-    element: <Auth />,
-  },
-  {
     path: '/main',
-    element: <Main />,
+    element: <MainPage />,
   },
   {
     path: '/learning',
     element: <MyLearning />,
+  },
+  {
+    path: '/learning/course',
+    element: <CoursePage />,
   },
   {
     path: '/library',
@@ -24,10 +24,10 @@ export const router = createBrowserRouter([
   },
   {
     path: '/news',
-    element: <Main />,
+    element: <MainPage />,
   },
   {
-    path: '/authform',
+    path: '/auth',
     element: <AuthPage />,
   },
   {

@@ -10,10 +10,17 @@
   transition: var(--transition-effect);
   max-width: 100%;
   min-height: 79px;
-  margin-bottom: 12px;
 
   &:hover {
     transform: var(--transform-effect);
+  }
+
+  &:not(:last-child) {
+    margin-bottom: 12px;
+  }
+
+  &:last-child {
+    margin-bottom: 0;
   }
 }
 

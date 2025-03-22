@@ -1,25 +1,24 @@
+import { Slot } from '@radix-ui/react-slot'
 import clsx from 'clsx'
 import { ComponentPropsWithRef } from 'react'
-import { ElementType } from 'react'
 
 import s from './button.module.scss'
 
-type Props<T extends ElementType = 'button'> = {
+type Props = {
   variant?: 'primary' | 'secondary'
-  as?: T
-} & ComponentPropsWithRef<T>
+  asChild?: boolean
+} & ComponentPropsWithRef<'button'>
 
-export const Button = <T extends ElementType = 'button'>({
-  variant = 'primary',
-  as: Component = 'button',
-  className,
-  children,
-  ...restProps
-}: Props<T>) => {
+export const Button = ({ asChild, disabled, className, variant = 'primary', ...props }: Props) => {
+  const Component = asChild ? Slot : 'button'
   const chosenButton = variant === 'secondary' ? s.secondary : s.primary
   return (
-    <Component className={clsx(s.button, chosenButton, className as string)} {...restProps}>
-      {children}
-    </Component>
+    <Component
+      className={clsx(s.button, chosenButton, className as string, disabled && s.disabled)}
+      disabled={disabled}
+      {...props}
+    />
   )
 }
+
+Button.displayName = 'Button'

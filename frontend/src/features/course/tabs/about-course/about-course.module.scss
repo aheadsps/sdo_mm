@@ -1,0 +1,98 @@
+.container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-areas:
+    'lessons progress'
+    'lessons goal';
+  gap: 20px;
+  width: 100%;
+  align-items: start;
+
+  @media (max-width: 1349px) {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      'progress'
+      'lessons'
+      'goal';
+  }
+
+  @media screen and (min-width: 1350px) {
+    grid-template-rows: 0.2fr 2fr;
+  }
+}
+
+.progress {
+  grid-area: progress;
+  display: flex;
+  justify-content: space-between;
+}
+
+.progressInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.progressTexts {
+  display: flex;
+  align-items: center;
+  gap: 41px;
+
+  @media screen and (max-width: 767px) {
+    flex-direction: column;
+    gap: 0;
+    align-items: flex-start;
+    font-size: 14px;
+  }
+}
+
+.progressBar {
+  height: 8px;
+  border-radius: 8px;
+  width: 100%;
+  border: 1px solid var(--color-additional-border100);
+}
+
+.progressBarIndicator {
+  background-color: var(--color-accent-red500);
+  height: 100%;
+}
+
+.icon {
+  cursor: pointer;
+}
+
+.lessons {
+  grid-area: lessons;
+  max-height: 616px;
+  overflow-y: auto;
+}
+
+.lessonItems {
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.lessonItemButton {
+  width: 100%;
+  margin-top: 12px;
+}
+
+.goal {
+  grid-area: goal;
+}
+
+.courseGoalTitle {
+  margin-bottom: 30px;
+  color: var(--color-text-primary);
+}
+
+.courseGoalDescription {
+  color: var(--color-text-primary);
+}
+
+.body2Text {
+  color: var(--color-text-secondary);
+}
