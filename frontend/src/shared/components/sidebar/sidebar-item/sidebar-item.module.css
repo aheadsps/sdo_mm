@@ -10,6 +10,7 @@
   border-radius: 8px;
   transition: var(--transition-effect);
 }
+
 .sidebarItemLink:hover {
   color: var(--color-accent-red500);
   transform: var(--transform-effect);
@@ -18,4 +19,4 @@
 .sidebarItemLink.active {
   background-color: var(--color-accent-red500);
   color: var(--color-bg-main);
-}/*# sourceMappingURL=sidebar-item.module.css.map */
+}

@@ -3,6 +3,7 @@
   border-radius: 8px;
   transition: var(--transition-effect);
 }
+
 .button:hover {
   transform: var(--transform-effect);
 }
@@ -17,4 +18,4 @@
   background-color: var(--color-bg-main);
   border: 1px solid var(--color-accent-red500);
   color: var(--color-text-primary);
-}/*# sourceMappingURL=button.module.css.map */
+}

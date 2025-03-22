@@ -1,0 +1,48 @@
+.authPage__container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 100vh;
+  width: 100%;
+  max-width: 1350px;
+  margin: 0 auto;
+  position: relative;
+  overflow: hidden;
+
+  &__content {
+    width: 100%;
+    max-width: 1350px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  &____img {
+    position: absolute;
+    inset: 85px 0 0;
+    z-index: -1;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  &__img__content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    max-width: 1350px;
+    margin: 0 auto;
+  }
+}
+
+.authPage__image {
+  @media (max-width: 767px) {
+    width: 69%;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    z-index: 1;
+  }
+}
