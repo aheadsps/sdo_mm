@@ -1,5 +1,5 @@
 .sidebar {
-  width: 294px;
+  min-width: 294px;
   background-color: var(--color-bg-main);
   height: calc(100vh - 103px);
   position: relative;
@@ -29,8 +29,8 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  width: 253px; 
   padding: 20px;
+  width: 294px;
 
   div {
     width: 253px;
