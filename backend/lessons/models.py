@@ -4,7 +4,7 @@ from django.utils.translation import gettext_lazy as _
 from django.contrib.auth import get_user_model
 from django.conf import settings
 
-from lessons.utils import (path_maker_question ,
+from backend.lessons.utils import (path_maker_question,
                                    path_maker_course,
                                    )
 
@@ -42,7 +42,7 @@ class Question(models.Model):
     text = models.TextField(verbose_name='текст вопроса',
                             help_text='Текст вопроса',
                             )
-    image = models.ImageField(upload_to=path_maker_question ,
+    image = models.ImageField(upload_to=path_maker_question,
                               verbose_name='картинка',
                               help_text='Картинка для вопроса',
                               null=True,
@@ -95,7 +95,7 @@ class Event(models.Model):
                                              'ивент избранным')
     status = models.CharField(choices=settings.STATUS_EVENTS,
                               null=True,
-                              default='process',
+                              default='expected',
                               verbose_name='статус ивента',
                               help_text='Текущий статус данного ивента',
                               )
@@ -164,16 +164,16 @@ class Lesson(models.Model):
                             blank=False,
                             help_text="Название урока",
                             )
-    serial = models.IntegerField(_("Номер"),
-                                 null=False,
-                                 blank=False,
-                                 validators=[MinValueValidator(1)],
-                                 default=1,
-                                 help_text="Порядковый номер урока"
-                                 )
+    serial = models.ImageField(_("Номер"),
+                               null=False,
+                               blank=False,
+                               validators=[MinValueValidator(1)],
+                               default=1,
+                               help_text="Порядковый номер урока"
+                               )
     course = models.ForeignKey(Course,
-                               verbose_name=_("Курс"),
-                               on_delete=models.CASCADE,
+                               _("Курс"),
+                               on_delete=models.SET_NULL,
                                related_name='lessons')
 
     # step = models.ManyToManyField(_("Шаг"),
