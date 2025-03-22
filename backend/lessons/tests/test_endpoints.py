@@ -8,7 +8,7 @@ from lessons import models as lessons_models
 from users import models as users_models
 
 
-class TestEndpointsEvents(APITestCase):
+class TestEndpoints(APITestCase):
     """
     Тесты Эндпоинтов
     """
