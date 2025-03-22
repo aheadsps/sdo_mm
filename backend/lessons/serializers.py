@@ -59,10 +59,13 @@ class QuestionSerializer(serializers.ModelSerializer):
         return question
 
 
-class CourseSerializer(serializers.ModelSerializer):
+class CreateCourseSerializer(serializers.ModelSerializer):
     """
     Сериализатор на обработку создания и обновления курсов
     """
+
+    experiences = user_serializers.WorkExperienceSerializer(many=True)
+    profession = user_serializers.ProfessionSerializer()
 
     # ПОСЛЕ ДОБАВЛЕНИЕ LESSON ОБЯЗАТЕЛЬНО ДОБАВИТЬ И ТУТ
     class Meta:
@@ -76,10 +79,36 @@ class CourseSerializer(serializers.ModelSerializer):
             "experiences",
         )
 
+    def create(self, validated_data):
+        # Логика по созданиею курса вместе с уроком и дальнейшей целочке по порядку
+        # Основа конструктора
+        return super().create(validated_data)
+
+
+class CourseSerializer(serializers.ModelSerializer):
+    """
+    Сериализатор Оптимизарованого вывода
+    """
+
+    # ПОСЛЕ ДОБАВЛЕНИЕ LESSON ОБЯЗАТЕЛЬНО ДОБАВИТЬ И ТУТ
+    class Meta:
+        model = models.Course
+        fields = (
+            "id",
+            "name",
+            "description",
+            "beginer",
+            "create_date",
+            "update_date",
+            "image",
+            "profession",
+            "experiences",
+        )
+
 
 class ViewCourseSerializer(serializers.ModelSerializer):
     """
-    Сериализатор вывода курса
+    Сериализатор вывода детального курса
     """
 
     experiences = user_serializers.WorkExperienceSerializer(many=True)
@@ -106,7 +135,7 @@ class EventSerializer(serializers.ModelSerializer):
     Сериализатор Эвента
     """
 
-    course = CourseSerializer()
+    course = ViewCourseSerializer()
 
     class Meta:
         model = models.Event

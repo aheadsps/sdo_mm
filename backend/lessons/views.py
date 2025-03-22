@@ -1,4 +1,4 @@
-from rest_framework import permissions, status
+from rest_framework import permissions, status, mixins
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
@@ -7,14 +7,21 @@ from loguru import logger
 from lessons import models
 from lessons import serializers
 from lessons import viewsets as own_viewsets
-from lessons.permissions import IsAdminOrIsStaff, OwnerEventPermission
+from lessons.permissions import (
+    IsAdminOrIsStaff,
+    OwnerEventPermission,
+    CanReadCourse,
+    )
 
 
-class EventViewSet(own_viewsets.GetUpdateDeleteViewSet):
+class EventViewSet(own_viewsets.GetCreateUpdateDeleteViewSet):
     """
     Виювсет эвента
     """
-    queryset = models.Event._default_manager.get_queryset()
+    queryset = (models.Event
+                ._default_manager
+                .get_queryset()
+                .select_related('course'))
     serializer_class = serializers.EventSerializer
     lookup_field = 'pk'
     lookup_url_kwarg = 'event_id'
@@ -29,7 +36,8 @@ class EventViewSet(own_viewsets.GetUpdateDeleteViewSet):
         elif self.action == 'currents':
             permission_classes = [permissions.IsAuthenticated]
         else:
-            permission_classes = [IsAdminOrIsStaff]
+            permission_classes = [permissions.IsAuthenticated &
+                                  IsAdminOrIsStaff]
         logger.debug(f'permisson class now {permission_classes}')
         return [permission() for permission in permission_classes]
 
@@ -66,3 +74,47 @@ class EventViewSet(own_viewsets.GetUpdateDeleteViewSet):
             return self.get_paginated_response(serializer.data)
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
+
+
+class CourseViewSet(mixins.ListModelMixin,
+                    own_viewsets.GetCreateUpdateDeleteViewSet,
+                    ):
+    """
+    Виювсет CRUD Курса
+    """
+    queryset = (models.Course
+                ._default_manager
+                .get_queryset()
+                .select_related('profession',
+                                'experiences',
+                                ))
+    serializer_class = serializers.ViewCourseSerializer
+    lookup_field = 'pk'
+    lookup_url_kwarg = 'course_id'
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_permissions(self):
+        logger.debug(f'action is {self.action}')
+        if self.action == 'retrieve':
+            permission_classes = [(permissions.IsAuthenticated &
+                                  OwnerEventPermission) |
+                                  IsAdminOrIsStaff]
+        else:
+            permission_classes = [permissions.IsAuthenticated &
+                                  IsAdminOrIsStaff]
+        logger.debug(f'permisson class now {permission_classes}')
+        return [permission() for permission in permission_classes]
+
+
+    def create(self, request, *args, **kwargs):
+        self.serializer_class = serializers.CreateCourseSerializer
+        return super().create(request, *args, **kwargs)
+
+    def update(self, request, *args, **kwargs):
+        self.serializer_class = serializers.CreateCourseSerializer
+        return super().update(request, *args, **kwargs)
+
+    def list(self, request, *args, **kwargs):
+        self.queryset = models.Course._default_manager.get_queryset()
+        self.serializer_class = serializers.CourseSerializer
+        return super().list(request, *args, **kwargs)

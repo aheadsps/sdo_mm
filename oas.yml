@@ -217,7 +217,7 @@ paths:
           $ref: "#/components/responses/Forbidden"
         "422":
           $ref: "#/components/responses/UnprocessableEntity"
-    put:
+    patch:
       operationId: api_events_patrial_update
       parameters:
         - in: path
@@ -494,7 +494,7 @@ paths:
           $ref: "#/components/responses/NotFound"
         "422":
           $ref: "#/components/responses/UnprocessableEntity"
-    put:
+    patch:
       operationId: api_courses_patrial_update
       parameters:
         - in: path
