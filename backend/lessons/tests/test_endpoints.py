@@ -34,6 +34,12 @@ class TestEndpoints(APITestCase):
             date_commencement=date_commencement,
             is_staff=True,
         )
+        self.user_1 = get_user_model()._default_manager.create(
+            email="user1@gmail.com",
+            profession=self.profession,
+            password="password",
+            date_commencement=date_commencement,
+        )
         group_profession = users_models.ProfessionGroup._default_manager.create(
             profession=self.profession,
         )
@@ -265,6 +271,21 @@ class TestEndpoints(APITestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
 
+    def test_permission_get_course(self):
+        """
+        Тест блокировки получения доступа к курсу
+        """
+        self.client.logout()
+        self.client.force_authenticate(self.user_1)
+        url = reverse(
+            "lessons:course-detail",
+            kwargs={"course_id": self.course.pk},
+        )
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 403)
+        self.client.logout()
+        self.client.force_authenticate(self.user)
+
     def test_create_course(self):
         """
         Тест создания курса
@@ -295,3 +316,102 @@ class TestEndpoints(APITestCase):
              'name': 'some_course',
              'profession': self.profession.pk},
         )
+
+    def test_permission_create_course(self):
+        """
+        Тест прав доступа к созданию курса
+        """
+        self.client.logout()
+        self.client.force_authenticate(self.user_1)
+        url = "/api/v1/courses"
+        data = dict(
+            name="some_course",
+            description="some_desc",
+            beginer=True,
+            image=None,
+            profession=self.profession.pk,
+            experiences=[
+                self.experience.pk,
+            ],
+        )
+        response = self.client.post(
+            path=url,
+            data=data,
+            format="json",
+        )
+        self.assertEqual(response.status_code, 403)
+        self.client.logout()
+        self.client.force_authenticate(self.user)
+
+    def test_update_course(self):
+        """
+        Тест обновления курса
+        """
+        url = f"/api/v1/courses/{self.course.pk}"
+        data = dict(
+            name="some_course_1",
+            description="some_desc_1",
+            beginer=False,
+            image=None,
+            profession=self.profession.pk,
+            experiences=[
+                self.experience.pk,
+            ],
+        )
+        response = self.client.patch(
+            path=url,
+            data=data,
+            format="json",
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['name'], 'some_course_1')
+
+    def test_permission_update_course(self):
+        """
+        Тест прав доступа к обновлению курса
+        """
+        self.client.logout()
+        self.client.force_authenticate(self.user_1)
+        url = f"/api/v1/courses/{self.course.pk}"
+        data = dict(
+            name="some_course_1",
+            description="some_desc_1",
+            beginer=False,
+            image=None,
+            profession=self.profession.pk,
+            experiences=[
+                self.experience.pk,
+            ],
+        )
+        response = self.client.patch(
+            path=url,
+            data=data,
+            format="json",
+        )
+        self.assertEqual(response.status_code, 403)
+        self.client.logout()
+        self.client.force_authenticate(self.user)
+
+    def test_delete_course(self):
+        """
+        Тест удаления курса
+        """
+        url = f'/api/v1/courses/{self.course.pk}'
+        response = self.client.delete(
+            path=url,
+        )
+        self.assertEqual(response.status_code, 204)
+
+    def test_permission_detele_course(self):
+        """
+        Тест прав доступа на удаление курса
+        """
+        self.client.logout()
+        self.client.force_authenticate(self.user_1)
+        url = f'/api/v1/courses/{self.course.pk}'
+        response = self.client.delete(
+            path=url,
+        )
+        self.assertEqual(response.status_code, 403)
+        self.client.logout()
+        self.client.force_authenticate(self.user)
