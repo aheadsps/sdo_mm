@@ -2,8 +2,7 @@ from rest_framework import generics, permissions
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from lessons import models
-from lessons import serializers
+from lessons import models, serializers
 from lessons import viewsets as own_viewsets
 from lessons.permissions import IsAdminOrIsStaff
 
@@ -12,13 +11,14 @@ class EventViewSet(own_viewsets.GetUpdateDeleteViewSet):
     """
     Виювсет эвента
     """
+
     queryset = models.Event._default_manager.get_queryset()
     serializer_class = serializers.EventSerializer
-    lookup_field = 'pk'
-    lookup_url_kwarg = 'event_id'
+    lookup_field = "pk"
+    lookup_url_kwarg = "event_id"
 
     def get_permissions(self):
-        if not self.action == 'retrieve':
+        if not self.action == "retrieve":
             permission_classes = [IsAdminOrIsStaff]
         else:
             permission_classes = [permissions.IsAuthenticated]

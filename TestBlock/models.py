@@ -2,8 +2,14 @@ from django.db import models
 
 
 class TestBlock(models.Model):
+    """
+    Модель представления тестового блока.
+    """
+
     description = models.TextField(verbose_name="описание")
-    lessons = models.OneToOneField(Lesson, on_delete=models.CASCADE, related_name="test_block_lessons")
+    lessons = models.OneToOneField(
+        Lesson, on_delete=models.CASCADE, related_name="test_block_lessons"
+    )
 
     class Meta:
         verbose_name = "тестовый блок"

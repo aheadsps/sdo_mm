@@ -1,4 +1,5 @@
 from django.contrib import admin
+
 from lessons import models
 
 
@@ -7,7 +8,8 @@ class AnswerAdmin(admin.ModelAdmin):
     """
     Админ панель Ответа
     """
-    list_display = ('text', 'correct', 'question')
+
+    list_display = ("text", "correct", "question")
 
 
 @admin.register(models.Question)
@@ -15,4 +17,5 @@ class QuestionAdmin(admin.ModelAdmin):
     """
     Админ панель Вопроса
     """
-    list_display = ('text', 'image')
+
+    list_display = ("text", "image")

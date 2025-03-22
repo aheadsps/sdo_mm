@@ -1,8 +1,8 @@
 import datetime
 
-from rest_framework.test import APITestCase
 from django.contrib.auth import get_user_model
 from django.urls import reverse
+from rest_framework.test import APITestCase
 
 from lessons import models as lessons_models
 from users import models as users_models

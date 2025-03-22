@@ -1,7 +1,6 @@
 from rest_framework.test import APITestCase
 
-from lessons import serializers
-from lessons import models
+from lessons import models, serializers
 
 
 class TestSerializers(APITestCase):
@@ -11,18 +10,21 @@ class TestSerializers(APITestCase):
 
     def setUp(self):
         self.question_date = dict(
-            text='Question',
+            text="Question",
             answers=[
-                dict(text='answer_1',
-                     correct=True,
-                     ),
-                dict(text='answer_2',
-                     correct=False,
-                     ),
-                dict(text='answer_3',
-                     correct=False,
-                     ),
-            ]
+                dict(
+                    text="answer_1",
+                    correct=True,
+                ),
+                dict(
+                    text="answer_2",
+                    correct=False,
+                ),
+                dict(
+                    text="answer_3",
+                    correct=False,
+                ),
+            ],
         )
 
     def test_create_question_with_answer(self):
@@ -34,6 +36,7 @@ class TestSerializers(APITestCase):
         instance = serializer.save()
         self.assertEqual(models.Question._default_manager.count(), 1)
         self.assertEqual(models.Answer._default_manager.count(), 3)
-        self.assertEqual(models.Answer._default_manager.first().question,
-                         instance,
-                         )
+        self.assertEqual(
+            models.Answer._default_manager.first().question,
+            instance,
+        )

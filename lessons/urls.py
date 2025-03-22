@@ -9,8 +9,8 @@ app_name = LessonsConfig.name
 router = routers.SimpleRouter(
     trailing_slash=False,
 )
-router.register(prefix=r'events', viewset=views.EventViewSet)
+router.register(prefix=r"events", viewset=views.EventViewSet)
 
 urlpatterns = [
-    path('', include(router.urls)),
+    path("", include(router.urls)),
 ]

@@ -1,6 +1,8 @@
-from users.models import Profession, ProfessionGroup, User
 import datetime
+
 from rest_framework.test import APITestCase
+
+from users.models import Profession, ProfessionGroup, User
 
 
 class TestEmailUserManagerAddProf(APITestCase):

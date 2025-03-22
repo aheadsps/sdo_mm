@@ -8,6 +8,4 @@ app_name = TestblockConfig.name
 router = DefaultRouter()
 router.register(r"test_block", TestBlockViewSet.as_view(), basename="test_block")
 
-urlpatterns = [
-
-              ] + router.urls
+urlpatterns = [] + router.urls
