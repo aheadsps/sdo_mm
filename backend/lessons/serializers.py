@@ -64,9 +64,6 @@ class CreateCourseSerializer(serializers.ModelSerializer):
     Сериализатор на обработку создания и обновления курсов
     """
 
-    experiences = user_serializers.WorkExperienceSerializer(many=True)
-    profession = user_serializers.ProfessionSerializer()
-
     # ПОСЛЕ ДОБАВЛЕНИЕ LESSON ОБЯЗАТЕЛЬНО ДОБАВИТЬ И ТУТ
     class Meta:
         model = models.Course
@@ -135,7 +132,7 @@ class EventSerializer(serializers.ModelSerializer):
     Сериализатор Эвента
     """
 
-    course = ViewCourseSerializer()
+    course = CourseSerializer()
 
     class Meta:
         model = models.Event

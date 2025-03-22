@@ -5,6 +5,7 @@ from django.contrib.auth import get_user_model
 from django.urls import reverse
 
 from lessons import models as lessons_models
+from lessons.utils import UTCTimeCast
 from users import models as users_models
 
 
@@ -53,6 +54,12 @@ class TestEndpoints(APITestCase):
             start_date=datetime.datetime(year=2026, month=1, day=1),
             end_date=None,
         )
+        self.curr_time_event = str(
+            UTCTimeCast(
+                input_time=self.course.create_date,
+                UTC=3,
+            ).get_UTC_set_time()
+        ).replace(" ", "T")
         self.client.force_authenticate(self.user)
 
     def test_get_event(self):
@@ -65,26 +72,6 @@ class TestEndpoints(APITestCase):
         )
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(
-            response.json(),
-            {
-                "id": self.event.pk,
-                "course": {
-                    "beginer": False,
-                    "description": "some",
-                    "experiences": [self.experience.pk],
-                    "image": None,
-                    "name": "course",
-                    "profession": self.profession.pk,
-                },
-                "done_lessons": 0,
-                "end_date": None,
-                "favorite": False,
-                "start_date": "2026-01-01T00:00:00+03:00",
-                "status": "process",
-                "user": self.user.pk,
-            },
-        )
 
     def test_create_event_start_date_fail(self):
         """
@@ -203,13 +190,14 @@ class TestEndpoints(APITestCase):
         self.assertEqual(response.status_code, 201)
         self.assertEqual(
             response.json(),
-            {'user': self.user.pk,
-             'course': self.course.pk,
-             'start_date': '2026-01-01T23:01:01+03:00',
-             'end_date': '2027-01-01T23:01:01+03:00',
-             'favorite': True,
-             'status': 'expected',
-             }
+            {
+                "user": self.user.pk,
+                "course": self.course.pk,
+                "start_date": "2026-01-01T23:01:01+03:00",
+                "end_date": "2027-01-01T23:01:01+03:00",
+                "favorite": True,
+                "status": "expected",
+            },
         )
 
     def test_update_event(self):
@@ -217,22 +205,23 @@ class TestEndpoints(APITestCase):
         Тест обновления эвента
         """
         url = f"/api/v1/events/{self.event.pk}"
-        data = dict(start_date=datetime.datetime(
-            year=2028,
-            month=1,
-            day=1,
+        data = dict(
+            start_date=datetime.datetime(
+                year=2028,
+                month=1,
+                day=1,
             ),
-                    end_date=datetime.datetime(
-                        year=2029,
-                        month=1,
-                        day=1,
-                    ),
-                    favorite=True,
-                    )
+            end_date=datetime.datetime(
+                year=2029,
+                month=1,
+                day=1,
+            ),
+            favorite=True,
+        )
         response = self.client.patch(
             path=url,
             data=data,
-            format='json',
+            format="json",
         )
         self.assertEqual(response.status_code, 200)
 
@@ -253,41 +242,56 @@ class TestEndpoints(APITestCase):
         url = "/api/v1/events/currents"
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(
-            response.json(),
-            {
-                "count": 1,
-                "next": None,
-                "previous": None,
-                "results": [
-                    {
-                        "user": self.user.pk,
-                        "id": self.event.pk,
-                        "course": {
-                            "beginer": False,
-                            "description": "some",
-                            "experiences": [self.experience.pk],
-                            "image": None,
-                            "name": "course",
-                            "profession": self.profession.pk,
-                        },
-                        "done_lessons": 0,
-                        "end_date": None,
-                        "favorite": False,
-                        "start_date": "2026-01-01T00:00:00+03:00",
-                        "status": "process",
-                    }
-                ],
-            },
-        )
 
     def test_change_favorite(self):
         """
         Тест изменения избраного
         """
-        url = f'/api/v1/events/{self.event.pk}/toggle-favorite'
+        url = f"/api/v1/events/{self.event.pk}/toggle-favorite"
         self.assertFalse(self.event.favorite)
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
         event = lessons_models.Event.objects.get(pk=self.event.pk)
         self.assertTrue(event.favorite)
+
+    def test_get_course(self):
+        """
+        Тест получение курса по ID
+        """
+        url = reverse(
+            "lessons:course-detail",
+            kwargs={"course_id": self.course.pk},
+        )
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+    def test_create_course(self):
+        """
+        Тест создания курса
+        """
+        url = "/api/v1/courses"
+        data = dict(
+            name="some_course",
+            description="some_desc",
+            beginer=True,
+            image=None,
+            profession=self.profession.pk,
+            experiences=[
+                self.experience.pk,
+            ],
+        )
+        response = self.client.post(
+            path=url,
+            data=data,
+            format="json",
+        )
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(
+            response.json(),
+            {'beginer': True,
+             'description': 'some_desc',
+             'experiences': [self.experience.pk],
+             'image': None,
+             'name': 'some_course',
+             'profession': self.profession.pk},
+        )

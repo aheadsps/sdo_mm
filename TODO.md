@@ -28,6 +28,29 @@ docker-compose up
 - По адрессу localhost:8080 Backend
 - По адрессу localhost:5173 Frontend
 
+Для тестирования нужно перейти во внуть контейнера.
+
+- Найдите контейнер:
+
+```bash
+docker ps
+```
+
+Ищите контейнер с именем у которого есть django и позьмите первые 3 символа CONTAITER ID
+
+- Войдите в контейнер:
+
+```bash
+docker exec -it YourCONTAINERID bash
+```
+
+после этого вы попадате во внурть контейнера где находится ваше приложение Джанго
+и можете стандартно запускать тесты внутри контейнера
+
+```bash
+python manage.py test
+```
+
 ### Admin
 
 email: <admin@admin.com>

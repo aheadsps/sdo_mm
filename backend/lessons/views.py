@@ -85,9 +85,8 @@ class CourseViewSet(mixins.ListModelMixin,
     queryset = (models.Course
                 ._default_manager
                 .get_queryset()
-                .select_related('profession',
-                                'experiences',
-                                ))
+                .select_related('profession')
+                .prefetch_related('experiences'))
     serializer_class = serializers.ViewCourseSerializer
     lookup_field = 'pk'
     lookup_url_kwarg = 'course_id'

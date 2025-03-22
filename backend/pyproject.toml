@@ -42,6 +42,7 @@ uritemplate = "4.1.1"
 urllib3 = "2.3.0"
 gunicorn = "^23.0.0"
 loguru = "^0.7.3"
+pydantic = "^2.10.6"
 
 
 [build-system]
