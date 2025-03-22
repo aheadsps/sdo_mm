@@ -40,13 +40,13 @@ class CanReadCourse(permissions.BasePermission):
     Права доступа на чтение курса
     """
     message = {
-        'forbidden': 'Доступ запрещен',
+        'forbidden': 'Данный курс не доступен',
         }
     code = status.HTTP_403_FORBIDDEN
 
     def has_object_permission(self, request, view, course):
+        if not course:
+            return
         user = request.user
         event = models.Event.objects.filter(Q(user=user) & Q(course=course))
-        return (event.exists()
-                or (request.user.is_staff
-                    or request.user.is_superuser))
+        return event.exists()

@@ -97,7 +97,7 @@ class CourseViewSet(mixins.ListModelMixin,
         logger.debug(f'action is {self.action}')
         if self.action == 'retrieve':
             permission_classes = [(permissions.IsAuthenticated &
-                                  OwnerEventPermission) |
+                                  CanReadCourse) |
                                   IsAdminOrIsStaff]
         else:
             permission_classes = [permissions.IsAuthenticated &
@@ -105,8 +105,8 @@ class CourseViewSet(mixins.ListModelMixin,
         logger.debug(f'permisson class now {permission_classes}')
         return [permission() for permission in permission_classes]
 
-
     def create(self, request, *args, **kwargs):
+        self.check_object_permissions(request=request, obj=None)
         self.serializer_class = serializers.CreateCourseSerializer
         return super().create(request, *args, **kwargs)
 
@@ -115,6 +115,7 @@ class CourseViewSet(mixins.ListModelMixin,
         return super().update(request, *args, **kwargs)
 
     def list(self, request, *args, **kwargs):
+        self.check_object_permissions(request=request, obj=None)
         self.queryset = models.Course._default_manager.get_queryset()
         self.serializer_class = serializers.CourseSerializer
         return super().list(request, *args, **kwargs)
