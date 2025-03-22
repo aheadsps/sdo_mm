@@ -1,5 +1,5 @@
 const PngIcon = () => (
-  <svg width="60" height="70" viewBox="0 0 60 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <svg width="80" height="81" viewBox="0 0 80 81" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path
       d="M62.0923 0.208984L77.915 16.7027V79.4245H18.8076V79.6292H78.1169V16.9103L62.0923 0.208984Z"
       fill="#909090"

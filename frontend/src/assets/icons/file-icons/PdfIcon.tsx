@@ -1,5 +1,5 @@
 const PdfIcon = () => (
-  <svg width="60" height="70" viewBox="0 0 60 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <svg width="80" height="81" viewBox="0 0 80 81" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path
       d="M62.8086 0.924805L78.7441 17.5363V80.7058H19.2148V80.912H78.9475V17.7454L62.8086 0.924805Z"
       fill="#909090"

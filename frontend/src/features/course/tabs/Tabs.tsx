@@ -1,13 +1,9 @@
 import { Button, Typography } from '@shared/components'
 import clsx from 'clsx'
-import React, { useState } from 'react'
+import { useState } from 'react'
 
 import s from './tabs.module.scss'
-
-type Tab = {
-  label: string
-  content: React.ReactNode
-}
+import { Tab } from './tabsData'
 
 type Props = {
   tabs: Tab[]

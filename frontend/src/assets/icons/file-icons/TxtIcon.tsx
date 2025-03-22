@@ -1,5 +1,5 @@
 const TxtIcon = () => (
-  <svg width="60" height="70" viewBox="0 0 60 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <svg width="80" height="81" viewBox="0 0 80 81" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path
       d="M62.5923 1.15332L78.415 17.6471V80.3688H19.3076V80.5736H78.6169V17.8547L62.5923 1.15332Z"
       fill="#909090"

@@ -1,5 +1,5 @@
 const XlsIcon = () => (
-  <svg width="60" height="70" viewBox="0 0 60 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <svg width="80" height="81" viewBox="0 0 80 81" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path
       d="M62.5923 0.838867L78.415 17.3326V80.0544H19.3076V80.2591H78.6169V17.5402L62.5923 0.838867Z"
       fill="#909090"
