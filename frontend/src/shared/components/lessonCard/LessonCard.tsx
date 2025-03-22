@@ -4,7 +4,7 @@ import { ClockIcon, DislikeIcon, HourglassIcon, LikeIcon, StickersIcon } from '@
 import { Course } from '@pages/my-learning'
 
 import { Button } from '../button'
-import ImageComponent from '../img/ImageComponent'
+import { ImageComponent } from '../image'
 
 import s from './lessonCard.module.scss'
 
@@ -63,7 +63,7 @@ export const LessonCard: React.FC<Props> = (props) => {
             <p className={s.container__depiction}>{item.description}</p>
           </div>
         </div>
-        <Button className={s.container__btn} children="Перейти к обучению"/>
+        <Button className={s.container__btn} children="Перейти к обучению" />
       </div>
     </div>
   )

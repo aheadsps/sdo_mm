@@ -1,4 +1,4 @@
-@import '../../template';
+/* @import '../../template'; */
 
 .container {
   width: 100%;
@@ -7,41 +7,49 @@
   display: flex;
   flex-direction: column;
   gap: 30px;
-  @include _screenTablet {
+
+  /* @include screen-tablet {
     min-width: 435px;
     
-  }
-  @include _screenMobile {
+  } */
+
+  /* @include screen-mobile {
     
-  }
+  } */
+
   &__headBox {
     width: 100%;
     height: 45px;
     display: flex;
     gap: 14px;
-    @include _screenTablet {
+
+    /* @include _screenTablet {
       min-width: 435px;
       
-    }
+    } */
   }
+
   &__btnBox {
-    width: 924px;
     width: 94%;
     height: 45px;
     display: flex;
     gap: 24px;
   }
+
   &__boxbtn {
     position: relative;
   }
+
   &__btn {
     width: 213px;
+
     // width: fit-content;
     height: 45px;
     border-radius: 8px;
     border: none;
     padding: 10px 20px;
   }
+
   &__counterBox {
     width: 32px;
     height: 32px;
@@ -55,10 +63,11 @@
     border-radius: 20px;
     background: var(--color-accent-red500);
   }
+
   &__counter {
     width: 9px;
     height: 18px;
-    font-family: Moscow Sans;
+    font-family: var(--font-family-secondary);
     font-weight: 300;
     font-size: var(--font-size-xs);
     line-height: 130%;
@@ -66,6 +75,7 @@
     vertical-align: middle;
     color: var(--color-text-button);
   }
+
   &__content {
     width: 997px;
     height: 675px;
@@ -73,9 +83,10 @@
     justify-content: space-between;
     flex-wrap: wrap;
     margin-top: 10px;
-    @include _screenTablet {
+
+    /* @include _screenTablet {
       min-width: 435px;
       
-    }
+    } */
   }
 }

@@ -1,4 +1,4 @@
-@import '../../../template';
+/* @import '../../../template'; */
 
 .container {
   width: 483px;
@@ -7,14 +7,17 @@
   display: flex;
   flex-direction: column;
   position: relative;
-  @include _screenTablet {
+
+  /* @include screen-tablet {
     min-width: 435px;
     
-  }
+  } */
+
   &__top {
     width: 483px;
     height: 341px;
   }
+
   &__likeBox {
     width: 141px;
     height: 44px;
@@ -28,6 +31,7 @@
     gap: 10px;
     background-color: var(--color-bg-main);
   }
+
   &__courseBox {
     width: 87px;
     height: 34px;
@@ -36,10 +40,11 @@
     background: var(--color-accent-red500);
     align-items: center;
   }
+
   &__course {
     width: 47px;
     height: 26px;
-    font-family: Manrope;
+    font-family: var(--font-family-primary);
     font-weight: 600;
     font-size: 20px;
     line-height: 130%;
@@ -47,11 +52,13 @@
     vertical-align: middle;
     color: var(--color-text-button);
   }
+
   &__like {
     all: unset;
     width: 44px;
     height: 44px;
   }
+
   &__bottom {
     width: 483px;
     height: 334px;
@@ -61,6 +68,7 @@
     padding: 20px;
     background: var(--color-bg-gray100);
   }
+
   &__card {
     width: 443px;
     height: 230px;
@@ -68,10 +76,11 @@
     flex-direction: column;
     gap: 24px;
   }
+
   &__title {
     width: 443px;
     height: 56px;
-    font-family: Manrope;
+    font-family: var(--font-family-primary);
     font-weight: 600;
     font-size: 20px;
     line-height: 130%;
@@ -79,6 +88,7 @@
     vertical-align: middle;
     color: var(--color-text-primary);
   }
+
   &__description {
     width: 443px;
     height: 150px;
@@ -86,48 +96,54 @@
     flex-direction: column;
     gap: 16px;
   }
+
   &__data {
     width: 443px;
     height: 24px;
     display: flex;
     justify-content: space-between;
   }
+
   &__param {
-    width: 100px;
     width: fit-content;
     height: 24px;
     display: flex;
     gap: 8px;
     align-items: center;
   }
+
   &__circle_blue {
    width: 24px;
    height: 24px;
    border-radius: 50%;
    background-color: var(--color-accent-info);
   }
+
   &__circle_green {
    width: 24px;
    height: 24px;
    border-radius: 50%;
    background-color: var(--color-accent-success);
   }
+
   &__circle_orange {
    width: 24px;
    height: 24px;
    border-radius: 50%;
    background-color: var(--color-accent-orange);
   }
+
   &__circle_red {
    width: 24px;
    height: 24px;
    border-radius: 50%;
    background-color: var(--color-accent-red500);
   }
+
   &__depiction {
     width: 443px;
     height: 110px;
-    font-family: Moscow Sans;
+    font-family: var(--font-family-secondary);
     font-weight: 300;
     font-size: 16px;
     line-height: 140%;
@@ -135,6 +151,7 @@
     vertical-align: middle;
     color: var(--color-text-secondary);
   }
+
   &__btn {
     width: 443px;
     height: 40px;
