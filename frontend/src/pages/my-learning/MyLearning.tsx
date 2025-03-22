@@ -1,21 +1,22 @@
 /* eslint-disable prettier/prettier */
 import { Button } from '@shared/components'
+import { AIComponent } from '@shared/components/ai-component/AIComponent'
 import { LessonCard } from '@shared/components/lessonCard/LessonCard'
+import Loader from '@shared/components/loader/Loader'
 import { Tooltipe } from '@shared/components/tooltipe/Tooltipe'
 import { withLayout } from '@shared/HOC/withLayout/withLayout'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
-import { courses, lessons } from './mockData'
+import { courses } from './mockData'
 import s from './myLearning.module.scss'
-import { Course, Lesson } from './types'
-import { AIComponent } from '@shared/components/ai-component/AIComponent'
-import Loader from '@shared/components/loader/Loader'
+import { Course } from './types'
 
 const MyLearningComp: React.FC = () => {
   const [mode, setMode] = useState<string>('Назначенные курсы')
   const [isTooltipe, setIsTooltipe] = useState<boolean>(true)
   const [isAIOpen, setIsAIOpen] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(true)
+  const [currentCourses, setCurrentCourses] = useState<Course[] | []>([])
 
   const buttons = [
     'Назначенные курсы',
@@ -25,8 +26,28 @@ const MyLearningComp: React.FC = () => {
   ]
   setTimeout(() => {
     setIsLoading(false)
-  }, 3000)
-  
+  }, 2000)
+ 
+  // const data:()=> Course[] | [] = () => {
+  //   if(mode === 'Назначенные курсы') return setCurrentCourses(courses)
+  //   if(mode === 'Просроченные курсы') return setCurrentCourses(courses.filter(el=> el.expired === false))
+  //   if(mode === 'Избранные курсы') return setCurrentCourses(courses.filter(el=> el.isCourse === true))
+  //   if(mode === 'Завершённые курсы') return setCurrentCourses(courses.filter(el=> el.progress === '100%'))
+  // }
+
+  useEffect(()=> {
+    const data:()=> Course[] | [] = () => {
+      if(mode === 'Назначенные курсы') return setCurrentCourses(courses)
+      if(mode === 'Просроченные курсы') return setCurrentCourses(courses.filter(el=> el.expired === false))
+      if(mode === 'Избранные курсы') return setCurrentCourses(courses.filter(el=> el.isCourse === true))
+      if(mode === 'Завершённые курсы') return setCurrentCourses(courses.filter(el=> el.progress === '100%'))
+    }
+    data()
+  }, [mode])
+//  const hendlrChangeMode = (btn) => {
+//   setMode(btn)
+//   data()
+//  }
   return (
     <>
       {isTooltipe && <Tooltipe />}
@@ -49,7 +70,8 @@ const MyLearningComp: React.FC = () => {
                         className={s.container__btn}
                         children={btn}
                         variant={mode === btn ? 'primary' : 'secondary'}
-                        onClick={() => setMode(btn)}
+                        onClick={() => setMode(btn)
+                        }
                       />
                     </div>
                   )
@@ -62,15 +84,15 @@ const MyLearningComp: React.FC = () => {
               />
             </div>
             <div className={s.container__content}>
-              {courses.map((course: Course) => {
+              {currentCourses.map((course: Course) => {
                 return <LessonCard course={course} key={course.id} />
               })}
             </div>
-            <div className={s.container__content}>
+            {/* <div className={s.container__content}>
               {lessons.map((lesson: Lesson) => {
                 return <LessonCard course={lesson} key={lesson.id} />
               })}
-            </div>
+            </div> */}
           </>
         )}
       </main>

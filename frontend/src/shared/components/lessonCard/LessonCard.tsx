@@ -1,16 +1,15 @@
 import { ReactNode, useState } from 'react'
 
 import { ClockIcon, DislikeIcon, HourglassIcon, LikeIcon, StickersIcon } from '@assets/icons'
+import { Course } from '@pages/my-learning'
 
 import { Button } from '../button'
 import ImageComponent from '../img/ImageComponent'
 
 import s from './lessonCard.module.scss'
-import { Course, Lesson } from '@pages/my-learning'
-import clsx from 'clsx'
 
 interface Props {
-  course: Course | Lesson
+  course: Course
   children?: ReactNode // Универсальный тип для children
 }
 
@@ -23,7 +22,7 @@ export const LessonCard: React.FC<Props> = (props) => {
       <div className={s.container__top}>
         <div className={s.container__likeBox}>
           <div className={s.container__courseBox}>
-            <p className={s.container__course}>Курс</p>
+            <p className={s.container__course}>{item.isCourse ? 'Курс' : 'Урок'}</p>
           </div>
           <button className={s.container__like} onClick={() => setIsFav(!isFav)}>
             {isFav ? <LikeIcon /> : <DislikeIcon />}
@@ -64,7 +63,7 @@ export const LessonCard: React.FC<Props> = (props) => {
             <p className={s.container__depiction}>{item.description}</p>
           </div>
         </div>
-        <Button className={s.container__btn} children="Перейти к обучению" />
+        <Button className={s.container__btn} children="Перейти к обучению"/>
       </div>
     </div>
   )
