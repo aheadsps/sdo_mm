@@ -173,7 +173,7 @@ class Lesson(models.Model):
                                )
     course = models.ForeignKey(Course,
                                _("Курс"),
-                               on_delete=models.SET_NULL,
+                               on_delete=models.CASCADE,
                                related_name='lessons')
 
     # step = models.ManyToManyField(_("Шаг"),
