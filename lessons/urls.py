@@ -3,6 +3,7 @@ from rest_framework import routers
 
 from lessons import views
 from lessons.apps import LessonsConfig
+from lessons.views import TestBlockListCreateAPIView, TestBlockRetrieveUpdateDestroyAPIView
 
 app_name = LessonsConfig.name
 
@@ -13,4 +14,7 @@ router.register(prefix=r"events", viewset=views.EventViewSet)
 
 urlpatterns = [
     path("", include(router.urls)),
+    path("list_create_test_block/", TestBlockListCreateAPIView.as_view(), name="list_create_test_block"),
+    path("retrieve_update_delete_test_block/<int:pk>/", TestBlockRetrieveUpdateDestroyAPIView.as_view(), name="retrieve_update_delete_test_block"),
+
 ]

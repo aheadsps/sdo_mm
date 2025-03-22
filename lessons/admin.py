@@ -1,6 +1,7 @@
 from django.contrib import admin
 
 from lessons import models
+from lessons.models import TestBlock
 
 
 @admin.register(models.Answer)
@@ -19,3 +20,5 @@ class QuestionAdmin(admin.ModelAdmin):
     """
 
     list_display = ("text", "image")
+
+admin.site.register(TestBlock)

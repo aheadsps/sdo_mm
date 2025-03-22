@@ -56,7 +56,6 @@ PROJECT_APPS = [
     "group",
     "lessons",
     "users",
-    "TestBlock",
 ]
 
 # Приложения из вне.

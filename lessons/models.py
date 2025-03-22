@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.core.validators import MinValueValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -166,3 +167,55 @@ class Course(models.Model):
 
     def __str__(self):
         return self.name
+
+class Lesson(models.Model):
+    """
+    Модель преставления урока
+    """
+    name = models.CharField(_("Название"),
+                            max_length=256,
+                            null=False,
+                            blank=False,
+                            help_text="Название урока",
+                            )
+    serial = models.ImageField(_("Номер"),
+                               null=False,
+                               blank=False,
+                               validators=[MinValueValidator(1)],
+                               default=1,
+                               help_text="Порядковый номер урока"
+                               )
+    course = models.ForeignKey(
+        Course,
+        verbose_name="Курс",
+        on_delete=models.CASCADE,
+        related_name='lessons',
+    )
+
+
+    # step = models.ManyToManyField(_("Шаг"),
+    #                                Step,
+    #                                related_name='lessons',
+    #                                blank=True)
+    # test_block = models.ForeignKey(
+    #     _("Тестирование"),
+    #     TestBlock,
+    #     on_delete=models.SET_NULL,
+    #     null=True,
+    #     blank=True,
+    #     related_name='lessons'
+    # )
+
+class TestBlock(models.Model):
+    """
+    Модель представления тестового блока.
+    """
+
+    lessons = models.OneToOneField(
+        Lesson, on_delete=models.CASCADE, related_name="test_block_lessons"
+    )
+
+    class Meta:
+        verbose_name = "тестовый блок"
+        verbose_name_plural = "тестовые блоки"
+        ordering = ["lessons"]

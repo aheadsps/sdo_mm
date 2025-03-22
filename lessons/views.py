@@ -4,7 +4,9 @@ from rest_framework.response import Response
 
 from lessons import models, serializers
 from lessons import viewsets as own_viewsets
+from lessons.models import TestBlock
 from lessons.permissions import IsAdminOrIsStaff
+from lessons.serializers import TestBlockSerializersOptimize, TestBlockSerializersDetail
 
 
 class EventViewSet(own_viewsets.GetUpdateDeleteViewSet):
@@ -38,3 +40,61 @@ class EventViewSet(own_viewsets.GetUpdateDeleteViewSet):
             return self.get_paginated_response(serializer.data)
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
+
+
+class TestBlockListCreateAPIView(generics.ListCreateAPIView):
+    serializer_class = TestBlockSerializersOptimize()
+    queryset = TestBlock.objects.all()
+
+
+class TestBlockRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = TestBlockSerializersDetail()
+    queryset = TestBlock.objects.all()
+
+# class TestBlockViewSet(viewsets.ViewSet):
+#     """
+#     Вьюха с реализацией получения списка вопросов и ответов, информации о конкретном тестовом блоке и сброса ответов
+#     """
+#     queryset = TestBlock.objects.all()
+#     permission_classes = [IsAuthenticated]
+#
+#     def list(self):
+#         """
+#         Возвращает список всех вопросов и ответов. Доступно всем аутентифицированным пользователям.
+#         """
+#         test_blocks = TestBlock.objects.all()
+#         blocks_serializer = TestBlockSerializersOptimize(test_blocks, many=True)
+#         data = {
+#             "questions_test_blocks": blocks_serializer.questions,
+#             "answers_test_blocks": blocks_serializer.answers,
+#         }
+#         return Response(data)
+#
+#     def retrieve_test_block(self, pk=None):
+#         """
+#         Получение информации о конкретном тестовом блоке. Доступно всем аутентифицированным пользователям.
+#         """
+#         try:
+#             test_block = TestBlock.objects.get(pk=pk)
+#             blocks_serializer = TestBlockSerializersDetail(test_block)
+#             data = {
+#                 "questions_test_blocks": blocks_serializer.questions,
+#                 "answers_test_blocks": blocks_serializer.answers,
+#             }
+#             return Response(data)
+#         except TestBlock.DoesNotExist:
+#             raise Http404
+#
+#     @action(detail=True, methods=["post"])
+#     def reset_answers(self, request, pk=None):
+#         """
+#         Сброс ответов. Доступно всем аутентифицированным пользователям.
+#         """
+#         try:
+#             test_block = TestBlock.objects.get(id=pk)
+#             test_block.answers.clear()
+#             test_block.save()
+#             serializer = TestBlockSerializersDetail(test_block)
+#             return Response(serializer.data)
+#         except TestBlock.DoesNotExist:
+#             raise Http404

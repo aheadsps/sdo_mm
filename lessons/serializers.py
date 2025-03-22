@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from lessons import models
+from lessons.models import TestBlock
 from users import serializers as user_serializers
 
 
@@ -106,3 +107,79 @@ class EventSerializer(serializers.ModelSerializer):
             "favorite",
             "status",
         )
+
+
+class TestBlockSerializersOptimize(serializers.ModelSerializer):
+    """
+    Сериалайзер оптимизированный
+    """
+    questions = QuestionSerializer(many=True, read_only=True)
+    answers = AnswerSerializer(many=True, read_only=True)
+
+    class Meta:
+        models = TestBlock
+        fields = "__all__"
+
+
+class TestBlockSerializersDetail(
+    serializers.ModelSerializer
+):
+    """
+    Сериалайзер детальный с логикой получения user_story, создания и обновления существующих записей.
+    """
+    questions = QuestionSerializer(many=True, read_only=True)
+    answers = AnswerSerializer(many=True, read_only=True)
+    user_story = serializers.SerializerMethodField()
+
+    class Meta:
+        model = TestBlock
+        fields = "__all__"
+
+    # нужно добавить логику получения для user_story
+    def get_user_story(self):
+        pass
+
+    def create(self, validated_data):
+        """
+        Метод для создания новой записи в модели TestBlock.
+        """
+
+        questions = validated_data.pop("questions", None)
+        answers = validated_data.pop("answers", None)
+        user_story = validated_data.pop("user_story", None)
+
+        test_block = TestBlock.objects.create(**validated_data)
+
+        if questions is not None:
+            test_block.questions = questions
+            test_block.answers = answers
+
+        if user_story is not None:
+            test_block.user_story = user_story
+
+        test_block.save()
+
+        return test_block
+
+    def update(self, instance, validated_data):
+        """
+        Метод для обновления существующей записи в модели TestBlock.
+        """
+
+        questions = validated_data.pop("questions", None)
+        answers = validated_data.pop("answers", None)
+        user_story = validated_data.pop("user_story", None)
+
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+
+        if questions is not None:
+            instance.questions = questions
+            instance.answers = answers
+
+        if user_story is not None:
+            instance.user_story = user_story
+
+        instance.save()
+
+        return instance
