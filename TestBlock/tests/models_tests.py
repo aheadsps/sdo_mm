@@ -1,9 +1,13 @@
 from django.test import TestCase
 
-from .models import Lesson, TestBlock
+from TestBlock.models import Lesson, TestBlock
 
 
 class TestBlockModelTests(TestCase):
+    """
+    Тест моделей
+    """
+
     def setUp(self):
         # Создание тестовых данных
         self.lesson = Lesson.objects.create(title="Test Lesson")

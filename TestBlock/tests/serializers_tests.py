@@ -7,6 +7,10 @@ from TestBlock.serializers import (TestBlockSerializersDetail,
 
 
 class TestBlockSerializersOptimizeTests(APITestCase):
+    """
+    Тест сериализаторов
+    """
+
     def setUp(self):
         # Создание тестовых данных
         self.question1 = Question.objects.create(text="Question 1")

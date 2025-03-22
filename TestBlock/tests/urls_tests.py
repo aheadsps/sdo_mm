@@ -1,31 +1,21 @@
-from django.test import TestCase
-from django.urls import reverse
+from django.test import SimpleTestCase
+from django.urls import resolve, reverse
 
-from TestBlock.models import TestBlock
+class RouterTest(SimpleTestCase):
+    def test_test_block_list_url_resolves(self):
+        """Проверяем, что URL '/test_block/' ведет к правильному представлению."""
+        url = reverse('test_block-list')
+        found = resolve(url)
+        self.assertEqual(found.func.__name__, 'TestBlockViewSet.list')
 
+    def test_test_block_detail_url_resolves(self):
+        """Проверяем, что URL '/test_block/1/' ведет к правильному представлению."""
+        url = reverse('test_block-detail', kwargs={'pk': 1})
+        found = resolve(url)
+        self.assertEqual(found.func.__name__, 'TestBlockViewSet.retrieve_test_block')
 
-class TestBlockViewSetTests(TestCase):
-    def setUp(self):
-        # Создание тестовых блоков
-        self.block1 = TestBlock.objects.create(description="Test Block 1")
-        self.block2 = TestBlock.objects.create(description="Test Block 2")
-
-    def test_list(self):
-        url = reverse("test_block-list")
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(response, self.block1.description)
-        self.assertContains(response, self.block2.description)
-
-    def test_retrieve_test_block(self):
-        url = reverse("test_block-detail", args=[self.block1.pk])
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(response, self.block1.description)
-
-    def test_reset_answers(self):
-        url = reverse("test_block-reset-answers", args=[self.block1.pk])
-        response = self.client.post(url)
-        self.assertEqual(response.status_code, 200)
-        # Проверка того, что ответы были сброшены (здесь предполагаем, что ответы проверяются через `assertEquals`)
-        self.assertEquals(self.block1.answers.count(), 0)
+    def test_test_block_reset_answers_url_resolves(self):
+        """Проверяем, что URL '/test_block/1/reset_answers/' ведет к правильному представлению."""
+        url = reverse('test_block-reset-answers', kwargs={'pk': 1})
+        found = resolve(url)
+        self.assertEqual(found.func.__name__, 'TestBlockViewSet.reset_answers')

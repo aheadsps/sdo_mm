@@ -6,6 +6,10 @@ from TestBlock.models import TestBlock
 
 
 class TestBlockViewSetTests(TestCase):
+    """
+    Тест контроллеров
+    """
+
     def setUp(self):
         # Создание тестовых блоков
         self.block1 = TestBlock.objects.create(description="Test Block 1")
@@ -24,14 +28,16 @@ class TestBlockViewSetTests(TestCase):
         self.block2.answers.add(self.answer2)
 
     def test_list(self):
-        url = reverse("testblock-list")
+        # тест списка тестовых блоков
+        url = reverse("test_block-list")
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, self.block1.description)
         self.assertContains(response, self.block2.description)
 
     def test_retrieve_test_block(self):
-        url = reverse("testblock-detail", args=[self.block1.pk])
+        # тест просмотра тестового блока
+        url = reverse("test_block-detail", args=[self.block1.pk])
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, self.block1.description)
@@ -39,7 +45,8 @@ class TestBlockViewSetTests(TestCase):
         self.assertContains(response, self.answer1.text)
 
     def test_reset_answers(self):
-        url = reverse("testblock-reset-answers", args=[self.block1.pk])
+        # тест сброса ответов
+        url = reverse("test_block-reset-answers", args=[self.block1.pk])
         response = self.client.post(url)
         self.assertEqual(response.status_code, 200)
         self.assertNotContains(response, self.answer1.text)
