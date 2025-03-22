@@ -6,6 +6,11 @@
   flex-direction: column;
   position: relative;
 }
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+  .container {
+    min-width: 435px;
+  }
+}
 .container__top {
   width: 483px;
   height: 341px;

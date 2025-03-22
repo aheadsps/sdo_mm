@@ -13,7 +13,7 @@ import { Course } from './types'
 
 const MyLearningComp: React.FC = () => {
   const [mode, setMode] = useState<string>('Назначенные курсы')
-  const [isTooltipe, setIsTooltipe] = useState<boolean>(true)
+  const [isTooltipe, setIsTooltipe] = useState<boolean>(false)
   const [isAIOpen, setIsAIOpen] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [currentCourses, setCurrentCourses] = useState<Course[] | []>([])
@@ -28,20 +28,13 @@ const MyLearningComp: React.FC = () => {
     setIsLoading(false)
   }, 2000)
  
-  // const data:()=> Course[] | [] = () => {
-  //   if(mode === 'Назначенные курсы') return setCurrentCourses(courses)
-  //   if(mode === 'Просроченные курсы') return setCurrentCourses(courses.filter(el=> el.expired === false))
-  //   if(mode === 'Избранные курсы') return setCurrentCourses(courses.filter(el=> el.isCourse === true))
-  //   if(mode === 'Завершённые курсы') return setCurrentCourses(courses.filter(el=> el.progress === '100%'))
-  // }
-
   useEffect(()=> {
-    const data:()=> Course[] | [] = () => {
-      if(mode === 'Назначенные курсы') return setCurrentCourses(courses)
-      if(mode === 'Просроченные курсы') return setCurrentCourses(courses.filter(el=> el.expired === false))
-      if(mode === 'Избранные курсы') return setCurrentCourses(courses.filter(el=> el.isCourse === true))
-      if(mode === 'Завершённые курсы') return setCurrentCourses(courses.filter(el=> el.progress === '100%'))
-    }
+     const data:()=> Course[] | [] = () => {
+    if(mode === 'Назначенные курсы') return setCurrentCourses(courses)
+    if(mode === 'Просроченные курсы') return setCurrentCourses(courses.filter(el=> el.expired === true))
+    if(mode === 'Избранные курсы') return setCurrentCourses(courses.filter(el=> el.isCourse === true))
+    if(mode === 'Завершённые курсы') return setCurrentCourses(courses.filter(el=> el.progress === '100%'))
+  }
     data()
   }, [mode])
 //  const hendlrChangeMode = (btn) => {
