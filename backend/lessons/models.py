@@ -94,7 +94,7 @@ class Event(models.Model):
                                    'ивент избранным')
     status = models.CharField(choices=settings.STATUS_EVENTS,
                               null=True,
-                              default='expected',
+                              default='process',
                               verbose_name='статус ивента',
                               help_text='Текущий статус данного ивента',
                               )
