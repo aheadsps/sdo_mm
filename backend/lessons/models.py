@@ -132,12 +132,14 @@ class Course(models.Model):
                                        )
     image = models.ImageField(_("Превью"),
                               upload_to=path_maker_course,
+                              blank=True,
                               null=True,
                               )
     profession = models.ForeignKey("users.Profession",
                                    verbose_name=_("профессия"),
                                    on_delete=models.SET_NULL,
                                    null=True,
+                                   blank=True,
                                    )
     experiences = models.ManyToManyField("users.WorkExperience",
                                          verbose_name=_("Стаж"),
