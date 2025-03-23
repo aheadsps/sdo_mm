@@ -10,6 +10,7 @@ router = routers.SimpleRouter(
     trailing_slash=False,
 )
 router.register(prefix=r'events', viewset=views.EventViewSet)
+router.register(r'lessons', viewset=views.LessonViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
