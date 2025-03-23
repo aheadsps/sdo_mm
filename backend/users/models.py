@@ -101,7 +101,7 @@ class WorkExperience(models.Model):
         verbose_name_plural = "Стаж"
 
     def __str__(self):
-        return self.years
+        return str(self.years)
 
 
 class ProfessionGroup(models.Model):

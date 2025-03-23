@@ -217,7 +217,7 @@ paths:
           $ref: "#/components/responses/Forbidden"
         "422":
           $ref: "#/components/responses/UnprocessableEntity"
-    put:
+    patch:
       operationId: api_events_patrial_update
       parameters:
         - in: path
@@ -236,7 +236,7 @@ paths:
           application/json:
             schema:
               type: object
-              $ref: "#/components/schemas/Event"
+              $ref: "#/components/schemas/EventCreate"
       responses:
         "200":
           description: JSON ответ с изменеными данными
@@ -244,7 +244,7 @@ paths:
             application/json:
               schema:
                 type: object
-                $ref: "#/components/schemas/Event"
+                $ref: "#/components/schemas/EventCreate"
         "400":
           $ref: "#/components/responses/BadRequest"
         "401":
@@ -343,9 +343,9 @@ paths:
         "422":
           $ref: "#/components/responses/UnprocessableEntity"
 
-  /events/main:
-    get:
-    ...
+  # /events/main:
+  #   get:
+  #   ...
 
   /events:
     get:
@@ -381,7 +381,7 @@ paths:
           application/json:
             schema:
               type: object
-              $ref: "#/components/schemas/Event"
+              $ref: "#/components/schemas/EventCreate"
       responses:
         "201":
           description: JSON ответ с новыми данными
@@ -389,7 +389,7 @@ paths:
             application/json:
               schema:
                 type: object
-                $ref: "#/components/schemas/Event"
+                $ref: "#/components/schemas/EventCreate"
             application/x-www-form-urlencoded:
               schema:
                 $ref: "#/components/schemas/Event"
@@ -494,7 +494,7 @@ paths:
           $ref: "#/components/responses/NotFound"
         "422":
           $ref: "#/components/responses/UnprocessableEntity"
-    put:
+    patch:
       operationId: api_courses_patrial_update
       parameters:
         - in: path
@@ -1575,6 +1575,42 @@ components:
           description: Текущий ответ
           nullable: true
           minimum: 1
+
+    EventCreate:
+      description: Сущность создания и обновления курса
+      additionalProperties: false
+      type: object
+      properties:
+        course_id:
+          type: integer
+          minimum: 1
+        done_lessons:
+          type: integer
+          default: 0
+        start_date:
+          type: string
+          format: date-time
+          readOnly: false
+          nullable: true
+        end_date:
+          type: string
+          format: date-time
+          readOnly: false
+          nullable: true
+        favorite:
+          type: boolean
+          description: Флаг избранного
+          default: false
+          readOnly: false
+        status:
+          description: Статус прохождения курса
+          enum:
+            - done
+            - process
+            - failed
+            - expected
+          readOnly: true
+          default: expected
 
     Event:
       description: Сущность задачи (курс) которая присваивается пользователю
