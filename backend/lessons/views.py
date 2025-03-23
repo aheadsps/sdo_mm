@@ -1,4 +1,4 @@
-from rest_framework import permissions, status, mixins
+from rest_framework import generics, permissions
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
@@ -8,6 +8,8 @@ from lessons import models
 from lessons import serializers
 from lessons import viewsets as own_viewsets
 from lessons.permissions import IsAdminOrIsStaff
+from lessons.serializers import LessonViewSerializer, LessonSerializer, \
+    LessonCreateSerializer
 
 
 class EventViewSet(own_viewsets.GetCreateUpdateDeleteViewSet):
@@ -114,6 +116,24 @@ class CourseViewSet(mixins.ListModelMixin,
         self.queryset = models.Course._default_manager.get_queryset()
         self.serializer_class = serializers.CourseSerializer
         return super().list(request, *args, **kwargs)
+
+
+class LessonViewSet(viewsets.ModelViewSet):
+    """
+    Вьюсет уроков с выбором сериализатора для CRUD-операций
+    """
+    queryset = models.Lesson.objects.all()
+    serializer_class = LessonSerializer
+
+    def get_serializer_class(self):
+        """
+        Возвращает сериализатор в зависимости от действия (action).
+        """
+        if self.action == 'retrieve':
+            return LessonViewSerializer
+        elif self.action in ['create', 'update', 'partial_update']:
+            return LessonCreateSerializer
+        return LessonSerializer
 
 
 class LessonViewSet(viewsets.ModelViewSet):
