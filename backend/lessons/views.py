@@ -134,21 +134,3 @@ class LessonViewSet(viewsets.ModelViewSet):
         elif self.action in ['create', 'update', 'partial_update']:
             return LessonCreateSerializer
         return LessonSerializer
-
-
-class LessonViewSet(viewsets.ModelViewSet):
-    """
-    Вьюсет уроков с выбором сериализатора для CRUD-операций
-    """
-    queryset = models.Lesson.objects.all()
-    serializer_class = LessonSerializer
-
-    def get_serializer_class(self):
-        """
-        Возвращает сериализатор в зависимости от действия (action).
-        """
-        if self.action == 'retrieve':
-            return LessonViewSerializer
-        elif self.action in ['create', 'update', 'partial_update']:
-            return LessonCreateSerializer
-        return LessonSerializer
