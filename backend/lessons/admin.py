@@ -48,3 +48,11 @@ class EventAdmin(admin.ModelAdmin):
         'favorite',
         'status',
         )
+
+
+@admin.register(models.Lesson)
+class LessonAdmin(admin.ModelAdmin):
+    """
+    Админ панель Урока
+    """
+    list_display = ("name", "serial", "course",)
