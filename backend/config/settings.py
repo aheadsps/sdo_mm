@@ -32,12 +32,11 @@ SECRET_KEY = get_random_secret_key()
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True if os.getenv('DEBUG') else False
 
-
 if not DEBUG:
     HOST = os.getenv("DJANGO_ALLOWED_HOSTS")
     ALLOWED_HOSTS = [HOST if HOST else "example.com"]
 else:
-  	ALLOWED_HOSTS = ['*']
+    ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -61,26 +60,26 @@ PROJECT_APPS = [
 
 # Приложения из вне.
 THIRD_PARTY_APPS = [
-	'drf_yasg',
-	'drf_spectacular',
-	'rest_framework',
-	'rest_framework.authtoken',
-	'authemail',
-	"phonenumbers",
-	"corsheaders",
+    'drf_yasg',
+    'drf_spectacular',
+    'rest_framework',
+    'rest_framework.authtoken',
+    'authemail',
+    "phonenumbers",
+    "corsheaders",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + PROJECT_APPS + THIRD_PARTY_APPS
 
 MIDDLEWARE = [
-	"django.middleware.security.SecurityMiddleware",
-	"django.contrib.sessions.middleware.SessionMiddleware",
-	"django.middleware.common.CommonMiddleware",
-	"django.middleware.csrf.CsrfViewMiddleware",
-	"django.contrib.auth.middleware.AuthenticationMiddleware",
-	"django.contrib.messages.middleware.MessageMiddleware",
-	"django.middleware.clickjacking.XFrameOptionsMiddleware",
-	"corsheaders.middleware.CorsMiddleware",
+    "django.middleware.security.SecurityMiddleware",
+    "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.common.CommonMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.messages.middleware.MessageMiddleware",
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
 ]
 
 ROOT_URLCONF = "config.urls"
@@ -113,14 +112,14 @@ API_VERSION = "api/v1/"
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 DATABASES = {
-	"default": {
-		"ENGINE": os.getenv("ENGINE"),
-		"NAME": os.getenv("DB_NAME"),
-		"USER": os.getenv("DB_USER"),
-		"PASSWORD": os.getenv("DB_PASSWORD"),
-		"HOST": os.getenv("DB_HOST"),
-		"PORT": os.getenv("DB_PORT"),
-	}
+    "default": {
+        "ENGINE": os.getenv("ENGINE"),
+        "NAME": os.getenv("DB_NAME"),
+        "USER": os.getenv("DB_USER"),
+        "PASSWORD": os.getenv("DB_PASSWORD"),
+        "HOST": os.getenv("DB_HOST"),
+        "PORT": os.getenv("DB_PORT"),
+    }
 }
 
 # Password validation
@@ -172,11 +171,11 @@ AUTH_USER_MODEL = "users.User"
 
 _page_paginator = "rest_framework.pagination.PageNumberPagination"
 
-
 REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": _page_paginator,
     "PAGE_SIZE": 20,
-    "DEFAULT_FILTER_BACKENDS": ("django_filters.rest_framework.DjangoFilterBackend",),
+    "DEFAULT_FILTER_BACKENDS": (
+    "django_filters.rest_framework.DjangoFilterBackend",),
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework.authentication.TokenAuthentication",
     ),
@@ -226,6 +225,6 @@ EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
 
 CORS_ALLOWED_ORIGINS = [
-	"http://localhost:8000",
-	"http://localhost:5173",
+    "http://localhost:8000",
+    "http://localhost:5173",
 ]
