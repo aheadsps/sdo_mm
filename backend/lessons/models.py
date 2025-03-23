@@ -4,7 +4,7 @@ from django.utils.translation import gettext_lazy as _
 from django.contrib.auth import get_user_model
 from django.conf import settings
 
-from backend.lessons.utils import (path_maker_question,
+from lessons.utils import (path_maker_question,
                                    path_maker_course,
                                    )
 
@@ -164,7 +164,7 @@ class Lesson(models.Model):
                             blank=False,
                             help_text="Название урока",
                             )
-    serial = models.ImageField(_("Номер"),
+    serial = models.IntegerField(_("Номер"),
                                null=False,
                                blank=False,
                                validators=[MinValueValidator(1)],
@@ -172,8 +172,8 @@ class Lesson(models.Model):
                                help_text="Порядковый номер урока"
                                )
     course = models.ForeignKey(Course,
-                               _("Курс"),
-                               on_delete=models.SET_NULL,
+                               verbose_name=_("Курс"),
+                               on_delete=models.CASCADE,
                                related_name='lessons')
 
     # step = models.ManyToManyField(_("Шаг"),
