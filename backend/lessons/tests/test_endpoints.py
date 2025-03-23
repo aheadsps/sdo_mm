@@ -1,17 +1,13 @@
 import datetime
-import os
 
-import django
 from rest_framework import status
 from rest_framework.test import APITestCase
 from django.contrib.auth import get_user_model
 from django.urls import reverse
 
 from lessons import models as lessons_models
-from lessons.models import Course, Lesson
 from users import models as users_models
 
-from users.models import User
 
 
 class TestEndpoints(APITestCase):
@@ -445,9 +441,9 @@ class LessonViewSetTest(APITestCase):
             is_staff=True,
         )
         self.client.force_authenticate(user=self.user)
-        self.course = Course.objects.create(name="Курс 1",
+        self.course = lessons_models.Course.objects.create(name="Курс 1",
                                             description="Описание курса 1")
-        self.lesson = Lesson.objects.create(name="Урок 1",
+        self.lesson = lessons_models.Lesson.objects.create(name="Урок 1",
                                             serial=1, course=self.course)
 
     def test_get_lesson_detail(self):
@@ -468,7 +464,7 @@ class LessonViewSetTest(APITestCase):
         }
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(Lesson.objects.count(), 2)
+        self.assertEqual(lessons_models.Lesson.objects.count(), 2)
 
     def test_update_lesson(self):
         """Тест обновления урока (Update)."""
@@ -488,7 +484,7 @@ class LessonViewSetTest(APITestCase):
         url = reverse('lessons:lesson-detail', args=[self.lesson.id])
         response = self.client.delete(url)
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-        self.assertEqual(Lesson.objects.count(), 0)
+        self.assertEqual(lessons_models.Lesson.objects.count(), 0)
 
 
 class LessonViewSetTest(APITestCase):
@@ -514,9 +510,9 @@ class LessonViewSetTest(APITestCase):
             is_staff=True,
         )
         self.client.force_authenticate(user=self.user)
-        self.course = Course.objects.create(name="Курс 1",
+        self.course = lessons_models.Course.objects.create(name="Курс 1",
                                             description="Описание курса 1")
-        self.lesson = Lesson.objects.create(name="Урок 1",
+        self.lesson = lessons_models.Lesson.objects.create(name="Урок 1",
                                             serial=1, course=self.course)
 
     def test_get_lesson_detail(self):
@@ -537,7 +533,7 @@ class LessonViewSetTest(APITestCase):
         }
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(Lesson.objects.count(), 2)
+        self.assertEqual(lessons_models.Lesson.objects.count(), 2)
 
     def test_update_lesson(self):
         """Тест обновления урока (Update)."""
@@ -557,4 +553,4 @@ class LessonViewSetTest(APITestCase):
         url = reverse('lessons:lesson-detail', args=[self.lesson.id])
         response = self.client.delete(url)
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-        self.assertEqual(Lesson.objects.count(), 0)
+        self.assertEqual(lessons_models.Lesson.objects.count(), 0)

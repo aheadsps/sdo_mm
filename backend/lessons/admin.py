@@ -56,11 +56,3 @@ class LessonAdmin(admin.ModelAdmin):
     Админ панель Урока
     """
     list_display = ("name", "serial", "course",)
-
-
-@admin.register(models.Lesson)
-class LessonAdmin(admin.ModelAdmin):
-    """
-    Админ панель Урока
-    """
-    list_display = ("name", "serial", "course",)
