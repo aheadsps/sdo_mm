@@ -16,3 +16,11 @@ class QuestionAdmin(admin.ModelAdmin):
     Админ панель Вопроса
     """
     list_display = ('text', 'image')
+
+
+@admin.register(models.Lesson)
+class LessonAdmin(admin.ModelAdmin):
+    """
+    Админ панель Урока
+    """
+    list_display = ("name", "serial", "course",)
