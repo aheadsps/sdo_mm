@@ -1,0 +1,29 @@
+.aiDescription {
+    height: 150px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    text-align: center;
+    color: var(--color-text-primary);
+}
+
+.aiTextarea {
+    position: relative;
+    color: var(--color-text-primary);
+}
+
+.textarea {
+    padding: 0;
+    min-height: 44px;
+    resize: none;
+
+    &::placeholder {
+        color: var(--color-text-secondary);
+    }
+}
+
+.textareaIcon {
+    position: absolute;
+    right: 5%;
+    bottom: 60%
+}

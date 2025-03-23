@@ -1,5 +1,4 @@
-import { Button, Tabs, Typography } from '@shared/components'
-import { Offcanvas } from '@shared/components/offcanvas/Offcanvas'
+import { Button, Tabs, Typography, AiComponent } from '@shared/components'
 import { useState } from 'react'
 import { NavLink } from 'react-router-dom'
 
@@ -36,7 +35,7 @@ export const CourseComponent = () => {
         </div>
       </div>
       <Tabs tabs={tabsData} variant="secondary" />
-      <Offcanvas isOpen={isOffcanvasOpen} setIsOpen={setIsOffcanvasOpen} />
+      <AiComponent isOpen={isOffcanvasOpen} setIsOpen={setIsOffcanvasOpen} />
     </div>
   )
 }

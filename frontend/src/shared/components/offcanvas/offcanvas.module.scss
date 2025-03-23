@@ -28,6 +28,9 @@
   position: absolute;
   color: var(--color-text-primary);
   border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 
   @media screen and (min-width: 1350px) {
     padding-top: 123px;
