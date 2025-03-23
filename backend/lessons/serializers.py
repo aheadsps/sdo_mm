@@ -106,3 +106,64 @@ class EventSerializer(serializers.ModelSerializer):
             "favorite",
             "status",
         )
+
+
+class LessonCreateSerializer(serializers.ModelSerializer):
+    """
+    Сериализатор создания и обновления урока
+    """
+    # step = StepSerializer(many=True)
+    # "step", "test_block добавить
+    class Meta:
+        model = models.Lesson
+        fields = (
+            "id",
+            "name",
+            "serial",
+            "course",
+        )
+        read_only_fields = ("id",)
+
+    # def create(self, validated_data):
+    #     step_items = validated_data.pop('step', [])
+    #     lesson = Lesson.objects.create(**validated_data)
+    #     step_create = [
+    #         Step(**step, lesson=lesson) for step in step_items
+    #     ]
+    #     Step.objects.bulk_create(step_create)
+    #     return lesson
+
+
+class LessonSerializer(serializers.ModelSerializer):
+    """
+    Сериализатор оптимизированного вывода
+    """
+    # "step", "test_block добавить
+
+    class Meta:
+        model = models.Lesson
+        fields = (
+            "id",
+            "name",
+            "serial",
+            "course",
+        )
+
+
+class LessonViewSerializer(serializers.ModelSerializer):
+    """
+    Сериализатор детального представления урока
+    """
+    course = ViewCourseSerializer()
+    # step = StepViewSerializer(many=True, read_only=True)
+    # test_block = TestBlockViewSerializer(read_only=True)
+
+    # "step", "test_block добавить
+    class Meta:
+        model = models.Lesson
+        fields = (
+            "id",
+            "name",
+            "serial",
+            "course",
+        )
