@@ -1,10 +1,9 @@
-import { Button, Typography } from '@shared/components'
+import { Button, Tabs, Typography } from '@shared/components'
 import { NavLink } from 'react-router-dom'
 
 import { ArrowLeftIcon } from '@assets/icons'
 
 import s from './course-comp.module.scss'
-import { Tabs } from './tabs/Tabs'
 import { tabsData } from './tabs/tabsData'
 
 export const CourseComponent = () => {
@@ -29,7 +28,7 @@ export const CourseComponent = () => {
           </Button>
         </div>
       </div>
-      <Tabs tabs={tabsData} />
+      <Tabs tabs={tabsData} variant="secondary" />
     </div>
   )
 }

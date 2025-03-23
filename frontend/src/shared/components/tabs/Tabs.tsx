@@ -1,15 +1,20 @@
 import { Button, Typography } from '@shared/components'
 import clsx from 'clsx'
-import { useState } from 'react'
+import { ComponentPropsWithoutRef, useState } from 'react'
 
 import s from './tabs.module.scss'
-import { Tab } from './tabsData'
+
+export type Tab = {
+  label: string
+  content: React.ReactNode
+}
 
 type Props = {
   tabs: Tab[]
-}
+  variant: 'primary' | 'secondary'
+} & ComponentPropsWithoutRef<'button'>
 
-export const Tabs = ({ tabs }: Props) => {
+export const Tabs = ({ tabs, variant = 'primary', ...props }: Props) => {
   const [activeTab, setActiveTab] = useState(0)
 
   return (
@@ -17,10 +22,11 @@ export const Tabs = ({ tabs }: Props) => {
       <div className={s.tabList}>
         {tabs.map((tab, index) => (
           <Button
-            variant="secondary"
+            variant={variant}
             key={index}
-            className={clsx(s.tab, { [s.active]: activeTab === index })}
+            className={clsx(s.tab, activeTab === index && s.active)}
             onClick={() => setActiveTab(index)}
+            {...props}
           >
             <Typography variant="header_6" className={s.tabText}>
               {tab.label}
