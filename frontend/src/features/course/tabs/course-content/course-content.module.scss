@@ -1,16 +1,15 @@
 .contentTitle {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 30px;
-    gap: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 30px;
+  gap: 40px;
 
-    @media screen and (max-width: 1349px) {
-        text-align: center;
-    }
+  @media screen and (max-width: 1349px) {
+    text-align: center;
+  }
 }
 
 .lessonButton {
-    min-width: 120px;
+  min-width: 120px;
 }
-

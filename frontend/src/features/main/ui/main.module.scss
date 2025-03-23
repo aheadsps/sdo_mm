@@ -1,5 +1,4 @@
-
- .main {
+.main {
   margin-top: 93px;
   padding: 20px;
 }
@@ -8,16 +7,16 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-areas:
-    "tasks warning"
-    "tasks courses";
+    'tasks warning'
+    'tasks courses';
   column-gap: 40px;
 
   @media (max-width: 1349px) {
     grid-template-columns: 1fr;
     grid-template-areas:
-      "warning"
-      "tasks"
-      "courses";
+      'warning'
+      'tasks'
+      'courses';
     max-width: 520px;
   }
 
@@ -39,7 +38,6 @@
   display: flex;
   flex-direction: column;
 }
-
 
 .title {
   margin-bottom: 24px;

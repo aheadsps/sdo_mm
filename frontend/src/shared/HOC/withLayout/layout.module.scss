@@ -2,12 +2,16 @@
   max-width: 1350px;
   display: flex;
   margin: 0 auto;
-  position: relative;
   width: 100%;
 
   @media screen and (max-width: 767px) {
     padding-left: 0;
     padding-right: 0;
+  }
+
+  main {
+    position: relative;
+    overflow-y: hidden;
   }
 }
 
@@ -19,7 +23,6 @@
   overflow-y: auto;
   scrollbar-width: none;
   width: 100%;
-
 
   @media screen and (min-width: 768px) and (max-width: 1349px) {
     padding-top: 115px;

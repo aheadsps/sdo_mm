@@ -13,8 +13,10 @@ export const withLayout = <T extends object>(Component: ComponentType<T>) => {
         <Header />
         <div className={s.appWrapper}>
           {!isMobile && <Sidebar />}
-          <main className={s.main}>
-            <Component {...props} />
+          <main>
+            <div className={s.main}>
+              <Component {...props} />
+            </div>
           </main>
         </div>
       </>

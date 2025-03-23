@@ -1,0 +1,38 @@
+.offcanvasContainer {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  backdrop-filter: blur(2px);
+  background-color: #48505666;
+  transform: translateX(100%);
+  transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+  visibility: hidden;
+}
+
+.offcanvas {
+  height: 100%;
+  width: 518px;
+  padding: 20px;
+  background-color: var(--color-bg-main);
+  border-left: 1px solid var(--color-additional-border100);
+  position: absolute;
+  right: 0;
+  padding-top: 123px;
+  color: var(--color-text-primary);
+}
+
+.offcanvasContainerVisible {
+  transform: translateX(0);
+  visibility: visible;
+}
+
+.offcanvasTitle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.closeIcon {
+  cursor: pointer;
+}

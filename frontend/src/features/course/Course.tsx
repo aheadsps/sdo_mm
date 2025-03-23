@@ -1,4 +1,6 @@
 import { Button, Tabs, Typography } from '@shared/components'
+import { Offcanvas } from '@shared/components/offcanvas/Offcanvas'
+import { useState } from 'react'
 import { NavLink } from 'react-router-dom'
 
 import { ArrowLeftIcon } from '@assets/icons'
@@ -7,8 +9,13 @@ import s from './course-comp.module.scss'
 import { tabsData } from './tabs/tabsData'
 
 export const CourseComponent = () => {
+  const [isOffcanvasOpen, setIsOffcanvasOpen] = useState(false)
+
+  const onButtonClick = () => {
+    setIsOffcanvasOpen(!isOffcanvasOpen)
+  }
   return (
-    <div>
+    <div className={s.courseContent}>
       <NavLink to={'/learning'} className={s.backToPage}>
         <ArrowLeftIcon className={s.icon} />
         <Typography variant="body_2" className={s.backText}>
@@ -20,7 +27,7 @@ export const CourseComponent = () => {
           English Check-Up: База и первые шаги
         </Typography>
         <div className={s.buttonsBlock}>
-          <Button variant="secondary" className={s.button}>
+          <Button variant="secondary" className={s.button} onClick={onButtonClick}>
             ИИ
           </Button>
           <Button variant="primary" className={s.button}>
@@ -29,6 +36,7 @@ export const CourseComponent = () => {
         </div>
       </div>
       <Tabs tabs={tabsData} variant="secondary" />
+      <Offcanvas isOpen={isOffcanvasOpen} setIsOpen={setIsOffcanvasOpen} />
     </div>
   )
 }
