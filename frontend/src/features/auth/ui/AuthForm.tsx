@@ -1,62 +1,27 @@
-import { zodResolver } from '@hookform/resolvers/zod'
-import { SerializedError } from '@reduxjs/toolkit'
-import { FetchBaseQueryError } from '@reduxjs/toolkit/query'
 import { Button, Typography, Input } from '@shared/components'
-import { useState } from 'react'
-import { useForm } from 'react-hook-form'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 import { ClosedEyeIcon, OpenedEyeIcon } from '@assets/icons'
 
-import { handleError } from '../../shared/utils/handleError'
+import { useAuthForm } from '../model/useAuthForm'
 
-import { useLoginMutation } from './api/auth.api'
 import styles from './auth-form.module.scss'
-import { authFormSchema } from './authFormSchema'
-
-interface AuthFormData {
-  email: string
-  password: string
-}
 
 export const AuthForm = () => {
   const {
+    onSubmit,
+    errorMessage,
+    errors,
     register,
-    handleSubmit,
-    formState: { errors, isSubmitting, isValid },
-    reset,
-  } = useForm<AuthFormData>({
-    defaultValues: {
-      email: '',
-      password: '',
-    },
-    resolver: zodResolver(authFormSchema),
-    mode: 'onBlur',
-  })
-
-  const [showPassword, setShowPassword] = useState(false)
-  const [errorMessage, setErrorMessage] = useState<string | null>(null)
-
-  const [login] = useLoginMutation()
-  const navigate = useNavigate()
-
-  const onFormSubmit = async (data: AuthFormData) => {
-    try {
-      const res = await login(data).unwrap()
-      if (res.token) {
-        localStorage.setItem('token', res.token)
-      }
-      reset()
-      await navigate('/main', { replace: true })
-    } catch (err) {
-      const error = handleError(err as FetchBaseQueryError | SerializedError)
-      setErrorMessage(error as string)
-    }
-  }
+    showPassword,
+    setShowPassword,
+    isValid,
+    isSubmitting,
+  } = useAuthForm()
 
   return (
     <div className={styles.auth}>
-      <form className={styles.auth__container} onSubmit={(e) => void handleSubmit(onFormSubmit)(e)}>
+      <form className={styles.auth__container} onSubmit={(e) => void onSubmit(e)}>
         <Typography className={styles.auth__heading} variant={'header_3'}>
           Авторизация
         </Typography>
