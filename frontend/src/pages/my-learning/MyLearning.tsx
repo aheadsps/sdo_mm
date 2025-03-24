@@ -1,6 +1,5 @@
 /* eslint-disable prettier/prettier */
 import { Button } from '@shared/components'
-import { AIComponent } from '@shared/components/ai-component/AIComponent'
 import { LessonCard } from '@shared/components/lessonCard/LessonCard'
 import Loader from '@shared/components/loader/Loader'
 import { Tooltipe } from '@shared/components/tooltipe/Tooltipe'
@@ -24,9 +23,10 @@ const MyLearningComp: React.FC = () => {
     'Избранные курсы',
     'Завершённые курсы',
   ]
+  const counter = [0, 0, 3, 0]
   setTimeout(() => {
     setIsLoading(false)
-  }, 2000)
+  }, 3000)
  
   useEffect(()=> {
      const data:()=> Course[] | [] = () => {
@@ -37,14 +37,11 @@ const MyLearningComp: React.FC = () => {
   }
     data()
   }, [mode])
-//  const hendlrChangeMode = (btn) => {
-//   setMode(btn)
-//   data()
-//  }
+
   return (
     <>
       {isTooltipe && <Tooltipe />}
-      {isAIOpen && <AIComponent />}
+      {/* {isAIOpen && <AIComponent />} */}
       <main className={s.container}>
         {isLoading ? (
           <Loader />
@@ -53,11 +50,10 @@ const MyLearningComp: React.FC = () => {
             <div className={s.container__headBox}>
               <div className={s.container__btnBox}>
                 {buttons.map((btn, index) => {
-                  const count = index + 1
                   return (
                     <div className={s.container__boxbtn} key={index}>
-                      <div className={s.container__counterBox}>
-                        <p className={s.container__counter}>{count}</p>
+                      <div className={counter[index] === 0? 'hidden' : s.container__counterBox}>
+                        <p className={s.container__counter}>{counter[index]}</p>
                       </div>
                       <Button
                         className={s.container__btn}
