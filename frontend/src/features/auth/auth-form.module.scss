@@ -7,7 +7,6 @@
     display: flex;
     justify-content: center;
   }
-  
 
   &__container {
     position: absolute;
@@ -15,8 +14,8 @@
     top: 153px;
     background-color: var(--color-bg-main);
 
-    @media screen and (max-width: 1349px){
-      left: 56px
+    @media screen and (max-width: 1349px) {
+      left: 56px;
     }
 
     @media (max-width: 767px) {
@@ -51,7 +50,6 @@
     font-size: 16px;
     position: relative;
 
-
     &:first-child {
       margin-bottom: 24px;
     }
@@ -69,7 +67,6 @@
   &__passwordWrapper {
     position: relative;
     width: 300px;
-
   }
 
   &__links {
@@ -120,4 +117,3 @@
 .auth__input::placeholder {
   font-family: 'Moscow Sans', sans-serif;
 }
-

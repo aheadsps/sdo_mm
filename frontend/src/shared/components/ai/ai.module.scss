@@ -1,0 +1,35 @@
+.aiDescription {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 20px;
+  text-align: center;
+  color: var(--color-text-primary);
+  overflow: scroll;
+  height: 100%;
+}
+
+.aiTextarea {
+  position: relative;
+  color: var(--color-text-primary);
+}
+
+.textarea {
+  padding: 0;
+  margin-top: 20px;
+  min-height: 44px;
+  resize: none;
+
+  &::placeholder {
+    color: var(--color-text-secondary);
+    font-family: var(--font-family-secondary);
+    font-weight: var(--font-weight-light);
+    font-size: var(--font-size-s);
+  }
+}
+
+.textareaIcon {
+  position: absolute;
+  right: 5%;
+  bottom: 45%;
+}
