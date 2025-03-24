@@ -1,3 +1,4 @@
+import { useGetProfileQuery } from '@app/api'
 import { Typography } from '@shared/components'
 import { NavLink } from 'react-router-dom'
 
@@ -6,13 +7,16 @@ import LogOutIcon from '@assets/icons/LogOutIcon'
 import s from './user-info.module.scss'
 
 export const UserInfo = () => {
-  return (
+  const { data: profile, isLoading } = useGetProfileQuery()
+  return isLoading ? (
+    <div>Loading...</div>
+  ) : (
     <div className={s.userBlock}>
       <Typography variant="body_1" className={s.userName}>
-        Алена Сон
+        {profile?.first_name}
       </Typography>
       <Typography variant="body_1" className={s.userEmail}>
-        as.alenason@gmail.com
+        {profile?.email}
       </Typography>
       <NavLink to={'/auth'} className={s.logOut}>
         <LogOutIcon width={'24px'} height={'24px'} />

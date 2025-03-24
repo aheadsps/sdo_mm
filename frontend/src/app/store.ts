@@ -1,4 +1,4 @@
-import { authApi } from '@features/auth/api/auth.api'
+import { authApi } from '@app/api/auth.api'
 import { configureStore } from '@reduxjs/toolkit'
 import { useDispatch, useSelector } from 'react-redux'
 

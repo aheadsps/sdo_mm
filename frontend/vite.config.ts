@@ -10,6 +10,7 @@ export default defineConfig({
       '@assets': '/src/assets',
       '@shared': '/src/shared',
       '@features': '/src/features',
+      '@app': '/src/app',
     },
   },
   build: {

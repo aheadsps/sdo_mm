@@ -1,3 +1,4 @@
+import { useLoginMutation } from '@app/api'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { SerializedError } from '@reduxjs/toolkit'
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query'
@@ -6,7 +7,6 @@ import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 
-import { useLoginMutation } from '../api'
 import { authFormSchema } from '../ui/authFormSchema'
 
 import { AuthFormData } from './types'
@@ -42,7 +42,7 @@ export const useAuthForm = () => {
       await navigate('/main', { replace: true })
     } catch (err) {
       const error = handleError(err as FetchBaseQueryError | SerializedError)
-      setErrorMessage(error as string)
+      setErrorMessage(error)
     }
   }
 
