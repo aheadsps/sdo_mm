@@ -1,5 +1,5 @@
 from rest_framework import serializers
-
+from lessons import validators
 from lessons import models
 from users import serializers as user_serializers
 
@@ -115,41 +115,42 @@ class AnswerSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Answer
-        fields = ('id', 'text', 'correct',)
+        fields = (
+            "id",
+            "text",
+            "correct",
+        )
 
 
 class ContentAttachmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.ContentAttachment
-        fields = ('id', 'file', 'file_type',)
+        fields = (
+            "id",
+            "file",
+            "file_type",
+        )
 
 
 class StepSerializer(serializers.ModelSerializer):
     content_attachment = ContentAttachmentSerializer(many=True)
-    #test_block = TestBlock(many=True) добавить позже
+    # test_block = TestBlock(many=True) добавить позже
 
     class Meta:
         model = models.Step
-        fields = ('serial','title','content_text', 'content_attachment')
-
+        fields = ("serial", "title", "content_text", "content_attachment")
+        validators = (validators.MoreThanZeroValidator("serial"),)
 
     def create(self, validated_data: dict[int, str, str, dict]):
-        content_attachment = validated_data.pop('content_attachment')
+        content_attachment = validated_data.pop("content_attachment")
         step = models.Step._default_manager.create(**validated_data)
-        content_attachment_models = [models.ContentAttachment
-                                        (
-                                        **item_content_attachment,
-                                        content_attachment=step
-                                        )
-                                        for item_content_attachment
-                                        in content_attachment
-                                    ]
+        content_attachment_models = [
+            models.ContentAttachment(**item_content_attachment, content_attachment=step)
+            for item_content_attachment in content_attachment
+        ]
 
-        models.ContentAttachment._default_manager.bulk_create(
-                                            content_attachment_models
-                                        )
+        models.ContentAttachment._default_manager.bulk_create(content_attachment_models)
         return step
-
 
     def update(self, instance, validated_data):
         """
@@ -157,12 +158,11 @@ class StepSerializer(serializers.ModelSerializer):
         Определаяем поля доступные для редактирования
         ContentAttachment обновляется отдельно
         """
-        instance.serial = validated_data.get(
-                                    'serial', instance.serial)
-        instance.title = validated_data.get(
-                                    'title', instance.title)
+        instance.serial = validated_data.get("serial", instance.serial)
+        instance.title = validated_data.get("title", instance.title)
         instance.content_text = validated_data.get(
-                                    'content_text', instance.content_text)
+            "content_text", instance.content_text
+        )
         instance.save()
 
         return instance

@@ -62,9 +62,7 @@ class TestStepUrl(APITestCase):
         """
         Добавление нового объекта в Step
         """
-        #url = reverse("lessons:step", kwargs={"event_id": self.event.pk})
-        url = reverse("lessons:step")
-        #url = '/step/'
+        url = reverse("lessons:step-list")
         data = {
             "serial": 4,
             "title": "Шаг 4",
@@ -82,7 +80,7 @@ class TestStepUrl(APITestCase):
         """
         Меняем объект в Step
         """
-        url = reverse("lessons:step") + str(step.id) + '/'
+        url = reverse("lessons:step-detail", kwargs={"pk": step.id})
         data = {
             "serial": 4,
             "title": "Шаг 4",
@@ -99,20 +97,34 @@ class TestStepUrl(APITestCase):
         """
         Выводим один объект Step
         """
-        url = reverse("lessons:step") + str(step.id) + '/'
+        url = reverse("lessons:step-detail", kwargs={"pk": step.id})
         response = self.client.get(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         """
         Выводим все объекты Step
         """
-        url = reverse("lessons:step")
+        url = reverse("lessons:step-list")
         response = self.client.get(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         """
         Удаляем объект Step 204_NO_CONTENT
         """
-        url = reverse("lessons:step") + str(step.id) + '/'
+        url = reverse("lessons:step-detail", kwargs={"pk": step.id})
         response = self.client.delete(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+        """
+        Добавление нового объекта в Step
+        """
+        url = reverse("lessons:step-list")
+        data = {
+            "serial": -5,
+            "title": "Шаг 4",
+            "content_text": "content_text",
+            "content_attachment": [
+            ]
+        }
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_422_UNPROCESSABLE_ENTITY)

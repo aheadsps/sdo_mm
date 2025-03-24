@@ -9,17 +9,9 @@ app_name = LessonsConfig.name
 router = routers.SimpleRouter(
     trailing_slash=False,
 )
-router.register(prefix=r'events', viewset=views.EventViewSet)
+router.register(prefix=r"events", viewset=views.EventViewSet)
+router.register(prefix=r"step", viewset=views.StepViewSet)
 
 urlpatterns = [
-    path('', include(router.urls)),
-    # url: step/ только list и create
-    path('step/', views.StepViewSet.as_view({'get':'list',
-                                  'post':'create'}),
-                                    name='step'),
-    # url: step/[0-9]+ retrieve partial_update destroy
-    path('step/<int:pk>/', views.StepDetailViewSet.as_view({'get':'retrieve',
-                                               'patch':'partial_update',
-                                               'delete':'destroy'
-                                               }),name='step_detail'),
+    path("", include(router.urls)),
 ]

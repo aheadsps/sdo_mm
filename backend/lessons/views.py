@@ -1,4 +1,4 @@
-from rest_framework import generics, permissions
+from rest_framework import permissions
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
@@ -6,11 +6,10 @@ from rest_framework.viewsets import ModelViewSet
 from lessons import models
 from lessons import serializers
 from lessons import viewsets as own_viewsets
-from lessons.permissions import IsAdminOrIsStaff, CustomPermissionClass
+from lessons.permissions import IsAdminOrIsStaff, ModeratorPermissionClass
 
-from django.contrib.auth.mixins import (LoginRequiredMixin,
-                                        PermissionRequiredMixin,
-                                        )
+from django.contrib.auth.mixins import (LoginRequiredMixin)
+
 
 class EventViewSet(own_viewsets.GetUpdateDeleteViewSet):
     """
@@ -44,23 +43,20 @@ class EventViewSet(own_viewsets.GetUpdateDeleteViewSet):
         return Response(serializer.data)
 
 
-class StepViewSet(LoginRequiredMixin,
-                  PermissionRequiredMixin,
-                  ModelViewSet ):
+class StepViewSet(ModelViewSet):
     """
     Просмотр всех шагов уроков list
     Создание нового шага урока
-    """
-    queryset = models.Step._default_manager.all()
-    serializer_class = serializers.StepSerializer
-    permission_required = "lessons.can_change_step"
-
-
-class StepDetailViewSet(LoginRequiredMixin, ModelViewSet
-                        ):
-    """
     Просмотр одного шага, Редактирование, удаление шага урока
     """
+
     queryset = models.Step._default_manager.all()
     serializer_class = serializers.StepSerializer
-    permission_classes = [CustomPermissionClass]
+
+
+    def get_permissions(self):
+        if self.action == "retrieve":
+            permission_classes = [permissions.IsAuthenticated]  # [IsAdminOrIsStaff]
+        else:
+            permission_classes = [ModeratorPermissionClass | permissions.IsAdminUser]
+        return [permission() for permission in permission_classes]
