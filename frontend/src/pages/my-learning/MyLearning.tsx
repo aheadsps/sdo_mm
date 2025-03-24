@@ -43,9 +43,9 @@ const MyLearningComp: React.FC = () => {
   }
   return (
     <>
-      {/* {isAIOpen && <AiComponent isOpen={isAIOpen} setIsOpen={setIsAIOpen}/>} */}
+      {isAIOpen && <AiComponent isOpen={isAIOpen} setIsOpen={setIsAIOpen}/>}
       {isTooltipe && <Tooltipe isOpen={isTooltipe} setIsOpen={setIsTooltipe}/>}
-      <main className={s.container}>
+      <div className={s.container}>
         {isLoading ? (
           <Loader />
         ) : (
@@ -83,7 +83,7 @@ const MyLearningComp: React.FC = () => {
             </div>
           </>
         )}
-      </main>
+      </div>
     </>
   )
 }

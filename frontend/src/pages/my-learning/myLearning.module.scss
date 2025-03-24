@@ -1,10 +1,27 @@
 .container {
-  width: 100%;
+  // width: 100%;
   height: fit-content;
   background-color: var(--color-bg-main);
   display: flex;
   flex-direction: column;
   gap: 30px;
+  @media screen and (min-width: 1350) {
+    max-width: 100%;
+    min-width: 1056px;
+  }
+  @media screen and (min-width: 1024) and (max-width: 1349) {
+    max-width: 730px;
+    min-width: 480px;
+  }
+  @media screen and (min-width: 768px) and (max-width: 1023) {
+    max-width: 480px;
+    min-width: 435px;
+  }
+  // @media screen and (max-width: 767px) {
+  //   max-width: 473px;
+  //   min-width: 360px;
+  //   flex-direction: column;
+  // }
   &__headBox {
     width: 100%;
     height: 45px;
@@ -80,4 +97,111 @@
     flex-wrap: wrap;
     margin-top: 10px;
   }
+  // @media screen and (min-width: 1350) {
+  //   max-width: 100%;
+  //   min-width: 1056px;
+  // }
+  // @media screen and (min-width: 1024) and (max-width: 1349)  {
+  //   max-width: 730px;
+  //   min-width: 480px;
+  // }
+  // @media screen and (min-width: 768px) and (max-width: 1023)  {
+  //   max-width: 480px;
+  //   min-width: 435px;
+  // }
 }
+
+@media screen and (max-width: 767px) {
+  .container {
+    // width: 100%;
+    // height: fit-content;
+    // background-color: var(--color-bg-main);
+    // display: flex;
+    // flex-direction: column;
+    // gap: 30px;
+    max-width: 473px;
+    min-width: 360px;
+    &__headBox {
+      width: 100%;
+      height: 45px;
+      display: flex;
+      gap: 14px;
+    }
+    &__btnBox {
+      width: 94%;
+      height: 45px;
+      display: flex;
+      gap: 24px;
+    }
+
+    &__boxbtn {
+      position: relative;
+    }
+    &__boxbtn_unactive {
+      position: static;
+    }
+
+    &__btn {
+      width: 213px;
+      // width: fit-content;
+      height: 45px;
+      border-radius: 8px;
+      border: none;
+      padding: 10px 20px;
+    }
+
+    &__counterBox {
+      width: 32px;
+      height: 32px;
+      position: absolute;
+      top: -15px;
+      left: 192px;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 20px;
+      background: var(--color-accent-red500);
+    }
+    &__counterBox_hidden {
+      width: 32px;
+      height: 32px;
+      position: absolute;
+      top: -15px;
+      left: 192px;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 20px;
+      background: transparent;
+      z-index: -1000;
+    }
+    &__counter {
+      width: 9px;
+      height: 18px;
+      font-family: var(--font-family-secondary);
+      font-weight: 300;
+      font-size: var(--font-size-xs);
+      line-height: 130%;
+      letter-spacing: 0.25px;
+      vertical-align: middle;
+      color: var(--color-text-button);
+    }
+    &__content {
+      width: 320px;
+      height: fit-content;
+      // display: flex;
+      flex-direction: column;
+      // justify-content: space-between;
+      flex-wrap: wrap;
+      // margin-top: 10px;
+    }
+  }
+}
+// @media screen and (min-width: 1350) {
+// }
+// @media screen and (min-width: 1024) and (max-width: 1349)  {
+// }
+// @media screen and (min-width: 768px) and (max-width: 1023)  {
+// }
