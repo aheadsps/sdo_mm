@@ -19,7 +19,6 @@ export { default as SendIcon } from './SendIcon'
 export * from './file-icons'
 
 export { default as TooltipeCheckboxIcon } from './TooltipeCheckboxIcon'
-export { default as CloseIcon } from './CloseIcon'
 export { default as LikeIcon } from './LikeIcon'
 export { default as DislikeIcon } from './DislikeIcon'
 export { default as StickersIcon } from './StickersIcon'
