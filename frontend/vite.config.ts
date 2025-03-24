@@ -12,4 +12,9 @@ export default defineConfig({
       '@features': '/src/features',
     },
   },
+  build: {
+    outDir: 'dist',
+    sourcemap: true,
+    cssCodeSplit: true,
+  },
 })

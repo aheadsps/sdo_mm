@@ -1,20 +1,20 @@
-import { forwardRef, SVGProps, Ref } from 'react'
+import { forwardRef, Ref, SVGProps } from 'react'
 
 const CloseIcon = forwardRef<SVGSVGElement, SVGProps<SVGSVGElement>>(
   (props, ref: Ref<SVGSVGElement>) => (
     <svg
-      width="24"
-      height="25"
-      viewBox="0 0 24 25"
+      width="10"
+      height="10"
+      viewBox="0 0 10 10"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      ref={ref}
       {...props}
+      ref={ref}
     >
       <path
-        d="M6.66699 7.16669L17.3337 17.8334M6.66699 17.8334L17.3337 7.16669"
-        stroke="#58151C"
-        stroke-width="2.66667"
+        d="M1 1L9 9M1 9L9 1"
+        stroke="currentColor"
+        stroke-width="2"
         stroke-linecap="round"
         stroke-linejoin="round"
       />

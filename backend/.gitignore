@@ -8,7 +8,7 @@ __pycache__/
 .42c
 .vscode
 .python-version
-
+*/migrations
 # Distribution / packaging
 .Python
 build/

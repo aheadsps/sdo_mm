@@ -14,6 +14,8 @@ export { default as HeartFilledIcon } from './HeartFillerIcon'
 export { default as ArrowUpRightIcon } from './ArrowUpRightIcon'
 export { default as ArrowDownIcon } from './ArrowDownIcon'
 export { default as ArrowUpIcon } from './ArrowUpIcon'
+export { default as CloseIcon } from './CloseIcon'
+export { default as SendIcon } from './SendIcon'
 export * from './file-icons'
 
 export { default as TooltipeCheckboxIcon } from './TooltipeCheckboxIcon'
