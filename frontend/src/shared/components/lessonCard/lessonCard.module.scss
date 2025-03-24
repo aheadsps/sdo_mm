@@ -18,11 +18,6 @@
   //   max-width: 480px;
   //   min-width: 435px;
   // }
-  // @media screen and (max-width: 767px) {
-  // width: 320px;
-  // height: 1207.8426513671875px;
-  // gap: 24px;
-  // }
   &__top {
     width: 483px;
     height: 341px;
@@ -39,12 +34,7 @@
     //   max-width: 480px;
     //   min-width: 435px;
     // }
-    // @media screen and (max-width: 767px) {
-    // width: 320px;
-    // height: 225.9213104248047px;
-    // }
   }
-
   &__likeBox {
     width: 161px;
     height: fit-content;
@@ -125,7 +115,11 @@
     flex-direction: column;
     gap: 16px;
   }
-
+  &__dataBox {
+    width: 100%;
+    display: flex;
+    // justify-content: center;
+  }
   &__data {
     width: 443px;
     height: 24px;
@@ -245,6 +239,9 @@
       width: 100%;
       height: fit-content;
       gap: 8px;
+    }
+    &__dataBox {
+      justify-content: center;
     }
     &__data {
       width: 220px;

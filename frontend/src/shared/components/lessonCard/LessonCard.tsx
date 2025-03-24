@@ -34,30 +34,32 @@ export const LessonCard: React.FC<Props> = (props) => {
         <div className={s.container__card}>
           <h2 className={s.container__title}>{item.name}</h2>
           <div className={s.container__description}>
-            <div className={s.container__data}>
-              <div className={s.container__param}>
-                <div
-                  className={
-                    status > 1
-                      ? s.container__circle_red
-                      : status < 1
-                        ? s.container__circle_green
-                        : s.container__circle_orange
-                  }
-                ></div>
-                <p className={s.container__paramTxt}>{status > 1 ? 'Просрочен' : item.days}</p>
-              </div>
-              <div className={s.container__param}>
-                <StickersIcon />
-                <p className={s.container__paramTxt}>{item.lessons}</p>
-              </div>
-              <div className={s.container__param}>
-                <HourglassIcon />
-                <p className={s.container__paramTxt}>{item.time}</p>
-              </div>
-              <div className={s.container__param}>
-                <ClockIcon />
-                <p className={s.container__paramTxt}>{item.progress}</p>
+            <div className={s.container__dataBox}>
+              <div className={s.container__data}>
+                <div className={s.container__param}>
+                  <div
+                    className={
+                      status > 1
+                        ? s.container__circle_red
+                        : status < 1
+                          ? s.container__circle_green
+                          : s.container__circle_orange
+                    }
+                  ></div>
+                  <p className={s.container__paramTxt}>{status > 1 ? 'Просрочен' : item.days}</p>
+                </div>
+                <div className={s.container__param}>
+                  <StickersIcon />
+                  <p className={s.container__paramTxt}>{item.lessons}</p>
+                </div>
+                <div className={s.container__param}>
+                  <HourglassIcon />
+                  <p className={s.container__paramTxt}>{item.time}</p>
+                </div>
+                <div className={s.container__param}>
+                  <ClockIcon />
+                  <p className={s.container__paramTxt}>{item.progress}</p>
+                </div>
               </div>
             </div>
             <p className={s.container__depiction}>{item.description}</p>
