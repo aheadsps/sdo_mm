@@ -1,0 +1,72 @@
+/* .main {
+  margin-top: 93px;
+  padding: 20px;
+}
+
+.contentBlock {
+  display: flex;
+  justify-content: space-between;
+}
+
+.tasks {
+  display: flex;
+  flex-direction: column;
+}
+
+.title {
+  margin-bottom: 24px;
+  color: var(--color-text-primary);
+}
+
+.expiredTasks {
+  margin-top: 40px;
+}
+
+.rightBlock {
+  margin-left: 32px;
+}
+
+.appointedTask {
+  max-width: 100%;
+}
+
+.responsive {
+  display: flex;
+  flex-direction: column;
+
+  @media screen and (min-width: 768px) and (max-width: 1024px) {
+    max-width: 415px;
+  }
+}
+ */
+
+ .main {
+  margin-top: 93px;
+  padding: 20px;
+}
+
+.contentBlock {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-areas:
+    "tasks warning"
+    "tasks courses";
+  column-gap: 40px;
+
+  @media (max-width: 1349px) {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "warning"
+      "tasks"
+      "courses";
+    max-width: 520px;
+  }
+
+  @media screen and (min-width: 1350px) {
+    grid-template-rows: 0.2fr 1fr;
+  }
+
+  @media screen and (min-width: 768px) and (max-width: 1024px) {
+    max-width: 415px;
+  }
+}

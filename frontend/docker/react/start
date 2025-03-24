@@ -1,0 +1,8 @@
+#!/bin/ash
+
+set -o errexit
+set -o pipefail
+set -o nounset
+
+npm run build
+npm run dev -- --host
