@@ -6,7 +6,8 @@ from lessons import models, serializers
 from lessons import viewsets as own_viewsets
 from lessons.models import TestBlock
 from lessons.permissions import IsAdminOrIsStaff
-from lessons.serializers import TestBlockSerializersOptimize, TestBlockSerializersDetail
+from lessons.serializers import (TestBlockSerializersDetail,
+                                 TestBlockSerializersOptimize)
 
 
 class EventViewSet(own_viewsets.GetUpdateDeleteViewSet):
@@ -50,6 +51,7 @@ class TestBlockListCreateAPIView(generics.ListCreateAPIView):
 class TestBlockRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = TestBlockSerializersDetail()
     queryset = TestBlock.objects.all()
+
 
 # class TestBlockViewSet(viewsets.ViewSet):
 #     """

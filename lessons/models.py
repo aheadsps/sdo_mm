@@ -168,30 +168,33 @@ class Course(models.Model):
     def __str__(self):
         return self.name
 
+
 class Lesson(models.Model):
     """
     Модель преставления урока
     """
-    name = models.CharField(_("Название"),
-                            max_length=256,
-                            null=False,
-                            blank=False,
-                            help_text="Название урока",
-                            )
-    serial = models.ImageField(_("Номер"),
-                               null=False,
-                               blank=False,
-                               validators=[MinValueValidator(1)],
-                               default=1,
-                               help_text="Порядковый номер урока"
-                               )
+
+    name = models.CharField(
+        _("Название"),
+        max_length=256,
+        null=False,
+        blank=False,
+        help_text="Название урока",
+    )
+    serial = models.ImageField(
+        _("Номер"),
+        null=False,
+        blank=False,
+        validators=[MinValueValidator(1)],
+        default=1,
+        help_text="Порядковый номер урока",
+    )
     course = models.ForeignKey(
         Course,
         verbose_name="Курс",
         on_delete=models.CASCADE,
-        related_name='lessons',
+        related_name="lessons",
     )
-
 
     # step = models.ManyToManyField(_("Шаг"),
     #                                Step,
@@ -205,6 +208,7 @@ class Lesson(models.Model):
     #     blank=True,
     #     related_name='lessons'
     # )
+
 
 class TestBlock(models.Model):
     """

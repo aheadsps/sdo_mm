@@ -113,6 +113,7 @@ class TestBlockSerializersOptimize(serializers.ModelSerializer):
     """
     Сериалайзер оптимизированный
     """
+
     questions = QuestionSerializer(many=True, read_only=True)
     answers = AnswerSerializer(many=True, read_only=True)
 
@@ -121,12 +122,11 @@ class TestBlockSerializersOptimize(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class TestBlockSerializersDetail(
-    serializers.ModelSerializer
-):
+class TestBlockSerializersDetail(serializers.ModelSerializer):
     """
     Сериалайзер детальный с логикой получения user_story, создания и обновления существующих записей.
     """
+
     questions = QuestionSerializer(many=True, read_only=True)
     answers = AnswerSerializer(many=True, read_only=True)
     user_story = serializers.SerializerMethodField()

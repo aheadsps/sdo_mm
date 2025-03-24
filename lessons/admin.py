@@ -21,4 +21,5 @@ class QuestionAdmin(admin.ModelAdmin):
 
     list_display = ("text", "image")
 
+
 admin.site.register(TestBlock)
