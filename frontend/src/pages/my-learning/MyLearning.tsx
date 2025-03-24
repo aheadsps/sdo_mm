@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Button } from '@shared/components'
+import { AiComponent, Button } from '@shared/components'
 import { LessonCard } from '@shared/components/lessonCard/LessonCard'
 import Loader from '@shared/components/loader/Loader'
 import { Tooltipe } from '@shared/components/tooltipe/Tooltipe'
@@ -12,8 +12,8 @@ import { Course } from './types'
 
 const MyLearningComp: React.FC = () => {
   const [mode, setMode] = useState<string>('Назначенные курсы')
-  const [isTooltipe, setIsTooltipe] = useState<boolean>(false)
-  const [isAIOpen, setIsAIOpen] = useState<boolean>(false)
+  const [isTooltipe, setIsTooltipe] = useState<boolean>(true)
+  const [isAIOpen, setIsAIOpen] = useState<boolean>(false) //true false
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [currentCourses, setCurrentCourses] = useState<Course[] | []>([])
 
@@ -37,11 +37,14 @@ const MyLearningComp: React.FC = () => {
   }
     data()
   }, [mode])
-
+  const hendleAiOpen = () => {
+    setMode('ИИ')
+    setIsAIOpen(!isAIOpen)
+  }
   return (
     <>
-      {isTooltipe && <Tooltipe />}
-      {/* {isAIOpen && <AIComponent />} */}
+      {/* {isAIOpen && <AiComponent isOpen={isAIOpen} setIsOpen={setIsAIOpen}/>} */}
+      {isTooltipe && <Tooltipe isOpen={isTooltipe} setIsOpen={setIsTooltipe}/>}
       <main className={s.container}>
         {isLoading ? (
           <Loader />
@@ -50,9 +53,10 @@ const MyLearningComp: React.FC = () => {
             <div className={s.container__headBox}>
               <div className={s.container__btnBox}>
                 {buttons.map((btn, index) => {
+                  
                   return (
                     <div className={s.container__boxbtn} key={index}>
-                      <div className={counter[index] === 0? 'hidden' : s.container__counterBox}>
+                      <div className={counter[index] === 0? s.container__counterBox_hidden : s.container__counterBox}>
                         <p className={s.container__counter}>{counter[index]}</p>
                       </div>
                       <Button
@@ -69,7 +73,7 @@ const MyLearningComp: React.FC = () => {
               <Button
                 children="ИИ"
                 variant={mode === 'ИИ' ? 'primary' : 'secondary'}
-                onClick={() => setMode('ИИ')}
+                onClick={() => hendleAiOpen()}
               />
             </div>
             <div className={s.container__content}>
@@ -77,11 +81,6 @@ const MyLearningComp: React.FC = () => {
                 return <LessonCard course={course} key={course.id} />
               })}
             </div>
-            {/* <div className={s.container__content}>
-              {lessons.map((lesson: Lesson) => {
-                return <LessonCard course={lesson} key={lesson.id} />
-              })}
-            </div> */}
           </>
         )}
       </main>
