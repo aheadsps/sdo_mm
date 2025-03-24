@@ -9,7 +9,11 @@ export const authApi = createApi({
   baseQuery: fetchBaseQuery({ baseUrl }),
   endpoints: (build) => ({
     login: build.mutation<ResponseType, LoginData>({
-      query: () => '/login',
+      query: (loginData) => ({
+        url: '/login',
+        method: 'POST',
+        body: loginData,
+      }),
     }),
   }),
 })

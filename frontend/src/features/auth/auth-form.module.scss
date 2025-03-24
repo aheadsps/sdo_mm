@@ -117,3 +117,9 @@
 .auth__input::placeholder {
   font-family: 'Moscow Sans', sans-serif;
 }
+
+.error {
+  color: var(--color-accent-red500);
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
