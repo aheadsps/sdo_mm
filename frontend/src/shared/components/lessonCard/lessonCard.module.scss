@@ -47,11 +47,12 @@
 
   &__likeBox {
     width: 161px;
-    height: 64px;
-    padding: 10px;
+    height: fit-content;
+    padding: 0 10px;
+    border-radius: 10%;
     position: absolute;
-    top: -2px;
-    left: 325px;
+    top: 10px;
+    left: 322px;
     display: flex;
     align-items: center;
     justify-content: flex-start;
@@ -190,53 +191,59 @@
 
 @media screen and (max-width: 767px) {
   .container {
-    width: 320px;
+    width: 100%;
     height: fit-content;
     border-radius: 8px;
     &__top {
-      width: 320px;
-      height: 225.92px;
+      width: 100%;
+      height: fit-content;
     }
     &__img {
-      width: 320px;
-      height: 225.92px;
+      width: 100%;
+      height: fit-content;
     }
     &__likeBox {
-      width: 127px;
-      height: 44px;
-      // top: -12px;
+      // width: 127px;
+      width: 40%;
+      height: fit-content;
+      top: 0;
       left: 192px;
+      // right: -42%;
+      left: 67%;
       gap: 10px;
     }
     &__courseBox {
-      width: 63px;
+      width: 49.6%;
       height: 27px;
       padding: 2px 12px 4px;
     }
     &__course {
-      width: 38px;
+      // width: 38px;
+      width: fit-content;
       height: 21px;
+      display: flex;
+      justify-content: center;
       font-size: var(--font-size-s);
     }
     &__bottom {
-      width: 320px;
-      height: 366px;
+      width: 100%;
+      height: fit-content;
       gap: 16px;
     }
 
     &__card {
-      width: 280px;
-      height: 276px;
+      width: 100%;
+      height: fit-content;
       gap: 16px;
     }
     &__title {
-      width: 280px;
+      width: 100%;
       height: fit-content;
       font-size: var(--font-size-s);
     }
     &__description {
-      width: 280px;
-      height: 204px;
+      width: 100%;
+      height: fit-content;
       gap: 8px;
     }
     &__data {
@@ -246,13 +253,6 @@
       row-gap: 8px;
       column-gap: 24px;
     }
-    // &__param {
-    //   width: fit-content;
-    //   height: 24px;
-    //   display: flex;
-    //   gap: 8px;
-    //   align-items: center;
-    // }
     &__depiction {
       width: 280px;
       height: fit-content;
@@ -266,10 +266,9 @@
     }
 
     &__btn {
-      width: 443px;
-      height: 40px;
-      border-radius: 8px;
-      padding: 13px 18px;
+      width: 100%;
+      height: fit-content;
+      padding: 10px 12px;
     }
   }
 }
