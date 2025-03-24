@@ -38,6 +38,10 @@
   align-items: center;
   gap: 41px;
 
+  @media screen and (max-width: 1349px) {
+    gap: 30px;
+  }
+
   @media screen and (max-width: 767px) {
     flex-direction: column;
     gap: 0;
