@@ -2,7 +2,7 @@ from rest_framework import serializers
 from lessons import validators
 from lessons import models
 from users import serializers as user_serializers
-
+from rest_framework.utils import html, model_meta
 
 class AnswerSerializer(serializers.ModelSerializer):
     """
@@ -123,13 +123,14 @@ class AnswerSerializer(serializers.ModelSerializer):
 
 
 class ContentAttachmentSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField()
+   # file = serializers.FileField()
+    #file_type = serializers.CharField(max_length=10)
+    #content_attachment = serializers.RelatedField(models.Step,read_only=True)
+
     class Meta:
         model = models.ContentAttachment
-        fields = (
-            "id",
-            "file",
-            "file_type",
-        )
+        fields = "__all__"
 
 
 class StepSerializer(serializers.ModelSerializer):
@@ -143,34 +144,37 @@ class StepSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data: dict[int, str, str, dict]):
         content_attachment = validated_data.pop("content_attachment")
-        print()
         step = models.Step._default_manager.create(**validated_data)
-        '''content_attachment_models = [
-            models.ContentAttachment(**item, content_attachment=step)
-            for item in content_attachment
-        ]'''
+        # Заполняем поле content_attachment
         content_attachment_models = []
         for item in content_attachment:
             content_attachment_models.append(
                 models.ContentAttachment(**item, content_attachment=step)
             )
-
-
-
         models.ContentAttachment._default_manager.bulk_create(content_attachment_models)
         return step
 
     def update(self, instance, validated_data):
         """
-        Обработка обновления Step
-        Определаяем поля доступные для редактирования
+        Обработка обновления Step.
+        Определяем поля доступные для редактирования
         ContentAttachment обновляется отдельно
         """
+
+
         instance.serial = validated_data.get("serial", instance.serial)
         instance.title = validated_data.get("title", instance.title)
         instance.content_text = validated_data.get(
             "content_text", instance.content_text
         )
+
+        print(validated_data.get("content_attachment"))
+
+        # получим все вложения старые
+        for item in instance.content_attachment.all():
+            print(item.id, item.file_type)
+
+
         instance.save()
 
         return instance
