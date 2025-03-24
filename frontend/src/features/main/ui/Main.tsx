@@ -1,4 +1,4 @@
-import { Calendar } from './calendar/Calendar'
+import { Calendar } from '../../../shared/components/calendar/Calendar'
 import s from './main.module.scss'
 import { CurrentTasks } from './tasks-elements/CurrentTasks'
 import { ExpiredTasks } from './tasks-elements/ExpiredTasks'

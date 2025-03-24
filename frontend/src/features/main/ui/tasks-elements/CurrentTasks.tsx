@@ -1,7 +1,7 @@
 import { Typography } from '@shared/components'
 
 import s from '../main.module.scss'
-import { Task } from '../task'
+import { Task } from '../../../../shared/components/task'
 
 export const CurrentTasks = () => {
   const hasTasks = true
