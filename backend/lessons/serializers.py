@@ -143,11 +143,19 @@ class StepSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data: dict[int, str, str, dict]):
         content_attachment = validated_data.pop("content_attachment")
+        print()
         step = models.Step._default_manager.create(**validated_data)
-        content_attachment_models = [
-            models.ContentAttachment(**item_content_attachment, content_attachment=step)
-            for item_content_attachment in content_attachment
-        ]
+        '''content_attachment_models = [
+            models.ContentAttachment(**item, content_attachment=step)
+            for item in content_attachment
+        ]'''
+        content_attachment_models = []
+        for item in content_attachment:
+            content_attachment_models.append(
+                models.ContentAttachment(**item, content_attachment=step)
+            )
+
+
 
         models.ContentAttachment._default_manager.bulk_create(content_attachment_models)
         return step

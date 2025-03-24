@@ -15,7 +15,7 @@ class MoreThanZeroValidator:
         """
         Проверка корректности serial >= 1
         """
-        if serializer_field.initial_data.get(self.serial) < 1:
+        if int(serializer_field.initial_data.get(self.serial)) < 1:
             raise exceptions.UnprocessableEntityError(
                 dict(serial="Не может быть меньше 1")
             )
