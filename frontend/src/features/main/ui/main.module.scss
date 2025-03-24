@@ -1,44 +1,3 @@
-/* .main {
-  margin-top: 93px;
-  padding: 20px;
-}
-
-.contentBlock {
-  display: flex;
-  justify-content: space-between;
-}
-
-.tasks {
-  display: flex;
-  flex-direction: column;
-}
-
-.title {
-  margin-bottom: 24px;
-  color: var(--color-text-primary);
-}
-
-.expiredTasks {
-  margin-top: 40px;
-}
-
-.rightBlock {
-  margin-left: 32px;
-}
-
-.appointedTask {
-  max-width: 100%;
-}
-
-.responsive {
-  display: flex;
-  flex-direction: column;
-
-  @media screen and (min-width: 768px) and (max-width: 1024px) {
-    max-width: 415px;
-  }
-}
- */
 
  .main {
   margin-top: 93px;
@@ -81,18 +40,14 @@
   flex-direction: column;
 }
 
-.assignedCourses {
-  grid-area: courses;
-
-  @media screen and (max-width: 1349px) {
-    margin-top: 40px;
-  }
-
-}
 
 .title {
   margin-bottom: 24px;
   color: var(--color-text-primary);
+}
+
+.noTasksText {
+  color: var(--color-text-secondary);
 }
 
 .rightBlock {
@@ -101,8 +56,5 @@
 
 .expiredTasks {
   margin-top: 40px;
-}
-
-.appointedTask {
-  max-width: 100%;
+  margin-bottom: 40px;
 }
