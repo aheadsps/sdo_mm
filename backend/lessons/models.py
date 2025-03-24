@@ -2,10 +2,9 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth import get_user_model
 from django.conf import settings
-from django.core.validators import MinValueValidator
-
 from lessons.utils import (path_maker_question,
                            path_maker_course,
+                           path_maker_content_attachment,
                            )
 
 
@@ -167,7 +166,6 @@ class Step(models.Model):
     serial = models.IntegerField(null=False,
                                  blank=False,
                                  default=1,
-                                 validators=[MinValueValidator(1)],
                                  verbose_name="Порядковый номер шага"
                                  )
 
@@ -187,7 +185,7 @@ TYPE_CONTENT = [
     ]
 
 class ContentAttachment(models.Model):
-    file = models.FileField(upload_to ='media/content_step', null=True, blank=True)
+    file = models.FileField(upload_to =path_maker_content_attachment, null=True, blank=True)
     file_type = models.CharField(max_length=10,
                                  choices=TYPE_CONTENT,
                                  default="Image",
@@ -204,4 +202,4 @@ class ContentAttachment(models.Model):
         verbose_name_plural = "Контент для шага урока"
 
     def __str__(self):
-        return self.file
+        return self.file.name
