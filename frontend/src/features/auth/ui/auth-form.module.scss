@@ -10,6 +10,7 @@
 
   &__container {
     position: absolute;
+    min-width: 300px;
     left: 200px;
     top: 153px;
     background-color: var(--color-bg-main);
@@ -51,7 +52,6 @@
 
   &__passwordWrapper {
     position: relative;
-    width: 300px;
   }
 
   &__links {
@@ -83,7 +83,7 @@
   &__eyeIconWrapper {
     position: absolute;
     top: 40%;
-    right: 12px;
+    right: 0;
     transform: translateY(-50%);
     cursor: pointer;
   }
