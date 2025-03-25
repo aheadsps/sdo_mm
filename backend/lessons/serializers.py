@@ -146,6 +146,9 @@ class StepSerializer(serializers.ModelSerializer):
         validators = (validators.MoreThanZeroValidator("serial"),)
 
     def create(self, validated_data: dict[int, str, str, dict]):
+        """
+        Создаем новый шаг урока
+        """
         content_attachment = validated_data.pop("content_attachment")
         step = models.Step._default_manager.create(**validated_data)
         # Заполняем поле content_attachment
@@ -160,11 +163,16 @@ class StepSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         """
         Обработка обновления Step.
-        Определяем поля доступные для редактирования
+
         ContentAttachment не редактируется:
         создается новый или удаляется
+        В API-запросе необходимо передать
+        ВСЕ актуальные записи ContentAttachment вместе с их ID
+        Если запись передана не будет - она удаляется из БД.
+        Если ID = null или не указан создается новая запись
         """
 
+        # Определяем поля Step
         instance.serial = validated_data.get("serial", instance.serial)
         instance.title = validated_data.get("title", instance.title)
         instance.content_text = validated_data.get(
