@@ -985,6 +985,45 @@ paths:
         "422":
           $ref: "#/components/responses/UnprocessableEntity"
 
+  /rates/vote/{lesson_id}:
+    post:
+      summary: Поставить оценку уроку
+      parameters:
+        - in: path
+          name: lesson_id
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+      tags:
+        - Rate
+      security:
+        - Token: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: "#/components/schemas/Rate"
+      responses:
+        "200":
+          description: JSON ответ подверждение
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/Rate"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+
 components:
   responses:
     NotFound:
@@ -1270,6 +1309,29 @@ components:
         - name
         - profession
         - experiences
+
+    Rate:
+      description: Сущность оценок по уроку
+      additionalProperties: false
+      type: object
+      properties:
+        id:
+          type: integer
+          minimum: 1
+          readOnly: true
+        user_id:
+          type: integer
+          minimum: 1
+          readOnly: true
+        lesson_id:
+          type: integer
+          minimum: 1
+          readOnly: true
+        rate:
+          type: integer
+          minimum: 1
+          maximum: 5
+          readOnly: false
 
     LessonView:
       description: Сущность урока детальный
