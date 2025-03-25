@@ -1,39 +1,11 @@
 .container {
-  // width: 483px;
-  // height: 675px;
   border-radius: 8px;
   display: flex;
   flex-direction: column;
   position: relative;
-  // @media screen and (min-width: 1350) {
-  //   width: 483px;
-  //   height: 675px;
-  // }
-  // @media screen and (min-width: 1024) and (max-width: 1349) {
-  //   width: 435px;
-  //   height: 1274.2236328125px;
-  //   gap: 40px;
-  // }
-  // @media screen and (min-width: 768px) and (max-width: 1023) {
-  //   max-width: 480px;
-  //   min-width: 435px;
-  // }
   &__top {
     width: 483px;
     height: 341px;
-    // @media screen and (min-width: 1350) {
-    //   width: 483px;
-    //   height: 675px;
-    // }
-    // @media screen and (min-width: 1024) and (max-width: 1349) {
-    //   width: 435px;
-    //   height: 1274.2236328125px;
-    //   gap: 40px;
-    // }
-    // @media screen and (min-width: 768px) and (max-width: 1023) {
-    //   max-width: 480px;
-    //   min-width: 435px;
-    // }
   }
   &__likeBox {
     width: 161px;
@@ -126,7 +98,6 @@
     display: flex;
     justify-content: space-between;
   }
-
   &__param {
     width: fit-content;
     height: 24px;
@@ -134,7 +105,15 @@
     gap: 8px;
     align-items: center;
   }
-
+  &__paramTxt {
+    font-family: Moscow Sans;
+    font-weight: 300;
+    font-size: var(--font-size-s);
+    line-height: 140%;
+    letter-spacing: 0.25px;
+    vertical-align: middle;
+    color: var(--color-text-secondary);
+  }
   &__circle_blue {
     width: 24px;
     height: 24px;
@@ -182,7 +161,83 @@
     padding: 13px 18px;
   }
 }
+@media screen and (min-width: 768px) and (max-width: 1349px) {
+  .container {
+    width: 100%;
+    height: fit-content;
+    border-radius: 8px;
+    &__top {
+      width: 100%;
+      height: fit-content;
+    }
+    &__img {
+      width: 100%;
+      height: fit-content;
+    }
+    &__likeBox {
+      width: 33%;
+      height: 7%;
+      top: 0;
+      left: 192px;
+      left: 67%;
+      margin-top: 5px;
+      padding-right: 0;
+    }
+    &__courseBox {
+      width: 94%;
+      min-height: 29px;
+      display: flex;
+      justify-content: center;
+      padding: 2px 20px 6px;
+    }
+    &__course {
+      width: fit-content;
+      height: 21px;
+      font-size: var(--font-size-m);
+    }
+    &__bottom {
+      width: 100%;
+      height: fit-content;
+      gap: 24px;
+    }
 
+    &__card {
+      width: 100%;
+      height: fit-content;
+      gap: 24px;
+    }
+    &__title {
+      width: 100%;
+      height: fit-content;
+      font-size: var(--font-size-s);
+    }
+    &__description {
+      width: 100%;
+      height: fit-content;
+      gap: 16px;
+    }
+    &__dataBox {
+      justify-content: space-between;
+    }
+    &__data {
+      width: fit-content;
+      height: 24px;
+    }
+    &__paramTxt {
+      font-size: var(--font-size-xs);
+    }
+    &__depiction {
+      width: 100%;
+      // width: 280px;
+      font-size: var(--font-size-xs);
+    }
+    &__btn {
+      width: 100%;
+      height: fit-content;
+      padding: 11px 14px;
+    }
+  }
+}
 @media screen and (max-width: 767px) {
   .container {
     width: 100%;

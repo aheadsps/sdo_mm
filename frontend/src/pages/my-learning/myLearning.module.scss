@@ -19,10 +19,6 @@
     height: 45px;
     display: flex;
     gap: 14px;
-    @media screen and (min-width: 768px) and (max-width: 1349) {
-      flex-direction: column;
-      gap: 20px;
-    }
   }
   &__btnBox {
     width: 94%;
@@ -94,44 +90,24 @@
     margin-top: 10px;
   }
 }
-// @media screen and (min-width: 1350) {
-// }
-// @media screen and (min-width: 1024) and (max-width: 1349)  {
-// }
-@media screen and (min-width: 768px) and (max-width: 1349) {
+@media screen and (min-width: 768px) and (max-width: 1349px) {
   .container {
     max-width: 1349px;
     min-width: 435px;
-    background-color: blueviolet;
     &__headBox {
-      width: 100%;
+      height: fit-content;
+      display: flex;
       flex-direction: column;
       gap: 20px;
-      background-color: aqua;
-      // width: 100%;
-      // // width: 435px;
-      // height: fit-content;
-      // min-height: 132px;
-      // flex-direction: column;
-      // gap: 20px;
     }
     &__btnBox {
-      width: 94%;
-      height: fit-content;
-      min-height: 76px;
-      flex-direction: column;
-      row-gap: 24px;
-
       width: 100%;
-      max-width: 764px;
       height: fit-content;
-      gap: 0;
-      overflow: auto;
-      &::-webkit-scrollbar {
-        display: none;
-      }
+      min-height: 132px;
+      display: flex;
+      flex-wrap: wrap;
+      column-gap: 24px;
     }
-
     &__boxbtn {
       position: relative;
     }
@@ -141,12 +117,16 @@
       max-height: 40px;
       padding: 8px 12px;
     }
+    &__counterBox {
+      left: 182px;
+      // z-index: 10;
+    }
     &__content {
       width: 100%;
       height: fit-content;
-      gap: 24px;
+      gap: 40px;
       flex-direction: column;
-      flex-wrap: wrap;
+      // flex-wrap: wrap;
     }
   }
 }
