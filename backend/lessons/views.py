@@ -11,6 +11,7 @@ from lessons.permissions import (
     IsAdminOrIsStaff,
     OwnerEventPermission,
     CanReadCourse,
+    CanReadLesson
     )
 
 
@@ -126,6 +127,32 @@ class LessonViewSet(viewsets.ModelViewSet):
     """
     queryset = models.Lesson.objects.all()
     serializer_class = serializers.LessonSerializer
+    lookup_field = 'id'
+    lookup_url_kwarg = 'lesson_id'
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_permissions(self):
+        if self.action == 'retrieve':
+            permission_classes = [(permissions.IsAuthenticated &
+                                  CanReadLesson) |
+                                  IsAdminOrIsStaff]
+        elif self.action in ['create', 'update', 'partial_update', 'destroy']:
+            permission_classes = [
+                permissions.IsAuthenticated & IsAdminOrIsStaff]
+        else:
+            permission_classes = [permissions.IsAuthenticated]
+
+        return [permission() for permission in permission_classes]
+
+    def get_queryset(self):
+        queryset = super().get_queryset().select_related('course')
+
+        if not (self.request.user.is_staff or self.request.user.is_superuser):
+            queryset = queryset.filter(
+                course__events__user=self.request.user
+            ).distinct()
+
+        return queryset
 
     def get_serializer_class(self):
         """
