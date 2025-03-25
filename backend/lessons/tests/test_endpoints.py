@@ -7,7 +7,7 @@ from django.urls import reverse
 
 from lessons import models as lessons_models
 from users import models as users_models
-
+from lessons.utils import UTCTimeCast
 
 
 class TestEndpoints(APITestCase):
