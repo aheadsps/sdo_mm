@@ -12,7 +12,6 @@ from lessons.permissions import (
     IsAdminOrIsStaff,
     OwnerEventPermission,
     CanReadCourse,
-    ModeratorPermissionClass,
     )
 
 

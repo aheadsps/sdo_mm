@@ -23,15 +23,6 @@ class IsAdminOrIsStaff(permissions.BasePermission):
         return request.user.is_staff or request.user.is_superuser
 
 
-class ModeratorPermissionClass(permissions.BasePermission):
-    """
-    Проверка на группу methodist
-    """
-
-    def has_permission(self, request, view):
-        return request.user.groups.filter(name="methodist").exists()
-
-
 class OwnerEventPermission(permissions.BasePermission):
     """
     Права доступа только владельцу

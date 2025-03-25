@@ -1,12 +1,17 @@
-from rest_framework.test import APITestCase, APIClient
-from lessons.models import Step
-from rest_framework import status
-from users import models as users_models
 import datetime
+from pathlib import Path
+
+from rest_framework.test import APITestCase, APIClient
+from rest_framework import status
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group, Permission
 from django.contrib.contenttypes.models import ContentType
+from django.conf import settings
 from django.urls import reverse
+from django.core.files import File
+
+from lessons.models import Step, ContentAttachment
+from users import models as users_models
 
 
 class TestStepUrl(APITestCase):
@@ -32,6 +37,7 @@ class TestStepUrl(APITestCase):
             profession=self.profession,
             password="password",
             date_commencement=date_commencement,
+            is_staff=True,
         )
         self.user.set_password("password")
         self.user.save()
@@ -128,7 +134,28 @@ class TestStepUrl(APITestCase):
         """
         Тесты обновления вложеных объектов у Step
         """
+        image_path: Path = settings.TEST_IMAGE_PATH
+        image_path_2: Path = settings.TEST_IMAGE_PATH_2
+
         step = Step._default_manager.create(
-            title='Some_step',
-            content_text='Some_content',
+            title="Some_step",
+            content_text="Some_content",
         )
+        url = f"/api/v1/step/{step.pk}"
+        with image_path.open("rb") as image:
+            content_at = ContentAttachment._default_manager.create(
+                file=File(image),
+                file_type="Image",
+                content_attachment=step,
+            )
+        with image_path_2.open("rb") as image:
+            data = dict(
+                title="Some_step_2",
+                content_text="Some_content_2",
+                content_attachment=[dict(
+                    file=image.raw,
+                    file_type="Image",
+                ),],
+            )
+            response = self.client.patch(url, data)
+        self.assertEqual(response.status_code, 200)
