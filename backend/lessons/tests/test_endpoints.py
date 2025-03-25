@@ -452,7 +452,7 @@ class LessonViewSetTest(APITestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['name'], "Урок 1")
-        self.assertEqual(response.data['course']['name'], "Курс 1")
+        self.assertEqual(response.data['course_id'], 3)
 
     def test_create_lesson(self):
         """Тест создания урока (Create)."""
