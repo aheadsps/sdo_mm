@@ -98,7 +98,12 @@
     margin-top: 10px;
   }
 }
-
+// @media screen and (min-width: 1350) {
+// }
+// @media screen and (min-width: 1024) and (max-width: 1349)  {
+// }
+// @media screen and (min-width: 768px) and (max-width: 1023)  {
+// }
 @media screen and (max-width: 767px) {
   .container {
     // width: 100%;
@@ -110,32 +115,43 @@
     max-width: 473px;
     min-width: 320px;
     &__headBox {
-      width: 100%;
-      height: 45px;
+      // width: 100%;
+      height: fit-content;
       display: flex;
-      gap: 14px;
+      flex-direction: column;
+      gap: 20px;
     }
     &__btnBox {
       width: 94%;
       height: 45px;
       display: flex;
       gap: 24px;
+
+      width: 100%;
+      max-width: 764px;
+      height: fit-content;
+      gap: 0;
+      overflow: auto;
+      &::-webkit-scrollbar {
+        display: none;
+      }
     }
 
     &__boxbtn {
       position: relative;
+      // width: fit-content;
+      // height: 40px;
+      // padding: 8px 12px;
     }
     &__boxbtn_unactive {
       position: static;
     }
 
     &__btn {
-      width: 213px;
-      // width: fit-content;
-      height: 45px;
-      border-radius: 8px;
-      border: none;
-      padding: 10px 20px;
+      width: fit-content;
+      min-width: 191px;
+      max-height: 40px;
+      padding: 8px 12px;
     }
 
     &__counterBox {
@@ -186,9 +202,3 @@
     }
   }
 }
-// @media screen and (min-width: 1350) {
-// }
-// @media screen and (min-width: 1024) and (max-width: 1349)  {
-// }
-// @media screen and (min-width: 768px) and (max-width: 1023)  {
-// }
