@@ -3,6 +3,9 @@ from lessons import validators
 from lessons import models
 from users import serializers as user_serializers
 from rest_framework.utils import html, model_meta
+from config.settings import MEDIA_ROOT
+import os
+
 
 class AnswerSerializer(serializers.ModelSerializer):
     """
@@ -123,14 +126,14 @@ class AnswerSerializer(serializers.ModelSerializer):
 
 
 class ContentAttachmentSerializer(serializers.ModelSerializer):
-    id = serializers.IntegerField()
-   # file = serializers.FileField()
-    #file_type = serializers.CharField(max_length=10)
-    #content_attachment = serializers.RelatedField(models.Step,read_only=True)
+    id = serializers.IntegerField(required=False, allow_null=True)
 
     class Meta:
         model = models.ContentAttachment
-        fields = "__all__"
+        fields = ["id",
+                  "file",
+                  "file_type"
+                  ]
 
 
 class StepSerializer(serializers.ModelSerializer):
@@ -158,9 +161,9 @@ class StepSerializer(serializers.ModelSerializer):
         """
         Обработка обновления Step.
         Определяем поля доступные для редактирования
-        ContentAttachment обновляется отдельно
+        ContentAttachment не редактируется:
+        создается новый или удаляется
         """
-
 
         instance.serial = validated_data.get("serial", instance.serial)
         instance.title = validated_data.get("title", instance.title)
@@ -168,12 +171,31 @@ class StepSerializer(serializers.ModelSerializer):
             "content_text", instance.content_text
         )
 
-        print(validated_data.get("content_attachment"))
+        # Получаем ID удаленных content_attachment
+        id_attachment_new = [item.get('id')  for item in validated_data.get("content_attachment") if not item.get('id') is None ]
+        id_attachment_old = [item.id for item in instance.content_attachment.all()]
+        id_attachment_delete = set(id_attachment_old)-set(id_attachment_new)
+        # Удалить старые content_attachment
+        delete_list = models.ContentAttachment.objects.filter(id__in=list(id_attachment_delete))
+        for item in delete_list:
+            if item.file.name:
+                file_path = item.file.name.split("/")
+                file_path = os.path.join(MEDIA_ROOT, *file_path)
+                try:
+                    os.remove(file_path)
+                except Exception:
+                    # запись в логи...
+                    pass
+        delete_list.delete()
 
-        # получим все вложения старые
-        for item in instance.content_attachment.all():
-            print(item.id, item.file_type)
-
+        # Заполняем новые поля content_attachment
+        content_attachment_models = []
+        for item in validated_data.get("content_attachment"):
+            if not item.get('id', None):
+                content_attachment_models.append(
+                    models.ContentAttachment(**item, content_attachment=instance)
+                )
+        models.ContentAttachment._default_manager.bulk_create(content_attachment_models)
 
         instance.save()
 

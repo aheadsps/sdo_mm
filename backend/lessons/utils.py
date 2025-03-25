@@ -6,6 +6,10 @@ if TYPE_CHECKING:
     from lessons.models import Question, Course, ContentAttachment
 
 def latinizator(dic):
+    """
+    Заменяет все русские буквы на английские
+    Пробелы на продчеркивание
+    """
     legend = {
         ' ': '_',
         ',': '',

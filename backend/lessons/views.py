@@ -54,9 +54,9 @@ class StepViewSet(ModelViewSet):
     serializer_class = serializers.StepSerializer
 
 
-    '''def get_permissions(self):
+    def get_permissions(self):
         if self.action == "retrieve":
             permission_classes = [permissions.IsAuthenticated]  # [IsAdminOrIsStaff]
         else:
             permission_classes = [ModeratorPermissionClass | permissions.IsAdminUser]
-        return [permission() for permission in permission_classes]'''
+        return [permission() for permission in permission_classes]
