@@ -1,4 +1,5 @@
 import { Button, Typography } from '@shared/components'
+import { handleError } from '@shared/utils'
 import { Link } from 'react-router-dom'
 
 import { ClosedEyeIcon, OpenedEyeIcon } from '@assets/icons'
@@ -9,7 +10,7 @@ import styles from './auth-form.module.scss'
 import { FormInput } from './FormInput'
 
 export const AuthForm = () => {
-  const { onSubmit, errorMessage, showPassword, setShowPassword, isValid, isSubmitting, control } =
+  const { onSubmit, showPassword, setShowPassword, isValid, isSubmitting, control, error } =
     useAuthForm()
 
   return (
@@ -50,9 +51,9 @@ export const AuthForm = () => {
             Восстановить
           </Link>
         </div>
-        {errorMessage && (
+        {error && (
           <Typography className={styles.error} variant="body_1">
-            {errorMessage}
+            {handleError(error)}
           </Typography>
         )}
         <Button className={styles.auth__button} disabled={!isValid || isSubmitting}>

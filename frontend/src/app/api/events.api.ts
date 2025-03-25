@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
 import { EventsResponse } from './api.types'
-import { baseUrl, token } from './auth.api'
+import { baseUrl, getToken } from './auth.api'
 
 export const eventsApi = createApi({
   reducerPath: 'eventsApi',
@@ -12,7 +12,7 @@ export const eventsApi = createApi({
         url: '/events/currents',
         method: 'GET',
         headers: {
-          Authorization: `Token ${token}`,
+          Authorization: `Token ${getToken()}`,
         },
       }),
     }),

@@ -3,7 +3,11 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { LoginResponse, LoginData, ProfileResponse } from './api.types'
 
 export const baseUrl = 'http://localhost:8080/api/v1'
-export const token = localStorage.getItem('token')
+export const getToken = () => {
+  const token = localStorage.getItem('token')
+  if (!token) return
+  return token
+}
 
 export const authApi = createApi({
   reducerPath: 'authApi',
@@ -21,7 +25,7 @@ export const authApi = createApi({
         url: '/profile',
         method: 'GET',
         headers: {
-          Authorization: `Token ${token}`,
+          Authorization: `Token ${getToken()}`,
         },
       }),
     }),
