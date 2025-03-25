@@ -224,7 +224,7 @@ class TestBlockSerializersOptimize(serializers.ModelSerializer):
     answers = AnswerSerializer(many=True, read_only=True)
 
     class Meta:
-        models = TestBlock
+        model = TestBlock
         fields = "__all__"
 
 
@@ -235,15 +235,15 @@ class TestBlockSerializersDetail(serializers.ModelSerializer):
 
     questions = QuestionSerializer(many=True, read_only=True)
     answers = AnswerSerializer(many=True, read_only=True)
-    user_story = serializers.SerializerMethodField()
+    # user_story = serializers.SerializerMethodField()
 
     class Meta:
         model = TestBlock
         fields = "__all__"
 
     # нужно добавить логику получения для user_story
-    def get_user_story(self):
-        pass
+    # def get_user_story(self):
+    #     pass
 
     def create(self, validated_data):
         """

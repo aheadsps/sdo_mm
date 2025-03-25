@@ -180,7 +180,7 @@ class Lesson(models.Model):
         blank=False,
         help_text="Название урока",
     )
-    serial = models.ImageField(
+    serial = models.IntegerField(
         _("Номер"),
         null=False,
         blank=False,
@@ -214,9 +214,7 @@ class Lesson(models.Model):
 
 
 class TestBlock(models.Model):
-    lesson = (
-        models.ForeignKey(Lesson, on_delete=models.CASCADE, related_name="test_block"),
-    )
+    lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, related_name="test_block")
 
     class Meta:
         verbose_name = "тестовый блок"
