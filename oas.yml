@@ -1217,6 +1217,12 @@ components:
           minItems: 1
           items:
             $ref: "#/components/schemas/WorkExperience"
+        lesson_story:
+          type: array
+          description: Уроки которые открыл пользователь
+          minItems: 0
+          items:
+            $ref: "#/components/schemas/LessonStory"
 
     Сourse:
       description: Сущность курса упрощеная
@@ -1270,6 +1276,10 @@ components:
       additionalProperties: false
       type: object
       properties:
+        id:
+          type: integer
+          minimum: 1
+          readOnly: true
         name:
           type: string
           maxLength: 256
@@ -1570,11 +1580,42 @@ components:
           type: integer
           readOnly: true
           minimum: 1
+        date_opened:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: false
         answer_id:
           type: integer
           description: Текущий ответ
           nullable: true
           minimum: 1
+
+    LessonStory:
+      description: История открытых уроков
+      additionalProperties: false
+      type: object
+      properties:
+        course_id:
+          type: integer
+          minimum: 1
+          readOnly: true
+          nullable: false
+        lesson_id:
+          type: integer
+          minimum: 1
+          readOnly: true
+          nullable: false
+        user_id:
+          type: integer
+          minimum: 1
+          readOnly: true
+          nullable: false
+        date_opened:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: false
 
     EventCreate:
       description: Сущность создания и обновления курса
