@@ -3,14 +3,14 @@ from rest_framework import generics, mixins, permissions, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from backend.lessons import models, serializers
-from backend.lessons import viewsets as own_viewsets
-from backend.lessons.models import TestBlock
-from backend.lessons.permissions import (CanReadCourse, IsAdminOrIsStaff,
+from lessons import models, serializers
+from lessons import viewsets as own_viewsets
+from lessons.models import TestBlock
+from lessons.permissions import (CanReadCourse, IsAdminOrIsStaff,
                                          OwnerEventPermission)
-from backend.lessons.serializers import (TestBlockSerializersDetail,
+from lessons.serializers import (TestBlockSerializersDetail,
                                          TestBlockSerializersOptimize)
-from backend.lessons.viewsets import GetCreateUpdateDeleteViewSet
+from lessons.viewsets import GetCreateUpdateDeleteViewSet
 
 
 class EventViewSet(GetCreateUpdateDeleteViewSet):

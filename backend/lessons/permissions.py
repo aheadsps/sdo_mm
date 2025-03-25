@@ -2,7 +2,7 @@ from django.db.models import Q
 from loguru import logger
 from rest_framework import permissions, status
 
-from backend.lessons import models
+from lessons import models
 
 
 class IsAdminOrIsStaff(permissions.BasePermission):

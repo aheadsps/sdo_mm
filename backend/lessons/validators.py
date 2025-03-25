@@ -2,8 +2,8 @@ import datetime
 
 from django.utils import timezone
 
-from backend.lessons import exceptions
-from backend.lessons.utils import get_value, tigger_to_check
+from lessons import exceptions
+from lessons.utils import get_value, tigger_to_check
 
 
 class TimeValidator:

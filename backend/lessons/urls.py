@@ -1,9 +1,9 @@
 from django.urls import include, path
 from rest_framework import routers
 
-from backend.lessons import views
-from backend.lessons.apps import LessonsConfig
-from backend.lessons.views import (TestBlockListCreateAPIView,
+from lessons import views
+from lessons.apps import LessonsConfig
+from lessons.views import (TestBlockListCreateAPIView,
                                    TestBlockRetrieveUpdateDestroyAPIView)
 
 app_name = LessonsConfig.name

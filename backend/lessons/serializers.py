@@ -4,11 +4,11 @@ from django.utils import timezone
 from loguru import logger
 from rest_framework import serializers
 
-from backend.lessons import models, validators
-from backend.lessons.d_types import VD
-from backend.lessons.models import TestBlock
-from backend.lessons.patrials import set_status
-from backend.users import serializers as user_serializers
+from lessons import models, validators
+from lessons.d_types import VD
+from lessons.models import TestBlock
+from lessons.patrials import set_status
+from users import serializers as user_serializers
 
 PROCESS = "process"
 EXPECTED = "expected"
