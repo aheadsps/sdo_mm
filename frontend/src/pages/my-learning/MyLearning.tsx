@@ -72,7 +72,7 @@ const MyLearningComp: React.FC = () => {
               </div>
               <Button
                 children="ИИ"
-                variant={mode === 'ИИ' ? 'primary' : 'secondary'}
+                variant={mode === 'ИИ' && isAIOpen === true ? 'primary' : 'secondary'}
                 onClick={() => hendleAiOpen()}
               />
             </div>
