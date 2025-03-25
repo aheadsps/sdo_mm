@@ -1,17 +1,19 @@
+import { useGetCurrentEventsQuery } from '@app/api'
 import { Typography } from '@shared/components'
+import { Task } from '@shared/components/task'
 
 import s from '../main.module.scss'
-import { Task } from '../../../../shared/components/task'
 
 export const CurrentTasks = () => {
-  const hasTasks = true
+  const { data: events } = useGetCurrentEventsQuery()
+
   return (
     <div>
       <Typography variant="header_4" className={s.title}>
         Ваши актуальные задачи
       </Typography>
 
-      {hasTasks ? (
+      {events?.results.length ? (
         <>
           <Task daysLeft={2}>Охрана труда</Task>
           <Task daysLeft={4}>Работа с электроинструментом</Task>
