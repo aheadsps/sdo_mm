@@ -1,3 +1,1 @@
-export * from './task'
-export * from './warning-card'
-export * from './main'
+export * from './Main'

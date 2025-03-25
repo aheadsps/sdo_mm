@@ -1,0 +1,119 @@
+.auth {
+  position: relative;
+  width: 100%;
+  background-color: var(--color-bg-main);
+
+  @media (max-width: 767px) {
+    display: flex;
+    justify-content: center;
+  }
+
+  &__container {
+    position: absolute;
+    left: 200px;
+    top: 153px;
+    background-color: var(--color-bg-main);
+
+    @media screen and (max-width: 1349px) {
+      left: 56px;
+    }
+
+    @media (max-width: 767px) {
+      position: static;
+      margin-top: 123px;
+      padding: 10px;
+    }
+  }
+
+  &__heading {
+    display: block;
+    padding-left: 10px;
+    border-left: 4px solid var(--color-accent-red500);
+    border-radius: 3px;
+    margin-bottom: 48px;
+    font-size: 32px !important;
+
+    @media (max-width: 768px) {
+      font-size: 24px !important;
+    }
+
+    @media (max-width: 767px) {
+      font-size: 20px !important;
+    }
+  }
+
+  &__inputs {
+    margin-bottom: 12px;
+  }
+
+  &__input {
+    font-size: 16px;
+    position: relative;
+
+    &:first-child {
+      margin-bottom: 24px;
+    }
+
+    @media (max-width: 768px) {
+      font-size: 14px;
+    }
+  }
+
+  &__inputError {
+    color: var(--color-accent-red500);
+    border-bottom: 2px solid var(--color-accent-red500);
+  }
+
+  &__passwordWrapper {
+    position: relative;
+    width: 300px;
+  }
+
+  &__links {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 12px;
+    margin-bottom: 48px;
+  }
+
+  &__link {
+    font-family: 'Moscow Sans', sans-serif;
+    font-weight: 300;
+    font-style: 14px;
+    line-height: 100%;
+    letter-spacing: 0.25px;
+    text-decoration: none;
+    color: var(--color-text-primary);
+
+    &:first-child {
+      color: var(--color-text-secondary);
+    }
+  }
+
+  &__button {
+    width: 100%;
+  }
+
+  &__error {
+    color: var(--color-accent-red500);
+    font-family: 'Moscow Sans', sans-serif;
+    font-weight: 300;
+    font-size: 14px;
+    line-height: 130%;
+    letter-spacing: 0.25px;
+    padding: 0 12px;
+    text-align: center;
+  }
+
+  &__eyeIconWrapper {
+    position: absolute;
+    top: 40%;
+    right: 12px;
+    transform: translateY(-50%);
+    cursor: pointer;
+  }
+}
+
+.auth__input::placeholder {
+  font-family: 'Moscow Sans', sans-serif;
+}

@@ -66,49 +66,44 @@ class Event(models.Model):
     Модель представления Ивента
     """
 
-    user = models.ForeignKey(
-        get_user_model(),
-        verbose_name=_("пользователь"),
-        on_delete=models.CASCADE,
-        help_text="Пользователь которому " "будет назначен ивент",
-    )
-    course = models.ForeignKey(
-        "lessons.Course",
-        verbose_name="курс",
-        on_delete=models.CASCADE,
-        help_text="Курс который обворачивается" "ивент",
-    )
-    done_lessons = models.SmallIntegerField(
-        _("Количество выполненых уроков"),
-        default=0,
-    )
-    start_date = models.DateTimeField(
-        verbose_name="дата начала ивента",
-        null=True,
-        help_text="Дата начала ивента, "
-        "нужно для Celery что бы в рассписании "
-        "поставить дату выдачи ивента",
-        default=None,
-    )
-    end_date = models.DateTimeField(
-        verbose_name="дедлайн",
-        null=True,
-        help_text="Дедлайн ивента, если" "дедлайна нет тогда бессрочно",
-        default=None,
-    )
-    favorite = models.BooleanField(
-        _("Избранный ивент"),
-        default=False,
-        help_text="Указатель является ли данный" "ивент избранным",
-    )
-    status = models.CharField(
-        max_length=100,
-        choices=settings.STATUS_EVENTS,
-        null=True,
-        default="expected",
-        verbose_name="статус ивента",
-        help_text="Текущий статус данного ивента",
-    )
+    user = models.ForeignKey(get_user_model(),
+                             verbose_name=_("пользователь"),
+                             on_delete=models.CASCADE,
+                             help_text='Пользователь которому '
+                             'будет назначен ивент',
+                             )
+    course = models.ForeignKey('lessons.Course',
+                               verbose_name='курс',
+                               on_delete=models.CASCADE,
+                               help_text='Курс который обворачивается'
+                               'ивент',
+                               )
+    done_lessons = models.SmallIntegerField(_("Количество выполненых уроков"),
+                                            default=0,
+                                            )
+    start_date = models.DateTimeField(verbose_name='дата начала ивента',
+                                      null=True,
+                                      help_text='Дата начала ивента, '
+                                      'нужно для Celery что бы в рассписании '
+                                      'поставить дату выдачи ивента',
+                                      default=None,
+                                      )
+    end_date = models.DateTimeField(verbose_name='дедлайн',
+                                    null=True,
+                                    help_text='Дедлайн ивента, если'
+                                    'дедлайна нет тогда бессрочно',
+                                    default=None,
+                                    )
+    favorite = models.BooleanField(_("Избранный ивент"),
+                                   default=False,
+                                   help_text='Указатель является ли данный'
+                                   'ивент избранным')
+    status = models.CharField(choices=settings.STATUS_EVENTS,
+                              null=True,
+                              default='process',
+                              verbose_name='статус ивента',
+                              help_text='Текущий статус данного ивента',
+                              )
 
     class Meta:
         verbose_name = _("Event")

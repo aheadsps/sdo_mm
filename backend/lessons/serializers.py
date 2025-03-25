@@ -1,10 +1,23 @@
+import datetime
 from rest_framework import serializers
-from lessons import validators
+from django.utils import timezone
+
+from loguru import logger
+
 from lessons import models
+from lessons import validators
+from lessons.d_types import VD
+from lessons.patrials import set_status
 from users import serializers as user_serializers
 from rest_framework.utils import html, model_meta
 from config.settings import MEDIA_ROOT
 import os
+
+
+PROCESS = "process"
+EXPECTED = "expected"
+DONE = "done"
+FAILED = "failed"
 
 
 class AnswerSerializer(serializers.ModelSerializer):
@@ -49,7 +62,7 @@ class QuestionSerializer(serializers.ModelSerializer):
         return question
 
 
-class CourseSerializer(serializers.ModelSerializer):
+class CreateCourseSerializer(serializers.ModelSerializer):
     """
     Сериализатор на обработку создания и обновления курсов
     """
@@ -66,10 +79,36 @@ class CourseSerializer(serializers.ModelSerializer):
             "experiences",
         )
 
+    def create(self, validated_data):
+        # Логика по созданиею курса вместе с уроком и дальнейшей целочке по порядку
+        # Основа конструктора
+        return super().create(validated_data)
+
+
+class CourseSerializer(serializers.ModelSerializer):
+    """
+    Сериализатор Оптимизарованого вывода
+    """
+
+    # ПОСЛЕ ДОБАВЛЕНИЕ LESSON ОБЯЗАТЕЛЬНО ДОБАВИТЬ И ТУТ
+    class Meta:
+        model = models.Course
+        fields = (
+            "id",
+            "name",
+            "description",
+            "beginer",
+            "create_date",
+            "update_date",
+            "image",
+            "profession",
+            "experiences",
+        )
+
 
 class ViewCourseSerializer(serializers.ModelSerializer):
     """
-    Сериализатор вывода курса
+    Сериализатор вывода детального курса
     """
 
     experiences = user_serializers.WorkExperienceSerializer(many=True)
@@ -93,7 +132,7 @@ class ViewCourseSerializer(serializers.ModelSerializer):
 
 class EventSerializer(serializers.ModelSerializer):
     """
-    Сериализатор Курса
+    Сериализатор Эвента
     """
 
     course = CourseSerializer()
@@ -102,26 +141,13 @@ class EventSerializer(serializers.ModelSerializer):
         model = models.Event
         fields = (
             "id",
+            "user",
             "course",
             "done_lessons",
             "start_date",
             "end_date",
             "favorite",
             "status",
-        )
-
-
-class AnswerSerializer(serializers.ModelSerializer):
-    """
-    Сериализатор Answer
-    """
-
-    class Meta:
-        model = models.Answer
-        fields = (
-            "id",
-            "text",
-            "correct",
         )
 
 
@@ -211,3 +237,71 @@ class StepSerializer(serializers.ModelSerializer):
         instance.save()
 
         return instance
+
+
+class EventSerializerCreate(serializers.ModelSerializer):
+    """
+    Сериализатор Создания в Изменения Эвента
+    """
+
+    status = serializers.CharField(read_only=True)
+
+    class Meta:
+        model = models.Event
+        fields = (
+            "user",
+            "course",
+            "start_date",
+            "end_date",
+            "favorite",
+            "status",
+        )
+        validators = (validators.TimeValidator("start_date", "end_date"),)
+
+    def _is_process(self, start_date: datetime.datetime) -> bool:
+        """
+        Определение является курс запущенным
+        """
+        time_now = timezone.now()
+        return time_now > start_date
+
+    def _change_status(self, validated_data: VD, process: bool) -> None:
+        """
+        Изменение статуса
+        """
+        if process:
+            set_status(
+                dict_data=validated_data,
+                value=PROCESS,
+            )
+        else:
+            set_status(
+                dict_data=validated_data,
+                value=EXPECTED,
+            )
+
+    def _correct_status(self, validated_data: VD) -> VD:
+        """
+        Корректировка статуса исходя от даты начала
+        """
+        start_date = validated_data.get("start_date")
+        if start_date:
+            is_process = self._is_process(start_date=start_date)
+            if self.instance:
+                if self.instance.status not in [DONE, FAILED]:
+                    self._change_status(
+                        validated_data=validated_data,
+                        process=is_process,
+                    )
+                return
+            else:
+                self._change_status(
+                    validated_data=validated_data,
+                    process=is_process,
+                )
+
+    def save(self, **kwargs):
+        logger.debug(f"before {self.validated_data}")
+        self._correct_status(self.validated_data)
+        logger.debug(f"after {self.validated_data}")
+        return super().save(**kwargs)

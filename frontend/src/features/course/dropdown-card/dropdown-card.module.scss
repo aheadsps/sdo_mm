@@ -1,0 +1,45 @@
+.dropdownCard {
+  margin-bottom: 10px;
+  overflow: hidden;
+  min-height: 90px;
+  position: relative;
+
+  &::after {
+    position: absolute;
+    content: '';
+    height: 1px;
+    background-color: var(--color-additional-border100);
+    width: 50%;
+    left: 25%;
+    bottom: 0;
+  }
+}
+
+.dropdownHeader {
+  padding: 10px 20px;
+  color: var(--color-additional-red800);
+  cursor: pointer;
+
+  @media screen and (max-width: 767px) {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+}
+
+.dropdownContent {
+  padding: 40px;
+  background-color: #fff;
+  border-top: 1px solid var(--color-additional-border700);
+
+  @media screen and (max-width: 1349px) {
+    padding: 20px;
+  }
+
+  @media screen and (max-width: 767px) {
+    padding: 10px;
+  }
+}
+
+.dropdownTitle {
+  color: var(--color-text-primary);
+}

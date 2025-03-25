@@ -2,7 +2,7 @@ import { Sidebar, Header } from '@shared/components'
 import { useScreenWidth } from '@shared/hooks'
 import { ComponentType } from 'react'
 
-import s from './layout.module.css'
+import s from './layout.module.scss'
 
 export const withLayout = <T extends object>(Component: ComponentType<T>) => {
   return (props: T) => {
@@ -13,8 +13,10 @@ export const withLayout = <T extends object>(Component: ComponentType<T>) => {
         <Header />
         <div className={s.appWrapper}>
           {!isMobile && <Sidebar />}
-          <main className={s.main}>
-            <Component {...props} />
+          <main>
+            <div className={s.main}>
+              <Component {...props} />
+            </div>
           </main>
         </div>
       </>
