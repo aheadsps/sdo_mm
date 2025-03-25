@@ -197,26 +197,23 @@
       height: fit-content;
     }
     &__likeBox {
-      // width: 127px;
       width: 40%;
       height: fit-content;
       top: 0;
       left: 192px;
-      // right: -42%;
       left: 67%;
       gap: 10px;
     }
     &__courseBox {
       width: 49.6%;
       height: 27px;
+      display: flex;
+      justify-content: center;
       padding: 2px 12px 4px;
     }
     &__course {
-      // width: 38px;
       width: fit-content;
       height: 21px;
-      display: flex;
-      justify-content: center;
       font-size: var(--font-size-s);
     }
     &__bottom {
