@@ -23,7 +23,7 @@ class IsAdminOrIsStaff(permissions.BasePermission):
         return request.user.is_staff or request.user.is_superuser
 
 
-class ModeratorPermissionClass(BasePermission):
+class ModeratorPermissionClass(permissions.BasePermission):
     """
     Проверка на группу methodist
     """
