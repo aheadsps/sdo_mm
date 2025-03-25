@@ -8,20 +8,19 @@ from lessons import serializers
 from lessons import viewsets as own_viewsets
 from lessons.permissions import IsAdminOrIsStaff, ModeratorPermissionClass
 
-from django.contrib.auth.mixins import (LoginRequiredMixin)
-
 
 class EventViewSet(own_viewsets.GetUpdateDeleteViewSet):
     """
     Виювсет эвента
     """
+
     queryset = models.Event._default_manager.get_queryset()
     serializer_class = serializers.EventSerializer
-    lookup_field = 'pk'
-    lookup_url_kwarg = 'event_id'
+    lookup_field = "pk"
+    lookup_url_kwarg = "event_id"
 
     def get_permissions(self):
-        if not self.action == 'retrieve':
+        if not self.action == "retrieve":
             permission_classes = [IsAdminOrIsStaff]
         else:
             permission_classes = [permissions.IsAuthenticated]
@@ -53,10 +52,10 @@ class StepViewSet(ModelViewSet):
     queryset = models.Step._default_manager.all()
     serializer_class = serializers.StepSerializer
 
-
     def get_permissions(self):
         if self.action == "retrieve":
-            permission_classes = [permissions.IsAuthenticated]  # [IsAdminOrIsStaff]
+            permission_classes = [permissions.IsAuthenticated]
         else:
-            permission_classes = [ModeratorPermissionClass | permissions.IsAdminUser]
+            permission_classes = [permissions.IsAuthenticated &
+                                  IsAdminOrIsStaff]
         return [permission() for permission in permission_classes]

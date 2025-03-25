@@ -8,6 +8,7 @@ from django.contrib.auth.models import Group, Permission
 from django.contrib.contenttypes.models import ContentType
 from django.urls import reverse
 
+
 class TestStepUrl(APITestCase):
     """
     Тесты основных функций модели Step
@@ -40,8 +41,8 @@ class TestStepUrl(APITestCase):
         group_profession.students.add(self.user)
         group_profession.save()
         # добавить в группу модераторов
-        Group.objects.create(name='admin')
-        group = Group.objects.create(name='methodist')
+        Group.objects.create(name="admin")
+        group = Group.objects.create(name="methodist")
         group.user_set.add(self.user)
         # Даём разрешение на редактирование
         ct = ContentType.objects.get_for_model(Step)
@@ -54,9 +55,8 @@ class TestStepUrl(APITestCase):
         group.save()
 
         self.client = APIClient()
-        self.client.login(username='user@gmail.com', password='password')
+        self.client.login(username="user@gmail.com", password="password")
         self.client.force_authenticate(user=self.user)
-
 
     def test_step_url_create(self):
         """
@@ -67,15 +67,14 @@ class TestStepUrl(APITestCase):
             "serial": 4,
             "title": "Шаг 4",
             "content_text": "content_text",
-            "content_attachment": [
-            ]
+            "content_attachment": [],
         }
-        response = self.client.post(url, data, format='json')
+        response = self.client.post(url, data, format="json")
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
         self.assertEqual(Step._default_manager.count(), 1)
         step = Step._default_manager.get()
-        self.assertEqual(step.title, 'Шаг 4')
+        self.assertEqual(step.title, "Шаг 4")
 
         """
         Меняем объект в Step
@@ -85,34 +84,31 @@ class TestStepUrl(APITestCase):
             "serial": 4,
             "title": "Шаг 4",
             "content_text": "Новый текст",
-            "content_attachment": [
-                {"file": None,
-                 "file-type": "Image"}
-            ]
+            "content_attachment": [{"file": None, "file-type": "Image"}],
         }
-        response = self.client.patch(url, data, format='json')
+        response = self.client.patch(url, data, format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(Step._default_manager.get().content_text, 'Новый текст')
+        self.assertEqual(Step._default_manager.get().content_text, "Новый текст")
 
         """
         Выводим один объект Step
         """
         url = reverse("lessons:step-detail", kwargs={"pk": step.id})
-        response = self.client.get(url, data, format='json')
+        response = self.client.get(url, data, format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         """
         Выводим все объекты Step
         """
         url = reverse("lessons:step-list")
-        response = self.client.get(url, data, format='json')
+        response = self.client.get(url, data, format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         """
         Удаляем объект Step 204_NO_CONTENT
         """
         url = reverse("lessons:step-detail", kwargs={"pk": step.id})
-        response = self.client.delete(url, data, format='json')
+        response = self.client.delete(url, data, format="json")
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
         """
@@ -123,8 +119,16 @@ class TestStepUrl(APITestCase):
             "serial": -5,
             "title": "Шаг 4",
             "content_text": "content_text",
-            "content_attachment": [
-            ]
+            "content_attachment": [],
         }
-        response = self.client.post(url, data, format='json')
+        response = self.client.post(url, data, format="json")
         self.assertEqual(response.status_code, status.HTTP_422_UNPROCESSABLE_ENTITY)
+
+    def test_update_step_attachements(self):
+        """
+        Тесты обновления вложеных объектов у Step
+        """
+        step = Step._default_manager.create(
+            title='Some_step',
+            content_text='Some_content',
+        )

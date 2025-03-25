@@ -23,6 +23,7 @@ class StepAdmin(admin.ModelAdmin):
     list_display = (
         "serial",
         "title",
+        'content_text',
     )
     search_fields = (
         "title",

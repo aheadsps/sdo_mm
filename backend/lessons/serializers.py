@@ -130,10 +130,7 @@ class ContentAttachmentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.ContentAttachment
-        fields = ["id",
-                  "file",
-                  "file_type"
-                  ]
+        fields = ["id", "file", "file_type"]
 
 
 class StepSerializer(serializers.ModelSerializer):
@@ -180,11 +177,17 @@ class StepSerializer(serializers.ModelSerializer):
         )
 
         # Получаем ID удаленных content_attachment
-        id_attachment_new = [item.get('id')  for item in validated_data.get("content_attachment") if not item.get('id') is None ]
+        id_attachment_new = [
+            item.get("id")
+            for item in validated_data.get("content_attachment")
+            if not item.get("id") is None
+        ]
         id_attachment_old = [item.id for item in instance.content_attachment.all()]
-        id_attachment_delete = set(id_attachment_old)-set(id_attachment_new)
+        id_attachment_delete = set(id_attachment_old) - set(id_attachment_new)
         # Удалить старые content_attachment
-        delete_list = models.ContentAttachment.objects.filter(id__in=list(id_attachment_delete))
+        delete_list = models.ContentAttachment.objects.filter(
+            id__in=list(id_attachment_delete)
+        )
         for item in delete_list:
             if item.file.name:
                 file_path = item.file.name.split("/")
@@ -199,7 +202,7 @@ class StepSerializer(serializers.ModelSerializer):
         # Заполняем новые поля content_attachment
         content_attachment_models = []
         for item in validated_data.get("content_attachment"):
-            if not item.get('id', None):
+            if not item.get("id", None):
                 content_attachment_models.append(
                     models.ContentAttachment(**item, content_attachment=instance)
                 )
