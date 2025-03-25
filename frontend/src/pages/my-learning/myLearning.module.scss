@@ -17,11 +17,6 @@
     max-width: 480px;
     min-width: 435px;
   }
-  // @media screen and (max-width: 767px) {
-  //   max-width: 473px;
-  //   min-width: 360px;
-  //   flex-direction: column;
-  // }
   &__headBox {
     width: 100%;
     height: 45px;
@@ -102,20 +97,58 @@
 // }
 // @media screen and (min-width: 1024) and (max-width: 1349)  {
 // }
-// @media screen and (min-width: 768px) and (max-width: 1023)  {
-// }
+@media screen and (min-width: 768px) and (max-width: 1349) {
+  .container {
+    max-width: 1349px;
+    min-width: 473px;
+    &__headBox {
+      width: fit-content;
+      width: 435px;
+      height: fit-content;
+      min-height: 132px;
+      flex-direction: column;
+      gap: 20px;
+    }
+    &__btnBox {
+      width: 94%;
+      height: fit-content;
+      min-height: 76px;
+      flex-direction: column;
+      row-gap: 24px;
+
+      width: 100%;
+      max-width: 764px;
+      height: fit-content;
+      gap: 0;
+      overflow: auto;
+      &::-webkit-scrollbar {
+        display: none;
+      }
+    }
+
+    &__boxbtn {
+      position: relative;
+    }
+    &__btn {
+      width: fit-content;
+      min-width: 191px;
+      max-height: 40px;
+      padding: 8px 12px;
+    }
+    &__content {
+      width: 100%;
+      height: fit-content;
+      gap: 24px;
+      flex-direction: column;
+      flex-wrap: wrap;
+    }
+  }
+}
 @media screen and (max-width: 767px) {
   .container {
-    // width: 100%;
-    // height: fit-content;
-    // background-color: var(--color-bg-main);
-    // display: flex;
-    // flex-direction: column;
-    // gap: 30px;
     max-width: 473px;
     min-width: 320px;
     &__headBox {
-      // width: 100%;
       height: fit-content;
       display: flex;
       flex-direction: column;
@@ -139,60 +172,13 @@
 
     &__boxbtn {
       position: relative;
-      // width: fit-content;
-      // height: 40px;
-      // padding: 8px 12px;
     }
-    &__boxbtn_unactive {
-      position: static;
-    }
-
     &__btn {
       width: fit-content;
       min-width: 191px;
       max-height: 40px;
       padding: 8px 12px;
     }
-
-    &__counterBox {
-      width: 32px;
-      height: 32px;
-      position: absolute;
-      top: -15px;
-      left: 192px;
-      // z-index: 10;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 20px;
-      background: var(--color-accent-red500);
-    }
-    &__counterBox_hidden {
-      width: 32px;
-      height: 32px;
-      position: absolute;
-      top: -15px;
-      left: 192px;
-      z-index: 100;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 20px;
-      background: transparent;
-      z-index: -1000;
-    }
-    &__counter {
-      width: 9px;
-      height: 18px;
-      font-family: var(--font-family-secondary);
-      font-weight: 300;
-      font-size: var(--font-size-xs);
-      line-height: 130%;
-      letter-spacing: 0.25px;
-      vertical-align: middle;
-      color: var(--color-text-button);
-    }
-
     &__content {
       width: 100%;
       height: fit-content;

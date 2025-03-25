@@ -14,6 +14,9 @@
     position: relative;
     // overflow-y: hidden;
     width: 100%;
+    @media screen and (min-width: 768px) and (max-width: 1349px) {
+      width: calc(100% - 294px);
+    }
   }
 }
 
