@@ -4,7 +4,7 @@ import { SerializedError } from '@reduxjs/toolkit'
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query'
 import { handleError } from '@shared/utils'
 import { useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { SubmitHandler, useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 
 import { authFormSchema } from '../ui/authFormSchema'
@@ -17,6 +17,7 @@ export const useAuthForm = () => {
     handleSubmit,
     formState: { errors, isSubmitting, isValid },
     reset,
+    control,
   } = useForm<AuthFormData>({
     defaultValues: {
       email: '',
@@ -28,14 +29,14 @@ export const useAuthForm = () => {
 
   const [showPassword, setShowPassword] = useState(false)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
-
-  const [login] = useLoginMutation()
   const navigate = useNavigate()
 
-  const onFormSubmit = async (data: AuthFormData) => {
+  const [login] = useLoginMutation()
+
+  const onSubmit: SubmitHandler<AuthFormData> = async (data) => {
     try {
       const res = await login(data).unwrap()
-      if (res.token) {
+      if (res && res.token) {
         localStorage.setItem('token', res.token)
       }
       reset()
@@ -47,7 +48,7 @@ export const useAuthForm = () => {
   }
 
   return {
-    onSubmit: handleSubmit(onFormSubmit),
+    onSubmit: handleSubmit(onSubmit),
     showPassword,
     errorMessage,
     register,
@@ -55,5 +56,6 @@ export const useAuthForm = () => {
     isSubmitting,
     isValid,
     setShowPassword,
+    control,
   }
 }

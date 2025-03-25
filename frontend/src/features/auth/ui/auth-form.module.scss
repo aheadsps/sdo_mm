@@ -43,25 +43,10 @@
   }
 
   &__inputs {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
     margin-bottom: 12px;
-  }
-
-  &__input {
-    font-size: 16px;
-    position: relative;
-
-    &:first-child {
-      margin-bottom: 24px;
-    }
-
-    @media (max-width: 768px) {
-      font-size: 14px;
-    }
-  }
-
-  &__inputError {
-    color: var(--color-accent-red500);
-    border-bottom: 2px solid var(--color-accent-red500);
   }
 
   &__passwordWrapper {
@@ -73,7 +58,8 @@
     display: flex;
     justify-content: space-between;
     padding: 0 12px;
-    margin-bottom: 48px;
+    margin-bottom: 24px;
+    margin-top: 24px;
   }
 
   &__link {
@@ -92,17 +78,6 @@
 
   &__button {
     width: 100%;
-  }
-
-  &__error {
-    color: var(--color-accent-red500);
-    font-family: 'Moscow Sans', sans-serif;
-    font-weight: 300;
-    font-size: 14px;
-    line-height: 130%;
-    letter-spacing: 0.25px;
-    padding: 0 12px;
-    text-align: center;
   }
 
   &__eyeIconWrapper {
