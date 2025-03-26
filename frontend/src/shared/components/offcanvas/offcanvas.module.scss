@@ -11,7 +11,7 @@
     visibility 0.7s;
   opacity: 0;
   visibility: hidden;
-
+  z-index: 20;
   @media screen and (min-width: 1350px) {
     transform: translateX(100%);
   }

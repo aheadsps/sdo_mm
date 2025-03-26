@@ -58,31 +58,9 @@ export const courses: Course[] = [
     status: 1,
   },
 ]
-// export const lessons: Lesson[] = [
-//   {
-//     id: '368',
-//     name: 'Безопасность на рабочем месте: охрана труда в метрополитене',
-//     src: '/img/svg/lesson-01.svg',
-//     description:
-//       'Этот курс поможет вам разобраться с основными правилами охраны труда в метрополитене. Вы узнаете о ключевых требованиях безопасности, инструкциях по предотвращению несчастных случаев и правильных действиях в экстренных ситуациях.',
-//     expired: true,
-//     days: '2 дня',
-//     lessons: '1 урок',
-//     time: '~50 минут',
-//     progress: '0%',
-//     status: 2,
-//   },
-//   {
-//     id: '593',
-//     name: 'Безопасность при работе с электроинструментом',
-//     src: '/img/svg/lesson-02.svg',
-//     description:
-//       'Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorem explicabo dicta magnam neque modi officia!',
-//     expired: false,
-//     days: '2 дня',
-//     lessons: '1 урок',
-//     time: '~120 минут',
-//     progress: '10%',
-//     status: 1,
-//   },
-// ]
+export const getCurrentCourses: (mode: number) => Course[] | [] | undefined = (mode: number) => {
+  if (mode === 0) return courses
+  if (mode === 1) return courses.filter((el) => el.expired === true)
+  if (mode === 2) return courses.filter((el) => el.isCourse === true)
+  if (mode === 3) return courses.filter((el) => el.progress === '100%')
+}

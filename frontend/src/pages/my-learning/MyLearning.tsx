@@ -1,23 +1,20 @@
-/* eslint-disable prettier/prettier */
 import { AiComponent, Button, Tab, Tabs } from '@shared/components'
 import { LessonCard } from '@shared/components/lessonCard/LessonCard'
 import Loader from '@shared/components/loader/Loader'
+import { TabsButtons } from '@shared/components/tabsButtons/TabsButtons'
 import { Tooltipe } from '@shared/components/tooltipe/Tooltipe'
 import { withLayout } from '@shared/HOC/withLayout/withLayout'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
-import { courses } from './mockData'
+import { getCurrentCourses } from './mockData'
 import s from './myLearning.module.scss'
 import { Course } from './types'
-import { AboutCourse } from '@features/course/tabs/about-course/AboutCourse'
-import { TabsButtons } from '@shared/components/tabsButtons/TabsButtons'
 
 const MyLearningComp: React.FC = () => {
-  // const [mode, setMode] = useState<string>('Назначенные курсы')
+  const [mode, setMode] = useState<number>(0)
   const [isTooltipe, setIsTooltipe] = useState<boolean>(true)
   const [isAIOpen, setIsAIOpen] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(true)
-  const [currentCourses, setCurrentCourses] = useState<Course[] | []>(courses)
 
   const buttons: string[] = [
     'Назначенные курсы',
@@ -25,36 +22,10 @@ const MyLearningComp: React.FC = () => {
     'Избранные курсы',
     'Завершённые курсы',
   ]
-  // const buttons: Tab[] = [
-  //   { label: 'Назначенные курсы', content: 'Назначенные курсы' },
-  //   { label: 'Просроченные курсы', content: 'Просроченные курсы' },
-  //   { label: 'Избранные курсы', content: 'Избранные курсы' },
-  //   { label: 'Завершённые курсы', content: 'Завершённые курсы' },
-  // ]
-  // const buttons: Tab[] = [
-  //   { label: 'Назначенные курсы', content: <AboutCourse />, },
-  //   { label: 'Просроченные курсы', content: <AboutCourse />, },
-  //   { label: 'Избранные курсы', content: <AboutCourse />, },
-  //   { label: 'Завершённые курсы', content: <AboutCourse />, },
-  // ]
-  const counter = [0, 0, 3, 0]
   setTimeout(() => {
     setIsLoading(false)
   }, 3000)
-
-  // useEffect(() => {
-  //   const data: () => Course[] | [] = () => {
-  //     if (mode === 'Назначенные курсы') return setCurrentCourses(courses)
-  //     if (mode === 'Просроченные курсы')
-  //       return setCurrentCourses(courses.filter((el) => el.expired === true))
-  //     if (mode === 'Избранные курсы')
-  //       return setCurrentCourses(courses.filter((el) => el.isCourse === true))
-  //     if (mode === 'Завершённые курсы')
-  //       return setCurrentCourses(courses.filter((el) => el.progress === '100%'))
-  //   }
-  //   data()
-  // }, [mode])
-
+  const currentCourses: Course[] = getCurrentCourses(mode)
   return (
     <>
       {isAIOpen && <AiComponent isOpen={isAIOpen} setIsOpen={setIsAIOpen} />}
@@ -65,30 +36,7 @@ const MyLearningComp: React.FC = () => {
         ) : (
           <>
             <div className={s.container__headBox}>
-              <TabsButtons tabs={buttons}/>
-              {/* <div className={s.container__btnBox}>
-                {buttons.map((btn, index) => {
-                  return (
-                    <div className={s.container__boxbtn} key={index}>
-                      <div
-                        className={
-                          counter[index] === 0
-                            ? s.container__counterBox_hidden
-                            : s.container__counterBox
-                        }
-                      >
-                        <p className={s.container__counter}>{counter[index]}</p>
-                      </div>
-                      <Button
-                        className={s.container__btn}
-                        children={btn}
-                        variant={mode === btn ? 'primary' : 'secondary'}
-                        onClick={() => setMode(btn)}
-                      />
-                    </div>
-                  )
-                })}
-              </div> */}
+              <TabsButtons tabs={buttons} activeTab={mode} setActiveTab={setMode} />
               <Button children="ИИ" variant="secondary" onClick={() => setIsAIOpen(!isAIOpen)} />
             </div>
             <div className={s.container__content}>
