@@ -1,0 +1,124 @@
+.box {
+  width: 100%;
+  height: 45px;
+  display: flex;
+  gap: 14px;
+}
+.tabBox {
+  width: 94%;
+  height: 45px;
+  display: flex;
+  gap: 24px;
+}
+.tabList {
+  position: relative;
+}
+.tabList_unactive {
+  position: static;
+}
+.tab {
+  width: 213px;
+  height: 45px;
+  border-radius: 8px;
+  border: none;
+  padding: 10px 20px;
+}
+.counterBox {
+  width: 32px;
+  height: 32px;
+  position: absolute;
+  top: -15px;
+  left: 192px;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 20px;
+  background: var(--color-accent-red500);
+}
+.counterBox_hidden {
+  width: 32px;
+  height: 32px;
+  position: absolute;
+  top: -15px;
+  left: 142px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 20px;
+  //   background: var(--color-accent-red500);
+  background: transparent;
+  z-index: -1000;
+}
+.counter {
+  width: 9px;
+  height: 18px;
+  font-family: var(--font-family-secondary);
+  font-weight: 300;
+  font-size: var(--font-size-xs);
+  line-height: 130%;
+  letter-spacing: 0.25px;
+  vertical-align: middle;
+  color: var(--color-text-button);
+}
+@media screen and (min-width: 768px) and (max-width: 1349px) {
+  .box {
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .tabBox {
+    width: 100%;
+    height: fit-content;
+    min-height: 132px;
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 24px;
+  }
+  .tabList {
+    position: relative;
+  }
+  .tab {
+    width: fit-content;
+    min-width: 191px;
+    max-height: 40px;
+    padding: 8px 12px;
+  }
+  .counterBox {
+    left: 182px;
+  }
+}
+@media screen and (max-width: 767px) {
+  .box {
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .tabBox {
+    display: flex;
+    width: 100%;
+    max-width: 764px;
+    height: fit-content;
+    gap: 0;
+    overflow: auto;
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+  .counterBox {
+    width: 24px;
+    height: 24px;
+    left: 153px;
+  }
+  .tabList {
+    position: relative;
+  }
+  .tab {
+    width: fit-content;
+    min-width: 161px;
+    max-height: 40px;
+    padding: 8px 12px;
+  }
+}

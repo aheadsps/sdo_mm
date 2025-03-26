@@ -12,8 +12,11 @@
 
   main {
     position: relative;
-    overflow-y: hidden;
+    // overflow-y: hidden;
     width: 100%;
+    @media screen and (min-width: 768px) and (max-width: 1349px) {
+      width: calc(100% - 294px);
+    }
   }
 }
 
@@ -27,7 +30,7 @@
   width: 100%;
 
   @media screen and (min-width: 768px) and (max-width: 1349px) {
-    padding-top: 115px;
+    padding: 115px 20px 20px; 
   }
 
   @media screen and (max-width: 767px) {
