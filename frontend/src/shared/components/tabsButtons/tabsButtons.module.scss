@@ -41,11 +41,12 @@
   height: 32px;
   position: absolute;
   top: -15px;
-  left: 192px;
+  left: 142px;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 20px;
+  //   background: var(--color-accent-red500);
   background: transparent;
   z-index: -1000;
 }
@@ -109,13 +110,14 @@
   .counterBox {
     width: 24px;
     height: 24px;
+    left: 153px;
   }
   .tabList {
     position: relative;
   }
   .tab {
     width: fit-content;
-    min-width: 191px;
+    min-width: 161px;
     max-height: 40px;
     padding: 8px 12px;
   }
