@@ -4,6 +4,7 @@ import Loader from '@shared/components/loader/Loader'
 import { TabsButtons } from '@shared/components/tabsButtons/TabsButtons'
 import { Tooltipe } from '@shared/components/tooltipe/Tooltipe'
 import { withLayout } from '@shared/HOC/withLayout/withLayout'
+import { useToggle } from '@shared/hooks/useToggle'
 import { useState } from 'react'
 
 import { getCurrentCourses } from './mockData'
@@ -12,9 +13,9 @@ import { Course } from './types'
 
 const MyLearningComp: React.FC = () => {
   const [mode, setMode] = useState<number>(0)
-  const [isTooltipe, setIsTooltipe] = useState<boolean>(true)
-  const [isAIOpen, setIsAIOpen] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(true)
+  const { isOpen: isTooltipeOpen, close: closeTooltipe } = useToggle(true)
+  const { isOpen: isAIOpen, close: closeAI, toggle: toggleAI } = useToggle()
 
   const buttons: string[] = [
     'Назначенные курсы',
@@ -28,8 +29,8 @@ const MyLearningComp: React.FC = () => {
   const currentCourses: Course[] = getCurrentCourses(mode)
   return (
     <>
-      {isAIOpen && <AiComponent isOpen={isAIOpen} setIsOpen={setIsAIOpen} />}
-      {isTooltipe && <Tooltipe isOpen={isTooltipe} setIsOpen={setIsTooltipe} />}
+      {isAIOpen && <AiComponent isOpen={isAIOpen} close={closeAI} />}
+      {isTooltipeOpen && <Tooltipe close={closeTooltipe} />}
       <div className={s.container}>
         {isLoading ? (
           <Loader />
@@ -37,7 +38,7 @@ const MyLearningComp: React.FC = () => {
           <>
             <div className={s.container__headBox}>
               <TabsButtons tabs={buttons} activeTab={mode} setActiveTab={setMode} />
-              <Button children="ИИ" variant="secondary" onClick={() => setIsAIOpen(!isAIOpen)} />
+              <Button children="ИИ" variant="secondary" onClick={toggleAI} />
             </div>
             <div className={s.container__content}>
               {currentCourses.length > 0

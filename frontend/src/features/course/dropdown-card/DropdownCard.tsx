@@ -1,4 +1,5 @@
-import { ComponentPropsWithoutRef, useState } from 'react'
+import { useToggle } from '@shared/hooks/useToggle'
+import { ComponentPropsWithoutRef } from 'react'
 
 import { ArrowDownIcon, ArrowUpIcon } from '@assets/icons'
 
@@ -12,20 +13,16 @@ type Props = {
 } & ComponentPropsWithoutRef<'div'>
 
 export const DropdownCard = ({ title, children, blocks }: Props) => {
-  const [isOpen, setIsOpen] = useState(false)
-
-  const toggleDropdown = () => {
-    setIsOpen(!isOpen)
-  }
+  const { isOpen: isOpenDropdown, toggle: toggleDropdown } = useToggle()
 
   return (
     <div className={s.dropdownCard}>
       <div className={s.dropdownHeader} onClick={toggleDropdown}>
         <LessonItemTitle onClick={toggleDropdown} title={title} blocks={blocks}>
-          {isOpen ? <ArrowUpIcon /> : <ArrowDownIcon />}
+          {isOpenDropdown ? <ArrowUpIcon /> : <ArrowDownIcon />}
         </LessonItemTitle>
       </div>
-      {isOpen && <div className={s.dropdownContent}>{children}</div>}
+      {isOpenDropdown && <div className={s.dropdownContent}>{children}</div>}
     </div>
   )
 }
