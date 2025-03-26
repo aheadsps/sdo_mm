@@ -134,6 +134,7 @@ class TestStepUrl(APITestCase):
         """
         Тесты обновления вложеных объектов у Step
         """
+
         image_path: Path = settings.TEST_IMAGE_PATH
         image_path_2: Path = settings.TEST_IMAGE_PATH_2
 
@@ -149,13 +150,13 @@ class TestStepUrl(APITestCase):
                 content_attachment=step,
             )
         with image_path_2.open("rb") as image:
-            data = dict(
-                title="Some_step_2",
-                content_text="Some_content_2",
-                content_attachment=[dict(
-                    file=image.raw,
-                    file_type="Image",
-                ),],
-            )
-            response = self.client.patch(url, data)
+
+            data = {
+                "serial": 1,
+                "title": "Шаг 4",
+                "content_text": "content_text",
+                "content_attachment[0]file": image.raw,
+                "content_attachment[0]file_type": "Image",
+            }
+            response = self.client.patch(url, data,  format='multipart')
         self.assertEqual(response.status_code, 200)
