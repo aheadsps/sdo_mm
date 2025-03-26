@@ -54,7 +54,6 @@ class EventAdmin(admin.ModelAdmin):
     """
 
     list_display = (
-<<<<<<< HEAD
         "user",
         "course",
         "done_lessons",
@@ -63,15 +62,6 @@ class EventAdmin(admin.ModelAdmin):
         "favorite",
         "status",
     )
-=======
-        'user',
-        'course',
-        'done_lessons',
-        'start_date',
-        'end_date',
-        'favorite',
-        'status',
-        )
 
 
 @admin.register(models.TestBlock)
@@ -80,4 +70,3 @@ class TestBlockAdmin(admin.ModelAdmin):
     Админ панель Эвента
     """
     list_display = ('id',)
->>>>>>> develop

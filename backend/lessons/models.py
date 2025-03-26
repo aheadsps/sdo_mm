@@ -41,19 +41,6 @@ class Question(models.Model):
     """
     Модель представления Вопроса
     """
-
-<<<<<<< HEAD
-    text = models.TextField(
-        verbose_name="текст вопроса",
-        help_text="Текст вопроса",
-    )
-    image = models.ImageField(
-        upload_to=path_maker_question,
-        verbose_name="картинка",
-        help_text="Картинка для вопроса",
-        null=True,
-    )
-=======
     text = models.TextField(verbose_name='текст вопроса',
                             help_text='Текст вопроса',
                             )
@@ -68,7 +55,6 @@ class Question(models.Model):
                                    on_delete=models.CASCADE,
                                    related_name='questions',
                                    )
->>>>>>> develop
 
     class Meta:
         verbose_name = _("Question")
