@@ -1,3 +1,4 @@
+import os
 from typing import TYPE_CHECKING, Any
 
 from rest_framework.serializers import ModelSerializer
@@ -184,6 +185,7 @@ def path_maker_content_attachment(instance: 'ContentAttachment', filename: str) 
     в системе.
     """
     text_tranc = instance.content_attachment.title
+    filename = os.path.basename(filename)
     # Когда будут уроки вставить папку "lesson №..."
     return f'content_attachment/{latinizator(text_tranc)}/{latinizator(filename)}'
 
