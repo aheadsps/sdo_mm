@@ -6,6 +6,28 @@ from lessons.utils import get_value, tigger_to_check
 from lessons import exceptions
 
 
+class MoreThanZeroValidator:
+    """
+    Валидатор на проверку нумерации int >= 1
+    """
+
+    requires_context = True
+
+    def __init__(self, serial: str) -> None:
+        self.serial = serial
+
+    def __call__(self, attrs, serializer_field):
+        """
+        Проверка корректности serial >= 1
+        """
+        need_check = tigger_to_check(attrs, self.serial)
+        if need_check:
+            if int(serializer_field.initial_data.get(self.serial)) < 1:
+                raise exceptions.UnprocessableEntityError(
+                    dict(serial="Не может быть меньше 1")
+                )
+
+
 class TimeValidator:
     """
     Валидатор на проверку времени (не меньше текущего)
