@@ -1,37 +1,36 @@
 import { createBrowserRouter } from 'react-router-dom'
 
-import { AuthPage } from '@pages/auth'
-import { CoursePage } from '@pages/course/CoursePage'
-import { MainPage } from '@pages/main'
-import { MyLearning } from '@pages/my-learning/MyLearning'
+import { routes } from './routes'
+
+import { AuthPage, CoursePage, MainPage, MyLearning } from '@/pages'
 
 export const router = createBrowserRouter([
   {
-    path: '/main',
+    path: routes.main,
     element: <MainPage />,
   },
   {
-    path: '/learning',
+    path: routes.learning,
     element: <MyLearning />,
   },
   {
-    path: '/learning/course',
+    path: routes.course,
     element: <CoursePage />,
   },
   {
-    path: '/library',
+    path: routes.library,
     element: <MyLearning />,
   },
   {
-    path: '/news',
+    path: routes.news,
     element: <MainPage />,
   },
   {
-    path: '/auth',
+    path: routes.auth,
     element: <AuthPage />,
   },
   {
-    path: '/',
+    path: routes.home,
     element: <div>Hello App</div>,
   },
 ])

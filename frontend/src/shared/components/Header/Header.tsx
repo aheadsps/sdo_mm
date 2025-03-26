@@ -1,14 +1,14 @@
-import { Typography } from '@shared/components'
-import { useScreenWidth } from '@shared/hooks'
 import React, { useState } from 'react'
-
-import { LogoIcon, MobileVersionHeaderIcon } from '@assets/icons'
 
 import '@fontsource/manrope/600.css'
 import { Sidebar } from '../sidebar'
+import { Typography } from '../typography'
 
 import styles from './header.module.scss'
 import { HeaderAvatar } from './HeaderAvatar'
+
+import { LogoIcon, MobileVersionHeaderIcon } from '@/assets/icons'
+import { useScreenWidth } from '@/shared/hooks'
 
 const Header: React.FC = () => {
   const [isLoggedIn] = useState()

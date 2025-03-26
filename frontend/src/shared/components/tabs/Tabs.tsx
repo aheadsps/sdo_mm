@@ -1,6 +1,8 @@
-import { Button, Typography } from '@shared/components'
 import clsx from 'clsx'
 import { ComponentPropsWithoutRef, useState } from 'react'
+
+import { Button } from '../button'
+import { Typography } from '../typography'
 
 import s from './tabs.module.scss'
 

@@ -1,7 +1,7 @@
-import { AuthForm } from '@features/auth/ui'
-import { Header, ImageComponent } from '@shared/components'
-
 import styles from './authpage.module.scss'
+
+import { AuthForm } from '@/features'
+import { ImageComponent, Header } from '@/shared/components'
 
 export const AuthPage: React.FC = () => {
   return (

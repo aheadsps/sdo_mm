@@ -1,7 +1,6 @@
-import { DropdownCard } from '@shared/components'
-import { Button, Typography } from '@shared/components'
-
 import s from './course-content.module.scss'
+
+import { DropdownCard, Typography, Button } from '@/shared/components'
 
 export const CourseContent = () => {
   return (

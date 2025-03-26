@@ -1,9 +1,9 @@
-import { Calendar } from '@shared/components'
-
 import s from './main.module.scss'
 import { CurrentTasks } from './tasks-elements/CurrentTasks'
 import { ExpiredTasks } from './tasks-elements/ExpiredTasks'
 import { WarningCard } from './warning-card'
+
+import { Calendar } from '@/shared/components'
 
 export const Main = () => {
   const hasWarning = true

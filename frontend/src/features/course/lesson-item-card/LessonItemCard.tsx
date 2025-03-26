@@ -1,11 +1,11 @@
-import { Typography } from '@shared/components'
 import { ComponentPropsWithoutRef } from 'react'
-
-import { ArrowUpRightIcon } from '@assets/icons'
 
 import { LessonItemTitle } from '../lesson-item-title/LessonItemTitle'
 
 import s from './lesson-item-card.module.scss'
+
+import { ArrowUpRightIcon } from '@/assets/icons'
+import { Typography } from '@/shared/components'
 
 type Props = ComponentPropsWithoutRef<'div'>
 

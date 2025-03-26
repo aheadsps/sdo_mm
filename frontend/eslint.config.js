@@ -47,13 +47,7 @@ export default tseslint.config(
     settings: {
       'import/resolver': {
         typescript: {},
-        alias: {
-          map: [
-            ['@pages', './src/pages'],
-            ['@assets', './src/assets'],
-          ],
-          extensions: ['.js', '.jsx', '.ts', '.tsx'],
-        },
+       
       },
     },
   }

@@ -1,6 +1,6 @@
-import { Typography, Task } from '@shared/components'
-
 import s from '../main.module.scss'
+
+import { Typography, Task } from '@/shared/components'
 
 export const ExpiredTasks = () => {
   const hasExpired = true

@@ -1,8 +1,10 @@
-import { Button, Tabs, Typography, AiComponent, BackToPage } from '@shared/components'
 import { useState } from 'react'
 
 import s from './course.module.scss'
 import { tabsData } from './tabs/tabsData'
+
+import { routes } from '@/routes/routes'
+import { Button, BackToPage, Typography, Tabs, AiComponent } from '@/shared/components'
 
 export const Course = () => {
   const [isOffcanvasOpen, setIsOffcanvasOpen] = useState(false)
@@ -12,7 +14,7 @@ export const Course = () => {
   }
   return (
     <div className={s.courseContent}>
-      <BackToPage to={'/learning'}>Вернуться к выбору курса</BackToPage>
+      <BackToPage to={routes.learning}>Вернуться к выбору курса</BackToPage>
       <div className={s.titleBlock}>
         {/* separate reusable component */}
         <Typography variant="header_4" className={s.title}>

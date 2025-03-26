@@ -1,8 +1,9 @@
-import { Typography } from '@shared/components'
 import clsx from 'clsx'
 import { ComponentPropsWithoutRef } from 'react'
 
 import s from './lesson-item-title.module.scss'
+
+import { Typography } from '@/shared/components'
 
 type Props = ComponentPropsWithoutRef<'div'> & {
   title: string

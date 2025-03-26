@@ -1,10 +1,10 @@
-import { LessonItemCard } from '@features/course'
-import { Button, Card, Typography } from '@shared/components'
-import { calculateProgress } from '@shared/utils'
-
-import { HeartFilledIcon } from '@assets/icons'
+import { LessonItemCard } from '../../lesson-item-card'
 
 import s from './about-course.module.scss'
+
+import { HeartFilledIcon } from '@/assets/icons'
+import { Card, Typography, Button } from '@/shared/components'
+import { calculateProgress } from '@/shared/utils'
 
 export const AboutCourse = () => {
   return (

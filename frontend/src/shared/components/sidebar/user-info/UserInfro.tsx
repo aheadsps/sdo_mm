@@ -1,11 +1,12 @@
-import { useGetProfileQuery } from '@app/api'
-import { Typography } from '@shared/components'
-import { handleError } from '@shared/utils'
 import { NavLink } from 'react-router-dom'
 
-import LogOutIcon from '@assets/icons/LogOutIcon'
+import { Typography } from '../../typography'
 
 import s from './user-info.module.scss'
+
+import { LogOutIcon } from '@/assets/icons'
+import { useGetProfileQuery } from '@/services'
+import { handleError } from '@/shared/utils'
 
 export const UserInfo = () => {
   const { data: profile, isLoading, error } = useGetProfileQuery()

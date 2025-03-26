@@ -1,7 +1,8 @@
-import { Typography } from '@shared/components'
 import clsx from 'clsx'
 import { ReactNode } from 'react'
 import { NavLink } from 'react-router-dom'
+
+import { Typography } from '../../typography'
 
 import s from './sidebar-item.module.scss'
 

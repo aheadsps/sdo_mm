@@ -1,5 +1,5 @@
-import { Course } from '@features/course'
-import { withLayout } from '@shared/HOC'
+import { Course } from '@/features'
+import { withLayout } from '@/shared/HOC'
 
 export const CourseComponent = () => {
   return <Course />

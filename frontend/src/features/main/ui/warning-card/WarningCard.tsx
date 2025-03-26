@@ -1,7 +1,6 @@
-import { Typography } from '@shared/components'
-import { Button } from '@shared/components/button/Button'
-
 import s from './warning-card.module.scss'
+
+import { Typography, Button } from '@/shared/components'
 
 export const WarningCard = () => {
   return (

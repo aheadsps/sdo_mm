@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
-import { LoginResponse, LoginData, ProfileResponse } from './api.types'
+import { LoginResponse, LoginData, ProfileResponse } from '../auth/auth.types'
 
 export const baseUrl = 'http://localhost:8080/api/v1'
 export const getToken = () => {

@@ -1,7 +1,7 @@
-import { PdfIcon, JpgIcon, DocIcon, PngIcon, XlsIcon } from '@assets/icons'
-
 import { CourseMaterialItem } from './course-material-item/CourseMaterialItem'
 import s from './course-materials.module.scss'
+
+import { PdfIcon, JpgIcon, DocIcon, PngIcon, XlsIcon } from '@/assets/icons'
 
 export const CourseMaterials = () => {
   return (

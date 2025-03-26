@@ -1,4 +1,6 @@
-import { AboutCourse, CourseContent, Materials } from '@features/course/tabs'
+import { AboutCourse } from './about-course'
+import { CourseContent } from './course-content'
+import { Materials } from './materials'
 
 export type Tab = {
   label: string
