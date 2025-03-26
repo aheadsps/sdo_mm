@@ -48,3 +48,11 @@ class EventAdmin(admin.ModelAdmin):
         'favorite',
         'status',
         )
+
+
+@admin.register(models.TestBlock)
+class TestBlockAdmin(admin.ModelAdmin):
+    """
+    Админ панель Эвента
+    """
+    list_display = ('id',)
