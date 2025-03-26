@@ -1,5 +1,6 @@
-import { Button } from '@shared/components'
 import { ComponentPropsWithoutRef, ReactNode } from 'react'
+
+import { Button } from '../button'
 
 import s from './tabsButtons.module.scss'
 

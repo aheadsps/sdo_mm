@@ -1,14 +1,11 @@
-import { AiComponent, Button } from '@shared/components'
-import { LessonCard } from '@shared/components/lessonCard/LessonCard'
-import Loader from '@shared/components/loader/Loader'
-import { TabsButtons } from '@shared/components/tabsButtons/TabsButtons'
-import { Tooltipe } from '@shared/components/tooltipe/Tooltipe'
-import { withLayout } from '@shared/HOC/withLayout/withLayout'
 import { useState } from 'react'
 
 import { getCurrentCourses } from './mockData'
 import s from './myLearning.module.scss'
 import { Course } from './types'
+
+import { AiComponent, Tooltipe, Loader, Button, LessonCard, TabsButtons } from '@/shared/components'
+import { withLayout } from '@/shared/HOC'
 
 const MyLearningComp: React.FC = () => {
   const [mode, setMode] = useState<number>(0)
@@ -29,7 +26,7 @@ const MyLearningComp: React.FC = () => {
   return (
     <>
       {isAIOpen && <AiComponent isOpen={isAIOpen} setIsOpen={setIsAIOpen} />}
-      {isTooltipe && <Tooltipe isOpen={isTooltipe} setIsOpen={setIsTooltipe} />}
+      {isTooltipe && <Tooltipe setIsOpen={setIsTooltipe} />}
       <div className={s.container}>
         {isLoading ? (
           <Loader />

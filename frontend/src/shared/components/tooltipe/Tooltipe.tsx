@@ -1,12 +1,11 @@
-import { CloseIcon, TooltipeCheckboxIcon } from '@assets/icons'
-
 import s from './tooltipe.module.scss'
 
+import { CloseIcon, TooltipeCheckboxIcon } from '@/assets/icons'
+
 type Props = {
-  isOpen: boolean
   setIsOpen: (isOpen: boolean) => void
 }
-export const Tooltipe = ({ isOpen, setIsOpen }: Props) => {
+export const Tooltipe = ({ setIsOpen }: Props) => {
   return (
     <div className={s.tooltipe}>
       <div className={s.tooltipe__topBox}>
