@@ -1,6 +1,6 @@
 import { CourseMaterials } from '@features/course/course-materials'
-import { DropdownCard } from '@features/course/dropdown-card'
 import { Button } from '@shared/components'
+import { DropdownCard } from '@shared/components/dropdown-card'
 
 import s from './materials.module.scss'
 
