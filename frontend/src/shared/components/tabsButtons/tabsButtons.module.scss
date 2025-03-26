@@ -3,7 +3,6 @@
   height: 45px;
   display: flex;
   gap: 14px;
-  // display: none;
 }
 .tabBox {
   width: 94%;
@@ -30,7 +29,7 @@
   position: absolute;
   top: -15px;
   left: 192px;
-  z-index: 10;
+  z-index: 10000;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -87,7 +86,6 @@
   }
   .counterBox {
     left: 182px;
-    // z-index: 10;
   }
 }
 @media screen and (max-width: 767px) {
@@ -98,7 +96,6 @@
     gap: 20px;
   }
   .tabBox {
-    // height: 45px;
     display: flex;
     width: 100%;
     max-width: 764px;

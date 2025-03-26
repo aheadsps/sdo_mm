@@ -1,4 +1,4 @@
-import { AiComponent, Button, Tab, Tabs } from '@shared/components'
+import { AiComponent, Button } from '@shared/components'
 import { LessonCard } from '@shared/components/lessonCard/LessonCard'
 import Loader from '@shared/components/loader/Loader'
 import { TabsButtons } from '@shared/components/tabsButtons/TabsButtons'
@@ -40,9 +40,11 @@ const MyLearningComp: React.FC = () => {
               <Button children="ИИ" variant="secondary" onClick={() => setIsAIOpen(!isAIOpen)} />
             </div>
             <div className={s.container__content}>
-              {currentCourses.map((course: Course) => {
-                return <LessonCard course={course} key={course.id} />
-              })}
+              {currentCourses.length > 0
+                ? currentCourses.map((course: Course) => {
+                    return <LessonCard course={course} key={course.id} />
+                  })
+                : ''}
             </div>
           </>
         )}
