@@ -13,7 +13,7 @@ import { Course } from './types'
 const MyLearningComp: React.FC = () => {
   const [mode, setMode] = useState<string>('Назначенные курсы')
   const [isTooltipe, setIsTooltipe] = useState<boolean>(true)
-  const [isAIOpen, setIsAIOpen] = useState<boolean>(false) //true false
+  const [isAIOpen, setIsAIOpen] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [currentCourses, setCurrentCourses] = useState<Course[] | []>([])
 
@@ -37,10 +37,7 @@ const MyLearningComp: React.FC = () => {
   }
     data()
   }, [mode])
-  const hendleAiOpen = () => {
-    setMode('ИИ')
-    setIsAIOpen(!isAIOpen)
-  }
+ 
   return (
     <>
       {isAIOpen && <AiComponent isOpen={isAIOpen} setIsOpen={setIsAIOpen}/>}
@@ -72,8 +69,8 @@ const MyLearningComp: React.FC = () => {
               </div>
               <Button
                 children="ИИ"
-                variant={mode === 'ИИ' && isAIOpen === true ? 'primary' : 'secondary'}
-                onClick={() => hendleAiOpen()}
+                variant='secondary'
+                onClick={() => setIsAIOpen(!isAIOpen)}
               />
             </div>
             <div className={s.container__content}>
