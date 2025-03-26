@@ -12,14 +12,15 @@ export type Tab = {
 type Props = {
   tabs: Tab[]
   variant: 'primary' | 'secondary'
+  className?: string
 } & ComponentPropsWithoutRef<'button'>
 
-export const Tabs = ({ tabs, variant = 'primary', ...props }: Props) => {
+export const Tabs = ({ tabs, variant = 'primary', className, ...props }: Props) => {
   const [activeTab, setActiveTab] = useState(0)
 
   return (
-    <div className={s.tabs}>
-      <div className={s.tabList}>
+    <>
+      <div className={clsx(s.tabList, className)}>
         {tabs.map((tab, index) => (
           <Button
             variant={variant}
@@ -35,6 +36,6 @@ export const Tabs = ({ tabs, variant = 'primary', ...props }: Props) => {
         ))}
       </div>
       <div className={s.tabContent}>{tabs[activeTab].content}</div>
-    </div>
+    </>
   )
 }
