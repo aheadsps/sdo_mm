@@ -14,64 +14,64 @@
     height: 45px;
     display: flex;
     gap: 14px;
+    display: none;
   }
-  &__btnBox {
-    width: 94%;
-    height: 45px;
-    display: flex;
-    gap: 24px;
-  }
-  &__boxbtn {
-    position: relative;
-  }
-  &__boxbtn_unactive {
-    position: static;
-  }
-  &__btn {
-    width: 213px;
-    height: 45px;
-    border-radius: 8px;
-    border: none;
-    padding: 10px 20px;
-  }
-  &__counterBox {
-    width: 32px;
-    height: 32px;
-    position: absolute;
-    top: -15px;
-    left: 192px;
-    // z-index: 10;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 20px;
-    background: var(--color-accent-red500);
-  }
-  &__counterBox_hidden {
-    width: 32px;
-    height: 32px;
-    position: absolute;
-    top: -15px;
-    left: 192px;
-    z-index: 100;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 20px;
-    background: transparent;
-    z-index: -1000;
-  }
-  &__counter {
-    width: 9px;
-    height: 18px;
-    font-family: var(--font-family-secondary);
-    font-weight: 300;
-    font-size: var(--font-size-xs);
-    line-height: 130%;
-    letter-spacing: 0.25px;
-    vertical-align: middle;
-    color: var(--color-text-button);
-  }
+  // &__btnBox {
+  //   width: 94%;
+  //   height: 45px;
+  //   display: flex;
+  //   gap: 24px;
+  // }
+  // &__boxbtn {
+  //   position: relative;
+  // }
+  // &__boxbtn_unactive {
+  //   position: static;
+  // }
+  // &__btn {
+  //   width: 213px;
+  //   height: 45px;
+  //   border-radius: 8px;
+  //   border: none;
+  //   padding: 10px 20px;
+  // }
+  // &__counterBox {
+  //   width: 32px;
+  //   height: 32px;
+  //   position: absolute;
+  //   top: -15px;
+  //   left: 192px;
+  //   z-index: 10;
+  //   display: flex;
+  //   align-items: center;
+  //   justify-content: center;
+  //   border-radius: 20px;
+  //   background: var(--color-accent-red500);
+  // }
+  // &__counterBox_hidden {
+  //   width: 32px;
+  //   height: 32px;
+  //   position: absolute;
+  //   top: -15px;
+  //   left: 192px;
+  //   display: flex;
+  //   align-items: center;
+  //   justify-content: center;
+  //   border-radius: 20px;
+  //   background: transparent;
+  //   z-index: -1000;
+  // }
+  // &__counter {
+  //   width: 9px;
+  //   height: 18px;
+  //   font-family: var(--font-family-secondary);
+  //   font-weight: 300;
+  //   font-size: var(--font-size-xs);
+  //   line-height: 130%;
+  //   letter-spacing: 0.25px;
+  //   vertical-align: middle;
+  //   color: var(--color-text-button);
+  // }
   &__content {
     width: 997px;
     height: 675px;
@@ -91,27 +91,27 @@
       flex-direction: column;
       gap: 20px;
     }
-    &__btnBox {
-      width: 100%;
-      height: fit-content;
-      min-height: 132px;
-      display: flex;
-      flex-wrap: wrap;
-      column-gap: 24px;
-    }
-    &__boxbtn {
-      position: relative;
-    }
-    &__btn {
-      width: fit-content;
-      min-width: 191px;
-      max-height: 40px;
-      padding: 8px 12px;
-    }
-    &__counterBox {
-      left: 182px;
-      // z-index: 10;
-    }
+    // &__btnBox {
+    //   width: 100%;
+    //   height: fit-content;
+    //   min-height: 132px;
+    //   display: flex;
+    //   flex-wrap: wrap;
+    //   column-gap: 24px;
+    // }
+    // &__boxbtn {
+    //   position: relative;
+    // }
+    // &__btn {
+    //   width: fit-content;
+    //   min-width: 191px;
+    //   max-height: 40px;
+    //   padding: 8px 12px;
+    // }
+    // &__counterBox {
+    //   left: 182px;
+    //   // z-index: 10;
+    // }
     &__content {
       width: 100%;
       height: fit-content;
@@ -131,28 +131,31 @@
       flex-direction: column;
       gap: 20px;
     }
-    &__btnBox {
-      // height: 45px;
-      display: flex;
-      width: 100%;
-      max-width: 764px;
-      height: fit-content;
-      gap: 0;
-      overflow: auto;
-      &::-webkit-scrollbar {
-        display: none;
-      }
-    }
-
-    &__boxbtn {
-      position: relative;
-    }
-    &__btn {
-      width: fit-content;
-      min-width: 191px;
-      max-height: 40px;
-      padding: 8px 12px;
-    }
+    // &__btnBox {
+    //   // height: 45px;
+    //   display: flex;
+    //   width: 100%;
+    //   max-width: 764px;
+    //   height: fit-content;
+    //   gap: 0;
+    //   overflow: auto;
+    //   &::-webkit-scrollbar {
+    //     display: none;
+    //   }
+    // }
+    // &__counterBox {
+    //   width: 24px;
+    //   height: 24px;
+    // }
+    // &__boxbtn {
+    //   position: relative;
+    // }
+    // &__btn {
+    //   width: fit-content;
+    //   min-width: 191px;
+    //   max-height: 40px;
+    //   padding: 8px 12px;
+    // }
     &__content {
       width: 100%;
       height: fit-content;
