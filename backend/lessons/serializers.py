@@ -9,12 +9,15 @@ from lessons import validators
 from lessons.d_types import VD
 from lessons.patrials import set_status
 from users import serializers as user_serializers
+from rest_framework.utils import html, model_meta
+from config.settings import MEDIA_ROOT
+import os
 
 
-PROCESS = 'process'
-EXPECTED = 'expected'
-DONE = 'done'
-FAILED = 'failed'
+PROCESS = "process"
+EXPECTED = "expected"
+DONE = "done"
+FAILED = "failed"
 
 
 class AnswerSerializer(serializers.ModelSerializer):
@@ -146,7 +149,7 @@ class EventSerializer(serializers.ModelSerializer):
         model = models.Event
         fields = (
             "id",
-            'user',
+            "user",
             "course",
             "done_lessons",
             "start_date",
@@ -154,6 +157,94 @@ class EventSerializer(serializers.ModelSerializer):
             "favorite",
             "status",
         )
+
+
+class ContentAttachmentSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(required=False, allow_null=True)
+
+    class Meta:
+        model = models.ContentAttachment
+        fields = ["id", "file", "file_type"]
+
+
+class StepSerializer(serializers.ModelSerializer):
+    content_attachment = ContentAttachmentSerializer(many=True)
+    # test_block = TestBlock(many=True) добавить позже
+
+    class Meta:
+        model = models.Step
+        fields = ("serial", "title", "content_text", "content_attachment")
+        validators = (validators.MoreThanZeroValidator("serial"),)
+
+    def create(self, validated_data: dict[int, str, str, dict]):
+        """
+        Создаем новый шаг урока
+        """
+        content_attachment = validated_data.pop("content_attachment")
+        step = models.Step._default_manager.create(**validated_data)
+        # Заполняем поле content_attachment
+        content_attachment_models = []
+        for item in content_attachment:
+            content_attachment_models.append(
+                models.ContentAttachment(**item, content_attachment=step)
+            )
+        models.ContentAttachment._default_manager.bulk_create(content_attachment_models)
+        return step
+
+    def update(self, instance, validated_data):
+        """
+        Обработка обновления Step.
+
+        ContentAttachment не редактируется:
+        создается новый или удаляется
+        В API-запросе необходимо передать
+        ВСЕ актуальные записи ContentAttachment вместе с их ID
+        Если запись передана не будет - она удаляется из БД.
+        Если ID = null или не указан создается новая запись
+        """
+
+        # Определяем поля Step
+        instance.serial = validated_data.get("serial", instance.serial)
+        instance.title = validated_data.get("title", instance.title)
+        instance.content_text = validated_data.get(
+            "content_text", instance.content_text
+        )
+
+        # Получаем ID удаленных content_attachment
+        id_attachment_new = [
+            item.get("id")
+            for item in validated_data.get("content_attachment")
+            if not item.get("id") is None
+        ]
+        id_attachment_old = [item.id for item in instance.content_attachment.all()]
+        id_attachment_delete = set(id_attachment_old) - set(id_attachment_new)
+        # Удалить старые content_attachment
+        delete_list = models.ContentAttachment.objects.filter(
+            id__in=list(id_attachment_delete)
+        )
+        for item in delete_list:
+            if item.file.name:
+                file_path = item.file.name.split("/")
+                file_path = os.path.join(MEDIA_ROOT, *file_path)
+                try:
+                    os.remove(file_path)
+                except Exception:
+                    # запись в логи...
+                    pass
+        delete_list.delete()
+
+        # Заполняем новые поля content_attachment
+        content_attachment_models = []
+        for item in validated_data.get("content_attachment"):
+            if not item.get("id", None):
+                content_attachment_models.append(
+                    models.ContentAttachment(**item, content_attachment=instance)
+                )
+        models.ContentAttachment._default_manager.bulk_create(content_attachment_models)
+
+        instance.save()
+
+        return instance
 
 
 class EventSerializerCreate(serializers.ModelSerializer):
@@ -173,7 +264,7 @@ class EventSerializerCreate(serializers.ModelSerializer):
             "favorite",
             "status",
         )
-        validators = (validators.TimeValidator('start_date', 'end_date'),)
+        validators = (validators.TimeValidator("start_date", "end_date"),)
 
     def _is_process(self, start_date: datetime.datetime) -> bool:
         """
@@ -201,7 +292,7 @@ class EventSerializerCreate(serializers.ModelSerializer):
         """
         Корректировка статуса исходя от даты начала
         """
-        start_date = validated_data.get('start_date')
+        start_date = validated_data.get("start_date")
         if start_date:
             is_process = self._is_process(start_date=start_date)
             if self.instance:
@@ -209,7 +300,7 @@ class EventSerializerCreate(serializers.ModelSerializer):
                     self._change_status(
                         validated_data=validated_data,
                         process=is_process,
-                        )
+                    )
                 return
             else:
                 self._change_status(
@@ -218,7 +309,7 @@ class EventSerializerCreate(serializers.ModelSerializer):
                 )
 
     def save(self, **kwargs):
-        logger.debug(f'before {self.validated_data}')
+        logger.debug(f"before {self.validated_data}")
         self._correct_status(self.validated_data)
-        logger.debug(f'after {self.validated_data}')
+        logger.debug(f"after {self.validated_data}")
         return super().save(**kwargs)

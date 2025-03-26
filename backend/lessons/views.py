@@ -1,6 +1,7 @@
 from rest_framework import permissions, status, mixins, generics
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework.viewsets import ModelViewSet
 
 from loguru import logger
 
@@ -26,6 +27,7 @@ class EventViewSet(own_viewsets.GetCreateUpdateDeleteViewSet):
     """
     Виювсет эвента
     """
+
     queryset = (models.Event
                 ._default_manager
                 .get_queryset()
@@ -82,6 +84,25 @@ class EventViewSet(own_viewsets.GetCreateUpdateDeleteViewSet):
             return self.get_paginated_response(serializer.data)
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
+
+
+class StepViewSet(ModelViewSet):
+    """
+    Просмотр всех шагов уроков list
+    Создание нового шага урока
+    Просмотр одного шага, Редактирование, удаление шага урока
+    """
+
+    queryset = models.Step._default_manager.all()
+    serializer_class = serializers.StepSerializer
+
+    def get_permissions(self):
+        if self.action == "retrieve":
+            permission_classes = [permissions.IsAuthenticated]
+        else:
+            permission_classes = [permissions.IsAuthenticated &
+                                  IsAdminOrIsStaff]
+        return [permission() for permission in permission_classes]
 
 
 class CourseViewSet(mixins.ListModelMixin,
