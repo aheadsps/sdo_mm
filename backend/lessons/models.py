@@ -42,6 +42,7 @@ class Question(models.Model):
     Модель представления Вопроса
     """
 
+<<<<<<< HEAD
     text = models.TextField(
         verbose_name="текст вопроса",
         help_text="Текст вопроса",
@@ -52,6 +53,22 @@ class Question(models.Model):
         help_text="Картинка для вопроса",
         null=True,
     )
+=======
+    text = models.TextField(verbose_name='текст вопроса',
+                            help_text='Текст вопроса',
+                            )
+    image = models.ImageField(upload_to=path_maker_question,
+                              verbose_name='картинка',
+                              help_text='Картинка для вопроса',
+                              null=True,
+                              blank=True,
+                              )
+    test_block = models.ForeignKey("lessons.TestBlock",
+                                   verbose_name=_("тестовый блок"),
+                                   on_delete=models.CASCADE,
+                                   related_name='questions',
+                                   )
+>>>>>>> develop
 
     class Meta:
         verbose_name = _("Question")
@@ -59,6 +76,18 @@ class Question(models.Model):
 
     def __str__(self):
         return self.text[0:10] + "..."
+
+
+class TestBlock(models.Model):
+    """
+    Тестовый блок
+    """
+    class Meta:
+        verbose_name = _("TestBlock")
+        verbose_name_plural = _("TestBlocks")
+
+    def __str__(self):
+        return f'test-block-{self.pk}'
 
 
 class Event(models.Model):

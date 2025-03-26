@@ -1,4 +1,4 @@
-from rest_framework import permissions, status, mixins
+from rest_framework import permissions, status, mixins, generics
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
@@ -13,6 +13,14 @@ from lessons.permissions import (
     OwnerEventPermission,
     CanReadCourse,
     )
+
+
+class TestBlockGeneric(generics.RetrieveAPIView):
+    queryset = models.TestBlock.objects.get_queryset()
+    serializer_class = serializers.TestBlockSerializer
+    lookup_field = 'pk'
+    lookup_url_kwarg = 'block_id'
+    permission_classes = [permissions.AllowAny]
 
 
 class EventViewSet(own_viewsets.GetCreateUpdateDeleteViewSet):

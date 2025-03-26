@@ -62,6 +62,14 @@ class QuestionSerializer(serializers.ModelSerializer):
         return question
 
 
+class TestBlockSerializer(serializers.ModelSerializer):
+    questions = QuestionSerializer(many=True)
+
+    class Meta:
+        model = models.TestBlock
+        fields = ('id', 'questions')
+
+
 class CreateCourseSerializer(serializers.ModelSerializer):
     """
     Сериализатор на обработку создания и обновления курсов
