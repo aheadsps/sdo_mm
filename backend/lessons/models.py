@@ -1,3 +1,4 @@
+from django.core.validators import MinValueValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth import get_user_model
@@ -85,13 +86,13 @@ class Event(models.Model):
                              verbose_name=_("пользователь"),
                              on_delete=models.CASCADE,
                              help_text='Пользователь которому '
-                             'будет назначен ивент',
+                                       'будет назначен ивент',
                              )
     course = models.ForeignKey('lessons.Course',
                                verbose_name='курс',
                                on_delete=models.CASCADE,
                                help_text='Курс который обворачивается'
-                               'ивент',
+                                         'ивент',
                                )
     done_lessons = models.SmallIntegerField(_("Количество выполненых уроков"),
                                             default=0,
@@ -106,16 +107,16 @@ class Event(models.Model):
     end_date = models.DateTimeField(verbose_name='дедлайн',
                                     null=True,
                                     help_text='Дедлайн ивента, если'
-                                    'дедлайна нет тогда бессрочно',
+                                              'дедлайна нет тогда бессрочно',
                                     default=None,
                                     )
     favorite = models.BooleanField(_("Избранный ивент"),
                                    default=False,
                                    help_text='Указатель является ли данный'
-                                   'ивент избранным')
+                                             'ивент избранным')
     status = models.CharField(choices=settings.STATUS_EVENTS,
                               null=True,
-                              default='process',
+                              default='expected',
                               verbose_name='статус ивента',
                               help_text='Текущий статус данного ивента',
                               )
@@ -177,6 +178,49 @@ class Course(models.Model):
     class Meta:
         verbose_name = _("Course")
         verbose_name_plural = _("Courses")
+
+    def __str__(self):
+        return self.name
+
+
+class Lesson(models.Model):
+    """
+    Модель преставления урока
+    """
+    name = models.CharField(_("Название"),
+                            max_length=256,
+                            null=False,
+                            blank=False,
+                            help_text="Название урока",
+                            )
+    serial = models.IntegerField(_("Номер"),
+                               null=False,
+                               blank=False,
+                               validators=[MinValueValidator(1)],
+                               default=1,
+                               help_text="Порядковый номер урока"
+                               )
+    course = models.ForeignKey(Course,
+                               verbose_name=_("Курс"),
+                               on_delete=models.CASCADE,
+                               related_name='lessons')
+
+    # step = models.ManyToManyField(_("Шаг"),
+    #                                Step,
+    #                                related_name='lessons',
+    #                                blank=True)
+    # test_block = models.ForeignKey(
+    #     _("Тестирование"),
+    #     TestBlock,
+    #     on_delete=models.SET_NULL,
+    #     null=True,
+    #     blank=True,
+    #     related_name='lessons'
+    # )
+
+    class Meta:
+        verbose_name = _("Lesson")
+        verbose_name_plural = _("Lessons")
 
     def __str__(self):
         return self.name

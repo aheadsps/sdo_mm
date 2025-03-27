@@ -1,5 +1,6 @@
 import datetime
 from rest_framework import serializers
+from rest_framework.utils import model_meta
 from django.utils import timezone
 
 from loguru import logger
@@ -62,6 +63,65 @@ class QuestionSerializer(serializers.ModelSerializer):
         return question
 
 
+class LessonCreateSerializer(serializers.ModelSerializer):
+    """
+    Сериализатор создания и обновления урока
+    """
+    # step = StepSerializer(many=True)
+    # "step", "test_block добавить
+    class Meta:
+        model = models.Lesson
+        fields = (
+            "id",
+            "name",
+            "serial",
+            "course",
+        )
+        read_only_fields = ("id",)
+
+    def create(self, validated_data):
+        # step_items = validated_data.pop('step', [])
+        # step_create = [
+        #     models.Step(**step, lesson=lesson) for step in step_items
+        # ]
+        # Step.objects.bulk_create(step_create)
+        return super().create(validated_data)
+
+
+class LessonSerializer(serializers.ModelSerializer):
+    """
+    Сериализатор оптимизированного вывода
+    """
+    # "step", "test_block добавить
+
+    class Meta:
+        model = models.Lesson
+        fields = (
+            "id",
+            "name",
+            "serial",
+            "course",
+        )
+
+
+class LessonViewSerializer(serializers.ModelSerializer):
+    """
+    Сериализатор детального представления урока
+    """
+    # step = StepViewSerializer(many=True, read_only=True)
+    # test_block = TestBlockViewSerializer(read_only=True)
+
+    # "step", "test_block добавить
+    class Meta:
+        model = models.Lesson
+        fields = (
+            "id",
+            "name",
+            "serial",
+            "course",
+        )
+
+
 class TestBlockSerializer(serializers.ModelSerializer):
     questions = QuestionSerializer(many=True)
 
@@ -75,7 +135,6 @@ class CreateCourseSerializer(serializers.ModelSerializer):
     Сериализатор на обработку создания и обновления курсов
     """
 
-    # ПОСЛЕ ДОБАВЛЕНИЕ LESSON ОБЯЗАТЕЛЬНО ДОБАВИТЬ И ТУТ
     class Meta:
         model = models.Course
         fields = (
@@ -87,18 +146,13 @@ class CreateCourseSerializer(serializers.ModelSerializer):
             "experiences",
         )
 
-    def create(self, validated_data):
-        # Логика по созданиею курса вместе с уроком и дальнейшей целочке по порядку
-        # Основа конструктора
-        return super().create(validated_data)
-
 
 class CourseSerializer(serializers.ModelSerializer):
     """
     Сериализатор Оптимизарованого вывода
     """
+    lessons = LessonSerializer(many=True)
 
-    # ПОСЛЕ ДОБАВЛЕНИЕ LESSON ОБЯЗАТЕЛЬНО ДОБАВИТЬ И ТУТ
     class Meta:
         model = models.Course
         fields = (
@@ -111,6 +165,7 @@ class CourseSerializer(serializers.ModelSerializer):
             "image",
             "profession",
             "experiences",
+            "lessons",
         )
 
 
@@ -121,8 +176,8 @@ class ViewCourseSerializer(serializers.ModelSerializer):
 
     experiences = user_serializers.WorkExperienceSerializer(many=True)
     profession = user_serializers.ProfessionSerializer()
+    lessons = LessonViewSerializer(many=True)
 
-    # ПОСЛЕ ДОБАВЛЕНИЕ LESSON ОБЯЗАТЕЛЬНО ДОБАВИТЬ И ТУТ
     class Meta:
         model = models.Course
         fields = (
@@ -135,6 +190,7 @@ class ViewCourseSerializer(serializers.ModelSerializer):
             "image",
             "profession",
             "experiences",
+            "lessons"
         )
 
 

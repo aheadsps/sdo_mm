@@ -54,15 +54,22 @@ class EventAdmin(admin.ModelAdmin):
     """
 
     list_display = (
-        "user",
-        "course",
-        "done_lessons",
-        "start_date",
-        "end_date",
-        "favorite",
-        "status",
-    )
+        'user',
+        'course',
+        'done_lessons',
+        'start_date',
+        'end_date',
+        'favorite',
+        'status',
+        )
 
+
+@admin.register(models.Lesson)
+class LessonAdmin(admin.ModelAdmin):
+    """
+    Админ панель Урока
+    """
+    list_display = ("name", "serial", "course",)
 
 @admin.register(models.TestBlock)
 class TestBlockAdmin(admin.ModelAdmin):
