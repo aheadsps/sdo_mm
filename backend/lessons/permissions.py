@@ -73,4 +73,3 @@ class CanReadLesson(permissions.BasePermission):
         )
 
         return event_exists.exists()
-

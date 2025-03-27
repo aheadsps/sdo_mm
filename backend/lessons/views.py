@@ -132,10 +132,12 @@ class LessonViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_permissions(self):
-        if self.action in ['retrieve', 'list']:
-            permission_classes = [CanReadLesson | IsAdminOrIsStaff]
+        if self.action == 'retrieve':
+            permission_classes = [permissions.IsAuthenticated &
+                                  (CanReadLesson | IsAdminOrIsStaff)]
         else:
-            permission_classes = [IsAdminOrIsStaff]
+            permission_classes = [permissions.IsAuthenticated &
+                                  IsAdminOrIsStaff]
 
         return [permission() for permission in permission_classes]
 
@@ -151,5 +153,8 @@ class LessonViewSet(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         self.check_object_permissions(request=request, obj=None)
-        self.serializer_class = serializers.LessonCreateSerializer
         return super().create(request, *args, **kwargs)
+
+    def list(self, request, *args, **kwargs):
+        self.check_object_permissions(request=request, obj=None)
+        return super().list(request, *args, **kwargs)

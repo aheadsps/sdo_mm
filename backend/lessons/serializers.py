@@ -269,7 +269,6 @@ class LessonViewSerializer(serializers.ModelSerializer):
     """
     Сериализатор детального представления урока
     """
-    course_id = serializers.IntegerField(source='course.id', read_only=True)
     # step = StepViewSerializer(many=True, read_only=True)
     # test_block = TestBlockViewSerializer(read_only=True)
 
@@ -280,5 +279,5 @@ class LessonViewSerializer(serializers.ModelSerializer):
             "id",
             "name",
             "serial",
-            "course_id",
+            "course",
         )

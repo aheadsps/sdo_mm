@@ -1270,6 +1270,10 @@ components:
       additionalProperties: false
       type: object
       properties:
+        id:
+          type: integer
+          readOnly: true
+          minimum: 1
         name:
           type: string
           maxLength: 256

@@ -458,7 +458,7 @@ class LessonViewSetTest(APITestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['name'], "Урок 1")
-        self.assertEqual(response.data['course_id'], 3)
+        self.assertEqual(response.data['course'], 3)
 
     def test_create_lesson(self):
         """Тест создания урока."""
@@ -524,12 +524,12 @@ class LessonViewSetTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_regular_user_can_view_lessons(self):
-        """Тест, что обычный пользователь может просматривать уроки."""
+        """Тест, что обычный пользователь не может просматривать полный список уроков."""
         self.client.force_authenticate(user=self._user)
 
         list_url = reverse('lessons:lesson-list')
         list_response = self.client.get(list_url)
-        self.assertEqual(list_response.status_code, status.HTTP_200_OK)
+        self.assertEqual(list_response.status_code, status.HTTP_403_FORBIDDEN)
 
         detail_url = reverse('lessons:lesson-detail', args=[self.lesson.id])
         detail_response = self.client.get(detail_url)
