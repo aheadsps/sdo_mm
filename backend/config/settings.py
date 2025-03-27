@@ -24,6 +24,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 TEST_IMAGE_PATH = BASE_DIR.joinpath(*("lessons", "tests", "image.png"))
 TEST_IMAGE_PATH_2 = BASE_DIR.joinpath(*("lessons", "tests", "image2.png"))
 
+
+TYPE_CONTENTS = [
+    ("Image", "Изображение"),
+    ("Video", "Видео"),
+]
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 

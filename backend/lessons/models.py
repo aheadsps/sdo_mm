@@ -10,73 +10,6 @@ from lessons.utils import (
 )
 
 
-class Answer(models.Model):
-    """
-    Модель представления Ответа
-    """
-
-    text = models.TextField(
-        verbose_name="текст ответа",
-        help_text="Текст ответа",
-    )
-    correct = models.BooleanField(
-        verbose_name="корректность",
-        help_text="Корректность данного ответа",
-    )
-    question = models.ForeignKey(
-        "lessons.Question",
-        verbose_name=_("ответ"),
-        related_name="answers",
-        on_delete=models.CASCADE,
-    )
-
-    class Meta:
-        verbose_name = _("Answer")
-        verbose_name_plural = _("Answers")
-
-    def __str__(self):
-        return self.text[0:10] + "..."
-
-
-class Question(models.Model):
-    """
-    Модель представления Вопроса
-    """
-    text = models.TextField(verbose_name='текст вопроса',
-                            help_text='Текст вопроса',
-                            )
-    image = models.ImageField(upload_to=path_maker_question,
-                              verbose_name='картинка',
-                              help_text='Картинка для вопроса',
-                              null=True,
-                              blank=True,
-                              )
-    test_block = models.ForeignKey("lessons.TestBlock",
-                                   verbose_name=_("тестовый блок"),
-                                   on_delete=models.CASCADE,
-                                   related_name='questions',
-                                   )
-
-    class Meta:
-        verbose_name = _("Question")
-        verbose_name_plural = _("Questions")
-
-    def __str__(self):
-        return self.text[0:10] + "..."
-
-
-class TestBlock(models.Model):
-    """
-    Тестовый блок
-    """
-    class Meta:
-        verbose_name = _("TestBlock")
-        verbose_name_plural = _("TestBlocks")
-
-    def __str__(self):
-        return f'test-block-{self.pk}'
-
-
 class Event(models.Model):
     """
     Модель представления Ивента
@@ -86,12 +19,14 @@ class Event(models.Model):
                              on_delete=models.CASCADE,
                              help_text='Пользователь которому '
                                        'будет назначен ивент',
+                             related_name='events',
                              )
     course = models.ForeignKey('lessons.Course',
                                verbose_name='курс',
                                on_delete=models.CASCADE,
                                help_text='Курс который обворачивается'
                                          'ивент',
+                               related_name='events',
                                )
     done_lessons = models.SmallIntegerField(_("Количество выполненых уроков"),
                                             default=0,
@@ -167,6 +102,7 @@ class Course(models.Model):
         verbose_name=_("профессия"),
         on_delete=models.SET_NULL,
         null=True,
+        related_name='courses',
     )
     experiences = models.ManyToManyField(
         "users.WorkExperience",
@@ -193,29 +129,16 @@ class Lesson(models.Model):
                             help_text="Название урока",
                             )
     serial = models.IntegerField(_("Номер"),
-                               null=False,
-                               blank=False,
-                               validators=[MinValueValidator(1)],
-                               default=1,
-                               help_text="Порядковый номер урока"
-                               )
+                                 null=False,
+                                 blank=False,
+                                 validators=[MinValueValidator(1)],
+                                 default=1,
+                                 help_text="Порядковый номер урока"
+                                 )
     course = models.ForeignKey(Course,
                                verbose_name=_("Курс"),
                                on_delete=models.CASCADE,
                                related_name='lessons')
-
-    # step = models.ManyToManyField(_("Шаг"),
-    #                                Step,
-    #                                related_name='lessons',
-    #                                blank=True)
-    # test_block = models.ForeignKey(
-    #     _("Тестирование"),
-    #     TestBlock,
-    #     on_delete=models.SET_NULL,
-    #     null=True,
-    #     blank=True,
-    #     related_name='lessons'
-    # )
 
     class Meta:
         verbose_name = _("Lesson")
@@ -223,14 +146,6 @@ class Lesson(models.Model):
 
     def __str__(self):
         return self.name
-
-
-class TestBlock(models.Model):
-    lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, related_name="test_block")
-
-    class Meta:
-        verbose_name = "тестовый блок"
-        verbose_name_plural = "тестовые блоки"
 
 
 class Step(models.Model):
@@ -247,8 +162,14 @@ class Step(models.Model):
         blank=True,
     )
     serial = models.IntegerField(
-        null=False, blank=False, default=1, verbose_name="Порядковый номер шага"
+        null=False, blank=False, default=1,
+        verbose_name="Порядковый номер шага"
     )
+    lesson = models.ForeignKey(Lesson,
+                               verbose_name=_("Урок"),
+                               on_delete=models.CASCADE,
+                               related_name='steps',
+                               )
 
     class Meta:
         verbose_name = "Шаг урока"
@@ -259,21 +180,18 @@ class Step(models.Model):
         return f"Шаг: {self.title}"
 
 
-TYPE_CONTENT = [
-    ("Image", "Изображение"),
-    ("Video", "Видео"),
-]
-
-
 class ContentAttachment(models.Model):
     file = models.FileField(
         upload_to=path_maker_content_attachment, null=True, blank=True
     )
     file_type = models.CharField(
-        max_length=10, choices=TYPE_CONTENT, default="Image", verbose_name="Тип файла"
+        max_length=10, choices=settings.TYPE_CONTENTS,
+        default="Image", verbose_name="Тип файла"
     )
-    content_attachment = models.ForeignKey(
-        Step, unique=False, on_delete=models.CASCADE, related_name="content_attachment"
+    step = models.ForeignKey(
+        Step, unique=False,
+        on_delete=models.CASCADE,
+        related_name='attachments',
     )
 
     class Meta:
@@ -282,3 +200,76 @@ class ContentAttachment(models.Model):
 
     def __str__(self):
         return self.file.name
+
+
+class TestBlock(models.Model):
+    """
+    Модель тестового блока
+    """
+
+    lesson = models.models.OneToOneField(Lesson,
+                                         on_delete=models.CASCADE,
+                                         related_name="test_block",
+                                         )
+
+    class Meta:
+        verbose_name = "тестовый блок"
+        verbose_name_plural = "тестовые блоки"
+
+    def __str__(self):
+        return f'test-block-{self.pk}'
+
+
+class Question(models.Model):
+    """
+    Модель представления Вопроса
+    """
+    text = models.TextField(verbose_name='текст вопроса',
+                            help_text='Текст вопроса',
+                            )
+    image = models.ImageField(upload_to=path_maker_question,
+                              verbose_name='картинка',
+                              help_text='Картинка для вопроса',
+                              null=True,
+                              blank=True,
+                              )
+    test_block = models.ForeignKey(TestBlock,
+                                   verbose_name=_("тестовый блок"),
+                                   on_delete=models.CASCADE,
+                                   related_name='questions',
+                                   )
+
+    class Meta:
+        verbose_name = _("Question")
+        verbose_name_plural = _("Questions")
+
+    def __str__(self):
+        return self.text[0:10] + "..."
+
+
+class Answer(models.Model):
+    """
+    Модель представления Ответа
+    """
+
+    text = models.TextField(
+        verbose_name="текст ответа",
+        help_text="Текст ответа",
+    )
+    correct = models.BooleanField(
+        verbose_name="корректность",
+        help_text="Корректность данного ответа",
+    )
+    question = models.ForeignKey(
+        Question,
+        verbose_name=_("ответ"),
+        related_name="answers",
+        on_delete=models.CASCADE,
+    )
+
+    class Meta:
+        verbose_name = _("Answer")
+        verbose_name_plural = _("Answers")
+
+    def __str__(self):
+        return self.text[0:10] + "..."
