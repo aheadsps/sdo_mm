@@ -20,6 +20,15 @@ class QuestionAdmin(admin.ModelAdmin):
 
     list_display = ("text", "image")
 
+@admin.register(models.Step)
+class StepAdmin(admin.ModelAdmin):
+    list_display = (
+        "serial",
+        "title",
+        "content_text",
+    )
+    search_fields = ("title",)
+
 
 @admin.register(models.Course)
 class CourseAdmin(admin.ModelAdmin):
@@ -45,11 +54,27 @@ class EventAdmin(admin.ModelAdmin):
     """
 
     list_display = (
-        "user",
-        "course",
-        "done_lessons",
-        "start_date",
-        "end_date",
-        "favorite",
-        "status",
-    )
+        'user',
+        'course',
+        'done_lessons',
+        'start_date',
+        'end_date',
+        'favorite',
+        'status',
+        )
+
+
+@admin.register(models.Lesson)
+class LessonAdmin(admin.ModelAdmin):
+    """
+    Админ панель Урока
+    """
+    list_display = ("name", "serial", "course",)
+
+
+@admin.register(models.TestBlock)
+class TestBlockAdmin(admin.ModelAdmin):
+    """
+    Админ панель Эвента
+    """
+    list_display = ('id',)

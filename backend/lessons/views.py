@@ -1,7 +1,8 @@
 from loguru import logger
-from rest_framework import generics, mixins, permissions, status
+from rest_framework import permissions, status, mixins, generics, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework.viewsets import ModelViewSet
 
 from lessons import models, serializers
 from lessons import viewsets as own_viewsets
@@ -10,15 +11,30 @@ from lessons.permissions import (CanReadCourse, IsAdminOrIsStaff,
                                  OwnerEventPermission)
 from lessons.serializers import (TestBlockSerializersDetail,
                                  TestBlockSerializersOptimize)
-from lessons.viewsets import GetCreateUpdateDeleteViewSet
+from lessons.permissions import (
+    IsAdminOrIsStaff,
+    OwnerEventPermission,
+    CanReadCourse,
+    CanReadLesson
+    )
 
 
-class EventViewSet(GetCreateUpdateDeleteViewSet):
+class TestBlockGeneric(generics.RetrieveAPIView):
+    queryset = models.TestBlock.objects.get_queryset()
+    serializer_class = serializers.TestBlockSerializer
+    lookup_field = 'pk'
+    lookup_url_kwarg = 'block_id'
+    permission_classes = [permissions.AllowAny]
+
+
+class EventViewSet(own_viewsets.GetCreateUpdateDeleteViewSet):
     """
     Виювсет эвента
     """
-
-    queryset = models.Event._default_manager.get_queryset().select_related("course")
+    queryset = (models.Event
+                ._default_manager
+                .get_queryset()
+                .select_related('course'))
     serializer_class = serializers.EventSerializer
     lookup_field = "pk"
     lookup_url_kwarg = "event_id"
@@ -73,10 +89,28 @@ class EventViewSet(GetCreateUpdateDeleteViewSet):
         return Response(serializer.data)
 
 
-class CourseViewSet(
-    mixins.ListModelMixin,
-    own_viewsets.GetCreateUpdateDeleteViewSet,
-):
+class StepViewSet(ModelViewSet):
+    """
+    Просмотр всех шагов уроков list
+    Создание нового шага урока
+    Просмотр одного шага, Редактирование, удаление шага урока
+    """
+
+    queryset = models.Step._default_manager.all()
+    serializer_class = serializers.StepSerializer
+
+    def get_permissions(self):
+        if self.action == "retrieve":
+            permission_classes = [permissions.IsAuthenticated]
+        else:
+            permission_classes = [permissions.IsAuthenticated &
+                                  IsAdminOrIsStaff]
+        return [permission() for permission in permission_classes]
+
+
+class CourseViewSet(mixins.ListModelMixin,
+                    own_viewsets.GetCreateUpdateDeleteViewSet,
+                    ):
     """
     Виювсет CRUD Курса
     """
@@ -174,3 +208,42 @@ class TestBlockRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIVie
 #             return Response(serializer.data)
 #         except TestBlock.DoesNotExist:
 #             raise Http404
+
+
+class LessonViewSet(viewsets.ModelViewSet):
+    """
+    Вьюсет уроков с выбором сериализатора для CRUD-операций
+    """
+    queryset = models.Lesson.objects.all()
+    serializer_class = serializers.LessonSerializer
+    lookup_field = 'id'
+    lookup_url_kwarg = 'lesson_id'
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_permissions(self):
+        if self.action == 'retrieve':
+            permission_classes = [permissions.IsAuthenticated &
+                                  (CanReadLesson | IsAdminOrIsStaff)]
+        else:
+            permission_classes = [permissions.IsAuthenticated &
+                                  IsAdminOrIsStaff]
+
+        return [permission() for permission in permission_classes]
+
+    def get_serializer_class(self):
+        """
+        Возвращает сериализатор в зависимости от действия (action).
+        """
+        if self.action == 'retrieve':
+            return serializers.LessonViewSerializer
+        elif self.action in ['create', 'update', 'partial_update']:
+            return serializers.LessonCreateSerializer
+        return serializers.LessonSerializer
+
+    def create(self, request, *args, **kwargs):
+        self.check_object_permissions(request=request, obj=None)
+        return super().create(request, *args, **kwargs)
+
+    def list(self, request, *args, **kwargs):
+        self.check_object_permissions(request=request, obj=None)
+        return super().list(request, *args, **kwargs)

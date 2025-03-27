@@ -1,9 +1,13 @@
-from django.conf import settings
-from django.contrib.auth import get_user_model
 from django.core.validators import MinValueValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from lessons.utils import path_maker_course, path_maker_question
+from django.contrib.auth import get_user_model
+from django.conf import settings
+from lessons.utils import (
+    path_maker_question,
+    path_maker_course,
+    path_maker_content_attachment,
+)
 
 
 class Answer(models.Model):
@@ -38,17 +42,20 @@ class Question(models.Model):
     """
     Модель представления Вопроса
     """
-
-    text = models.TextField(
-        verbose_name="текст вопроса",
-        help_text="Текст вопроса",
-    )
-    image = models.ImageField(
-        upload_to=path_maker_question,
-        verbose_name="картинка",
-        help_text="Картинка для вопроса",
-        null=True,
-    )
+    text = models.TextField(verbose_name='текст вопроса',
+                            help_text='Текст вопроса',
+                            )
+    image = models.ImageField(upload_to=path_maker_question,
+                              verbose_name='картинка',
+                              help_text='Картинка для вопроса',
+                              null=True,
+                              blank=True,
+                              )
+    test_block = models.ForeignKey("lessons.TestBlock",
+                                   verbose_name=_("тестовый блок"),
+                                   on_delete=models.CASCADE,
+                                   related_name='questions',
+                                   )
 
     class Meta:
         verbose_name = _("Question")
@@ -58,53 +65,60 @@ class Question(models.Model):
         return self.text[0:10] + "..."
 
 
+class TestBlock(models.Model):
+    """
+    Тестовый блок
+    """
+    class Meta:
+        verbose_name = _("TestBlock")
+        verbose_name_plural = _("TestBlocks")
+
+    def __str__(self):
+        return f'test-block-{self.pk}'
+
+
 class Event(models.Model):
     """
     Модель представления Ивента
     """
-
-    user = models.ForeignKey(
-        get_user_model(),
-        verbose_name=_("пользователь"),
-        on_delete=models.CASCADE,
-        help_text="Пользователь которому " "будет назначен ивент",
-    )
-    course = models.ForeignKey(
-        "lessons.Course",
-        verbose_name="курс",
-        on_delete=models.CASCADE,
-        help_text="Курс который обворачивается" "ивент",
-    )
-    done_lessons = models.SmallIntegerField(
-        _("Количество выполненых уроков"),
-        default=0,
-    )
-    start_date = models.DateTimeField(
-        verbose_name="дата начала ивента",
-        null=True,
-        help_text="Дата начала ивента, "
-        "нужно для Celery что бы в рассписании "
-        "поставить дату выдачи ивента",
-        default=None,
-    )
-    end_date = models.DateTimeField(
-        verbose_name="дедлайн",
-        null=True,
-        help_text="Дедлайн ивента, если" "дедлайна нет тогда бессрочно",
-        default=None,
-    )
-    favorite = models.BooleanField(
-        _("Избранный ивент"),
-        default=False,
-        help_text="Указатель является ли данный" "ивент избранным",
-    )
-    status = models.CharField(
-        choices=settings.STATUS_EVENTS,
-        null=True,
-        default="expected",
-        verbose_name="статус ивента",
-        help_text="Текущий статус данного ивента",
-    )
+    user = models.ForeignKey(get_user_model(),
+                             verbose_name=_("пользователь"),
+                             on_delete=models.CASCADE,
+                             help_text='Пользователь которому '
+                                       'будет назначен ивент',
+                             )
+    course = models.ForeignKey('lessons.Course',
+                               verbose_name='курс',
+                               on_delete=models.CASCADE,
+                               help_text='Курс который обворачивается'
+                                         'ивент',
+                               )
+    done_lessons = models.SmallIntegerField(_("Количество выполненых уроков"),
+                                            default=0,
+                                            )
+    start_date = models.DateTimeField(verbose_name='дата начала ивента',
+                                      null=True,
+                                      help_text='Дата начала ивента, '
+                                      'нужно для Celery что бы в рассписании '
+                                      'поставить дату выдачи ивента',
+                                      default=None,
+                                      )
+    end_date = models.DateTimeField(verbose_name='дедлайн',
+                                    null=True,
+                                    help_text='Дедлайн ивента, если'
+                                              'дедлайна нет тогда бессрочно',
+                                    default=None,
+                                    )
+    favorite = models.BooleanField(_("Избранный ивент"),
+                                   default=False,
+                                   help_text='Указатель является ли данный'
+                                             'ивент избранным')
+    status = models.CharField(choices=settings.STATUS_EVENTS,
+                              null=True,
+                              default='expected',
+                              verbose_name='статус ивента',
+                              help_text='Текущий статус данного ивента',
+                              )
 
     class Meta:
         verbose_name = _("Event")
@@ -172,25 +186,23 @@ class Lesson(models.Model):
     """
     Модель преставления урока
     """
-
-    name = models.CharField(
-        _("Название"),
-        max_length=256,
-        null=False,
-        blank=False,
-        help_text="Название урока",
-    )
-    serial = models.IntegerField(
-        _("Номер"),
-        null=False,
-        blank=False,
-        validators=[MinValueValidator(1)],
-        default=1,
-        help_text="Порядковый номер урока",
-    )
-    course = models.ForeignKey(
-        Course, verbose_name="Курс", on_delete=models.CASCADE, related_name="lessons"
-    )
+    name = models.CharField(_("Название"),
+                            max_length=256,
+                            null=False,
+                            blank=False,
+                            help_text="Название урока",
+                            )
+    serial = models.IntegerField(_("Номер"),
+                               null=False,
+                               blank=False,
+                               validators=[MinValueValidator(1)],
+                               default=1,
+                               help_text="Порядковый номер урока"
+                               )
+    course = models.ForeignKey(Course,
+                               verbose_name=_("Курс"),
+                               on_delete=models.CASCADE,
+                               related_name='lessons')
 
     # step = models.ManyToManyField(_("Шаг"),
     #                                Step,
@@ -219,3 +231,54 @@ class TestBlock(models.Model):
     class Meta:
         verbose_name = "тестовый блок"
         verbose_name_plural = "тестовые блоки"
+
+
+class Step(models.Model):
+    """
+    Шаги урока
+    """
+
+    title = models.CharField(
+        max_length=256, null=False, blank=False, verbose_name="Шаг урока"
+    )
+    content_text = models.TextField(
+        verbose_name="Контент шага урока",
+        null=True,
+        blank=True,
+    )
+    serial = models.IntegerField(
+        null=False, blank=False, default=1, verbose_name="Порядковый номер шага"
+    )
+
+    class Meta:
+        verbose_name = "Шаг урока"
+        verbose_name_plural = "Шаги урока"
+        ordering = ["title"]
+
+    def __str__(self):
+        return f"Шаг: {self.title}"
+
+
+TYPE_CONTENT = [
+    ("Image", "Изображение"),
+    ("Video", "Видео"),
+]
+
+
+class ContentAttachment(models.Model):
+    file = models.FileField(
+        upload_to=path_maker_content_attachment, null=True, blank=True
+    )
+    file_type = models.CharField(
+        max_length=10, choices=TYPE_CONTENT, default="Image", verbose_name="Тип файла"
+    )
+    content_attachment = models.ForeignKey(
+        Step, unique=False, on_delete=models.CASCADE, related_name="content_attachment"
+    )
+
+    class Meta:
+        verbose_name = "Контент для шага урока"
+        verbose_name_plural = "Контент для шага урока"
+
+    def __str__(self):
+        return self.file.name
