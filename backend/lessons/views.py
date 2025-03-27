@@ -33,8 +33,7 @@ class EventViewSet(own_viewsets.GetCreateUpdateDeleteViewSet):
     """
     queryset = (models.Event
                 ._default_manager
-                .get_queryset()
-                .select_related('course'))
+                .get_queryset())
     serializer_class = serializers.EventSerializer
     lookup_field = "pk"
     lookup_url_kwarg = "event_id"
@@ -44,19 +43,29 @@ class EventViewSet(own_viewsets.GetCreateUpdateDeleteViewSet):
         logger.debug(f"action is {self.action}")
         if self.action in ["retrieve", "toggle-favorite"]:
             permission_classes = [
-                (permissions.IsAuthenticated & OwnerEventPermission) | IsAdminOrIsStaff
+                (permissions.IsAuthenticated & OwnerEventPermission)
+                | IsAdminOrIsStaff
             ]
         elif self.action == "currents":
             permission_classes = [permissions.IsAuthenticated]
         else:
-            permission_classes = [permissions.IsAuthenticated & IsAdminOrIsStaff]
+            permission_classes = [permissions.IsAuthenticated &
+                                  IsAdminOrIsStaff]
         logger.debug(f"permisson class now {permission_classes}")
         return [permission() for permission in permission_classes]
+
+    def retrieve(self, request, *args, **kwargs):
+        self.queryset = self.queryset.select_related('course')
+        return super().retrieve(request, *args, **kwargs)
 
     def create(self, request, *args, **kwargs):
         self.check_object_permissions(request, None)
         self.serializer_class = serializers.EventSerializerCreate
         return super().create(request, *args, **kwargs)
+
+    def update(self, request, *args, **kwargs):
+        self.serializer_class = serializers.EventSerializerCreate
+        return super().update(request, *args, **kwargs)
 
     @action(detail=True, url_path="toggle-favorite")
     def toggle_favorite(self, request, event_id=None):
@@ -89,25 +98,6 @@ class EventViewSet(own_viewsets.GetCreateUpdateDeleteViewSet):
         return Response(serializer.data)
 
 
-class StepViewSet(ModelViewSet):
-    """
-    Просмотр всех шагов уроков list
-    Создание нового шага урока
-    Просмотр одного шага, Редактирование, удаление шага урока
-    """
-
-    queryset = models.Step._default_manager.all()
-    serializer_class = serializers.StepSerializer
-
-    def get_permissions(self):
-        if self.action == "retrieve":
-            permission_classes = [permissions.IsAuthenticated]
-        else:
-            permission_classes = [permissions.IsAuthenticated &
-                                  IsAdminOrIsStaff]
-        return [permission() for permission in permission_classes]
-
-
 class CourseViewSet(mixins.ListModelMixin,
                     own_viewsets.GetCreateUpdateDeleteViewSet,
                     ):
@@ -117,39 +107,72 @@ class CourseViewSet(mixins.ListModelMixin,
 
     queryset = (
         models.Course._default_manager.get_queryset()
-        .select_related("profession")
-        .prefetch_related("experiences")
+        .select_related("lessons")
     )
-    serializer_class = serializers.ViewCourseSerializer
     lookup_field = "pk"
     lookup_url_kwarg = "course_id"
-    permission_classes = [permissions.IsAuthenticated]
 
     def get_permissions(self):
         logger.debug(f"action is {self.action}")
         if self.action == "retrieve":
             permission_classes = [
-                (permissions.IsAuthenticated & CanReadCourse) | IsAdminOrIsStaff
+                (permissions.IsAuthenticated & CanReadCourse)
+                | IsAdminOrIsStaff
             ]
         else:
-            permission_classes = [permissions.IsAuthenticated & IsAdminOrIsStaff]
+            permission_classes = [permissions.IsAuthenticated &
+                                  IsAdminOrIsStaff]
         logger.debug(f"permisson class now {permission_classes}")
         return [permission() for permission in permission_classes]
 
+    def get_serializer_class(self):
+        if self.action == 'retrieve':
+            serializer_class = serializers.ViewCourseSerializer
+            self.queryset = (self.queryset
+                             .select_related('profession')
+                             .prefetch_related('experiences'))
+        elif self.action in ['update', 'create', 'partial_update']:
+            serializer_class = serializers.CreateCourseSerializer
+        else:
+            serializer_class = serializers.CourseSerializer
+        return serializer_class
+
     def create(self, request, *args, **kwargs):
         self.check_object_permissions(request=request, obj=None)
-        self.serializer_class = serializers.CreateCourseSerializer
         return super().create(request, *args, **kwargs)
-
-    def update(self, request, *args, **kwargs):
-        self.serializer_class = serializers.CreateCourseSerializer
-        return super().update(request, *args, **kwargs)
 
     def list(self, request, *args, **kwargs):
         self.check_object_permissions(request=request, obj=None)
-        self.queryset = models.Course._default_manager.get_queryset()
-        self.serializer_class = serializers.CourseSerializer
         return super().list(request, *args, **kwargs)
+
+
+class StepViewSet(ModelViewSet):
+    """
+    Просмотр всех шагов уроков list
+    Создание нового шага урока
+    Просмотр одного шага, Редактирование, удаление шага урока
+    """
+
+    queryset = models.Step._default_manager.get_queryset()
+    lookup_field = "pk"
+    lookup_url_kwarg = "step_id"
+
+    def get_permissions(self):
+        if self.action == "retrieve":
+            permission_classes = [permissions.IsAuthenticated]
+        else:
+            permission_classes = [permissions.IsAuthenticated &
+                                  IsAdminOrIsStaff]
+        return [permission() for permission in permission_classes]
+
+    def get_serializer_class(self):
+        if self.action == 'list':
+            serializer_class = serializers.StepSerializer
+        else:
+            serializer_class = serializers.StepViewSerializer
+            if self.action == 'retrieve':
+                self.queryset = self.queryset.select_related('attachments')
+        return serializer_class
 
 
 class TestBlockListCreateAPIView(generics.ListCreateAPIView):
