@@ -31,6 +31,6 @@ export const router = createBrowserRouter([
   },
   {
     path: routes.home,
-    element: <div>Hello App</div>,
+    element: <div>Hello App APP</div>,
   },
 ])

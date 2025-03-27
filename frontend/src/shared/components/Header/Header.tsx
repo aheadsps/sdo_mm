@@ -8,14 +8,15 @@ import styles from './header.module.scss'
 import { HeaderAvatar } from './HeaderAvatar'
 
 import { LogoIcon, MobileVersionHeaderIcon } from '@/assets/icons'
+import { useAppSelector } from '@/services'
+import { selectIsAuth } from '@/services/auth/authSlice'
 import { useScreenWidth } from '@/shared/hooks'
 
 const Header: React.FC = () => {
-  const [isLoggedIn] = useState()
+  const isAuth = useAppSelector(selectIsAuth)
+  const { isMobile } = useScreenWidth()
 
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false)
-
-  const { isMobile } = useScreenWidth()
 
   const onToggleMobileSidebar = () => {
     setIsMobileSidebarOpen(!isMobileSidebarOpen)
@@ -35,7 +36,7 @@ const Header: React.FC = () => {
             Корпоративный университет Транспортного комплекса
           </Typography>
         </div>
-        {isLoggedIn && <HeaderAvatar />}
+        {isAuth && <HeaderAvatar />}
         <MobileVersionHeaderIcon
           className={styles.header__mobileIcon}
           width={40}

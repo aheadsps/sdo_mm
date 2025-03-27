@@ -1,9 +1,26 @@
+import { useEffect } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
+
 import styles from './authpage.module.scss'
 
 import { AuthForm } from '@/features'
+import { routes } from '@/routes/routes'
+import { getToken } from '@/services'
 import { ImageComponent, Header } from '@/shared/components'
 
 export const AuthPage: React.FC = () => {
+  const navigate = useNavigate()
+  const location = useLocation()
+  const isAuth = !!getToken()
+
+  useEffect(() => {
+    if (isAuth) {
+      const back = location.state?.from || routes.main
+      navigate(back, { replace: true })
+    }
+  }, [isAuth, location, navigate])
+
+  if (isAuth) return null
   return (
     <div className={styles.authPage__container}>
       <Header />

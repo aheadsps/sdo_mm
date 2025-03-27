@@ -1,15 +1,31 @@
-import { NavLink } from 'react-router-dom'
+import { useEffect } from 'react'
+import { NavLink, useNavigate } from 'react-router-dom'
 
 import { Typography } from '../../typography'
 
 import s from './user-info.module.scss'
 
 import { LogOutIcon } from '@/assets/icons'
-import { useGetProfileQuery } from '@/services'
+import { routes } from '@/routes/routes'
+import { useAppDispatch, useGetProfileQuery } from '@/services'
+import { clearUser, setUser } from '@/services/auth/authSlice'
 import { handleError } from '@/shared/utils'
 
 export const UserInfo = () => {
   const { data: profile, isLoading, error } = useGetProfileQuery()
+  const dispatch = useAppDispatch()
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    if (profile) {
+      dispatch(setUser(profile))
+    }
+  }, [dispatch, profile])
+
+  const onLogout = () => {
+    dispatch(clearUser())
+    navigate(routes.auth, { replace: true })
+  }
 
   if (isLoading) {
     return <div>Loading...</div>
@@ -24,7 +40,7 @@ export const UserInfo = () => {
         {profile?.email}
       </Typography>
       {error && <Typography variant="body_1">{handleError(error)}</Typography>}
-      <NavLink to={'/auth'} className={s.logOut}>
+      <NavLink to={routes.auth} className={s.logOut} onClick={onLogout}>
         <LogOutIcon width={'24px'} height={'24px'} />
         <Typography variant="caption">Выйти</Typography>
       </NavLink>

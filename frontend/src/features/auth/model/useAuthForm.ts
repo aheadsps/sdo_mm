@@ -34,6 +34,7 @@ export const useAuthForm = () => {
     const res = await login(data).unwrap()
     if (res && res.token) {
       localStorage.setItem('token', res.token)
+
       reset()
       await navigate('/main', { replace: true })
     }

@@ -2,10 +2,12 @@ import { configureStore } from '@reduxjs/toolkit'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { authApi } from './auth/auth.api'
+import { authReducer } from './auth/authSlice'
 import { eventsApi } from './events'
 
 export const store = configureStore({
   reducer: {
+    auth: authReducer,
     [authApi.reducerPath]: authApi.reducer,
     [eventsApi.reducerPath]: eventsApi.reducer,
   },
