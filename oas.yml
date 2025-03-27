@@ -1684,6 +1684,9 @@ components:
       additionalProperties: false
       type: object
       properties:
+        user_id:
+          type: integer
+          minimum: 1
         course_id:
           type: integer
           minimum: 1
@@ -1720,6 +1723,9 @@ components:
       additionalProperties: false
       type: object
       properties:
+        user_id:
+          type: integer
+          minimum: 1
         course:
           type: object
           readOnly: false
