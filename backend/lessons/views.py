@@ -132,27 +132,12 @@ class LessonViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_permissions(self):
-        if self.action == 'retrieve':
-            permission_classes = [(permissions.IsAuthenticated &
-                                  CanReadLesson) |
-                                  IsAdminOrIsStaff]
-        elif self.action in ['create', 'update', 'partial_update', 'destroy']:
-            permission_classes = [
-                permissions.IsAuthenticated & IsAdminOrIsStaff]
+        if self.action in ['retrieve', 'list']:
+            permission_classes = [CanReadLesson | IsAdminOrIsStaff]
         else:
-            permission_classes = [permissions.IsAuthenticated]
+            permission_classes = [IsAdminOrIsStaff]
 
         return [permission() for permission in permission_classes]
-
-    def get_queryset(self):
-        queryset = super().get_queryset().select_related('course')
-
-        if not (self.request.user.is_staff or self.request.user.is_superuser):
-            queryset = queryset.filter(
-                course__events__user=self.request.user
-            ).distinct()
-
-        return queryset
 
     def get_serializer_class(self):
         """
@@ -163,3 +148,8 @@ class LessonViewSet(viewsets.ModelViewSet):
         elif self.action in ['create', 'update', 'partial_update']:
             return serializers.LessonCreateSerializer
         return serializers.LessonSerializer
+
+    def create(self, request, *args, **kwargs):
+        self.check_object_permissions(request=request, obj=None)
+        self.serializer_class = serializers.LessonCreateSerializer
+        return super().create(request, *args, **kwargs)
