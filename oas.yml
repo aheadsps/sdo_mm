@@ -1353,6 +1353,9 @@ components:
           minimum: 1
           readOnly: false
           nullable: false
+        course_id:
+          type: integer
+          minimum: 1
         steps:
           type: array
           description: Шаги урока
@@ -1384,6 +1387,9 @@ components:
           minimum: 1
           readOnly: false
           nullable: false
+        course_id:
+          type: integer
+          minimum: 1
         steps:
           type: array
           description: Шаги урока
@@ -1418,7 +1424,7 @@ components:
           minimum: 1
           readOnly: false
           nullable: false
-        media_attachment:
+        attachments:
           type: array
           description: Медиа вложения. (Только в логике сериализатора, в модели не реализуем!)
           nullable: true
@@ -1444,7 +1450,7 @@ components:
           minimum: 1
           readOnly: false
           nullable: false
-        media_attachment:
+        attachments:
           type: array
           description: Медиа вложения. (Только в логике сериализатора, в модели не реализуем!)
           nullable: true
