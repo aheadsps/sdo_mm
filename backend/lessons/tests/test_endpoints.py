@@ -440,6 +440,12 @@ class LessonViewSetTest(APITestCase):
             date_commencement=date_commencement,
             is_staff=True,
         )
+        self._user = get_user_model()._default_manager.create(
+            email="user@mail.ru",
+            profession=self.profession,
+            password="password",
+            date_commencement=date_commencement,
+        )
         self.client.force_authenticate(user=self.user)
         self.course = lessons_models.Course.objects.create(name="Курс 1",
                                             description="Описание курса 1")
@@ -447,7 +453,7 @@ class LessonViewSetTest(APITestCase):
                                             serial=1, course=self.course)
 
     def test_get_lesson_detail(self):
-        """Тест детального представления урока (Retrieve)."""
+        """Тест детального представления урока."""
         url = reverse('lessons:lesson-detail', args=[self.lesson.id])
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -455,7 +461,7 @@ class LessonViewSetTest(APITestCase):
         self.assertEqual(response.data['course_id'], 3)
 
     def test_create_lesson(self):
-        """Тест создания урока (Create)."""
+        """Тест создания урока."""
         url = reverse('lessons:lesson-list')
         data = {
             "name": "Новый урок",
@@ -467,7 +473,7 @@ class LessonViewSetTest(APITestCase):
         self.assertEqual(lessons_models.Lesson.objects.count(), 2)
 
     def test_update_lesson(self):
-        """Тест обновления урока (Update)."""
+        """Тест обновления урока."""
         url = reverse('lessons:lesson-detail', args=[self.lesson.id])
         data = {
             "name": "Обновленный урок",
@@ -480,8 +486,51 @@ class LessonViewSetTest(APITestCase):
         self.assertEqual(self.lesson.name, "Обновленный урок")
 
     def test_delete_lesson(self):
-        """Тест удаления урока (Delete)."""
+        """Тест удаления урока."""
         url = reverse('lessons:lesson-detail', args=[self.lesson.id])
         response = self.client.delete(url)
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(lessons_models.Lesson.objects.count(), 0)
+
+    def test_permission_create_lesson(self):
+        """Тест прав доступа на создание урока."""
+        self.client.force_authenticate(user=self._user)
+        url = reverse('lessons:lesson-list')
+        data = {
+            "name": "Новый урок",
+            "serial": 2,
+            "course": self.course.id
+        }
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_permission_update_lesson(self):
+        """Тест прав доступа на обновление урока."""
+        self.client.force_authenticate(user=self._user)
+        url = reverse('lessons:lesson-detail', args=[self.lesson.id])
+        data = {
+            "name": "Обновленный урок",
+            "serial": 1,
+            "course": self.course.id
+        }
+        response = self.client.put(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_permission_delete_lesson(self):
+        """Тест прав доступа на удаление урока."""
+        self.client.force_authenticate(user=self._user)
+        url = reverse('lessons:lesson-detail', args=[self.lesson.id])
+        response = self.client.delete(url)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_regular_user_can_view_lessons(self):
+        """Тест, что обычный пользователь может просматривать уроки."""
+        self.client.force_authenticate(user=self._user)
+
+        list_url = reverse('lessons:lesson-list')
+        list_response = self.client.get(list_url)
+        self.assertEqual(list_response.status_code, status.HTTP_200_OK)
+
+        detail_url = reverse('lessons:lesson-detail', args=[self.lesson.id])
+        detail_response = self.client.get(detail_url)
+        self.assertEqual(detail_response.status_code, status.HTTP_403_FORBIDDEN)
