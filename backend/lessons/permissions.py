@@ -11,9 +11,10 @@ class IsAdminOrIsStaff(permissions.BasePermission):
     """
     Права доступа и admin и staff
     """
+
     message = {
-        'forbidden': 'Доступ запрещен',
-        }
+        "forbidden": "Доступ запрещен",
+    }
     code = status.HTTP_403_FORBIDDEN
 
     def has_object_permission(self, request, view, obj):

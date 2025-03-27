@@ -985,6 +985,45 @@ paths:
         "422":
           $ref: "#/components/responses/UnprocessableEntity"
 
+  /rates/vote/{lesson_id}:
+    post:
+      summary: Поставить оценку уроку
+      parameters:
+        - in: path
+          name: lesson_id
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+      tags:
+        - Rate
+      security:
+        - Token: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: "#/components/schemas/Rate"
+      responses:
+        "200":
+          description: JSON ответ подверждение
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/Rate"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+
 components:
   responses:
     NotFound:
@@ -1217,6 +1256,12 @@ components:
           minItems: 1
           items:
             $ref: "#/components/schemas/WorkExperience"
+        lesson_story:
+          type: array
+          description: Уроки которые открыл пользователь
+          minItems: 0
+          items:
+            $ref: "#/components/schemas/LessonStory"
 
     Сourse:
       description: Сущность курса упрощеная
@@ -1265,6 +1310,29 @@ components:
         - profession
         - experiences
 
+    Rate:
+      description: Сущность оценок по уроку
+      additionalProperties: false
+      type: object
+      properties:
+        id:
+          type: integer
+          minimum: 1
+          readOnly: true
+        user_id:
+          type: integer
+          minimum: 1
+          readOnly: true
+        lesson_id:
+          type: integer
+          minimum: 1
+          readOnly: true
+        rate:
+          type: integer
+          minimum: 1
+          maximum: 5
+          readOnly: false
+
     LessonView:
       description: Сущность урока детальный
       additionalProperties: false
@@ -1272,8 +1340,8 @@ components:
       properties:
         id:
           type: integer
-          readOnly: true
           minimum: 1
+          readOnly: true
         name:
           type: string
           maxLength: 256
@@ -1574,11 +1642,42 @@ components:
           type: integer
           readOnly: true
           minimum: 1
+        date_opened:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: false
         answer_id:
           type: integer
           description: Текущий ответ
           nullable: true
           minimum: 1
+
+    LessonStory:
+      description: История открытых уроков
+      additionalProperties: false
+      type: object
+      properties:
+        course_id:
+          type: integer
+          minimum: 1
+          readOnly: true
+          nullable: false
+        lesson_id:
+          type: integer
+          minimum: 1
+          readOnly: true
+          nullable: false
+        user_id:
+          type: integer
+          minimum: 1
+          readOnly: true
+          nullable: false
+        date_opened:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: false
 
     EventCreate:
       description: Сущность создания и обновления курса
