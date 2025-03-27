@@ -8,103 +8,6 @@
         }
     },
     {
-        "model": "users.profession",
-        "pk": 1,
-        "fields": {
-            "en_name": "admin",
-            "ru_name": "админ"
-        }
-    },
-    {
-        "model": "users.profession",
-        "pk": 2,
-        "fields": {
-            "en_name": "Builder",
-            "ru_name": "Строитель"
-        }
-    },
-    {
-        "model": "users.user",
-        "pk": 1,
-        "fields": {
-            "password": "pbkdf2_sha256$870000$ofpvZtUzC2ussdeThMQZDi$kd908xHVD4Gus40uz4t4yLpsuQ/EsYnwmFuUL8eifAs=",
-            "is_superuser": true,
-            "email": "admin@admin.com",
-            "is_staff": true,
-            "is_active": true,
-            "is_verified": true,
-            "first_name": null,
-            "last_name": null,
-            "date_joined": "2025-03-17T06:12:30.791Z",
-            "last_login": "2025-03-21T17:48:03.091Z",
-            "date_commencement": "2024-01-01",
-            "profession": 1,
-            "groups": [],
-            "user_permissions": []
-        }
-    },
-    {
-        "model": "users.user",
-        "pk": 2,
-        "fields": {
-            "password": "pbkdf2_sha256$870000$DonqVrVvapUROtVYqQARBu$54hlfk6iYSksSW5bwBKOTO+w/vjhvEGICsPiaU3UyGY=",
-            "is_superuser": false,
-            "email": "y@mail.ru",
-            "is_staff": false,
-            "is_active": true,
-            "is_verified": true,
-            "first_name": null,
-            "last_name": null,
-            "date_joined": "2025-03-21T17:51:25.332Z",
-            "last_login": "2025-03-21T17:58:00.653Z",
-            "date_commencement": "2025-03-21",
-            "profession": 2,
-            "groups": [
-                1
-            ],
-            "user_permissions": []
-        }
-    },
-    {
-        "model": "users.profile",
-        "pk": 1,
-        "fields": {
-            "user": 2,
-            "phone": null,
-            "image": "",
-            "date_birthday": null
-        }
-    },
-    {
-        "model": "users.workexperience",
-        "pk": 2,
-        "fields": {
-            "years": 1
-        }
-    },
-    {
-        "model": "users.workexperience",
-        "pk": 3,
-        "fields": {
-            "years": 2
-        }
-    },
-    {
-        "model": "users.workexperience",
-        "pk": 4,
-        "fields": {
-            "years": 3
-        }
-    },
-    {
-        "model": "users.professiongroup",
-        "pk": 1,
-        "fields": {
-            "profession": 2,
-            "students": []
-        }
-    },
-    {
         "model": "lessons.answer",
         "pk": 1,
         "fields": {
@@ -198,5 +101,102 @@
         "model": "lessons.testblock",
         "pk": 1,
         "fields": {}
+    },
+    {
+        "model": "users.profession",
+        "pk": 1,
+        "fields": {
+            "en_name": "admin",
+            "ru_name": "админ"
+        }
+    },
+    {
+        "model": "users.profession",
+        "pk": 2,
+        "fields": {
+            "en_name": "Builder",
+            "ru_name": "Строитель"
+        }
+    },
+    {
+        "model": "users.user",
+        "pk": 1,
+        "fields": {
+            "password": "pbkdf2_sha256$870000$ofpvZtUzC2ussdeThMQZDi$kd908xHVD4Gus40uz4t4yLpsuQ/EsYnwmFuUL8eifAs=",
+            "is_superuser": true,
+            "email": "admin@admin.com",
+            "is_staff": true,
+            "is_active": true,
+            "is_verified": true,
+            "first_name": "Vasia",
+            "last_name": "Petechkin",
+            "date_joined": "2025-03-17T06:12:30.791Z",
+            "last_login": "2025-03-27T16:49:48.781Z",
+            "date_commencement": "2024-01-01",
+            "profession": 1,
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "users.user",
+        "pk": 2,
+        "fields": {
+            "password": "pbkdf2_sha256$870000$DonqVrVvapUROtVYqQARBu$54hlfk6iYSksSW5bwBKOTO+w/vjhvEGICsPiaU3UyGY=",
+            "is_superuser": false,
+            "email": "y@mail.ru",
+            "is_staff": false,
+            "is_active": true,
+            "is_verified": true,
+            "first_name": "Alex",
+            "last_name": "Martira",
+            "date_joined": "2025-03-21T17:51:25.332Z",
+            "last_login": "2025-03-27T16:50:01.552Z",
+            "date_commencement": "2025-03-21",
+            "profession": 2,
+            "groups": [
+                1
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "users.profile",
+        "pk": 1,
+        "fields": {
+            "user": 2,
+            "phone": null,
+            "image": "",
+            "date_birthday": null
+        }
+    },
+    {
+        "model": "users.workexperience",
+        "pk": 2,
+        "fields": {
+            "years": 1
+        }
+    },
+    {
+        "model": "users.workexperience",
+        "pk": 3,
+        "fields": {
+            "years": 2
+        }
+    },
+    {
+        "model": "users.workexperience",
+        "pk": 4,
+        "fields": {
+            "years": 3
+        }
+    },
+    {
+        "model": "users.professiongroup",
+        "pk": 1,
+        "fields": {
+            "profession": 2,
+            "students": []
+        }
     }
 ]
