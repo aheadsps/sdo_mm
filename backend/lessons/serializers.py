@@ -86,6 +86,7 @@ class CourseSerializer(serializers.ModelSerializer):
     """
     Сериализатор Оптимизарованого вывода
     """
+    lessons_id = serializers.IntegerField(source='course.id', read_only=True)
 
     # ПОСЛЕ ДОБАВЛЕНИЕ LESSON ОБЯЗАТЕЛЬНО ДОБАВИТЬ И ТУТ
     class Meta:
@@ -100,6 +101,7 @@ class CourseSerializer(serializers.ModelSerializer):
             "image",
             "profession",
             "experiences",
+            "lessons_id",
         )
 
 
@@ -110,6 +112,7 @@ class ViewCourseSerializer(serializers.ModelSerializer):
 
     experiences = user_serializers.WorkExperienceSerializer(many=True)
     profession = user_serializers.ProfessionSerializer()
+    lessons = serializers.SerializerMethodField()
 
     # ПОСЛЕ ДОБАВЛЕНИЕ LESSON ОБЯЗАТЕЛЬНО ДОБАВИТЬ И ТУТ
     class Meta:
@@ -124,7 +127,11 @@ class ViewCourseSerializer(serializers.ModelSerializer):
             "image",
             "profession",
             "experiences",
+            "lessons"
         )
+
+    def get_lessons(self, obj):
+        return LessonViewSerializer(obj.lessons.all(), many=True).data
 
 
 class EventSerializer(serializers.ModelSerializer):
