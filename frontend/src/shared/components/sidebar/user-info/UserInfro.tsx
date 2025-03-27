@@ -34,7 +34,7 @@ export const UserInfo = () => {
   return (
     <div className={s.userBlock}>
       <Typography variant="body_1" className={s.userName}>
-        {profile?.first_name}
+        {profile?.first_name} {profile?.last_name}
       </Typography>
       <Typography variant="body_1" className={s.userEmail}>
         {profile?.email}

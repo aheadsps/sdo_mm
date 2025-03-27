@@ -17,6 +17,7 @@ export type ProfileResponse = {
   id: number
   email: string
   first_name: string
+  last_name: string
   date_commencement: string
   profession: number
   profile: UserProfile
