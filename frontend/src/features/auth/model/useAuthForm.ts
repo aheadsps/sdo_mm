@@ -1,5 +1,8 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useState } from 'react'
+import { SerializedError } from '@reduxjs/toolkit'
+import { FetchBaseQueryError } from '@reduxjs/toolkit/query'
+import { useCallback, useState } from 'react'
+import { useEffect } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 
@@ -8,6 +11,7 @@ import { authFormSchema } from '../ui/authFormSchema'
 import { AuthFormData } from './types'
 
 import { useLoginMutation } from '@/services'
+import { handleError } from '@/shared/utils'
 
 export const useAuthForm = () => {
   const {
@@ -16,6 +20,7 @@ export const useAuthForm = () => {
     formState: { errors, isSubmitting, isValid },
     reset,
     control,
+    watch,
   } = useForm<AuthFormData>({
     defaultValues: {
       email: '',
@@ -26,19 +31,33 @@ export const useAuthForm = () => {
   })
 
   const [showPassword, setShowPassword] = useState(false)
+  const [authError, setAuthError] = useState<string | null>(null)
   const navigate = useNavigate()
 
   const [login, { error }] = useLoginMutation()
 
   const onSubmit: SubmitHandler<AuthFormData> = async (data) => {
-    const res = await login(data).unwrap()
-    if (res && res.token) {
-      localStorage.setItem('token', res.token)
+    try {
+      const res = await login(data).unwrap()
+      if (res && res.token) {
+        localStorage.setItem('token', res.token)
 
-      reset()
-      await navigate('/main', { replace: true })
+        reset()
+        await navigate('/main', { replace: true })
+      }
+    } catch (err) {
+      setAuthError(handleError(err as FetchBaseQueryError | SerializedError))
     }
   }
+
+  const clearAuthError = useCallback(() => setAuthError(null), [])
+
+  useEffect(() => {
+    const subscription = watch(() => {
+      clearAuthError()
+    })
+    return () => subscription.unsubscribe()
+  }, [watch, clearAuthError])
 
   return {
     onSubmit: handleSubmit(onSubmit),
@@ -50,5 +69,6 @@ export const useAuthForm = () => {
     setShowPassword,
     control,
     error,
+    authError,
   }
 }

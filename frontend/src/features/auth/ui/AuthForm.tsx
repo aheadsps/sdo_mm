@@ -7,10 +7,9 @@ import { FormInput } from './FormInput'
 
 import { OpenedEyeIcon, ClosedEyeIcon } from '@/assets/icons'
 import { Typography, Button } from '@/shared/components'
-import { handleError } from '@/shared/utils'
 
 export const AuthForm = () => {
-  const { onSubmit, showPassword, setShowPassword, isValid, isSubmitting, control, error } =
+  const { onSubmit, showPassword, setShowPassword, isValid, isSubmitting, control, authError } =
     useAuthForm()
 
   return (
@@ -51,9 +50,9 @@ export const AuthForm = () => {
             Восстановить
           </Link>
         </div>
-        {error && (
+        {authError && (
           <Typography className={styles.error} variant="body_1">
-            {handleError(error)}
+            {authError}
           </Typography>
         )}
         <Button className={styles.auth__button} disabled={!isValid || isSubmitting}>
