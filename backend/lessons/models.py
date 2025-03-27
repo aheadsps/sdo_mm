@@ -5,8 +5,8 @@ from django.contrib.auth import get_user_model
 from django.conf import settings
 
 from lessons.utils import (path_maker_question,
-                                   path_maker_course,
-                                   )
+                           path_maker_course,
+                           )
 
 
 class Answer(models.Model):
@@ -195,5 +195,3 @@ class Lesson(models.Model):
 
     def __str__(self):
         return self.name
-
-
