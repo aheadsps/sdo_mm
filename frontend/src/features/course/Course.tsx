@@ -1,5 +1,5 @@
 import { Button, Tabs, Typography, AiComponent } from '@shared/components'
-import { useState } from 'react'
+import { useToggle } from '@shared/hooks/useToggle'
 import { NavLink } from 'react-router-dom'
 
 import { ArrowLeftIcon } from '@assets/icons'
@@ -8,11 +8,8 @@ import s from './course-comp.module.scss'
 import { tabsData } from './tabs/tabsData'
 
 export const CourseComponent = () => {
-  const [isOffcanvasOpen, setIsOffcanvasOpen] = useState(false)
+  const { isOpen: isOffcanvasOpen, close: closeOffcanvas, toggle: toggleOffCanvas } = useToggle()
 
-  const onButtonClick = () => {
-    setIsOffcanvasOpen(!isOffcanvasOpen)
-  }
   return (
     <div className={s.courseContent}>
       <NavLink to={'/learning'} className={s.backToPage}>
@@ -26,7 +23,7 @@ export const CourseComponent = () => {
           English Check-Up: База и первые шаги
         </Typography>
         <div className={s.buttonsBlock}>
-          <Button variant="secondary" className={s.button} onClick={onButtonClick}>
+          <Button variant="secondary" className={s.button} onClick={toggleOffCanvas}>
             ИИ
           </Button>
           <Button variant="primary" className={s.button}>
@@ -35,7 +32,7 @@ export const CourseComponent = () => {
         </div>
       </div>
       <Tabs tabs={tabsData} variant="secondary" />
-      <AiComponent isOpen={isOffcanvasOpen} setIsOpen={setIsOffcanvasOpen} />
+      <AiComponent isOpen={isOffcanvasOpen} close={closeOffcanvas} />
     </div>
   )
 }
