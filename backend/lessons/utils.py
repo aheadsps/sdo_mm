@@ -2,9 +2,15 @@ import os
 from typing import TYPE_CHECKING, Any
 
 from rest_framework.serializers import ModelSerializer
+from datetime import datetime, timedelta, timezone
+from typing import ClassVar
+
+from loguru import logger
+from pydantic import BaseModel, Field
 
 if TYPE_CHECKING:
     from lessons.models import Question, Course, ContentAttachment
+
 
 def latinizator(dic):
     """
@@ -82,28 +88,20 @@ def latinizator(dic):
         'Ю': 'Yu',
         'Я': 'Ya',
     }
-    return ''.join([legend.get(i,i) for i in dic])
-
-
-from datetime import datetime, timedelta, timezone
-from typing import ClassVar
-
-from loguru import logger
-from pydantic import BaseModel, Field
+    return ''.join([legend.get(i, i) for i in dic])
 
 
 class UTCTimeCast(BaseModel):
     """
     Построение UTC времени
     """
+
     is_set: ClassVar[bool] = Field(default=False)
 
     input_time: datetime
     UTC: int = Field(default=0, gt=-13, lt=13)
 
-    def _handle_offset_time(self,
-                            input_time: datetime,
-                            UTC: int) -> datetime:
+    def _handle_offset_time(self, input_time: datetime, UTC: int) -> datetime:
         """Изменение времени исходя из указанных настроек
 
         Args:
@@ -114,7 +112,7 @@ class UTCTimeCast(BaseModel):
             datetime: Возвращает обработанный datetime
         """
         offset = timedelta(hours=UTC)
-        utc_set = timezone(offset, name=f'UTC{UTC}')
+        utc_set = timezone(offset, name=f"UTC{UTC}")
         result_time = input_time.astimezone(utc_set)
         return result_time
 
@@ -136,9 +134,10 @@ class UTCTimeCast(BaseModel):
         """
         Получение времени по желаемому UTC
         """
-        output_time = self._handle_offset_time(input_time=self.input_time,
-                                               UTC=self.UTC,
-                                               )
+        output_time = self._handle_offset_time(
+            input_time=self.input_time,
+            UTC=self.UTC,
+        )
         UTCTimeCast.is_set = True
         return output_time
 
@@ -146,37 +145,38 @@ class UTCTimeCast(BaseModel):
         """
         Получение микросекунд от вычисленного времени
         """
-        time_utc = self._handle_offset_time(input_time=self.input_time,
-                                            UTC=self.UTC,
-                                            )
+        time_utc = self._handle_offset_time(
+            input_time=self.input_time,
+            UTC=self.UTC,
+        )
         logger.info(time_utc)
         microseconds = self._to_UNIX_microseconds(offset_time=time_utc)
         logger.info(microseconds)
         return microseconds
 
     def __repr__(self) -> str:
-        return f'{self.__class__.__name__} {self.input_time} {self.UTC}'
+        return f"{self.__class__.__name__} {self.input_time} {self.UTC}"
 
     def __str__(self) -> str:
         return str(self.UTC)
 
 
-def path_maker_question(instance: 'Question', filename: str) -> str:
+def path_maker_question(instance: "Question", filename: str) -> str:
     """
     Создает корректный путь для сохранения медиа файлов
     в системе.
     """
     text_tranc = instance.text[0:10]
-    return f'question/{text_tranc}/{filename}'
+    return f"question/{text_tranc}/{filename}"
 
 
-def path_maker_course(instance: 'Course', filename: str) -> str:
+def path_maker_course(instance: "Course", filename: str) -> str:
     """
     Создает корректный путь для сохранения медиа файлов
     в системе.
     """
     text_tranc = instance.name
-    return f'course/{text_tranc}/{filename}'
+    return f"course/{text_tranc}/{filename}"
 
 
 def path_maker_content_attachment(instance: 'ContentAttachment', filename: str) -> str:
@@ -184,7 +184,7 @@ def path_maker_content_attachment(instance: 'ContentAttachment', filename: str) 
     Создает корректный путь для сохранения медиа файлов
     в системе.
     """
-    text_tranc = instance.content_attachment.title
+    text_tranc = instance.step.title
     filename = os.path.basename(filename)
     # Когда будут уроки вставить папку "lesson №..."
     return f'content_attachment/{latinizator(text_tranc)}/{latinizator(filename)}'
@@ -218,11 +218,11 @@ def get_value(field: str,
     return value
 
 
-def tigger_to_check(attrs: dict[str, Any],
-                    *fields: list[str],
-                    ) -> bool:
-    """Тригер если проверка нужна
-    """
+def tigger_to_check(
+    attrs: dict[str, Any],
+    *fields: list[str],
+) -> bool:
+    """Тригер если проверка нужна"""
     need_check = False
     for field in fields:
         if field in attrs:
@@ -230,8 +230,9 @@ def tigger_to_check(attrs: dict[str, Any],
     return need_check
 
 
-def set_value(dict_data: dict[str, Any],
-              key: str,
-              value: str,
-              ) -> None:
+def set_value(
+    dict_data: dict[str, Any],
+    key: str,
+    value: str,
+) -> None:
     dict_data[key] = value
