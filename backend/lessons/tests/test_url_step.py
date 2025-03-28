@@ -1,3 +1,4 @@
+import json
 import datetime
 from pathlib import Path
 
@@ -7,7 +8,6 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group, Permission
 from django.contrib.contenttypes.models import ContentType
 from django.conf import settings
-from django.urls import reverse
 from django.core.files import File
 
 from lessons.models import Step, ContentAttachment
