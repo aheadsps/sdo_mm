@@ -3,7 +3,7 @@ import { AiComponent, Button, Typography } from '@shared/components'
 import { useToggle } from '@shared/hooks/useToggle'
 import { ReactNode } from 'react'
 
-import { ArrowLeftIcon } from '@assets/icons'
+import { ArrowLeftIcon, YouTubeLogo } from '@assets/icons'
 
 import s from './lessonComponent.module.scss'
 
@@ -39,8 +39,9 @@ const LessonComponent = ({ setIsLessonOpen }: Props) => {
       <Typography variant="body_2" className={s.desc}>
         Цель урока: проверить словарный запас и научиться избегать ложных друзей переводчика.
       </Typography>
-      <div className={s.content}></div>
-      {/* <DropdownCard title="Урок 1. Проверка стартового уровня" blocks="2 блока">
+      <div className={s.content}>
+        <div className={s.leftBox}>
+          {/* <DropdownCard title="Урок 1. Проверка стартового уровня" blocks="2 блока">
         <div className={s.contentTitle}>
           <Typography variant="body_2">
             Цель урока: проверить словарный запас и научиться избегать ложных друзей переводчика.
@@ -49,6 +50,35 @@ const LessonComponent = ({ setIsLessonOpen }: Props) => {
         </div>
         <Typography variant="body_2">1. Введение: Почему мы путаем слова?</Typography>
       </DropdownCard> */}
+        </div>
+        <div className={s.rightBox}>
+          <div className={s.headerLesson}>
+            <Typography variant="header_3" className={s.titleLesson}>
+              4. Слова, которые мы используем неправильно
+            </Typography>
+            <Typography variant="header_6" className={s.countLessons}>
+              4/6
+            </Typography>
+          </div>
+          <Typography variant="body_2" className={s.lessonDesc}>
+            Многие английские слова кажутся знакомыми, но их настоящие значения могут сильно
+            отличаться. Это называется «ложные друзья переводчика». В этом уроке ты научишься их
+            распознавать.
+          </Typography>
+          <div className={s.videoBox}>
+            <YouTubeLogo />
+          </div>
+          <div className={s.hint}>
+            <Typography variant="body_2" className={s.hintTxt}>
+              Чтобы не запоминать слова неправильно, всегда проверяй их значение в контексте!
+            </Typography>
+          </div>
+          <div className={s.buttonBox}>
+            <Button variant="secondary">Выйти из урока</Button>
+            <Button variant="primary">Перейти к следующей теме</Button>
+          </div>
+        </div>
+      </div>
       <AiComponent isOpen={isOffcanvasOpen} close={closeOffcanvas} />
     </div>
   )
