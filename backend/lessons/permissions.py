@@ -74,3 +74,51 @@ class CanReadLesson(permissions.BasePermission):
         )
 
         return event_exists.exists()
+
+
+class CanReadStep(permissions.BasePermission):
+    """
+    Права доступа на просмотр Шага
+    """
+
+    message = {
+        'forbidden': 'Данный урок не доступен',
+    }
+    code = status.HTTP_403_FORBIDDEN
+
+    def has_object_permission(self, request, view, step):
+        if not step:
+            return
+
+        user = request.user
+
+        event_exists = models.Event.objects.filter(
+            Q(user=user) &
+            Q(course=step.lesson.course)
+        )
+
+        return event_exists.exists()
+
+
+class CanReadBlock(permissions.BasePermission):
+    """
+    Права доступа на просмотр Тестового блока
+    """
+
+    message = {
+        'forbidden': 'Данный урок не доступен',
+    }
+    code = status.HTTP_403_FORBIDDEN
+
+    def has_object_permission(self, request, view, test_block):
+        if not test_block:
+            return
+
+        user = request.user
+
+        event_exists = models.Event.objects.filter(
+            Q(user=user) &
+            Q(course=test_block.step.lesson.course)
+        )
+
+        return event_exists.exists()

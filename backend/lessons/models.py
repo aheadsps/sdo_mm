@@ -102,6 +102,7 @@ class Course(models.Model):
         verbose_name=_("профессия"),
         on_delete=models.SET_NULL,
         null=True,
+        blank=True,
         related_name='courses',
     )
     experiences = models.ManyToManyField(
@@ -138,7 +139,10 @@ class Lesson(models.Model):
     course = models.ForeignKey(Course,
                                verbose_name=_("Курс"),
                                on_delete=models.CASCADE,
-                               related_name='lessons')
+                               related_name='lessons',
+                               null=True,
+                               blank=True,
+                               )
 
     class Meta:
         verbose_name = _("Lesson")
@@ -169,6 +173,8 @@ class Step(models.Model):
                                verbose_name=_("Урок"),
                                on_delete=models.CASCADE,
                                related_name='steps',
+                               null=True,
+                               blank=True,
                                )
 
     class Meta:
@@ -192,6 +198,8 @@ class ContentAttachment(models.Model):
         Step, unique=False,
         on_delete=models.CASCADE,
         related_name='attachments',
+        null=True,
+        blank=True,
     )
 
     class Meta:
@@ -210,6 +218,8 @@ class TestBlock(models.Model):
     lesson = models.models.OneToOneField(Lesson,
                                          on_delete=models.CASCADE,
                                          related_name="test_block",
+                                         null=True,
+                                         blank=True,
                                          )
 
     class Meta:
@@ -237,6 +247,8 @@ class Question(models.Model):
                                    verbose_name=_("тестовый блок"),
                                    on_delete=models.CASCADE,
                                    related_name='questions',
+                                   null=True,
+                                   blank=True,
                                    )
 
     class Meta:
@@ -265,6 +277,8 @@ class Answer(models.Model):
         verbose_name=_("ответ"),
         related_name="answers",
         on_delete=models.CASCADE,
+        null=True,
+        blank=True,
     )
 
     class Meta:

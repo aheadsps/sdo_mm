@@ -933,31 +933,6 @@ paths:
           $ref: "#/components/responses/NotFound"
         "422":
           $ref: "#/components/responses/UnprocessableEntity"
-    delete:
-      operationId: api_test-block_destroy
-      summary: Удаление тестового блока (для администрации или методиста (возможно будет реализация только в админ панели))
-      parameters:
-        - in: path
-          name: block_id
-          required: true
-          schema:
-            type: integer
-            minimum: 1
-      tags:
-        - TestBlock
-      security:
-        - Token: []
-      responses:
-        "204":
-          description: Шаг удален успешно
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "422":
-          $ref: "#/components/responses/UnprocessableEntity"
 
   /test-block/{block_id}/reset:
     delete:

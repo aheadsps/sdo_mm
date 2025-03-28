@@ -78,6 +78,16 @@ class StepSerializer(serializers.ModelSerializer):
         fields = ("serial", "title", "content_text", "attachments")
 
 
+class StepCreateSerializer(serializers.ModelSerializer):
+    """
+    Шаги создание
+    """
+
+    class Meta:
+        model = models.Step
+        fields = ("serial", "title", "content_text", "attachments")
+
+
 class StepViewSerializer(serializers.ModelSerializer):
     """
     Шаг детальный

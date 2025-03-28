@@ -1,30 +1,19 @@
 from loguru import logger
-from rest_framework import permissions, status, mixins, generics, viewsets
+from rest_framework import permissions, status, mixins, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
 from lessons import models, serializers
 from lessons import viewsets as own_viewsets
-from lessons.models import TestBlock
-from lessons.permissions import (CanReadCourse, IsAdminOrIsStaff,
-                                 OwnerEventPermission)
-from lessons.serializers import (TestBlockSerializersDetail,
-                                 TestBlockSerializersOptimize)
 from lessons.permissions import (
     IsAdminOrIsStaff,
     OwnerEventPermission,
     CanReadCourse,
-    CanReadLesson
+    CanReadLesson,
+    CanReadStep,
+    CanReadBlock,
     )
-
-
-class TestBlockGeneric(generics.RetrieveAPIView):
-    queryset = models.TestBlock.objects.get_queryset()
-    serializer_class = serializers.TestBlockSerializer
-    lookup_field = 'pk'
-    lookup_url_kwarg = 'block_id'
-    permission_classes = [permissions.AllowAny]
 
 
 class EventViewSet(own_viewsets.GetCreateUpdateDeleteViewSet):
@@ -43,8 +32,8 @@ class EventViewSet(own_viewsets.GetCreateUpdateDeleteViewSet):
         logger.debug(f"action is {self.action}")
         if self.action in ["retrieve", "toggle-favorite"]:
             permission_classes = [
-                (permissions.IsAuthenticated & OwnerEventPermission)
-                | IsAdminOrIsStaff
+                permissions.IsAuthenticated &
+                (OwnerEventPermission | IsAdminOrIsStaff)
             ]
         elif self.action == "currents":
             permission_classes = [permissions.IsAuthenticated]
@@ -116,8 +105,8 @@ class CourseViewSet(mixins.ListModelMixin,
         logger.debug(f"action is {self.action}")
         if self.action == "retrieve":
             permission_classes = [
-                (permissions.IsAuthenticated & CanReadCourse)
-                | IsAdminOrIsStaff
+                permissions.IsAuthenticated &
+                (CanReadCourse | IsAdminOrIsStaff)
             ]
         else:
             permission_classes = [permissions.IsAuthenticated &
@@ -159,78 +148,58 @@ class StepViewSet(ModelViewSet):
 
     def get_permissions(self):
         if self.action == "retrieve":
-            permission_classes = [permissions.IsAuthenticated]
+            permission_classes = [permissions.IsAuthenticated &
+                                  (CanReadStep | IsAdminOrIsStaff)]
         else:
             permission_classes = [permissions.IsAuthenticated &
                                   IsAdminOrIsStaff]
         return [permission() for permission in permission_classes]
 
     def get_serializer_class(self):
-        if self.action == 'list':
-            serializer_class = serializers.StepSerializer
-        else:
+        if self.action == 'retrieve':
             serializer_class = serializers.StepViewSerializer
-            if self.action == 'retrieve':
-                self.queryset = self.queryset.select_related('attachments')
+            self.queryset = (self.queryset
+                             .select_related('attachments'))
+        elif self.action in ['update', 'create', 'partial_update']:
+            serializer_class = serializers.StepCreateSerializer
+        else:
+            serializer_class = serializers.StepSerializer
         return serializer_class
 
 
-class TestBlockListCreateAPIView(generics.ListCreateAPIView):
-    serializer_class = TestBlockSerializersOptimize
-    queryset = TestBlock.objects.all()
+class TestBlockViewSet(own_viewsets.TargetViewSet):
+    """
+    Тестовый блок виювсет
+    """
+    queryset = models.TestBlock._default_manager.get_queryset()
+    serializer_class = serializers.TestBlockSerializersOptimize
+    lookup_field = 'pk'
+    lookup_url_kwarg = 'block_id'
 
+    def get_permissions(self):
+        if self.action in ["retrieve",
+                        #    "reset",
+                           ]:
+            permission_classes = [permissions.IsAuthenticated &
+                                  (CanReadBlock | IsAdminOrIsStaff)]
+        else:
+            permission_classes = [permissions.IsAuthenticated &
+                                  IsAdminOrIsStaff]
+        return [permission() for permission in permission_classes]
 
-class TestBlockRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
-    serializer_class = TestBlockSerializersDetail
-    queryset = TestBlock.objects.all()
+    def get_serializer_class(self):
+        if self.action == 'retrieve':
+            serializer_class = serializers.TestBlockSerializersDetail
+            self.queryset = (self.queryset
+                             .select_related('questions'))
+        else:
+            serializer_class = serializers.TestBlockSerializersOptimize
+        return serializer_class
 
-# class TestBlockViewSet(viewsets.ViewSet):
-#     """
-#     Вьюха с реализацией получения списка вопросов и ответов, информации о конкретном тестовом блоке и сброса ответов
-#     """
-#     queryset = TestBlock.objects.all()
-#     permission_classes = [IsAuthenticated]
-#
-#     def list(self):
-#         """
-#         Возвращает список всех вопросов и ответов. Доступно всем аутентифицированным пользователям.
-#         """
-#         test_blocks = TestBlock.objects.all()
-#         blocks_serializer = TestBlockSerializersOptimize(test_blocks, many=True)
-#         data = {
-#             "questions_test_blocks": blocks_serializer.questions,
-#             "answers_test_blocks": blocks_serializer.answers,
-#         }
-#         return Response(data)
-#
-#     def retrieve_test_block(self, pk=None):
-#         """
-#         Получение информации о конкретном тестовом блоке. Доступно всем аутентифицированным пользователям.
-#         """
-#         try:
-#             test_block = TestBlock.objects.get(pk=pk)
-#             blocks_serializer = TestBlockSerializersDetail(test_block)
-#             data = {
-#                 "questions_test_blocks": blocks_serializer.questions,
-#                 "answers_test_blocks": blocks_serializer.answers,
-#             }
-#             return Response(data)
-#         except TestBlock.DoesNotExist:
-#             raise Http404
-#
-#     @action(detail=True, methods=["post"])
-#     def reset_answers(self, request, pk=None):
-#         """
-#         Сброс ответов. Доступно всем аутентифицированным пользователям.
-#         """
-#         try:
-#             test_block = TestBlock.objects.get(id=pk)
-#             test_block.answers.clear()
-#             test_block.save()
-#             serializer = TestBlockSerializersDetail(test_block)
-#             return Response(serializer.data)
-#         except TestBlock.DoesNotExist:
-#             raise Http404
+    # @action(methods=['delete'], detail=True)
+    # def reset(self, request, block_id=None):
+    #     obj = self.get_object()
+    #     Здесь логика с UserStory
 
 
 class LessonViewSet(viewsets.ModelViewSet):
@@ -241,7 +210,6 @@ class LessonViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.LessonSerializer
     lookup_field = 'id'
     lookup_url_kwarg = 'lesson_id'
-    permission_classes = [permissions.IsAuthenticated]
 
     def get_permissions(self):
         if self.action == 'retrieve':

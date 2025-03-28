@@ -14,3 +14,15 @@ class GetCreateUpdateDeleteViewSet(
     """
 
     ...
+
+
+class TargetViewSet(
+    mixins.UpdateModelMixin,
+    mixins.RetrieveModelMixin,
+    viewsets.GenericViewSet,
+):
+    """
+    Виеюв сет реазилизуюзий действия только с объектом
+    """
+
+    ...
