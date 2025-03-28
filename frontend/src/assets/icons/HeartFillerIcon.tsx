@@ -21,7 +21,7 @@ const HeartFilledIcon = forwardRef<SVGSVGElement, SVGProps<SVGSVGElement>>(
         stroke="#F8F9FA"
         stroke-width="0.5"
       />
-      <g clip-path="url(#clip0_1070_41528)">
+      <g clipPath="url(#clip0_1070_41528)">
         <path
           fill-rule="evenodd"
           clip-rule="evenodd"

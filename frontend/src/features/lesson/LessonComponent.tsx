@@ -3,7 +3,7 @@ import { AiComponent, Button, Typography } from '@shared/components'
 import { useToggle } from '@shared/hooks/useToggle'
 import { ReactNode } from 'react'
 
-import { ArrowLeftIcon, TooltipeCheckboxIcon, YouTubeLogo } from '@assets/icons'
+import { ArrowLeftIcon, YouTubeLogo } from '@assets/icons'
 
 import s from './lessonComponent.module.scss'
 
@@ -73,7 +73,7 @@ const LessonComponent = ({ setIsLessonOpen }: Props) => {
                 <div className={s.checkboxContainer}>
                   <input type="checkbox" className={s.checkbox} />
                 </div>
-                <Typography variant="body_2">5. Как запоминать новые слова правильно?</Typography>
+                <Typography variant="body_2">5. Как запоминать новые слова правильно?</Typography>
               </li>
               <li className={s.lessonTheme}>
                 <div className={s.checkboxContainer}>
@@ -88,7 +88,22 @@ const LessonComponent = ({ setIsLessonOpen }: Props) => {
           </DropdownCard>
         </div>
         <div className={s.rightBox}>
-          <div className={s.headerLesson}>
+          <div className={s.rightTop}>
+            <div className={s.headerLesson}>
+              <Typography variant="header_3" className={s.titleLesson}>
+                4. Слова, которые мы используем неправильно
+              </Typography>
+              <Typography variant="header_6" className={s.countLessons}>
+                4/6
+              </Typography>
+            </div>
+            <Typography variant="body_2" className={s.lessonDesc}>
+              Многие английские слова кажутся знакомыми, но их настоящие значения могут сильно
+              отличаться. Это называется «ложные друзья переводчика». В этом уроке ты научишься их
+              распознавать.
+            </Typography>
+          </div>
+          {/* <div className={s.headerLesson}>
             <Typography variant="header_3" className={s.titleLesson}>
               4. Слова, которые мы используем неправильно
             </Typography>
@@ -100,14 +115,14 @@ const LessonComponent = ({ setIsLessonOpen }: Props) => {
             Многие английские слова кажутся знакомыми, но их настоящие значения могут сильно
             отличаться. Это называется «ложные друзья переводчика». В этом уроке ты научишься их
             распознавать.
-          </Typography>
+          </Typography> */}
           <div className={s.videoBox}>
             <YouTubeLogo />
           </div>
           <div className={s.hint}>
-            <Typography variant="body_2" className={s.hintTxt}>
+            <p className={s.hintTxt}>
               Чтобы не запоминать слова неправильно, всегда проверяй их значение в контексте!
-            </Typography>
+            </p>
           </div>
           <div className={s.buttonBox}>
             <Button variant="secondary" onClick={() => setIsLessonOpen(false)}>
