@@ -38,7 +38,7 @@ class QuestionSerializer(serializers.ModelSerializer):
     Сериализатор Question
     """
 
-    answers = AnswerSerializer(many=True)
+    answers = AnswerSerializer(many=True, read_only=True)
     image = serializers.ImageField(required=False)
 
     class Meta:

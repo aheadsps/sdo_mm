@@ -59,10 +59,12 @@ class TimeValidator:
         time_now = timezone.now()
         logger.debug(f'dates in validator \nstart_date:{start_date} \nend_date: {end_date} \ntime_now: {time_now}')
         if start_date and (time_now > start_date):
+            logger.debug(f'enter to error start_date {start_date and (time_now > start_date)}')
             self.error_detail.update(
                 dict(start_date="Не может быть указано задним числом")
             )
         if end_date and (time_now > end_date):
+            logger.debug(f'enter to error end_date {end_date and (time_now > end_date)}')
             self.error_detail.update(
                 dict(end_date="Не может быть указано задним числом")
             )
@@ -79,6 +81,7 @@ class TimeValidator:
             )
 
     def __call__(self, attrs, serializer):
+        self.error_detail = dict()
         need_check = tigger_to_check(attrs, self.start_date, self.end_date)
         if need_check:
             start_date = get_value(self.start_date, attrs, serializer)
