@@ -17,7 +17,7 @@ services:
       - db
 
   db:
-    restart: always 
+    restart: always
     image: postgres:16.3-alpine
     volumes:
       - postgres_data:/var/lib/postgresql/data/
@@ -42,21 +42,6 @@ services:
     tty: true
     environment:
       - CHOKIDAR_USEPOLLING=true
-    networks:
-      - backend
-
-  rabbitmq:
-    image: 'rabbitmq:3.11-management'
-    container_name: 'rabbitmq'
-    restart: unless-stopped
-    volumes:
-      - ./backend/docker/rabbitmq/rabbitmq.config:/etc/rabbitmq/rabbitmq.config:ro
-      - ./backend/docker/rabbitmq/definitions.json:/etc/rabbitmq/definitions.json:ro
-    ports:
-      - 5672:5672 # AMQP protocol port
-      - 15672:15672 # HTTP management UI
-    networks:
-      - backend
 
 volumes:
   postgres_data:
