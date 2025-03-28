@@ -1,5 +1,7 @@
+import LessonComponent from '@features/lesson/LessonComponent'
 import { Button, Tabs, Typography, AiComponent } from '@shared/components'
 import { useToggle } from '@shared/hooks/useToggle'
+import { useState } from 'react'
 import { NavLink } from 'react-router-dom'
 
 import { ArrowLeftIcon } from '@assets/icons'
@@ -9,8 +11,11 @@ import { tabsData } from './tabs/tabsData'
 
 export const CourseComponent = () => {
   const { isOpen: isOffcanvasOpen, close: closeOffcanvas, toggle: toggleOffCanvas } = useToggle()
+  const [isLessonOpen, setIsLessonOpen] = useState(true)
 
-  return (
+  return isLessonOpen ? (
+    <LessonComponent setIsLessonOpen={setIsLessonOpen} />
+  ) : (
     <div className={s.courseContent}>
       <NavLink to={'/learning'} className={s.backToPage}>
         <ArrowLeftIcon className={s.icon} />
