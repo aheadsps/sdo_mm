@@ -922,6 +922,312 @@ paths:
         "422":
           $ref: "#/components/responses/UnprocessableEntity"
 
+  /questions/{question_id}:
+    get:
+      summary: Получение конкретного вопроса по ID (для администрации или методиста)
+      parameters:
+        - in: path
+          name: question_id
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+      operationId: api_questions_retrieve
+      tags:
+        - Question
+      security:
+        - Token: []
+      responses:
+        "200":
+          description: JSON ответ с вопроса
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/Question"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+    put:
+      operationId: api_questions_patrial_update
+      parameters:
+        - in: path
+          name: question_id
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+      summary: Обновление вопроса (для администрации или методиста)
+      tags:
+        - Question
+      security:
+        - Token: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: "#/components/schemas/QuestionCreate"
+      responses:
+        "200":
+          description: JSON ответ с изменеными данными
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/QuestionCreate"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+    delete:
+      operationId: api_questions_destroy
+      summary: Удаление шага (для администрации или методиста (возможно будет реализация только в админ панели))
+      parameters:
+        - in: path
+          name: question_id
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+      tags:
+        - Question
+      security:
+        - Token: []
+      responses:
+        "204":
+          description: Вопрос удален успешно
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+
+  /questions:
+    get:
+      operationId: api_questions_list
+      summary: Получение всего списка вопросов (для администрации и методиста)
+      tags:
+        - Question
+      security:
+        - Token: []
+      responses:
+        "200":
+          description: JSON ответ со списком всех вопросов из уроков
+          content:
+            application/json:
+              schema:
+                type: array
+                minItems: 0
+                items:
+                  $ref: "#/components/schemas/Question"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+    post:
+      operationId: api_questions_create
+      summary: Создание новых вопросов (для администрации и методиста)
+      tags:
+        - Question
+      security:
+        - Token: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: "#/components/schemas/QuestionCreate"
+      responses:
+        "201":
+          description: JSON ответ с новыми данными
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/QuestionCreate"
+            application/x-www-form-urlencoded:
+              schema:
+                $ref: "#/components/schemas/QuestionCreate"
+            multipart/form-data:
+              schema:
+                $ref: "#/components/schemas/QuestionCreate"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+
+  /answers/{answer_id}:
+    get:
+      summary: Получение конкретного ответа по ID (для администрации или методиста)
+      parameters:
+        - in: path
+          name: answer_id
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+      operationId: api_answers_retrieve
+      tags:
+        - Answer
+      security:
+        - Token: []
+      responses:
+        "200":
+          description: JSON ответ с вопроса
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/Answer"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+    put:
+      operationId: api_answers_patrial_update
+      parameters:
+        - in: path
+          name: answer_id
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+      summary: Обновление ответа (для администрации или методиста)
+      tags:
+        - Answer
+      security:
+        - Token: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: "#/components/schemas/Answer"
+      responses:
+        "200":
+          description: JSON ответ с изменеными данными
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/Answer"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+    delete:
+      operationId: api_answers_destroy
+      summary: Удаление вопроса (для администрации или методиста (возможно будет реализация только в админ панели))
+      parameters:
+        - in: path
+          name: answer_id
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+      tags:
+        - Answer
+      security:
+        - Token: []
+      responses:
+        "204":
+          description: Ответ удален успешно
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+
+  /answers:
+    get:
+      operationId: api_answers_list
+      summary: Получение всего списка ответов (для администрации и методиста)
+      tags:
+        - Answer
+      security:
+        - Token: []
+      responses:
+        "200":
+          description: JSON ответ со списком всех ответов из уроков
+          content:
+            application/json:
+              schema:
+                type: array
+                minItems: 0
+                items:
+                  $ref: "#/components/schemas/Answer"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+    post:
+      operationId: api_answers_create
+      summary: Создание новых ответов (для администрации и методиста)
+      tags:
+        - Answer
+      security:
+        - Token: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: "#/components/schemas/Answer"
+      responses:
+        "201":
+          description: JSON ответ с новыми данными
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/Answer"
+            application/x-www-form-urlencoded:
+              schema:
+                $ref: "#/components/schemas/Answer"
+            multipart/form-data:
+              schema:
+                $ref: "#/components/schemas/Answer"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+
   /rates/vote/{lesson_id}:
     post:
       summary: Поставить оценку уроку
@@ -1562,12 +1868,41 @@ components:
           description: Изображения для тестового вопроса
           readOnly: false
           nullable: true
+        test_block:
+          type: integer
+          minimum: 1
         answers:
           type: array
           description: Ответы на данный вопрос. (Только в логике сериализатора, в модели не реализуем!)
           minItems: 0
           items:
             $ref: "#/components/schemas/Answer"
+
+    QuestionCreate:
+      description: Сущность тестов для урока создание
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: integer
+          readOnly: true
+          minimum: 1
+        text:
+          type: string
+          readOnly: false
+          nullable: false
+        image:
+          type: string
+          format: path
+          description: Изображения для тестового вопроса
+          readOnly: false
+          nullable: true
+        test_block:
+          type: integer
+          minimum: 1
+      required:
+        - text
+        - test_block
 
     Answer:
       description: Сущность ответов на тесты
@@ -1585,10 +1920,13 @@ components:
         correct:
           type: boolean
           readOnly: false
+        question:
+          type: integer
+          minimum: 1
       required:
-        - question
         - text
         - correct
+        - question
 
     ContentAttachment:
       description: Сущность для множественного присвоения мультимедийных файлов к урокам

@@ -8,8 +8,7 @@ from lessons import models, validators
 from lessons.d_types import VD
 from lessons.patrials import set_status
 from users import serializers as user_serializers
-from config.settings import MEDIA_ROOT
-import os
+
 
 PROCESS = "process"
 EXPECTED = "expected"
@@ -30,6 +29,7 @@ class AnswerSerializer(serializers.ModelSerializer):
             "id",
             "text",
             "correct",
+            "question",
         )
 
 
@@ -45,18 +45,29 @@ class QuestionSerializer(serializers.ModelSerializer):
         model = models.Question
         fields = ("id", "text", "image", "answers")
 
-    def create(self, validated_data: dict[str, str]):
-        """
-        Получение возможности создавать вопрос сразу с ответами
-        """
+    # def create(self, validated_data: dict[str, str]):
+    #     """
+    #     Получение возможности создавать вопрос сразу с ответами
+    #     """
 
-        answers = validated_data.pop("answers")
-        question = models.Question._default_manager.create(**validated_data)
-        answers_models = [
-            models.Answer(**answer, question=question) for answer in answers
-        ]
-        models.Answer._default_manager.bulk_create(answers_models)
-        return question
+    #     answers = validated_data.pop("answers")
+    #     question = models.Question._default_manager.create(**validated_data)
+    #     answers_models = [
+    #         models.Answer(**answer, question=question) for answer in answers
+    #     ]
+    #     models.Answer._default_manager.bulk_create(answers_models)
+    #     return question
+
+
+class QuestionCreateSerializer(serializers.ModelSerializer):
+    """
+    Создание вопроса
+    """
+
+    class Meta:
+        model = models.Question
+        fields = ("id", "text", "image", "test_block")
+        read_only_fields = ("id",)
 
 
 class ContentAttachmentSerializer(serializers.ModelSerializer):

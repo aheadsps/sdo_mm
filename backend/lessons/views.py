@@ -238,3 +238,30 @@ class TestBlockViewSet(mixins.RetrieveModelMixin,
     # def reset(self, request, block_id=None):
     #     obj = self.get_object()
     #     Здесь логика с UserStory
+
+
+class QuestionViewSet(viewsets.ModelViewSet):
+    """
+    Виювсет вопроса
+    """
+    queryset = models.Question._default_manager.get_queryset()
+    permission_classes = [IsAdminOrIsStaff]
+    lookup_field = 'pk'
+    lookup_url_kwarg = 'question_id'
+
+    def get_serializer_class(self):
+        if self.action in ['create', 'update', 'partial_update']:
+            serializer_class = serializers.QuestionCreateSerializer
+        else:
+            serializer_class = serializers.QuestionSerializer
+        return serializer_class
+
+
+class AnswerViewSet(viewsets.ModelViewSet):
+    """
+    Виювсет ответов
+    """
+    queryset = models.Answer._default_manager.get_queryset()
+    permission_classes = [IsAdminOrIsStaff]
+    lookup_field = 'pk'
+    lookup_url_kwarg = 'answer_id'
