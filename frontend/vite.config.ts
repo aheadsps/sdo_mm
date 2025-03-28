@@ -1,5 +1,3 @@
-import path from 'path'
-
 import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vite'
 
@@ -7,7 +5,14 @@ import { defineConfig } from 'vite'
 export default defineConfig({
   plugins: [react()],
   resolve: {
-    alias: [{ find: '@', replacement: path.resolve(__dirname, 'src') }],
+    alias: {
+      '@pages': '/src/pages',
+      '@assets': '/src/assets',
+      '@shared': '/src/shared',
+      '@features': '/src/features',
+      '@routes': '/src/routes',
+      '@services': '/src/services',
+    },
   },
   build: {
     outDir: 'dist',

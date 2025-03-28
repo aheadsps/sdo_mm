@@ -1,10 +1,10 @@
+import { SendIcon } from '@assets/icons'
+
 import { Offcanvas } from '../offcanvas/Offcanvas'
 import { Textarea } from '../text-field/Textarea'
 
 import s from './ai.module.scss'
 import { AiDescription } from './AiDescription'
-
-import { SendIcon } from '@/assets/icons'
 
 type Props = {
   isOpen: boolean

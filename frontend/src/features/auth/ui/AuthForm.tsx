@@ -1,12 +1,11 @@
+import { OpenedEyeIcon, ClosedEyeIcon } from '@assets/icons'
+import { Typography, Button } from '@shared/components'
 import { Link } from 'react-router-dom'
 
 import { useAuthForm } from '../model/useAuthForm'
 
 import styles from './auth-form.module.scss'
 import { FormInput } from './FormInput'
-
-import { OpenedEyeIcon, ClosedEyeIcon } from '@/assets/icons'
-import { Typography, Button } from '@/shared/components'
 
 export const AuthForm = () => {
   const { onSubmit, showPassword, setShowPassword, isValid, isSubmitting, control, authError } =

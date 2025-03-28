@@ -1,3 +1,4 @@
+import { CloseIcon } from '@assets/icons'
 import clsx from 'clsx'
 import { ReactNode } from 'react'
 import ReactDOM from 'react-dom'
@@ -5,8 +6,6 @@ import ReactDOM from 'react-dom'
 import { Typography } from '../typography'
 
 import s from './offcanvas.module.scss'
-
-import { CloseIcon } from '@/assets/icons'
 
 type Props = {
   isOpen: boolean

@@ -1,3 +1,7 @@
+import { LogoIcon, MobileVersionHeaderIcon } from '@assets/icons'
+import { selectIsAuth } from '@services/auth/authSlice'
+import { useAppSelector } from '@services/store'
+import { useScreenWidth } from '@shared/hooks'
 import React, { useState } from 'react'
 
 import '@fontsource/manrope/600.css'
@@ -6,11 +10,6 @@ import { Typography } from '../typography'
 
 import styles from './header.module.scss'
 import { HeaderAvatar } from './HeaderAvatar'
-
-import { LogoIcon, MobileVersionHeaderIcon } from '@/assets/icons'
-import { useAppSelector } from '@/services'
-import { selectIsAuth } from '@/services/auth/authSlice'
-import { useScreenWidth } from '@/shared/hooks'
 
 const Header: React.FC = () => {
   const isAuth = useAppSelector(selectIsAuth)

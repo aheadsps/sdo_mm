@@ -1,12 +1,11 @@
+import { ClockIcon, LikeIcon, DislikeIcon, StickersIcon, HourglassIcon } from '@assets/icons'
+import type { Course } from '@pages/my-learning/types'
 import { ReactNode, useState } from 'react'
 
 import { Button } from '../button'
 import { ImageComponent } from '../image'
 
 import s from './lessonCard.module.scss'
-
-import { ClockIcon, LikeIcon, DislikeIcon, StickersIcon, HourglassIcon } from '@/assets/icons'
-import type { Course } from '@/pages/my-learning/types'
 
 interface Props {
   course: Course

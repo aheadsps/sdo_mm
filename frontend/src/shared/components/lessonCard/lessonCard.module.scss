@@ -3,10 +3,12 @@
   display: flex;
   flex-direction: column;
   position: relative;
+
   &__top {
     width: 483px;
     height: 341px;
   }
+
   &__likeBox {
     width: 161px;
     height: fit-content;
@@ -87,17 +89,21 @@
     flex-direction: column;
     gap: 16px;
   }
+
   &__dataBox {
     width: 100%;
     display: flex;
+
     // justify-content: center;
   }
+
   &__data {
     width: 443px;
     height: 24px;
     display: flex;
     justify-content: space-between;
   }
+
   &__param {
     width: fit-content;
     height: 24px;
@@ -105,8 +111,9 @@
     gap: 8px;
     align-items: center;
   }
+
   &__paramTxt {
-    font-family: Moscow Sans;
+    font-family: var(--font-family-secondary);
     font-weight: 300;
     font-size: var(--font-size-s);
     line-height: 140%;
@@ -114,30 +121,35 @@
     vertical-align: middle;
     color: var(--color-text-secondary);
   }
+
   &__circle_blue {
     width: 24px;
     height: 24px;
     border-radius: 50%;
     background-color: var(--color-accent-info);
   }
+
   &__circle_green {
     width: 24px;
     height: 24px;
     border-radius: 50%;
     background-color: var(--color-accent-success);
   }
+
   &__circle_orange {
     width: 24px;
     height: 24px;
     border-radius: 50%;
     background-color: var(--color-accent-orange);
   }
+
   &__circle_red {
     width: 24px;
     height: 24px;
     border-radius: 50%;
     background-color: var(--color-accent-red500);
   }
+
   &__depiction {
     width: 443px;
     height: 110px;
@@ -149,6 +161,7 @@
     vertical-align: middle;
     color: var(--color-text-secondary);
   }
+
   &__btn {
     width: 443px;
     height: 40px;
@@ -156,28 +169,32 @@
     padding: 13px 18px;
   }
 }
+
 @media screen and (min-width: 768px) and (max-width: 1349px) {
   .container {
     width: 100%;
     height: fit-content;
     border-radius: 8px;
+
     &__top {
       width: 100%;
       height: fit-content;
     }
+
     &__img {
       width: 100%;
       height: fit-content;
     }
+
     &__likeBox {
       width: 33%;
       height: 7%;
       top: 0;
-      left: 192px;
       left: 67%;
       margin-top: 5px;
       padding-right: 0;
     }
+
     &__courseBox {
       width: 94%;
       min-height: 29px;
@@ -185,44 +202,53 @@
       justify-content: center;
       padding: 2px 20px 6px;
     }
+
     &__course {
       width: fit-content;
       height: 21px;
       font-size: var(--font-size-m);
     }
+
     &__bottom {
       width: 100%;
       height: fit-content;
       gap: 24px;
     }
+
     &__card {
       width: 100%;
       height: fit-content;
       gap: 24px;
     }
+
     &__title {
       width: 100%;
       height: fit-content;
       font-size: var(--font-size-s);
     }
+
     &__description {
       width: 100%;
       height: fit-content;
       gap: 16px;
     }
+
     &__data {
       width: 100%;
       height: 24px;
       display: flex;
       justify-content: space-between;
     }
+
     &__paramTxt {
       font-size: var(--font-size-xs);
     }
+
     &__depiction {
       width: 100%;
       font-size: var(--font-size-xs);
     }
+
     &__btn {
       width: 100%;
       height: fit-content;
@@ -230,27 +256,31 @@
     }
   }
 }
+
 @media screen and (max-width: 767px) {
   .container {
     width: 100%;
     height: fit-content;
     border-radius: 8px;
+
     &__top {
       width: 100%;
       height: fit-content;
     }
+
     &__img {
       width: 100%;
       height: fit-content;
     }
+
     &__likeBox {
       width: 40%;
       height: fit-content;
       top: 0;
-      left: 192px;
       left: 67%;
       gap: 10px;
     }
+
     &__courseBox {
       width: 49.6%;
       height: 27px;
@@ -258,11 +288,13 @@
       justify-content: center;
       padding: 2px 12px 4px;
     }
+
     &__course {
       width: fit-content;
       height: 21px;
       font-size: var(--font-size-s);
     }
+
     &__bottom {
       width: 100%;
       height: fit-content;
@@ -274,26 +306,30 @@
       height: fit-content;
       gap: 16px;
     }
+
     &__title {
       width: 100%;
       height: fit-content;
       font-size: var(--font-size-s);
     }
+
     &__description {
       width: 100%;
       height: fit-content;
       gap: 8px;
     }
+
     &__dataBox {
       justify-content: center;
     }
+
     &__data {
       width: 220px;
       height: fit-content;
       flex-wrap: wrap;
-      row-gap: 8px;
-      column-gap: 24px;
+      gap: 8px 24px;
     }
+
     &__depiction {
       width: 280px;
       height: fit-content;

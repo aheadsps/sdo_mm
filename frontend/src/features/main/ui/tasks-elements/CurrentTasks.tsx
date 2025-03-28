@@ -1,7 +1,7 @@
-import s from '../main.module.scss'
+import { useGetCurrentEventsQuery } from '@services/events'
+import { Typography, Task } from '@shared/components'
 
-import { useGetCurrentEventsQuery } from '@/services'
-import { Typography, Task } from '@/shared/components'
+import s from '../main.module.scss'
 
 export const CurrentTasks = () => {
   const { data: events } = useGetCurrentEventsQuery()

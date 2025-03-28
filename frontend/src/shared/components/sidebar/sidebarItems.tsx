@@ -6,8 +6,8 @@ import {
   WebinarAndSupportIcon,
   WebinarIcon,
   SettingsEyeIcon,
-} from '@/assets/icons'
-import { routes } from '@/routes/routes'
+} from '@assets/icons'
+import { routes } from '@routes/routes'
 
 export const sidebarItems = [
   {

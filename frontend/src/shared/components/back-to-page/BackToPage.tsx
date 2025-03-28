@@ -1,3 +1,4 @@
+import { ArrowLeftIcon } from '@assets/icons'
 import clsx from 'clsx'
 import { ReactNode } from 'react'
 import { NavLink } from 'react-router-dom'
@@ -5,8 +6,6 @@ import { NavLink } from 'react-router-dom'
 import { Typography } from '../typography'
 
 import s from './back-to.page.module.scss'
-
-import { ArrowLeftIcon } from '@/assets/icons'
 
 type Props = {
   to: string

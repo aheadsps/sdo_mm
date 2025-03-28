@@ -1,8 +1,10 @@
+import { AuthPage } from '@pages/auth'
+import { CoursePage } from '@pages/course'
+import { MainPage } from '@pages/main'
+import { MyLearning } from '@pages/my-learning'
 import { createBrowserRouter } from 'react-router-dom'
 
 import { routes } from './routes'
-
-import { AuthPage, CoursePage, MainPage, MyLearning } from '@/pages'
 
 export const router = createBrowserRouter([
   {

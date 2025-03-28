@@ -1,12 +1,11 @@
+import { ArrowRightIcon } from '@assets/icons'
+import { getBackgroundColor } from '@shared/utils'
 import clsx from 'clsx'
 import { ComponentPropsWithRef, ReactNode } from 'react'
 
 import { Typography } from '../typography'
 
 import s from './task.module.scss'
-
-import { ArrowRightIcon } from '@/assets/icons'
-import { getBackgroundColor } from '@/shared/utils'
 
 type Props = {
   daysLeft?: number

@@ -1,12 +1,11 @@
+import { AuthForm } from '@features/auth'
+import { routes } from '@routes/routes'
+import { getToken } from '@services/auth'
+import { ImageComponent, Header } from '@shared/components'
 import { useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 import styles from './authpage.module.scss'
-
-import { AuthForm } from '@/features'
-import { routes } from '@/routes/routes'
-import { getToken } from '@/services'
-import { ImageComponent, Header } from '@/shared/components'
 
 export const AuthPage: React.FC = () => {
   const navigate = useNavigate()

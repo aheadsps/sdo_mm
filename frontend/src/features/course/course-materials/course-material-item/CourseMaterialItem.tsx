@@ -1,8 +1,7 @@
+import { Typography, Button } from '@shared/components'
 import { ReactNode } from 'react'
 
 import s from './course-material-item.module.scss'
-
-import { Typography, Button } from '@/shared/components'
 
 type Props = {
   title: string

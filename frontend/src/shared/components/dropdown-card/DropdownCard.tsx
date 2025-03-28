@@ -1,11 +1,10 @@
+import { ArrowDownIcon, ArrowUpIcon } from '@assets/icons'
+import { useToggle } from '@shared/hooks/useToggle'
 import { ComponentPropsWithoutRef } from 'react'
 
 import { LessonItemTitle } from '../../../features/course/lesson-item-title/LessonItemTitle'
 
 import s from './dropdown-card.module.scss'
-
-import { ArrowDownIcon, ArrowUpIcon } from '@/assets/icons'
-import { useToggle } from '@/shared/hooks/useToggle'
 
 type Props = {
   title: string

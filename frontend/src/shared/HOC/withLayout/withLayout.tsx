@@ -1,9 +1,8 @@
+import { Header, Sidebar, Loader } from '@shared/components'
+import { useScreenWidth } from '@shared/hooks'
 import { ComponentType, useEffect, useState } from 'react'
 
 import s from './layout.module.scss'
-
-import { Header, Sidebar, Loader } from '@/shared/components'
-import { useScreenWidth } from '@/shared/hooks'
 
 export const withLayout = <T extends object>(Component: ComponentType<T>) => {
   return (props: T) => {

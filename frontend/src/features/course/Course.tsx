@@ -1,9 +1,9 @@
+import { routes } from '@routes/routes'
+import { Button, BackToPage, Typography, Tabs, AiComponent } from '@shared/components'
+import { useToggle } from '@shared/hooks'
+
 import s from './course.module.scss'
 import { tabsData } from './tabs/tabsData'
-
-import { routes } from '@/routes/routes'
-import { Button, BackToPage, Typography, Tabs, AiComponent } from '@/shared/components'
-import { useToggle } from '@/shared/hooks'
 
 export const Course = () => {
   const { isOpen: isOffcanvasOpen, close: closeOffcanvas, toggle: toggleOffCanvas } = useToggle()

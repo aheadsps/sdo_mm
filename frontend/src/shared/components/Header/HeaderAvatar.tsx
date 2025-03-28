@@ -1,10 +1,10 @@
+import { selectUser } from '@services/auth'
+import { useAppSelector } from '@services/store'
+import { getUserInitials } from '@shared/utils'
+
 import { Typography } from '../typography'
 
 import s from './header.module.scss'
-
-import { useAppSelector } from '@/services'
-import { selectUser } from '@/services/auth'
-import { getUserInitials } from '@/shared/utils'
 
 export const HeaderAvatar = () => {
   const user = useAppSelector(selectUser)

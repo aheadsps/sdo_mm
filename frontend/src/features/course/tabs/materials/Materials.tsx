@@ -1,8 +1,8 @@
+import { DropdownCard, Button } from '@shared/components'
+
 import { CourseMaterials } from '../../course-materials'
 
 import s from './materials.module.scss'
-
-import { DropdownCard, Button } from '@/shared/components'
 
 export const Materials = () => {
   return (

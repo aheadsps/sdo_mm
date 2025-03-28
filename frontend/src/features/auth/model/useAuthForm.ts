@@ -1,6 +1,8 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { SerializedError } from '@reduxjs/toolkit'
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query'
+import { useLoginMutation } from '@services/auth'
+import { handleError } from '@shared/utils'
 import { useCallback, useState } from 'react'
 import { useEffect } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
@@ -9,9 +11,6 @@ import { useNavigate } from 'react-router-dom'
 import { authFormSchema } from '../ui/authFormSchema'
 
 import { AuthFormData } from './types'
-
-import { useLoginMutation } from '@/services'
-import { handleError } from '@/shared/utils'
 
 export const useAuthForm = () => {
   const {

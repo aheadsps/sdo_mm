@@ -1,15 +1,15 @@
+import { LogOutIcon } from '@assets/icons'
+import { routes } from '@routes/routes'
+import { useGetProfileQuery } from '@services/auth'
+import { clearUser, setUser } from '@services/auth/authSlice'
+import { useAppDispatch } from '@services/store'
+import { handleError } from '@shared/utils'
 import { useEffect } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 
 import { Typography } from '../../typography'
 
 import s from './user-info.module.scss'
-
-import { LogOutIcon } from '@/assets/icons'
-import { routes } from '@/routes/routes'
-import { useAppDispatch, useGetProfileQuery } from '@/services'
-import { clearUser, setUser } from '@/services/auth/authSlice'
-import { handleError } from '@/shared/utils'
 
 export const UserInfo = () => {
   const { data: profile, isLoading, error } = useGetProfileQuery()

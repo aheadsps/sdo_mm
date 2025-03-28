@@ -1,9 +1,8 @@
+import { Input } from '@shared/components'
 import { ComponentPropsWithoutRef, ReactNode } from 'react'
 import { Control, FieldValues, Path, useController } from 'react-hook-form'
 
 import s from './form-input.module.scss'
-
-import { Input } from '@/shared/components'
 
 type Props<T extends FieldValues> = {
   children?: ReactNode

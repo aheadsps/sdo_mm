@@ -1,5 +1,5 @@
-import { Main } from '@/features'
-import { withLayout } from '@/shared/HOC'
+import { Main } from '@features/main'
+import { withLayout } from '@shared/HOC'
 
 const MainContent = () => {
   return <Main />

@@ -1,6 +1,6 @@
-import s from './tooltipe.module.scss'
+import { CloseIcon, TooltipeCheckboxIcon } from '@assets/icons'
 
-import { CloseIcon, TooltipeCheckboxIcon } from '@/assets/icons'
+import s from './tooltipe.module.scss'
 
 type Props = {
   close: () => void
