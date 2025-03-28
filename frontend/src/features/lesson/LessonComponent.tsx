@@ -1,5 +1,6 @@
 import { DropdownCard } from '@features/course'
 import { AiComponent, Button, Typography } from '@shared/components'
+import Video from '@shared/components/video/VideoComponent'
 import { useToggle } from '@shared/hooks/useToggle'
 import { ReactNode } from 'react'
 
@@ -103,21 +104,9 @@ const LessonComponent = ({ setIsLessonOpen }: Props) => {
               распознавать.
             </Typography>
           </div>
-          {/* <div className={s.headerLesson}>
-            <Typography variant="header_3" className={s.titleLesson}>
-              4. Слова, которые мы используем неправильно
-            </Typography>
-            <Typography variant="header_6" className={s.countLessons}>
-              4/6
-            </Typography>
-          </div>
-          <Typography variant="body_2" className={s.lessonDesc}>
-            Многие английские слова кажутся знакомыми, но их настоящие значения могут сильно
-            отличаться. Это называется «ложные друзья переводчика». В этом уроке ты научишься их
-            распознавать.
-          </Typography> */}
           <div className={s.videoBox}>
-            <YouTubeLogo />
+            <Video />
+            {/* <YouTubeLogo /> */}
           </div>
           <div className={s.hint}>
             <p className={s.hintTxt}>
