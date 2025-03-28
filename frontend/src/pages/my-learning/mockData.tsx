@@ -59,8 +59,8 @@ export const courses: Course[] = [
   },
 ]
 export const getCurrentCourses: (mode: number) => Course[] = (mode: number) => {
-  if (mode === 0) return courses
   if (mode === 1) return courses.filter((el) => el.expired === true)
   if (mode === 2) return courses.filter((el) => el.isCourse === true)
   if (mode === 3) return courses.filter((el) => el.progress === '100%')
+  return courses
 }

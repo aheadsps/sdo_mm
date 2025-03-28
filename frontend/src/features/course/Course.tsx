@@ -1,17 +1,17 @@
+
+import { useToggle } from '@shared/hooks/useToggle'
+import { NavLink } from 'react-router-dom'
 import { useState } from 'react'
+import { routes } from '@/routes/routes'
+import { Button, BackToPage, Typography, Tabs, AiComponent } from '@/shared/components'
 
 import s from './course.module.scss'
 import { tabsData } from './tabs/tabsData'
 
-import { routes } from '@/routes/routes'
-import { Button, BackToPage, Typography, Tabs, AiComponent } from '@/shared/components'
 
 export const Course = () => {
-  const [isOffcanvasOpen, setIsOffcanvasOpen] = useState(false)
+  const { isOpen: isOffcanvasOpen, close: closeOffcanvas, toggle: toggleOffCanvas } = useToggle()
 
-  const onButtonClick = () => {
-    setIsOffcanvasOpen(!isOffcanvasOpen)
-  }
   return (
     <div className={s.courseContent}>
       <BackToPage to={routes.learning}>Вернуться к выбору курса</BackToPage>
@@ -21,7 +21,7 @@ export const Course = () => {
           English Check-Up: База и первые шаги
         </Typography>
         <div className={s.buttonsBlock}>
-          <Button variant="secondary" className={s.button} onClick={onButtonClick}>
+          <Button variant="secondary" className={s.button} onClick={toggleOffCanvas}>
             ИИ
           </Button>
           <Button variant="primary" className={s.button}>
@@ -30,7 +30,7 @@ export const Course = () => {
         </div>
       </div>
       <Tabs tabs={tabsData} variant="secondary" />
-      <AiComponent isOpen={isOffcanvasOpen} setIsOpen={setIsOffcanvasOpen} />
+      <AiComponent isOpen={isOffcanvasOpen} close={closeOffcanvas} />
     </div>
   )
 }

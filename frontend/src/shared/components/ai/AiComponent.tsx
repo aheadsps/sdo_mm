@@ -8,12 +8,12 @@ import { SendIcon } from '@/assets/icons'
 
 type Props = {
   isOpen: boolean
-  setIsOpen: (isOpen: boolean) => void
+  close: () => void
 }
 
-export const AiComponent = ({ isOpen, setIsOpen }: Props) => {
+export const AiComponent = ({ isOpen, close }: Props) => {
   return (
-    <Offcanvas isOpen={isOpen} setIsOpen={setIsOpen} title="Ваш персональный помощник">
+    <Offcanvas isOpen={isOpen} close={close} title="Ваш персональный помощник">
       <AiDescription />
       <div className={s.aiTextarea}>
         <Textarea placeholder="Введите текст" className={s.textarea} />

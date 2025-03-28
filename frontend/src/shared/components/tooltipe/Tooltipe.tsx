@@ -3,14 +3,14 @@ import s from './tooltipe.module.scss'
 import { CloseIcon, TooltipeCheckboxIcon } from '@/assets/icons'
 
 type Props = {
-  setIsOpen: (isOpen: boolean) => void
+  close: () => void
 }
-export const Tooltipe = ({ setIsOpen }: Props) => {
+export const Tooltipe = ({ close }: Props) => {
   return (
     <div className={s.tooltipe}>
       <div className={s.tooltipe__topBox}>
         <TooltipeCheckboxIcon />
-        <div className={s.tooltipe__rightBox} onClick={() => setIsOpen(false)}>
+        <div className={s.tooltipe__rightBox} onClick={close}>
           <p className={s.tooltipe__txt}>12 секунд назад</p>
           <CloseIcon />
         </div>
