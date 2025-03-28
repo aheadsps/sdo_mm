@@ -1,13 +1,9 @@
-
-import { useToggle } from '@shared/hooks/useToggle'
-import { NavLink } from 'react-router-dom'
-import { useState } from 'react'
-import { routes } from '@/routes/routes'
-import { Button, BackToPage, Typography, Tabs, AiComponent } from '@/shared/components'
-
 import s from './course.module.scss'
 import { tabsData } from './tabs/tabsData'
 
+import { routes } from '@/routes/routes'
+import { Button, BackToPage, Typography, Tabs, AiComponent } from '@/shared/components'
+import { useToggle } from '@/shared/hooks'
 
 export const Course = () => {
   const { isOpen: isOffcanvasOpen, close: closeOffcanvas, toggle: toggleOffCanvas } = useToggle()

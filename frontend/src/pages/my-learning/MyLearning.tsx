@@ -1,14 +1,12 @@
-import { AiComponent, Button } from '@shared/components'
-import { LessonCard } from '@shared/components/lessonCard/LessonCard'
-import { TabsButtons } from '@shared/components/tabsButtons/TabsButtons'
-import { Tooltipe } from '@shared/components/tooltipe/Tooltipe'
-import { withLayout } from '@shared/HOC/withLayout/withLayout'
-import { useToggle } from '@shared/hooks/useToggle'
 import { useState } from 'react'
 
 import { getCurrentCourses } from './mockData'
 import s from './myLearning.module.scss'
 import { Course } from './types'
+
+import { AiComponent, Tooltipe, TabsButtons, Button, LessonCard } from '@/shared/components'
+import { withLayout } from '@/shared/HOC'
+import { useToggle } from '@/shared/hooks/useToggle'
 
 const buttons: string[] = [
   'Назначенные курсы',
