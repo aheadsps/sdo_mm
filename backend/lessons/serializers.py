@@ -71,11 +71,16 @@ class StepSerializer(serializers.ModelSerializer):
     Шаги - оптимизированный
     """
 
-    attachments = serializers.PrimaryKeyRelatedField(many=True)
+    attachments = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
 
     class Meta:
         model = models.Step
-        fields = ("serial", "title", "content_text", "attachments")
+        fields = ("serial",
+                  "title",
+                  "content_text",
+                  "attachments",
+                  "lesson",
+                  )
 
 
 class StepCreateSerializer(serializers.ModelSerializer):
@@ -85,7 +90,82 @@ class StepCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Step
-        fields = ("serial", "title", "content_text", "attachments")
+        fields = ("serial",
+                  "title",
+                  "content_text",
+                  "lesson",
+                  )
+        validators = (validators.MoreThanZeroValidator("serial"),)
+
+    # def create(self, validated_data: dict[int, str, str, dict]):
+    #     """
+    #     Создаем новый шаг урока
+    #     """
+    #     content_attachment = validated_data.pop("attachments")
+    #     step = models.Step._default_manager.create(**validated_data)
+    #     # Заполняем поле content_attachment
+    #     content_attachment_models = []
+    #     for item in content_attachment:
+    #         content_attachment_models.append(
+    #             models.ContentAttachment(**item, step=step)
+    #         )
+    #     models.ContentAttachment._default_manager.bulk_create(content_attachment_models)
+    #     return step
+
+    # def update(self, instance, validated_data):
+    #     """
+    #     Обработка обновления Step.
+
+    #     ContentAttachment не редактируется:
+    #     создается новый или удаляется
+    #     В API-запросе необходимо передать
+    #     ВСЕ актуальные записи ContentAttachment вместе с их ID
+    #     Если запись передана не будет - она удаляется из БД.
+    #     Если ID = null или не указан создается новая запись
+    #     """
+
+    #     # Определяем поля Step
+    #     instance.serial = validated_data.get("serial", instance.serial)
+    #     instance.title = validated_data.get("title", instance.title)
+    #     instance.content_text = validated_data.get(
+    #         "content_text", instance.content_text
+    #     )
+
+    #     # Получаем ID удаленных content_attachment
+    #     id_attachment_new = [
+    #         item.get("id")
+    #         for item in validated_data.get("attachments")
+    #         if not item.get("id") is None
+    #     ]
+    #     id_attachment_old = [item.id for item in instance.attachments.all()]
+    #     id_attachment_delete = set(id_attachment_old) - set(id_attachment_new)
+    #     # Удалить старые content_attachment
+    #     delete_list = models.ContentAttachment.objects.filter(
+    #         id__in=list(id_attachment_delete)
+    #     )
+    #     for item in delete_list:
+    #         if item.file.name:
+    #             file_path = item.file.name.split("/")
+    #             file_path = os.path.join(MEDIA_ROOT, *file_path)
+    #             try:
+    #                 os.remove(file_path)
+    #             except Exception:
+    #                 # запись в логи...
+    #                 pass
+    #     delete_list.delete()
+
+    #     # Заполняем новые поля content_attachment
+    #     content_attachment_models = []
+    #     for item in validated_data.get("attachments"):
+    #         if not item.get("id", None):
+    #             content_attachment_models.append(
+    #                 models.ContentAttachment(**item, step=instance)
+    #             )
+    #     models.ContentAttachment._default_manager.bulk_create(content_attachment_models)
+
+    #     instance.save()
+
+    #     return instance
 
 
 class StepViewSerializer(serializers.ModelSerializer):
@@ -93,82 +173,16 @@ class StepViewSerializer(serializers.ModelSerializer):
     Шаг детальный
     """
 
-    attachments = ContentAttachmentSerializer(many=True)
+    attachments = ContentAttachmentSerializer(many=True, read_only=True)
 
     class Meta:
         model = models.Step
-        fields = ("serial", "title", "content_text", "attachments")
-        validators = (validators.MoreThanZeroValidator("serial"),)
-
-    def create(self, validated_data: dict[int, str, str, dict]):
-        """
-        Создаем новый шаг урока
-        """
-        content_attachment = validated_data.pop("attachments")
-        step = models.Step._default_manager.create(**validated_data)
-        # Заполняем поле content_attachment
-        content_attachment_models = []
-        for item in content_attachment:
-            content_attachment_models.append(
-                models.ContentAttachment(**item, step=step)
-            )
-        models.ContentAttachment._default_manager.bulk_create(content_attachment_models)
-        return step
-
-    def update(self, instance, validated_data):
-        """
-        Обработка обновления Step.
-
-        ContentAttachment не редактируется:
-        создается новый или удаляется
-        В API-запросе необходимо передать
-        ВСЕ актуальные записи ContentAttachment вместе с их ID
-        Если запись передана не будет - она удаляется из БД.
-        Если ID = null или не указан создается новая запись
-        """
-
-        # Определяем поля Step
-        instance.serial = validated_data.get("serial", instance.serial)
-        instance.title = validated_data.get("title", instance.title)
-        instance.content_text = validated_data.get(
-            "content_text", instance.content_text
-        )
-
-        # Получаем ID удаленных content_attachment
-        id_attachment_new = [
-            item.get("id")
-            for item in validated_data.get("attachments")
-            if not item.get("id") is None
-        ]
-        id_attachment_old = [item.id for item in instance.attachments.all()]
-        id_attachment_delete = set(id_attachment_old) - set(id_attachment_new)
-        # Удалить старые content_attachment
-        delete_list = models.ContentAttachment.objects.filter(
-            id__in=list(id_attachment_delete)
-        )
-        for item in delete_list:
-            if item.file.name:
-                file_path = item.file.name.split("/")
-                file_path = os.path.join(MEDIA_ROOT, *file_path)
-                try:
-                    os.remove(file_path)
-                except Exception:
-                    # запись в логи...
-                    pass
-        delete_list.delete()
-
-        # Заполняем новые поля content_attachment
-        content_attachment_models = []
-        for item in validated_data.get("attachments"):
-            if not item.get("id", None):
-                content_attachment_models.append(
-                    models.ContentAttachment(**item, step=instance)
-                )
-        models.ContentAttachment._default_manager.bulk_create(content_attachment_models)
-
-        instance.save()
-
-        return instance
+        fields = ("serial",
+                  "title",
+                  "content_text",
+                  "lesson",
+                  "attachments",
+                  )
 
 
 class TestBlockSerializersOptimize(serializers.ModelSerializer):
@@ -201,8 +215,6 @@ class LessonCreateSerializer(serializers.ModelSerializer):
     """
     Сериализатор создания и обновления урока
     """
-    # steps = StepSerializer(many=True)
-    # test_block = TestBlockSerializersDetail()
 
     class Meta:
         model = models.Lesson
@@ -211,18 +223,8 @@ class LessonCreateSerializer(serializers.ModelSerializer):
             "name",
             "serial",
             "course",
-            # "steps",
-            # "test_block",
         )
         read_only_fields = ("id",)
-
-    def create(self, validated_data):
-        # step_items = validated_data.pop('step', [])
-        # step_create = [
-        #     models.Step(**step, lesson=lesson) for step in step_items
-        # ]
-        # Step.objects.bulk_create(step_create)
-        return super().create(validated_data)
 
 
 class LessonSerializer(serializers.ModelSerializer):
@@ -230,7 +232,7 @@ class LessonSerializer(serializers.ModelSerializer):
     Сериализатор оптимизированного вывода
     """
     steps = StepSerializer(many=True)
-    test_block = TestBlockSerializersOptimize()
+    test_block = serializers.PrimaryKeyRelatedField(read_only=True)
 
     class Meta:
         model = models.Lesson
@@ -267,7 +269,6 @@ class CreateCourseSerializer(serializers.ModelSerializer):
     """
     Сериализатор на обработку создания и обновления курсов
     """
-    # lessons = LessonCreateSerializer(many=True)
 
     class Meta:
         model = models.Course
@@ -330,6 +331,27 @@ class ViewCourseSerializer(serializers.ModelSerializer):
         )
 
 
+class EventViewSerializer(serializers.ModelSerializer):
+    """
+    Сериализатор Эвента
+    """
+
+    course = ViewCourseSerializer()
+
+    class Meta:
+        model = models.Event
+        fields = (
+            "id",
+            "user",
+            "course",
+            "done_lessons",
+            "start_date",
+            "end_date",
+            "favorite",
+            "status",
+        )
+
+
 class EventSerializer(serializers.ModelSerializer):
     """
     Сериализатор Эвента
@@ -381,16 +403,10 @@ class EventSerializerCreate(serializers.ModelSerializer):
         """
         Изменение статуса
         """
-        if process:
-            set_status(
-                dict_data=validated_data,
-                value=PROCESS,
-            )
-        else:
-            set_status(
-                dict_data=validated_data,
-                value=EXPECTED,
-            )
+        set_status(
+            dict_data=validated_data,
+            value=PROCESS if process else EXPECTED,
+        )
 
     def _correct_status(self, validated_data: VD) -> VD:
         """

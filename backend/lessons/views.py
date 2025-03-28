@@ -22,7 +22,7 @@ class EventViewSet(own_viewsets.GetCreateUpdateDeleteViewSet):
     """
     queryset = (models.Event
                 ._default_manager
-                .get_queryset())
+                .get_queryset().select_related('course'))
     serializer_class = serializers.EventSerializer
     lookup_field = "pk"
     lookup_url_kwarg = "event_id"
@@ -35,6 +35,7 @@ class EventViewSet(own_viewsets.GetCreateUpdateDeleteViewSet):
                 permissions.IsAuthenticated &
                 (OwnerEventPermission | IsAdminOrIsStaff)
             ]
+            self.serializer_class = serializers.EventViewSerializer
         elif self.action == "currents":
             permission_classes = [permissions.IsAuthenticated]
         else:
@@ -94,10 +95,7 @@ class CourseViewSet(mixins.ListModelMixin,
     Виювсет CRUD Курса
     """
 
-    queryset = (
-        models.Course._default_manager.get_queryset()
-        .select_related("lessons")
-    )
+    queryset = models.Course._default_manager.get_queryset()
     lookup_field = "pk"
     lookup_url_kwarg = "course_id"
 
@@ -117,6 +115,7 @@ class CourseViewSet(mixins.ListModelMixin,
     def get_serializer_class(self):
         if self.action == 'retrieve':
             serializer_class = serializers.ViewCourseSerializer
+            self.queryset = self.queryset.select_related('lessons')
             self.queryset = (self.queryset
                              .select_related('profession')
                              .prefetch_related('experiences'))
@@ -125,6 +124,44 @@ class CourseViewSet(mixins.ListModelMixin,
         else:
             serializer_class = serializers.CourseSerializer
         return serializer_class
+
+    def create(self, request, *args, **kwargs):
+        self.check_object_permissions(request=request, obj=None)
+        return super().create(request, *args, **kwargs)
+
+    def list(self, request, *args, **kwargs):
+        self.check_object_permissions(request=request, obj=None)
+        return super().list(request, *args, **kwargs)
+
+
+class LessonViewSet(viewsets.ModelViewSet):
+    """
+    Вьюсет уроков с выбором сериализатора для CRUD-операций
+    """
+    queryset = models.Lesson.objects.all()
+    serializer_class = serializers.LessonSerializer
+    lookup_field = 'id'
+    lookup_url_kwarg = 'lesson_id'
+
+    def get_permissions(self):
+        if self.action == 'retrieve':
+            permission_classes = [permissions.IsAuthenticated &
+                                  (CanReadLesson | IsAdminOrIsStaff)]
+        else:
+            permission_classes = [permissions.IsAuthenticated &
+                                  IsAdminOrIsStaff]
+
+        return [permission() for permission in permission_classes]
+
+    def get_serializer_class(self):
+        """
+        Возвращает сериализатор в зависимости от действия (action).
+        """
+        if self.action == 'retrieve':
+            return serializers.LessonViewSerializer
+        elif self.action in ['create', 'update', 'partial_update']:
+            return serializers.LessonCreateSerializer
+        return serializers.LessonSerializer
 
     def create(self, request, *args, **kwargs):
         self.check_object_permissions(request=request, obj=None)
@@ -167,7 +204,8 @@ class StepViewSet(ModelViewSet):
         return serializer_class
 
 
-class TestBlockViewSet(own_viewsets.TargetViewSet):
+class TestBlockViewSet(mixins.RetrieveModelMixin,
+                       viewsets.GenericViewSet):
     """
     Тестовый блок виювсет
     """
@@ -200,41 +238,3 @@ class TestBlockViewSet(own_viewsets.TargetViewSet):
     # def reset(self, request, block_id=None):
     #     obj = self.get_object()
     #     Здесь логика с UserStory
-
-
-class LessonViewSet(viewsets.ModelViewSet):
-    """
-    Вьюсет уроков с выбором сериализатора для CRUD-операций
-    """
-    queryset = models.Lesson.objects.all()
-    serializer_class = serializers.LessonSerializer
-    lookup_field = 'id'
-    lookup_url_kwarg = 'lesson_id'
-
-    def get_permissions(self):
-        if self.action == 'retrieve':
-            permission_classes = [permissions.IsAuthenticated &
-                                  (CanReadLesson | IsAdminOrIsStaff)]
-        else:
-            permission_classes = [permissions.IsAuthenticated &
-                                  IsAdminOrIsStaff]
-
-        return [permission() for permission in permission_classes]
-
-    def get_serializer_class(self):
-        """
-        Возвращает сериализатор в зависимости от действия (action).
-        """
-        if self.action == 'retrieve':
-            return serializers.LessonViewSerializer
-        elif self.action in ['create', 'update', 'partial_update']:
-            return serializers.LessonCreateSerializer
-        return serializers.LessonSerializer
-
-    def create(self, request, *args, **kwargs):
-        self.check_object_permissions(request=request, obj=None)
-        return super().create(request, *args, **kwargs)
-
-    def list(self, request, *args, **kwargs):
-        self.check_object_permissions(request=request, obj=None)
-        return super().list(request, *args, **kwargs)

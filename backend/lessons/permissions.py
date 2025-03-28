@@ -87,7 +87,7 @@ class CanReadStep(permissions.BasePermission):
     code = status.HTTP_403_FORBIDDEN
 
     def has_object_permission(self, request, view, step):
-        if not step:
+        if not step or not step.lesson or not step.lesson:
             return
 
         user = request.user
@@ -118,7 +118,7 @@ class CanReadBlock(permissions.BasePermission):
 
         event_exists = models.Event.objects.filter(
             Q(user=user) &
-            Q(course=test_block.step.lesson.course)
+            Q(course=test_block.lesson.course)
         )
 
         return event_exists.exists()

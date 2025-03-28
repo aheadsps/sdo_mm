@@ -1,6 +1,7 @@
 import datetime
 
 from django.utils import timezone
+from loguru import logger
 
 from lessons import exceptions
 from lessons.utils import get_value, tigger_to_check
@@ -56,11 +57,12 @@ class TimeValidator:
             exceptions.UnprocessableEntityError: Исключение в случае не соотвествия
         """
         time_now = timezone.now()
-        if start_date and time_now > start_date:
+        logger.debug(f'dates in validator \nstart_date:{start_date} \nend_date: {end_date} \ntime_now: {time_now}')
+        if start_date and (time_now > start_date):
             self.error_detail.update(
                 dict(start_date="Не может быть указано задним числом")
             )
-        if end_date and time_now > end_date:
+        if end_date and (time_now > end_date):
             self.error_detail.update(
                 dict(end_date="Не может быть указано задним числом")
             )

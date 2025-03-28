@@ -215,12 +215,12 @@ class TestBlock(models.Model):
     Модель тестового блока
     """
 
-    lesson = models.models.OneToOneField(Lesson,
-                                         on_delete=models.CASCADE,
-                                         related_name="test_block",
-                                         null=True,
-                                         blank=True,
-                                         )
+    lesson = models.OneToOneField(Lesson,
+                                  on_delete=models.CASCADE,
+                                  related_name="test_block",
+                                  null=True,
+                                  blank=True,
+                                  )
 
     class Meta:
         verbose_name = "тестовый блок"

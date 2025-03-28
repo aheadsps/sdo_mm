@@ -229,7 +229,7 @@ class TestEndpoints(APITestCase):
             data=data,
             format="json",
         )
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json(), 200)
 
     def test_delete_event(self):
         """

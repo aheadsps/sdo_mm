@@ -210,7 +210,7 @@ paths:
             application/json:
               schema:
                 type: object
-                $ref: "#/components/schemas/Event"
+                $ref: "#/components/schemas/EventView"
         "401":
           $ref: "#/components/responses/Unauthorized"
         "403":
@@ -392,10 +392,10 @@ paths:
                 $ref: "#/components/schemas/EventCreate"
             application/x-www-form-urlencoded:
               schema:
-                $ref: "#/components/schemas/Event"
+                $ref: "#/components/schemas/EventCreate"
             multipart/form-data:
               schema:
-                $ref: "#/components/schemas/Event"
+                $ref: "#/components/schemas/EventCreate"
         "400":
           $ref: "#/components/responses/BadRequest"
         "401":
@@ -439,7 +439,7 @@ paths:
           application/json:
             schema:
               type: object
-              $ref: "#/components/schemas/СourseView"
+              $ref: "#/components/schemas/CourseCreate"
       responses:
         "201":
           description: JSON ответ с новыми данными
@@ -447,13 +447,13 @@ paths:
             application/json:
               schema:
                 type: object
-                $ref: "#/components/schemas/СourseView"
+                $ref: "#/components/schemas/CourseCreate"
             application/x-www-form-urlencoded:
               schema:
-                $ref: "#/components/schemas/СourseView"
+                $ref: "#/components/schemas/CourseCreate"
             multipart/form-data:
               schema:
-                $ref: "#/components/schemas/СourseView"
+                $ref: "#/components/schemas/CourseCreate"
         "400":
           $ref: "#/components/responses/BadRequest"
         "401":
@@ -513,7 +513,7 @@ paths:
           application/json:
             schema:
               type: object
-              $ref: "#/components/schemas/СourseView"
+              $ref: "#/components/schemas/CourseCreate"
       responses:
         "200":
           description: JSON ответ с изменеными данными
@@ -521,7 +521,7 @@ paths:
             application/json:
               schema:
                 type: object
-                $ref: "#/components/schemas/СourseView"
+                $ref: "#/components/schemas/CourseCreate"
         "400":
           $ref: "#/components/responses/BadRequest"
         "401":
@@ -592,7 +592,7 @@ paths:
           application/json:
             schema:
               type: object
-              $ref: "#/components/schemas/LessonView"
+              $ref: "#/components/schemas/LessonCreate"
       responses:
         "201":
           description: JSON ответ с новыми данными
@@ -600,13 +600,13 @@ paths:
             application/json:
               schema:
                 type: object
-                $ref: "#/components/schemas/LessonView"
+                $ref: "#/components/schemas/LessonCreate"
             application/x-www-form-urlencoded:
               schema:
-                $ref: "#/components/schemas/LessonView"
+                $ref: "#/components/schemas/LessonCreate"
             multipart/form-data:
               schema:
-                $ref: "#/components/schemas/LessonView"
+                $ref: "#/components/schemas/LessonCreate"
         "400":
           $ref: "#/components/responses/BadRequest"
         "401":
@@ -666,7 +666,7 @@ paths:
           application/json:
             schema:
               type: object
-              $ref: "#/components/schemas/LessonView"
+              $ref: "#/components/schemas/LessonCreate"
       responses:
         "200":
           description: JSON ответ с изменеными данными
@@ -674,7 +674,7 @@ paths:
             application/json:
               schema:
                 type: object
-                $ref: "#/components/schemas/LessonView"
+                $ref: "#/components/schemas/LessonCreate"
         "400":
           $ref: "#/components/responses/BadRequest"
         "401":
@@ -745,7 +745,7 @@ paths:
           application/json:
             schema:
               type: object
-              $ref: "#/components/schemas/StepView"
+              $ref: "#/components/schemas/StepCreate"
       responses:
         "201":
           description: JSON ответ с новыми данными
@@ -753,13 +753,13 @@ paths:
             application/json:
               schema:
                 type: object
-                $ref: "#/components/schemas/StepView"
+                $ref: "#/components/schemas/StepCreate"
             application/x-www-form-urlencoded:
               schema:
-                $ref: "#/components/schemas/StepView"
+                $ref: "#/components/schemas/StepCreate"
             multipart/form-data:
               schema:
-                $ref: "#/components/schemas/StepView"
+                $ref: "#/components/schemas/StepCreate"
         "400":
           $ref: "#/components/responses/BadRequest"
         "401":
@@ -819,7 +819,7 @@ paths:
           application/json:
             schema:
               type: object
-              $ref: "#/components/schemas/StepView"
+              $ref: "#/components/schemas/StepCreate"
       responses:
         "200":
           description: JSON ответ с изменеными данными
@@ -827,7 +827,7 @@ paths:
             application/json:
               schema:
                 type: object
-                $ref: "#/components/schemas/StepView"
+                $ref: "#/components/schemas/StepCreate"
         "400":
           $ref: "#/components/responses/BadRequest"
         "401":
@@ -887,44 +887,6 @@ paths:
               schema:
                 type: object
                 $ref: "#/components/schemas/TestBlockView"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "422":
-          $ref: "#/components/responses/UnprocessableEntity"
-    put:
-      operationId: api_test-block_update
-      parameters:
-        - in: path
-          name: block_id
-          required: true
-          schema:
-            type: integer
-            minimum: 1
-      summary: Обновление тестового блока (для администрации или методиста)
-      tags:
-        - TestBlock
-      security:
-        - Token: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              $ref: "#/components/schemas/TestBlockView"
-      responses:
-        "200":
-          description: JSON ответ с изменеными данными
-          content:
-            application/json:
-              schema:
-                type: object
-                $ref: "#/components/schemas/TestBlockView"
-        "400":
-          $ref: "#/components/responses/BadRequest"
         "401":
           $ref: "#/components/responses/Unauthorized"
         "403":
@@ -1238,6 +1200,47 @@ components:
           items:
             $ref: "#/components/schemas/LessonStory"
 
+    CourseCreate:
+      description: Сущность курса упрощеная
+      additionalProperties: false
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 256
+          readOnly: false
+          nullable: false
+        description:
+          type: string
+          readOnly: false
+          nullable: true
+        beginer:
+          type: boolean
+          default: false
+          description: Является ли курс для начинающих?
+        image:
+          type: string
+          format: path
+          readOnly: false
+          nullable: true
+        profession:
+          type: integer
+          description: Для какой профессии предназначен курс
+          nullable: true
+          minimum: 1
+        experiences:
+          type: array
+          description: Список стажевых интервалов для которых подходит данный курс
+          minItems: 1
+          items:
+            type: integer
+            minimum: 1
+      required:
+        - id
+        - name
+        - profession
+        - experiences
+
     Сourse:
       description: Сущность курса упрощеная
       additionalProperties: false
@@ -1267,7 +1270,7 @@ components:
           format: path
           readOnly: false
           nullable: true
-        profession_id:
+        profession:
           type: integer
           description: Для какой профессии предназначен курс
           nullable: true
@@ -1294,11 +1297,11 @@ components:
           type: integer
           minimum: 1
           readOnly: true
-        user_id:
+        user:
           type: integer
           minimum: 1
           readOnly: true
-        lesson_id:
+        lesson:
           type: integer
           minimum: 1
           readOnly: true
@@ -1328,7 +1331,7 @@ components:
           minimum: 1
           readOnly: false
           nullable: false
-        course_id:
+        course:
           type: integer
           minimum: 1
         steps:
@@ -1341,6 +1344,32 @@ components:
           type: object
           description: Тестовый блок
           $ref: '#/components/schemas/TestBlockView'
+
+    LessonCreate:
+      description: Сущность урока создание
+      additionalProperties: false
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+          minimum: 1
+        name:
+          type: string
+          maxLength: 256
+          readOnly: false
+          nullable: false
+        serial:
+          type: integer
+          description: Порядковый номер урока (1 урок всегда открыт)
+          minimum: 1
+          readOnly: false
+          nullable: false
+        course:
+          type: integer
+          minimum: 1
+      required:
+        - name
 
     Lesson:
       description: Сущность урока
@@ -1362,7 +1391,7 @@ components:
           minimum: 1
           readOnly: false
           nullable: false
-        course_id:
+        course:
           type: integer
           minimum: 1
         steps:
@@ -1373,9 +1402,34 @@ components:
             type: object
             minimum: 1
             $ref: "#/components/schemas/Step"
-        test_block_id:
+        test_block:
           type: integer
           description: Тестовый блок
+          minimum: 1
+
+    StepCreate:
+      description: Шаги урока создание
+      properties:
+        id:
+          type: integer
+          readOnly: true
+          minimum: 1
+        title:
+          type: string
+          maxLength: 256
+          readOnly: false
+          nullable: false
+        content_text:
+          type: string
+          readOnly: false
+        serial:
+          type: integer
+          description: Порядковый номер шага (1 шаг всегда открыт)
+          minimum: 1
+          readOnly: false
+          nullable: false
+        lesson:
+          type: integer
           minimum: 1
 
     Step:
@@ -1393,6 +1447,9 @@ components:
         content_text:
           type: string
           readOnly: false
+        lesson:
+          type: integer
+          minimum: 1
         serial:
           type: integer
           description: Порядковый номер шага (1 шаг всегда открыт)
@@ -1425,6 +1482,9 @@ components:
           minimum: 1
           readOnly: false
           nullable: false
+        lesson:
+          type: integer
+          minimum: 1
         attachments:
           type: array
           description: Медиа вложения. (Только в логике сериализатора, в модели не реализуем!)
@@ -1442,7 +1502,7 @@ components:
           type: integer
           minimum: 1
           readOnly: true
-        lesson_id:
+        lesson:
           description: В модели делаем полноценную связь, в сериализаторе только id
           type: integer
           minimum: 1
@@ -1470,7 +1530,7 @@ components:
           type: integer
           minimum: 1
           readOnly: true
-        lesson_id:
+        lesson:
           description: В модели делаем полноценную связь, в сериализаторе только id
           type: integer
           minimum: 1
@@ -1615,11 +1675,11 @@ components:
           type: integer
           readOnly: true
           minimum: 1
-        user_id:
+        user:
           type: integer
           readOnly: true
           minimum: 1
-        lesson_id:
+        lesson:
           type: integer
           readOnly: true
           minimum: 1
@@ -1628,7 +1688,7 @@ components:
           format: date-time
           readOnly: true
           nullable: false
-        answer_id:
+        answer:
           type: integer
           description: Текущий ответ
           nullable: true
@@ -1639,17 +1699,17 @@ components:
       additionalProperties: false
       type: object
       properties:
-        course_id:
+        course:
           type: integer
           minimum: 1
           readOnly: true
           nullable: false
-        lesson_id:
+        lesson:
           type: integer
           minimum: 1
           readOnly: true
           nullable: false
-        user_id:
+        user:
           type: integer
           minimum: 1
           readOnly: true
@@ -1665,10 +1725,10 @@ components:
       additionalProperties: false
       type: object
       properties:
-        user_id:
+        user:
           type: integer
           minimum: 1
-        course_id:
+        course:
           type: integer
           minimum: 1
         done_lessons:
@@ -1699,12 +1759,12 @@ components:
           readOnly: true
           default: expected
 
-    Event:
+    EventView:
       description: Сущность задачи (курс) которая присваивается пользователю
       additionalProperties: false
       type: object
       properties:
-        user_id:
+        user:
           type: integer
           minimum: 1
         course:
@@ -1712,6 +1772,48 @@ components:
           readOnly: false
           minimum: 1
           $ref: "#/components/schemas/СourseView"
+        done_lessons:
+          type: integer
+          readOnly: true
+          default: 0
+        start_date:
+          type: string
+          format: date-time
+          readOnly: false
+          nullable: true
+        end_date:
+          type: string
+          format: date-time
+          readOnly: false
+          nullable: true
+        favorite:
+          type: boolean
+          description: Флаг избранного
+          default: false
+          readOnly: false
+        status:
+          description: Статус прохождения курса
+          enum:
+            - done
+            - process
+            - failed
+            - expected
+          readOnly: true
+          default: expected
+
+    Event:
+      description: Сущность задачи (курс) упрощенная
+      additionalProperties: false
+      type: object
+      properties:
+        user:
+          type: integer
+          minimum: 1
+        course:
+          type: object
+          readOnly: false
+          minimum: 1
+          $ref: "#/components/schemas/Сourse"
         done_lessons:
           type: integer
           readOnly: true
