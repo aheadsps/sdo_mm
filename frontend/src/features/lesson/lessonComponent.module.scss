@@ -30,14 +30,28 @@
   width: auto;
   display: flex;
   justify-content: space-between;
-
   @media screen and (max-width: 1349px) {
     flex-direction: column;
     gap: 20px;
   }
+  @media screen and (max-width: 768px) {
+    margin-bottom: 40px;
+  }
 }
 .title {
   color: var(--color-text-primary);
+  font-family: Manrope;
+  font-weight: 700;
+  font-size: var(--font-size-xl);
+  line-height: 125%;
+  letter-spacing: 0.5px;
+  vertical-align: middle;
+  @media screen and (min-width: 768px) and (max-width: 1349px) {
+    font-size: var(--font-size-h6);
+  }
+  @media screen and (max-width: 768px) {
+    font-size: var(--font-size-m);
+  }
 }
 .buttonsBlock {
   display: flex;
@@ -47,7 +61,7 @@
     gap: 24px;
   }
   @media screen and (max-width: 767px) {
-    gap: 16px;
+    gap: 14px;
   }
 }
 .button {
@@ -76,7 +90,7 @@
   height: 100%;
   display: flex;
   gap: 30px;
-  @media screen and (min-width: 768px) and (max-width: 1349px) {
+  @media screen and (max-width: 1349px) {
     width: 100%;
     flex-direction: column;
     gap: 40px;
@@ -91,7 +105,7 @@
   flex-direction: column;
   gap: 20px;
   border-right-width: 1px var(--color-additional-border100);
-  @media screen and (min-width: 768px) and (max-width: 1349px) {
+  @media screen and (max-width: 1349px) {
     width: 100%;
   }
 }
@@ -139,14 +153,13 @@
 }
 .rightBox {
   width: 727px;
-  height: 705px;
+  height: fit-content;
   display: flex;
   flex-direction: column;
   gap: 30px;
   // align-items: flex-end;
-  @media screen and (min-width: 768px) and (max-width: 1349px) {
+  @media screen and (max-width: 1349px) {
     width: 100%;
-    // flex-direction: column;
   }
 }
 .rightTop {
@@ -169,8 +182,9 @@
   line-height: 130%;
   letter-spacing: 0.25px;
   vertical-align: middle;
-  @media screen and (min-width: 768px) and (max-width: 1349px) {
+  @media screen and (max-width: 1349px) {
     width: 85%;
+    font-size: var(--font-size-s);
   }
 }
 .countLessons {
@@ -183,6 +197,9 @@
   letter-spacing: 0.25px;
   vertical-align: middle;
   color: var(--color-text-secondary);
+  @media screen and (max-width: 1349px) {
+    font-size: var(--font-size-s);
+  }
 }
 .lessonDesc {
   width: 727px;
@@ -193,7 +210,7 @@
   line-height: 140%;
   letter-spacing: 0.25px;
   vertical-align: middle;
-  @media screen and (min-width: 768px) and (max-width: 1349px) {
+  @media screen and (max-width: 1349px) {
     width: 100%;
     font-size: var(--font-size-xs);
   }
@@ -207,7 +224,7 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  @media screen and (min-width: 768px) and (max-width: 1349px) {
+  @media screen and (max-width: 1349px) {
     width: 100%;
   }
 }
@@ -224,7 +241,7 @@
 }
 .hintTxt {
   width: 97%;
-  height: 50px;
+  height: fit-content;
   font-family: Moscow Sans;
   font-weight: 300;
   font-size: var(--font-size-m);
@@ -241,4 +258,9 @@
   gap: 30px;
   margin: 0;
   padding: 0;
+  @media screen and (max-width: 767px) {
+    height: fit-content;
+    flex-direction: column;
+    gap: 24px;
+  }
 }
