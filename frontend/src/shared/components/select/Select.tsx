@@ -1,4 +1,5 @@
 import { useToggle } from '@shared/hooks/useToggle'
+import clsx from 'clsx'
 import { useState } from 'react'
 
 import { ArrowDownIcon, ArrowUpIcon } from '@assets/icons'
@@ -8,16 +9,17 @@ import { Typography } from '../typography'
 import styles from './Select.module.scss'
 
 type Option = {
-  label: string
+  id: number
   value: string
 }
 
 type Props = {
   options: Option[]
   placeholder?: string
+  className?: string
 }
 
-const Select = ({ options, placeholder = 'Выбрать' }: Props) => {
+export const Select = ({ options, placeholder = 'Выбрать', className }: Props) => {
   const { isOpen, toggle, close } = useToggle()
   const [selected, setSelected] = useState<Option | null>(null)
 
@@ -27,7 +29,7 @@ const Select = ({ options, placeholder = 'Выбрать' }: Props) => {
   }
 
   return (
-    <div className={styles.selectContainer}>
+    <div className={clsx(styles.selectContainer, className)}>
       <div
         className={styles.selectBox}
         onClick={toggle}
@@ -41,7 +43,7 @@ const Select = ({ options, placeholder = 'Выбрать' }: Props) => {
           className={selected ? styles.selectedText : styles.placeholder}
           variant="body_1"
         >
-          {selected ? selected.label : placeholder}
+          {selected ? selected.value : placeholder}
         </Typography>
         {isOpen ? (
           <ArrowUpIcon width={'12px'} height={'12px'} />
@@ -60,7 +62,7 @@ const Select = ({ options, placeholder = 'Выбрать' }: Props) => {
               aria-selected={selected?.value === option.value}
               tabIndex={0}
             >
-              {option.label}
+              {option.value}
             </div>
           ))}
         </div>
@@ -68,5 +70,3 @@ const Select = ({ options, placeholder = 'Выбрать' }: Props) => {
     </div>
   )
 }
-
-export default Select
