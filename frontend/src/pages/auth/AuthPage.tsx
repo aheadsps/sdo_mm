@@ -24,7 +24,7 @@ export const AuthPage: React.FC = () => {
     <div className={styles.authPage__container}>
       <Header />
       <AuthForm />
-      <ImageComponent className={styles.authPage__image} src="/img/img_tmp/bg_train.png" />
+      <ImageComponent className={styles.authPage__image} src="/img/img_tmp/bg_trains.png" />
     </div>
   )
 }

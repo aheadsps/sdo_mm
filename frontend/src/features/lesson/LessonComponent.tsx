@@ -1,10 +1,9 @@
-import { DropdownCard } from '@features/course'
+import { ArrowLeftIcon } from '@assets/icons'
+import { DropdownCard } from '@shared/components'
 import { AiComponent, Button, Typography } from '@shared/components'
 import Video from '@shared/components/video/VideoComponent'
 import { useToggle } from '@shared/hooks/useToggle'
 import { ReactNode } from 'react'
-
-import { ArrowLeftIcon, YouTubeLogo } from '@assets/icons'
 
 import s from './lessonComponent.module.scss'
 

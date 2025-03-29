@@ -82,10 +82,10 @@
   src:
     local('Moscow Sans'),
     local('Moscow-Sans'),
-    url('/fonts/MoscowSans/moscowsansregular.ttf') format('ttf'),
-    url('/fonts/MoscowSans/moscowsansregular.woff2') format('woff2'),
-    url('/fonts/MoscowSans/moscowsansregular.eot') format('eot'),
-    url('/fonts/MoscowSans/moscowsansregular.woff') format('woff');
+    url('/fonts/MoscowSans/moscowsansregulars.ttf') format('ttf'),
+    url('/fonts/MoscowSans/moscowsansregulars.woff2') format('woff2'),
+    url('/fonts/MoscowSans/moscowsansregulars.eot') format('eot'),
+    url('/fonts/MoscowSans/moscowsansregulars.woff') format('woff');
   font-display: swap;
 }
 
