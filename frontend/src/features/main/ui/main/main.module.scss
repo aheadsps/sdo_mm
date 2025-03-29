@@ -1,3 +1,6 @@
+<<<<<<< HEAD
+.main {
+=======
 /* .main {
   margin-top: 93px;
   padding: 20px;
@@ -41,6 +44,7 @@
  */
 
  .main {
+>>>>>>> develop
   margin-top: 93px;
   padding: 20px;
 }
@@ -95,12 +99,17 @@
   color: var(--color-text-primary);
 }
 
+.noTasksText {
+  color: var(--color-text-secondary);
+}
+
 .rightBlock {
   margin-left: 32px;
 }
 
 .expiredTasks {
   margin-top: 40px;
+  margin-bottom: 40px;
 }
 
 .appointedTask {

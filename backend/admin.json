@@ -8,6 +8,110 @@
         }
     },
     {
+        "model": "lessons.answer",
+        "pk": 1,
+        "fields": {
+            "text": "Питонист",
+            "correct": false,
+            "question": 1
+        }
+    },
+    {
+        "model": "lessons.answer",
+        "pk": 2,
+        "fields": {
+            "text": "Фронт",
+            "correct": false,
+            "question": 1
+        }
+    },
+    {
+        "model": "lessons.answer",
+        "pk": 3,
+        "fields": {
+            "text": "Человек",
+            "correct": true,
+            "question": 1
+        }
+    },
+    {
+        "model": "lessons.answer",
+        "pk": 4,
+        "fields": {
+            "text": "Инопланетянин",
+            "correct": true,
+            "question": 1
+        }
+    },
+    {
+        "model": "lessons.answer",
+        "pk": 5,
+        "fields": {
+            "text": "Еети",
+            "correct": false,
+            "question": 1
+        }
+    },
+    {
+        "model": "lessons.answer",
+        "pk": 5,
+        "fields": {
+            "text": "Да, хз",
+            "correct": false,
+            "question": 2
+        }
+    },
+    {
+        "model": "lessons.answer",
+        "pk": 6,
+        "fields": {
+            "text": "Завтра",
+            "correct": false,
+            "question": 2
+        }
+    },
+    {
+        "model": "lessons.answer",
+        "pk": 7,
+        "fields": {
+            "text": "Через неделю",
+            "correct": false,
+            "question": 2
+        }
+    },
+    {
+        "model": "lessons.answer",
+        "pk": 8,
+        "fields": {
+            "text": "Через 2 недели",
+            "correct": true,
+            "question": 2
+        }
+    },
+    {
+        "model": "lessons.question",
+        "pk": 1,
+        "fields": {
+            "text": "Кто ты такой?",
+            "image": "",
+            "test_block": 1
+        }
+    },
+    {
+        "model": "lessons.question",
+        "pk": 2,
+        "fields": {
+            "text": "Когда закончим?",
+            "image": "",
+            "test_block": 1
+        }
+    },
+    {
+        "model": "lessons.testblock",
+        "pk": 1,
+        "fields": {}
+    },
+    {
         "model": "users.profession",
         "pk": 1,
         "fields": {
