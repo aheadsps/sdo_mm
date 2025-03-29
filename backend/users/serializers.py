@@ -1,7 +1,6 @@
 from authemail.serializers import UserSerializer
 from django.contrib.auth import authenticate
 from rest_framework import serializers
-
 from users import models
 
 
