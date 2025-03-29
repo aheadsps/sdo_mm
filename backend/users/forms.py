@@ -1,7 +1,6 @@
 from datetime import timedelta
 
 from authemail.forms import EmailUserCreationForm
-
 from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
@@ -10,7 +9,7 @@ from django.utils import timezone
 from django.utils.translation import gettext as _
 
 from .models import Profile
-from .utils import generate_random_password, custom_send_multi_format_email
+from .utils import custom_send_multi_format_email, generate_random_password
 
 MAX_WORK_EXPERIENCE_YEARS = 60
 
@@ -26,13 +25,13 @@ class CustomUserCreationForm(EmailUserCreationForm):
 
     date_commencement = forms.DateField(
         required=True,
-        widget=forms.DateInput(attrs={'type': 'date'}),
-        label=_('Дата начала')
+        widget=forms.DateInput(attrs={"type": "date"}),
+        label=_("Дата начала"),
     )
 
     class Meta:
         model = get_user_model()
-        fields = ('email', 'date_commencement', "profession")
+        fields = ("email", "date_commencement", "profession")
 
     def clean_email(self):
         """
@@ -41,25 +40,25 @@ class CustomUserCreationForm(EmailUserCreationForm):
         try:
             return super().clean_email()
         except forms.ValidationError:
-            raise forms.ValidationError(
-                _('Пользователь с таким email уже существует.'))
+            raise forms.ValidationError(_("Пользователь с таким email уже существует."))
 
     def clean_date_commencement(self):
-        """ Валидация поля date_commencement по ограничениям стажа """
+        """Валидация поля date_commencement по ограничениям стажа"""
 
-        date_commencement = self.cleaned_data.get('date_commencement')
+        date_commencement = self.cleaned_data.get("date_commencement")
 
         today = timezone.now().date()
 
         if date_commencement > today:
             raise ValidationError(
-                'Дата начала работы не может быть больше текущей даты.')
+                "Дата начала работы не может быть больше текущей даты."
+            )
 
-        max_commencement_date = today - timedelta(
-            days=365 * MAX_WORK_EXPERIENCE_YEARS)
+        max_commencement_date = today - timedelta(days=365 * MAX_WORK_EXPERIENCE_YEARS)
         if date_commencement < max_commencement_date:
             raise ValidationError(
-                f'Стаж не может быть больше {MAX_WORK_EXPERIENCE_YEARS} лет.')
+                f"Стаж не может быть больше {MAX_WORK_EXPERIENCE_YEARS} лет."
+            )
 
         return date_commencement
 
@@ -89,17 +88,18 @@ class CustomUserCreationForm(EmailUserCreationForm):
             user.groups.add(user_group)
 
             custom_send_multi_format_email(
-                'welcome_email',
-                {'email': user.email, 'password': random_password},
-                target_email=user.email
+                "welcome_email",
+                {"email": user.email, "password": random_password},
+                target_email=user.email,
             )
 
         except Exception as e:
             raise Exception(
-                f"Ошибка при сохранении пользователя или отправке email: {str(e)}")
+                f"Ошибка при сохранении пользователя или отправке email: {str(e)}"
+            )
 
         return user
 
     def save_m2m(self):
-        """ Пустой метод для совместимости с Django. """
+        """Пустой метод для совместимости с Django."""
         pass

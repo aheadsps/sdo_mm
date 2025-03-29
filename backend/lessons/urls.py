@@ -12,11 +12,11 @@ router = routers.SimpleRouter(
 router.register(prefix=r'events', viewset=views.EventViewSet)
 router.register(prefix=r'step', viewset=views.StepViewSet)
 router.register(prefix=r'courses', viewset=views.CourseViewSet)
-router.register(r'lessons', viewset=views.LessonViewSet)
+router.register(prefix=r'lessons', viewset=views.LessonViewSet)
+router.register(prefix=r'test-block', viewset=views.TestBlockViewSet)
+router.register(prefix=r'questions', viewset=views.QuestionViewSet)
+router.register(prefix=r'answers', viewset=views.AnswerViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('test-block/<int:block_id>',
-         view=views.TestBlockGeneric.as_view(),
-         name='test_block')
 ]

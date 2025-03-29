@@ -2,7 +2,15 @@ import { forwardRef, SVGProps, Ref } from 'react'
 
 const LikeIcon = forwardRef<SVGSVGElement, SVGProps<SVGSVGElement>>(
   (props, ref: Ref<SVGSVGElement>) => (
-    <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg
+      width="44"
+      height="44"
+      viewBox="0 0 44 44"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      ref={ref}
+      {...props}
+    >
       <rect x="5.25" y="5.25" width="33.5" height="33.5" rx="16.75" fill="#DC3444" />
       <rect
         x="5.25"
@@ -12,8 +20,6 @@ const LikeIcon = forwardRef<SVGSVGElement, SVGProps<SVGSVGElement>>(
         rx="16.75"
         stroke="#F8F9FA"
         stroke-width="0.5"
-        ref={ref}
-        {...props}
       />
       <g clipPath="url(#clip0_5322_15994)">
         <path

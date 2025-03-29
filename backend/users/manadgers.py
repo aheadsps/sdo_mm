@@ -7,12 +7,15 @@ class EmailUserManagerAddProf(EmailUserManager):
     Менеджер для корректной работый специфицеских частей программы
     """
 
-    def _create_user(self, email: str,
-                     password: str,
-                     is_staff: bool,
-                     is_superuser: bool,
-                     is_verified: bool,
-                     **extra_fields):
+    def _create_user(
+        self,
+        email: str,
+        password: str,
+        is_staff: bool,
+        is_superuser: bool,
+        is_verified: bool,
+        **extra_fields
+    ):
         """
         Кастомное добавление профессии
         При команде createsuperuser создание профессии 'admin'
@@ -26,33 +29,40 @@ class EmailUserManagerAddProf(EmailUserManager):
 
         now = timezone.now()
         if not email:
-            raise ValueError('Users must have an email address')
+            raise ValueError("Users must have an email address")
         email = self.normalize_email(email)
 
         try:
-            profession = Profession.objects.get(en_name='admin')
+            profession = Profession.objects.get(en_name="admin")
         except Profession.DoesNotExist:
             # если не создаем группу админ и профессию админ
             profession = Profession.objects.create(
-                en_name='admin',
-                ru_name='admin',
-                )
+                en_name="admin",
+                ru_name="admin",
+            )
             profession_group = ProfessionGroup.objects.create(
                 profession=profession,
-                )
+            )
         else:
             # Ищем группу для этой профессии
-            profession_group = ProfessionGroup.objects.order_by('-id').filter(
-                profession=profession.pk
-            ).first()
+            profession_group = (
+                ProfessionGroup.objects.order_by("-id")
+                .filter(profession=profession.pk)
+                .first()
+            )
 
         # Юзеру назначаем профессию
-        user = self.model(email=email,
-                          is_staff=is_staff, is_active=True,
-                          is_superuser=is_superuser, is_verified=is_verified,
-                          last_login=now, date_joined=now,
-                          profession=profession,
-                          **extra_fields)
+        user = self.model(
+            email=email,
+            is_staff=is_staff,
+            is_active=True,
+            is_superuser=is_superuser,
+            is_verified=is_verified,
+            last_login=now,
+            date_joined=now,
+            profession=profession,
+            **extra_fields
+        )
         user.set_password(password)
         user.save(using=self._db)
         user_new = User.objects.get(email=email)

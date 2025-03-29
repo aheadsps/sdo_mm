@@ -1,19 +1,10 @@
+from authemail.admin import EmailUserAdmin, SignupCodeInline
 from authemail.models import EmailChangeCode, PasswordResetCode
 from django.contrib import admin
 from django.contrib.auth import get_user_model
-
-from authemail.admin import (
-    EmailUserAdmin,
-    SignupCodeInline,
-)
-from users.models import (
-    Profile,
-    Profession,
-    ProfessionGroup,
-    User,
-    WorkExperience,
-)
 from users.forms import CustomUserCreationForm
+from users.models import (Profession, ProfessionGroup, Profile, User,
+                          WorkExperience)
 
 # Отключение регистрации моделей в админке
 admin.site.unregister(EmailChangeCode)
@@ -55,8 +46,7 @@ class UserAdmin(EmailUserAdmin):
     )
     fieldsets = (
         (None, {"fields": ("email", "password")}),
-        ("Personal Info",
-         {"fields": ("first_name", "last_name", "profession")}),
+        ("Personal Info", {"fields": ("first_name", "last_name", "profession")}),
         (
             "Important dates",
             {"fields": ("date_joined", "last_login", "date_commencement")},
@@ -99,8 +89,7 @@ def save_model(self, request, obj, form, change):
         # если профессия изменилась
         if old_instance.profession != form.instance.profession:
             # Удалить user в старой ProfessionGroup
-            profession_group = ProfessionGroup.objects.get(
-                students=old_instance.pk)
+            profession_group = ProfessionGroup.objects.get(students=old_instance.pk)
             profession_group.students.remove(form.instance)
             # Добавить user в созданную последней ProfessionGroup
             profession_group = (
@@ -133,14 +122,6 @@ def save_model(self, request, obj, form, change):
         except Exception:
             # обработка ошибки добавления юзера в группу профессий
             pass
-
-
-@admin.register(WorkExperience)
-class AdminWorkExperience(admin.ModelAdmin):
-    """
-    Админ панель стажа
-    """
-    list_display = ('years',)
 
 
 @admin.register(Profile)
