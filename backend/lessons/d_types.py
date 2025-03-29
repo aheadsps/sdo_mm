@@ -1,3 +1,3 @@
 from typing import Any, TypeVar
 
-VD = TypeVar('VD', bound=dict[str, Any])
+VD = TypeVar("VD", bound=dict[str, Any])

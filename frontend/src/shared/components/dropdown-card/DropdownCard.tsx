@@ -5,13 +5,14 @@ import { ComponentPropsWithoutRef } from 'react'
 import { LessonItemTitle } from '../../../features/course/lesson-item-title/LessonItemTitle'
 
 import s from './dropdown-card.module.scss'
+import clsx from 'clsx'
 
 type Props = {
   title: string
   blocks: string
 } & ComponentPropsWithoutRef<'div'>
 
-export const DropdownCard = ({ title, children, blocks }: Props) => {
+export const DropdownCard = ({ className, title, children, blocks }: Props) => {
   const { isOpen: isOpenDropdown, toggle: toggleDropdown } = useToggle()
 
   return (
@@ -21,7 +22,10 @@ export const DropdownCard = ({ title, children, blocks }: Props) => {
           {isOpenDropdown ? <ArrowUpIcon /> : <ArrowDownIcon />}
         </LessonItemTitle>
       </div>
-      {isOpenDropdown && <div className={s.dropdownContent}>{children}</div>}
+      {/*  className={s.dropdownContent}*/}
+      {isOpenDropdown && (
+        <div className={clsx(s.dropdownContent, className as string)}>{children}</div>
+      )}
     </div>
   )
 }

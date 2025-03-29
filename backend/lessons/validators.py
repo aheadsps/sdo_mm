@@ -1,9 +1,10 @@
 import datetime
 
 from django.utils import timezone
+from loguru import logger
 
-from lessons.utils import get_value, tigger_to_check
 from lessons import exceptions
+from lessons.utils import get_value, tigger_to_check
 
 
 class MoreThanZeroValidator:
@@ -40,10 +41,11 @@ class TimeValidator:
         self.end_date = str(end_date)
         self.error_detail = dict()
 
-    def _check_up_time(self,
-                       start_date: datetime.datetime,
-                       end_date: datetime.datetime,
-                       ) -> None:
+    def _check_up_time(
+        self,
+        start_date: datetime.datetime,
+        end_date: datetime.datetime,
+    ) -> None:
         """
         Проверка корректности временых рамок
 
@@ -55,12 +57,21 @@ class TimeValidator:
             exceptions.UnprocessableEntityError: Исключение в случае не соотвествия
         """
         time_now = timezone.now()
-        if start_date and time_now > start_date:
-            self.error_detail.update(dict(start_date='Не может быть указано задним числом'))
-        if end_date and time_now > end_date:
-            self.error_detail.update(dict(end_date='Не может быть указано задним числом'))
+        logger.debug(f'dates in validator \nstart_date:{start_date} \nend_date: {end_date} \ntime_now: {time_now}')
+        if start_date and (time_now > start_date):
+            logger.debug(f'enter to error start_date {start_date and (time_now > start_date)}')
+            self.error_detail.update(
+                dict(start_date="Не может быть указано задним числом")
+            )
+        if end_date and (time_now > end_date):
+            logger.debug(f'enter to error end_date {end_date and (time_now > end_date)}')
+            self.error_detail.update(
+                dict(end_date="Не может быть указано задним числом")
+            )
         if (start_date and end_date) and (start_date >= end_date):
-            self.error_detail.update(dict(date='start_date не может быть позже чем end_date'))
+            self.error_detail.update(
+                dict(date="start_date не может быть позже чем end_date")
+            )
         self._process_error(error_detail=self.error_detail)
 
     def _process_error(self, error_detail: dict[str, str]) -> None:
@@ -70,6 +81,7 @@ class TimeValidator:
             )
 
     def __call__(self, attrs, serializer):
+        self.error_detail = dict()
         need_check = tigger_to_check(attrs, self.start_date, self.end_date)
         if need_check:
             start_date = get_value(self.start_date, attrs, serializer)
@@ -77,4 +89,4 @@ class TimeValidator:
             self._check_up_time(
                 start_date=start_date,
                 end_date=end_date,
-                )
+            )

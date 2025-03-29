@@ -4,15 +4,15 @@
   min-height: 90px;
   position: relative;
 
-  &::after {
-    position: absolute;
-    content: '';
-    height: 1px;
-    background-color: var(--color-additional-border100);
-    width: 50%;
-    left: 25%;
-    bottom: 0;
-  }
+  // &::after {
+  //   position: absolute;
+  //   content: '';
+  //   height: 1px;
+  //   background-color: var(--color-additional-border100);
+  //   width: 50%;
+  //   left: 25%;
+  //   bottom: 0;
+  // }
 }
 
 .dropdownHeader {
@@ -43,3 +43,9 @@
 .dropdownTitle {
   color: var(--color-text-primary);
 }
+// .dropdown {
+//   padding: 0;
+//   &::after {
+//     background-color: var(--color-bg-main)
+//   }
+// }
