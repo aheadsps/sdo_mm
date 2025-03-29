@@ -1,10 +1,8 @@
 import LessonComponent from '@features/lesson/LessonComponent'
-import { Button, Tabs, Typography, AiComponent } from '@shared/components'
+import { routes } from '@routes/routes'
+import { Button, Tabs, Typography, AiComponent, BackToPage } from '@shared/components'
 import { useToggle } from '@shared/hooks/useToggle'
 import { useState } from 'react'
-import { NavLink } from 'react-router-dom'
-
-import { ArrowLeftIcon } from '@assets/icons'
 
 import s from './course.module.scss'
 import { tabsData } from './tabs/tabsData'
