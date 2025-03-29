@@ -1,0 +1,51 @@
+.selectContainer {
+  display: flex;
+  flex-direction: column;
+  width: 220px;
+  font-family: var(--font-family-secondary);
+}
+
+.selectBox {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid var(--color-additional-border700);
+  cursor: pointer;
+  background: var(--color-bg-main);
+}
+
+.selectedText {
+  color: var(--color-text-primary);
+}
+
+.placeholder {
+  color: var(--color-text-secondary);
+}
+
+.dropdown {
+  border: 1px solid var(--color-additional-border100);
+  border-bottom-right-radius: 8px;
+  border-bottom-left-radius: 8px;
+  background: var(--color-bg-main);
+  overflow: auto;
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px;
+  cursor: pointer;
+  color: var(--color-text-primary);
+
+  &:hover {
+    background: var(--color-bg-3);
+    color: var(--color-bg-main);
+  }
+}
+
+.selected {
+  background: var(--color-accent-red500);
+  color: var(--color-bg-main);
+}
