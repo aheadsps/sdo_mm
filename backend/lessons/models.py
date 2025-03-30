@@ -7,7 +7,20 @@ from lessons.utils import (
     path_maker_question,
     path_maker_course,
     path_maker_content_attachment,
+    path_maker_scorm,
 )
+
+
+class SCORM(models.Model):
+    """
+    Модель представления SCORM
+    """
+    name = models.CharField(_("название"),
+                            max_length=256,
+                            )
+    file = models.FileField(_("файл scorm"),
+                            upload_to=path_maker_scorm,
+                            )
 
 
 class Event(models.Model):
