@@ -15,8 +15,8 @@ class CoreSCORM:
     """
     Ядро работы конструктора SCORM
     """
-    def __init__(self, file: os.PathLike | io.IOBase[bytes]):
-        self.file = file
+    # def __init__(self, file: os.PathLike | io.IOBase[bytes]):
+    #     self.file = file
 
     def extract_package(self, package_file: os.PathLike | io.IOBase[bytes]):
         """
@@ -33,15 +33,11 @@ class CoreSCORM:
                 zip_infos=zipinfos
             )
             logger.debug(f'root_path: {root_path}')
-
-            for zipinfo in zipinfos:
-                if zipinfo.filename.startswith(root_path):
-                    if not is_dir(zipinfo):
-                        logger.debug(f'zipinfo is {zipinfo}')
-                        SCORM._default_manager.create(
-                            name=zipinfo.filename,
-                            file=ContentFile(scorm_zipfile.read(zipinfo.filename),),
-                            )
+            self._save_extract_file(
+                zip_file=scorm_zipfile,
+                zip_infos=zipinfos,
+                root_path=root_path,
+            )
 
     def _get_root_path(self, zip_infos: zipfile.ZipInfo) -> str:
         """
@@ -63,3 +59,20 @@ class CoreSCORM:
             )
 
         return root_path
+
+    def _save_extract_file(self,
+                           zip_file: zipfile.ZipFile,
+                           zip_infos: zipfile.ZipInfo,
+                           root_path: str,
+                           ) -> None:
+        """
+        Сохранение извлеченного файла
+        """
+        for zipinfo in zip_infos:
+            if zipinfo.filename.startswith(root_path):
+                if not is_dir(zipinfo):
+                    logger.debug(f'zipinfo is {zipinfo}')
+                    SCORM._default_manager.create(
+                        name=zipinfo.filename,
+                        file=ContentFile(zip_file.read(zipinfo.filename),),
+                        )
