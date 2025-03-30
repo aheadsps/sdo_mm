@@ -1,3 +1,4 @@
+import { LessonTest } from '@features/lessons/tests/Tests'
 import { createBrowserRouter } from 'react-router-dom'
 
 import { AuthPage } from '@pages/auth'
@@ -29,6 +30,10 @@ export const router = createBrowserRouter([
   {
     path: '/auth',
     element: <AuthPage />,
+  },
+  {
+    path: '/tests',
+    element: <LessonTest />,
   },
   {
     path: '/',
