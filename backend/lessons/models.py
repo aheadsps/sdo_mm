@@ -9,15 +9,42 @@ from lessons.utils import (
     path_maker_content_attachment,
     path_maker_scorm,
 )
+from lessons.mixins import PathModelMixin
+
+
+class CreateDirField(PathModelMixin, models.CharField):
+    """
+    Кастомное поле для создания папки от имени
+    """
+
+    ...
 
 
 class SCORM(models.Model):
     """
     Модель представления SCORM
     """
-    name = models.CharField(_("название"),
-                            max_length=256,
-                            )
+    name = CreateDirField(_("название"),
+                          max_length=256,
+                          unique=True,
+                          )
+
+    class Meta:
+        verbose_name = _("SCORM пакет")
+        verbose_name_plural = _("SCORM пакеты")
+
+    def __str__(self):
+        return self.name
+
+
+class SCORMFile(models.Model):
+    """
+    Модель представления SCORM файлов
+    """
+    scorm = models.ForeignKey(SCORM,
+                              verbose_name=_("SCORM"),
+                              on_delete=models.CASCADE,
+                              )
     file = models.FileField(_("файл scorm"),
                             upload_to=path_maker_scorm,
                             )

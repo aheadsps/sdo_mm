@@ -25,6 +25,9 @@ TEST_IMAGE_PATH = BASE_DIR.joinpath(*("lessons", "tests", "image.png"))
 TEST_IMAGE_PATH_2 = BASE_DIR.joinpath(*("lessons", "tests", "image2.png"))
 
 
+TEST_SCORM_PATH = BASE_DIR.joinpath(*("lessons", "scorm", "tests", "SCORM.zip"))
+
+
 SCORM_MANIFEST_NAME = 'imsmanifest.xml'
 
 OS_PATH_ALT_SEP = '\\'

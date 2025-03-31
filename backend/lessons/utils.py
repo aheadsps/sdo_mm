@@ -9,7 +9,7 @@ from loguru import logger
 from pydantic import BaseModel, Field
 
 if TYPE_CHECKING:
-    from lessons.models import Question, Course, ContentAttachment, SCORM
+    from lessons.models import Question, Course, ContentAttachment, SCORMFile
 
 
 def latinizator(dic):
@@ -179,12 +179,12 @@ def path_maker_course(instance: "Course", filename: str) -> str:
     return f"course/{text_tranc}/{filename}"
 
 
-def path_maker_scorm(instance: "SCORM", filename: str) -> str:
+def path_maker_scorm(instance: "SCORMFile", filename: str) -> str:
     """
     Создает корректный путь для сохранения файлов
     в системе.
     """
-    text_tranc = instance.name
+    text_tranc = str(instance)
     return f"scorm/{text_tranc}/{filename}"
 
 
