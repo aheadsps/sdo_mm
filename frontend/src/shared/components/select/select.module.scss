@@ -3,6 +3,7 @@
   flex-direction: column;
   width: 200px;
   font-family: var(--font-family-secondary);
+  position: relative;
 }
 
 .selectBox {
@@ -30,6 +31,9 @@
   border-bottom-right-radius: 8px;
   border-bottom-left-radius: 8px;
   background: var(--color-bg-main);
+  position: absolute;
+  width: 100%;
+  top: 100%;
   overflow: auto;
 }
 

@@ -1,4 +1,3 @@
-import { Select } from '@shared/components'
 import { createBrowserRouter } from 'react-router-dom'
 
 import { AuthPage } from '@pages/auth'
@@ -6,21 +5,6 @@ import { CoursePage } from '@pages/course/CoursePage'
 import { MainPage } from '@pages/main'
 import { MyLearning } from '@pages/my-learning/MyLearning'
 import { TestModal } from '@pages/test-for-modal-page/TestModal'
-
-const options = [
-  {
-    id: 1,
-    value: 'Cat',
-  },
-  {
-    id: 2,
-    value: 'Dog',
-  },
-  {
-    id: 3,
-    value: 'Apple',
-  },
-]
 
 export const router = createBrowserRouter([
   {
@@ -53,10 +37,6 @@ export const router = createBrowserRouter([
   },
 
   /* routes for testing components */
-  {
-    path: '/select',
-    element: <Select options={options} />,
-  },
   {
     path: '/modal',
     element: <TestModal />,
