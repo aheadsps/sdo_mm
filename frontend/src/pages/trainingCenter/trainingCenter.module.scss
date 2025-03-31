@@ -1,6 +1,5 @@
 .container {
-  width: 997px;
-  //width: 100%;
+  width: 100%;
   height: fit-content;
   display: flex;
   flex-direction: column;
@@ -9,10 +8,12 @@
 .cardsBlock {
   width: 100%;
   height: fit-content;
-  //   display: flex;
-  //   flex-direction: row;
-  //   flex-wrap: wrap;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 32px;
+  @media screen and (max-width: 1349px) {
+   display: flex;
+   flex-direction: column;
+   gap: 40px;
+  }
 }

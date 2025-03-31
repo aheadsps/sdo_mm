@@ -14,7 +14,7 @@ export const CourseCard = () => {
           <div className={s.itemRight}>12.02.2025</div>
         </div>
         <div className={s.item}>
-          <div className={s.itemLeft}>Прогресс завершенных: 20%</div>
+          <div className={s.itemLeft}>Прогресс: 20%</div>
           <div className={s.itemRight}>Учится: 487</div>
         </div>
       </div>

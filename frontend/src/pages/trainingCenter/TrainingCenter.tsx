@@ -19,6 +19,10 @@ const TrainingCenter = () => {
         <CourseCard />
         <CourseCard />
         <CourseCard />
+        <CourseCard />
+        <CourseCard />
+        <CourseCard />
+        <CourseCard />
       </div>
     </div>
   )

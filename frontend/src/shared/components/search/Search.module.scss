@@ -3,6 +3,9 @@
   height: 64px;
   border-radius: 8px;
   padding: 12px 0;
+  @media screen and (min-width: 768px) and (max-width: 1349px) {
+    padding: 12px;
+  }
 }
 .box {
   width: 100%;
@@ -14,10 +17,14 @@
   border-width: 1px 0px 1px 1px;
   border-style: solid;
   border-color: var(--color-additional-border100);
+  @media screen and (min-width: 768px) and (max-width: 1349px) {
+    gap: 0;
+  }
 }
 .input {
   all: unset;
   width: 957px;
+  width: calc(100% - 40px);
   height: 40px;
   border-top-left-radius: 8px;
   border-bottom-left-radius: 8px;
@@ -36,6 +43,12 @@
     letter-spacing: 0.25px;
     color: var(--color-text-secondary);
   }
+  // @media screen and (max-width: 1349px) {
+  //   width: calc(100% - 40px);
+  // }
+  // @media screen and (max-width: 767px) {
+  //   width: 282px;
+  // }
 }
 .icon {
   width: 40px;
@@ -43,4 +56,7 @@
   border-top-right-radius: 8px;
   border-bottom-right-radius: 8px;
   cursor: pointer;
+  @media screen and (max-width: 1349px) {
+    height: 100%;
+  }
 }
