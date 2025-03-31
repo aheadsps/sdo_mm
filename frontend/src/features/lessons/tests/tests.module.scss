@@ -51,11 +51,11 @@
     border-radius: 8px;
     margin-bottom: 20px;
   }
-  .green {
+  .correctAnswer {
     background-color: #4dd4ac1a;
   }
 
-  .red {
+  .wrongAnswer {
     background-color: #e35c6a1a;
   }
 
@@ -169,7 +169,7 @@
 input[type='radio'] {
   width: 20px;
   height: 20px;
-  border: 8px solid #dc3444; // Цвет рамки
+  border: 5px solid #dc3444; // Цвет рамки
   background-color: #dc3444;
   border-radius: 50%; // Круглая форма
   appearance: none; // Убираем стандартный стиль

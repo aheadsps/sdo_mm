@@ -6,16 +6,15 @@ import clsx from 'clsx'
 import { Typography } from '@shared/components'
 
 import s from '../../tests.module.scss'
-export const AnswerVariant = (answer, key) => {
-console.log(key);
+export const AnswerVariant = ({ answer, name, isCorrect, descr, checked, onSelect }) => {
   return (
-    <div key={key} className={clsx(s.answers, answer.isCorrect ? s.green : s.red)}>
+    <div className={clsx(s.answers, isCorrect ? s.green : s.red)}>
       <label className={s.option}>
-        <input type="radio" name="q1" checked readOnly />{' '}
-        <Typography variant="body_1">{answer.answer}</Typography>
+        <input type="radio" name={name} checked={checked} onChange={onSelect} />{' '}
+        <Typography variant="body_1">{answer}</Typography>
       </label>
       <div className={s.explanation}>
-        <Typography variant="caption">{answer.isCorrect ? answer.descr: ""}</Typography>
+        <Typography variant="caption">{checked ? descr : ''}</Typography>
       </div>
     </div>
   )

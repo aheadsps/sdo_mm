@@ -1,26 +1,26 @@
 export const cards = [
-  {id: 1, title: '1. Переведи на английский, какой вариант правильный?', task: '«Я — студент»', answers:
+  {id: 11, title: '1. Переведи на английский, какой вариант правильный?', task: '«Я — студент»', answers:
   [
-    {isCorrect: false, vary: 'a)', answer: 'a) I student', descr: 'Неверно! В английском предложении всегда нужен глагол, а перед профессией нужен артикль«a».',},
-    { isCorrect: false, vary: 'b)', answer: 'b) I am student', descr: 'Неверно! В английском предложении всегда нужен глагол, а перед профессией нужен артикль«a».,'
+    {id: 1,isCorrect: false, vary: 'a)', answer: 'a) I student', descr: 'Неверно! В английском предложении всегда нужен глагол, а перед профессией нужен артикль«a».',},
+    { id: 2,isCorrect: false, vary: 'b)', answer: 'b) I am student', descr: 'Неверно! В английском предложении всегда нужен глагол, а перед профессией нужен артикль«a».,'
      },
-    { isCorrect: true, vary: 'c)', answer: 'c) I am a student', descr: 'Все верно! В английском предложении всегда нужен глагол, а перед профессией нужен артикль«a».', },
+    { id: 3,isCorrect: true, vary: 'c)', answer: 'c) I am a student', descr: 'Все верно! В английском предложении всегда нужен глагол, а перед профессией нужен артикль«a».', },
   ]
 
   },
-  {id: 2, title: '2. Выбери, какое слово пропущено?', task: '«This __ a cat»', answers:
-  [{isCorrect: false, vary: 'a)', answer: 'a) are', descr: 'Неверно! В английском предложении всегда нужен глагол, а перед профессией нужен артикль«a».', },
-  { isCorrect: true, vary: 'b)', answer: 'b) is', descr: 'Неверно! В английском предложении всегда нужен глагол, а перед профессией нужен артикль«a».', },
-  { isCorrect: false, vary: 'c)', answer: 'c) am', descr: 'Неверно! В английском предложении всегда нужен глагол, а перед профессией нужен артикль«a».', }
+  {id: 10, title: '2. Выбери, какое слово пропущено?', task: '«This __ a cat»', answers:
+  [{id: 5,isCorrect: false, vary: 'a)', answer: 'a) are', descr: 'Неверно! В английском предложении всегда нужен глагол, а перед профессией нужен артикль«a».', },
+  { id: 6,isCorrect: true, vary: 'b)', answer: 'b) is', descr: 'Неверно! В английском предложении всегда нужен глагол, а перед профессией нужен артикль«a».', },
+  { id: 7,isCorrect: false, vary: 'c)', answer: 'c) am', descr: 'Неверно! В английском предложении всегда нужен глагол, а перед профессией нужен артикль«a».', }
   ]
   },
   ]
 
   export const pictureCards = [
-    {id: 1, title: '4. Сопоставь слова с их значением:', task: '', answers:
-    [{ engVary: 'Apple', answer: 'b.' },
-    { engVary: 'Dog', answer: 'a.' },
-    { engVary: 'Car', answer: 'c.' }
+    {id: 12, title: '4. Сопоставь слова с их значением:', task: '', answers:
+    [{ id: 8,engVary: 'Apple', answer: 'b.' },
+    { id: 9, engVary: 'Dog', answer: 'a.' },
+    { id: 10, engVary: 'Car', answer: 'c.' }
     ]
     },
   ]

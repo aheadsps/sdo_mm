@@ -1,6 +1,6 @@
 import { Button, Typography } from '@shared/components'
 import React from 'react'
-
+import { useState } from 'react'
 import { cards, pictureCards } from './questionCard/AnswerVariant/questionsData'
 import { QuestionCard } from './questionCard/QuestionCard'
 import { PictureCard } from './pictureCard/PictureCard'
@@ -8,6 +8,15 @@ import { PictureCard } from './pictureCard/PictureCard'
 import s from './tests.module.scss'
 
 export const LessonTest = () => {
+  const [selectedAnswers, setSelectedAnswers] = useState({})
+
+  const handleSelect = (questionId, answerId, isCorrect) => {
+    setSelectedAnswers((prev) => ({
+      ...prev,
+      [questionId]: { answerId, isCorrect },
+    }))
+  }
+
   return (
     <div className={s.lessonTest}>
       <div className={s.headerBlock}>
@@ -18,7 +27,7 @@ export const LessonTest = () => {
           Давай потренируемся!
         </Typography>
       </div>
-      <div key="questionBlock" className={s.questionBlock}>
+      <div className={s.questionBlock}>
         {cards.map((card) => {
           return (
             <QuestionCard
@@ -27,6 +36,9 @@ export const LessonTest = () => {
               title={card.title}
               task={card.task}
               answers={card.answers}
+              selectedAnswer={selectedAnswers[card.id]?.answerId}
+              isCorrectAnswer={selectedAnswers[card.id]?.isCorrect}
+              onSelect={handleSelect}
             />
           )
         })}
