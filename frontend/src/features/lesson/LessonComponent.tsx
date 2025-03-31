@@ -1,10 +1,9 @@
 import { DropdownCard } from '@features/course'
 import { AiComponent, Button, Typography } from '@shared/components'
-import Video from '@shared/components/video/VideoComponent'
 import { useToggle } from '@shared/hooks/useToggle'
 import { ReactNode } from 'react'
 
-import { ArrowLeftIcon } from '@assets/icons'
+import { ArrowLeftIcon, YouTubeLogo } from '@assets/icons'
 
 import s from './lessonComponent.module.scss'
 
@@ -105,8 +104,7 @@ const LessonComponent = ({ setIsLessonOpen }: Props) => {
             </Typography>
           </div>
           <div className={s.videoBox}>
-            <Video />
-            {/* <YouTubeLogo /> */}
+            <YouTubeLogo />
           </div>
           <div className={s.hint}>
             <p className={s.hintTxt}>
