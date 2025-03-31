@@ -1,3 +1,4 @@
+import { CourseCard } from '@shared/components/courseCard'
 import { Search } from '@shared/components/search'
 import Title from '@shared/components/title/Title'
 
@@ -12,11 +13,12 @@ const TrainingCenter = () => {
       <Title txt={txt} btn1={btn1} btn2={btn2} />
       <Search />
       <div className={s.cardsBlock}>
-        <div className={s.Card}>
-          <h6 className={s.title}>English Check-Up: Продвинутый разбор</h6>
-          <div className={s.content}></div>
-          <div className={s.buttonBox}></div>
-        </div>
+        <CourseCard />
+        <CourseCard />
+        <CourseCard />
+        <CourseCard />
+        <CourseCard />
+        <CourseCard />
       </div>
     </div>
   )

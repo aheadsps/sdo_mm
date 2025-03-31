@@ -1,0 +1,83 @@
+.card {
+  width: 483px;
+  height: 236px;
+  border-radius: 8px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.title {
+  width: 443px;
+  height: 52px;
+  font-family: Manrope;
+  font-weight: 600;
+  font-size: var(--font-size-h6);
+  line-height: 130%;
+  letter-spacing: 0.25px;
+  vertical-align: middle;
+}
+.content {
+  width: 443px;
+  height: 56px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.item {
+  width: 443px;
+  display: flex;
+  width: 100%;
+  height: 22px;
+  display: flex;
+  justify-content: space-between;
+}
+.itemLeft {
+  width: fit-content;
+  height: 22px;
+  font-family: Moscow Sans;
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 140%;
+  letter-spacing: 0.25px;
+  vertical-align: middle;
+  color: var(--color-text-secondary);
+}
+.colorGreen {
+   color: var(--color-accent-success);
+}
+.colorOrange {
+   color: var(--color-accent-orange);
+}
+.colorBlue {
+   color: var(--color-accent-info);
+}
+.colorRed {
+   color: var(--color-accent-red500);
+}
+.itemRight {
+  width: fit-content;
+  height: 22px;
+  font-family: Moscow Sans;
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 140%;
+  letter-spacing: 0.25px;
+  vertical-align: middle;
+  color: var(--color-text-secondary);
+}
+.buttonBox {
+  width: 443px;
+  height: 40px;
+  display: flex;
+  gap: 12px;
+}
+.basket {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  //   fill: #58151C;
+}
+.btn {
+  width: 100%;
+}

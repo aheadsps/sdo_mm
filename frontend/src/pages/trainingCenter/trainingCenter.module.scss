@@ -9,40 +9,10 @@
 .cardsBlock {
   width: 100%;
   height: fit-content;
-  display: flex;
-  flex-wrap: wrap;
+  //   display: flex;
+  //   flex-direction: row;
+  //   flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 32px;
-}
-.card {
-  width: 483px;
-  height: 236px;
-  border-radius: 8px;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-}
-.title {
-  width: 443px;
-  height: 52px;
-  font-family: Manrope;
-  font-weight: 600;
-  font-size: var(--font-size-h6);
-  line-height: 130%;
-  letter-spacing: 0.25px;
-  vertical-align: middle;
-}
-.content {
-  width: 443px;
-  height: 56px;
-  display: flex;
-  gap: 12px;
-  background-color: blueviolet;
-}
-.buttonBox {
-  width: 443px;
-  height: 40px;
-  display: flex;
-  gap: 12px;
-  background-color: burlywood;
 }
