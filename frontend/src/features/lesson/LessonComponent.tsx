@@ -1,5 +1,6 @@
 import { DropdownCard } from '@features/course'
 import { AiComponent, Button, Typography } from '@shared/components'
+import Title from '@shared/components/title/Title'
 import { useToggle } from '@shared/hooks/useToggle'
 import { ReactNode } from 'react'
 
@@ -15,6 +16,10 @@ interface Props {
 
 const LessonComponent = ({ setIsLessonOpen }: Props) => {
   const { isOpen: isOffcanvasOpen, close: closeOffcanvas, toggle: toggleOffCanvas } = useToggle()
+  const txt = 'English Check-Up: База и первые шаги'
+  const btn1 = 'ИИ'
+  const btn2 = 'Обсуждение урока'
+
   return (
     <div className={s.container}>
       <div className={s.backToPage} onClick={() => setIsLessonOpen(false)}>
@@ -23,19 +28,7 @@ const LessonComponent = ({ setIsLessonOpen }: Props) => {
           Вернуться на общую страницу курса
         </Typography>
       </div>
-      <div className={s.titleBlock}>
-        <Typography variant="header_4" className={s.title}>
-          English Check-Up: База и первые шаги
-        </Typography>
-        <div className={s.buttonsBlock}>
-          <Button variant="secondary" className={s.button} onClick={toggleOffCanvas}>
-            ИИ
-          </Button>
-          <Button variant="primary" className={s.button}>
-            Обсуждение урока
-          </Button>
-        </div>
-      </div>
+      <Title txt={txt} btn1={btn1} btn2={btn2} fstBtn={toggleOffCanvas} />
       <Typography variant="body_2" className={s.desc}>
         Цель урока: проверить словарный запас и научиться избегать ложных друзей переводчика.
       </Typography>

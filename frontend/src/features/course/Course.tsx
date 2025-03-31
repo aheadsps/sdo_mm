@@ -8,13 +8,15 @@ import { ArrowLeftIcon } from '@assets/icons'
 
 import s from './course-comp.module.scss'
 import { tabsData } from './tabs/tabsData'
+import TrainingCenter from '@pages/trainingCenter/TrainingCenter'
 
 export const CourseComponent = () => {
   const { isOpen: isOffcanvasOpen, close: closeOffcanvas, toggle: toggleOffCanvas } = useToggle()
   const [isLessonOpen, setIsLessonOpen] = useState(true)
 
   return isLessonOpen ? (
-    <LessonComponent setIsLessonOpen={setIsLessonOpen} />
+    // <LessonComponent setIsLessonOpen={setIsLessonOpen} />
+    <TrainingCenter />
   ) : (
     <div className={s.courseContent}>
       <NavLink to={'/learning'} className={s.backToPage}>

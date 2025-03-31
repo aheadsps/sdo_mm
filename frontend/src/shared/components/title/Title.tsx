@@ -9,8 +9,8 @@ interface Props {
   txt: string
   btn1: string
   btn2: string
-  fstBtn: () => void
-  scndBtn: () => void
+  fstBtn?: () => void
+  scndBtn?: () => void
   children?: ReactNode
 }
 const Title = ({ txt, btn1, btn2, fstBtn, scndBtn }: Props) => {
