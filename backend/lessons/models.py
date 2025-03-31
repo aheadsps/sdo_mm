@@ -9,25 +9,18 @@ from lessons.utils import (
     path_maker_content_attachment,
     path_maker_scorm,
 )
-from lessons.mixins import PathModelMixin
-
-
-class CreateDirField(PathModelMixin, models.CharField):
-    """
-    Кастомное поле для создания папки от имени
-    """
-
-    ...
+from lessons.validators import validate_path
 
 
 class SCORM(models.Model):
     """
     Модель представления SCORM
     """
-    name = CreateDirField(_("название"),
-                          max_length=256,
-                          unique=True,
-                          )
+    name = models.CharField(_("название"),
+                            max_length=256,
+                            unique=True,
+                            validators=[validate_path],
+                            )
 
     class Meta:
         verbose_name = _("SCORM пакет")

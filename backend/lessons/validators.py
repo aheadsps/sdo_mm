@@ -1,10 +1,25 @@
 import datetime
+from pathlib import Path
 
 from django.utils import timezone
+from django.conf import settings
+from django.core.exceptions import ValidationError
 from loguru import logger
 
 from lessons import exceptions
 from lessons.utils import get_value, tigger_to_check
+
+
+def validate_path(value: str):
+    logger.debug(value)
+    media = Path(settings.MEDIA_ROOT)
+    fp = media.joinpath('scorm', value)
+    if fp.exists():
+        raise ValidationError(
+            'Курс с данным именем уже имеется',
+            code='course_exists',
+            params={"value": value},
+            )
 
 
 class MoreThanZeroValidator:

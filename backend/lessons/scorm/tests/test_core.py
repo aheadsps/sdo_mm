@@ -27,3 +27,4 @@ class TestSCORMCore(TestCase):
             scorm.save()
 
         self.assertEqual(SCORM._default_manager.count(), 1)
+        self.assertEqual(SCORM._default_manager.get().name, 'Просто курс')
