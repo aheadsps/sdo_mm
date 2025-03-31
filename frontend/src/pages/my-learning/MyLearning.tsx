@@ -25,7 +25,7 @@ const MyLearningComp: React.FC = () => {
   const currentCourses: Course[] = getCurrentCourses(mode)
   return (
     <>
-      {isAIOpen && <AiComponent isOpen={isAIOpen} close={closeAI} />}
+      <AiComponent isOpen={isAIOpen} close={closeAI} />
       {isTooltipeOpen && <Tooltipe close={closeTooltipe} />}
       <div className={s.container}>
         <div className={s.container__headBox}>
