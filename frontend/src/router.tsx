@@ -5,6 +5,7 @@ import { AuthPage } from '@pages/auth'
 import { CoursePage } from '@pages/course/CoursePage'
 import { MainPage } from '@pages/main'
 import { MyLearning } from '@pages/my-learning/MyLearning'
+import { TestModal } from '@pages/test-for-modal-page/TestModal'
 
 const options = [
   {
@@ -55,5 +56,9 @@ export const router = createBrowserRouter([
   {
     path: '/select',
     element: <Select options={options} />,
+  },
+  {
+    path: '/modal',
+    element: <TestModal />,
   },
 ])
