@@ -1,4 +1,3 @@
-import LessonComponent from '@features/lesson/LessonComponent'
 import { Button, Tabs, Typography, AiComponent } from '@shared/components'
 import { useToggle } from '@shared/hooks/useToggle'
 import { useState } from 'react'
@@ -11,11 +10,10 @@ import { tabsData } from './tabs/tabsData'
 
 export const CourseComponent = () => {
   const { isOpen: isOffcanvasOpen, close: closeOffcanvas, toggle: toggleOffCanvas } = useToggle()
-  const [isLessonOpen, setIsLessonOpen] = useState(true)
-
-  return isLessonOpen ? (
-    <LessonComponent setIsLessonOpen={setIsLessonOpen} />
-  ) : (
+  // const hendleNavigate = async () => {
+  //   await navigate('/learning/course')
+  // }
+  return (
     <div className={s.courseContent}>
       <NavLink to={'/learning'} className={s.backToPage}>
         <ArrowLeftIcon className={s.icon} />
@@ -40,4 +38,5 @@ export const CourseComponent = () => {
       <AiComponent isOpen={isOffcanvasOpen} close={closeOffcanvas} />
     </div>
   )
+  // )
 }

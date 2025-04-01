@@ -1,3 +1,4 @@
+import { Lesson } from '@features/lesson/LessonComponent'
 import { Select } from '@shared/components'
 import { createBrowserRouter } from 'react-router-dom'
 
@@ -54,6 +55,10 @@ export const router = createBrowserRouter([
   {
     path: '/trainingCenter',
     element: <TrainingCenter />,
+  },
+  {
+    path: '/lesson',
+    element: <Lesson />,
   },
 
   /* routes for testing components */

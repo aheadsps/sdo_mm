@@ -1,33 +1,45 @@
 import { DropdownCard } from '@features/course'
 import { AiComponent, Button, Typography } from '@shared/components'
 import Title from '@shared/components/title/Title'
+import { withLayout } from '@shared/HOC'
 import { useToggle } from '@shared/hooks/useToggle'
-import { ReactNode } from 'react'
+import { NavLink, useNavigate } from 'react-router-dom'
 
 import { ArrowLeftIcon, YouTubeLogo } from '@assets/icons'
 
 import s from './lessonComponent.module.scss'
 
-interface Props {
-  //   isLessonOpen: boolean
-  setIsLessonOpen: (isLessonOpen: boolean) => void
-  children?: ReactNode
-}
+// interface Props {
+//   //   isLessonOpen: boolean
+//   setIsLessonOpen: (isLessonOpen: boolean) => void
+//   children?: ReactNode
+// }
 
-const LessonComponent = ({ setIsLessonOpen }: Props) => {
+const LessonComponent = () => {
   const { isOpen: isOffcanvasOpen, close: closeOffcanvas, toggle: toggleOffCanvas } = useToggle()
   const txt = 'English Check-Up: База и первые шаги'
   const btn1 = 'ИИ'
   const btn2 = 'Обсуждение урока'
+  const navigate = useNavigate()
+
+  const hendleNavigate = async () => {
+    await navigate('/learning/course')
+  }
 
   return (
     <div className={s.container}>
-      <div className={s.backToPage} onClick={() => setIsLessonOpen(false)}>
+      <NavLink to={'/learning/course'} className={s.backToPage}>
+        <ArrowLeftIcon className={s.icon} />
+        <Typography variant="body_2" className={s.backText}>
+          Вернуться к выбору курса
+        </Typography>
+      </NavLink>
+      {/* <div className={s.backToPage} onClick={() => hendleNavigate()}>
         <ArrowLeftIcon className={s.icon} />
         <Typography variant="body_2" className={s.backText}>
           Вернуться на общую страницу курса
         </Typography>
-      </div>
+      </div> */}
       <Title txt={txt} btn1={btn1} btn2={btn2} fstBtn={toggleOffCanvas} />
       <Typography variant="body_2" className={s.desc}>
         Цель урока: проверить словарный запас и научиться избегать ложных друзей переводчика.
@@ -105,9 +117,10 @@ const LessonComponent = ({ setIsLessonOpen }: Props) => {
             </p>
           </div>
           <div className={s.buttonBox}>
-            <Button variant="secondary" onClick={() => setIsLessonOpen(false)}>
+            <Button variant="secondary" onClick={() => hendleNavigate()}>
               Выйти из урока
             </Button>
+
             <Button variant="primary">Перейти к следующей теме</Button>
           </div>
         </div>
@@ -117,4 +130,4 @@ const LessonComponent = ({ setIsLessonOpen }: Props) => {
   )
 }
 
-export default LessonComponent
+export const Lesson = withLayout(LessonComponent)
