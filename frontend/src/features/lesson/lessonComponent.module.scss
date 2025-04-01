@@ -111,8 +111,6 @@
     gap: 40px;
   }
 
-  // @media screen and (max-width: 767px) {
-  // }
 }
 
 .leftBox {
@@ -304,6 +302,7 @@
 }
 
 .buttonBox {
+  // all: unset;
   width: 100%;
   height: 40px;
   display: flex;
@@ -318,3 +317,9 @@
     gap: 24px;
   }
 }
+// .btn {
+//   @media screen and (max-width: 767px) {
+//   width: 40%;
+//   font-size: 14px;
+//   }
+// }

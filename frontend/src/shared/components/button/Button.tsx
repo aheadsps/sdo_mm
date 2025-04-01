@@ -6,6 +6,7 @@ import s from './button.module.scss'
 
 type Props<T extends ElementType = 'button'> = {
   variant?: 'primary' | 'secondary'
+  onClick?: () => void | Promise<void>
   as?: T
 } & ComponentPropsWithRef<T>
 

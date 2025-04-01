@@ -1,0 +1,23 @@
+.container {
+  width: 100%;
+  height: fit-content;
+  Top: 123px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  @media screen and (min-width: 1349px) {
+    width: 997px;
+  }
+}
+.cardsBlock {
+  width: 100%;
+  height: fit-content;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  @media screen and (max-width: 1349px) {
+   display: flex;
+   flex-direction: column;
+   gap: 40px;
+  }
+}
