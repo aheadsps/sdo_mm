@@ -34,14 +34,15 @@
 .title {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 14px;
     width: 100%;
+    padding-left: 8px;
 }
 
 .tabs {
     display: flex;
     flex-wrap: nowrap; 
-    gap: 16px;
+    gap: 45px;
     max-width: 100vw;
     overflow-x: auto;
     white-space: nowrap; 
@@ -49,7 +50,8 @@
 
     button {
         flex: 0 0 auto;
-        min-width: 150px; 
+        padding-left: 20px;
+        padding-right: 20px;
     }
   }
  
