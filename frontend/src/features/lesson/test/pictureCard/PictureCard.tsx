@@ -1,6 +1,21 @@
-import { Typography } from '@shared/components'
+import { Select, Typography } from '@shared/components'
 
 import s from '../tests.module.scss'
+
+const options = [
+  {
+    id: 1,
+    value: 'Cat',
+  },
+  {
+    id: 2,
+    value: 'Dog',
+  },
+  {
+    id: 3,
+    value: 'Apple',
+  },
+]
 
 type PictureAnswer = {
   id: number
@@ -47,12 +62,7 @@ export const PictureCard = ({ title, answers }: Props) => {
                   <Typography variant="body_1" className={s.headerQuestion}>
                     <span>{answerData.engVary}</span>
                   </Typography>
-                  <select>
-                    <option>Значение</option>
-                    <option>a.</option>
-                    <option>b.</option>
-                    <option>c.</option>
-                  </select>
+                  <Select options={options} />
                 </div>
               )
             })}
