@@ -14,7 +14,6 @@ export const CourseComponent = () => {
   const [isLessonOpen, setIsLessonOpen] = useState(true)
 
   return isLessonOpen ? (
-    // <TrainingCenter />
     <LessonComponent setIsLessonOpen={setIsLessonOpen} />
   ) : (
     <div className={s.courseContent}>

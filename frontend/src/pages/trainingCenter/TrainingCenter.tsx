@@ -3,8 +3,9 @@ import { Search } from '@shared/components/search'
 import Title from '@shared/components/title/Title'
 
 import s from './trainingCenter.module.scss'
+import { withLayout } from '@shared/HOC'
 
-const TrainingCenter = () => {
+const Training = () => {
   const txt = 'Центр обучения'
   const btn1 = 'Создать тест'
   const btn2 = 'Создать курс'
@@ -27,5 +28,4 @@ const TrainingCenter = () => {
     </div>
   )
 }
-
-export default TrainingCenter
+export const TrainingCenter = withLayout(Training)

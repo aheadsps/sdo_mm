@@ -6,9 +6,10 @@ import {
   WebinarAndSupportIcon,
   SettingsEyeIcon,
   WebinarIcon,
+  SupportIcon,
 } from '@assets/icons'
 
-export const sidebarItems = [
+export const sidebarItemsStudent = [
   {
     id: 'main',
     icon: <MainIcon width={24} height={24} />,
@@ -49,6 +50,51 @@ export const sidebarItems = [
     id: 'settings',
     icon: <SettingsEyeIcon width={24} height={24} />,
     text: 'Настройки',
+    path: '/',
+  },
+]
+
+export const sidebarItemsMethodologist = [
+  {
+    id: 'main',
+    icon: <MainIcon width={24} height={24} />,
+    text: 'Главная',
+    path: '/main',
+  },
+  {
+    id: 'trainingCenter',
+    icon: <StudyIcon width={24} height={24} />,
+    text: 'Центр обучения',
+    path: '/trainingCenter',
+  },
+  {
+    id: 'analytics',
+    icon: <LibraryIcon width={24} height={24} />,
+    text: 'Аналитика',
+    path: '/',
+  },
+  {
+    id: 'webinars',
+    icon: <WebinarIcon width={24} height={24} />,
+    text: 'Вебинары',
+    path: '/',
+  },
+  {
+    id: 'consultations',
+    icon: <WebinarAndSupportIcon width={24} height={24} />,
+    text: 'Консультации',
+    path: '/',
+  },
+  {
+    id: 'settings',
+    icon: <SettingsEyeIcon width={24} height={24} />,
+    text: 'Настройки',
+    path: '/',
+  },
+  {
+    id: 'support',
+    icon: <SupportIcon width={24} height={24} />,
+    text: 'Поддержка',
     path: '/',
   },
 ]

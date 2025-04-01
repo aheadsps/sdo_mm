@@ -5,6 +5,7 @@ import { AuthPage } from '@pages/auth'
 import { CoursePage } from '@pages/course/CoursePage'
 import { MainPage } from '@pages/main'
 import { MyLearning } from '@pages/my-learning/MyLearning'
+import { TrainingCenter } from '@pages/trainingCenter/TrainingCenter'
 
 const options = [
   {
@@ -49,6 +50,10 @@ export const router = createBrowserRouter([
   {
     path: '/',
     element: <div>Hello App</div>,
+  },
+  {
+    path: '/trainingCenter',
+    element: <TrainingCenter />,
   },
 
   /* routes for testing components */
