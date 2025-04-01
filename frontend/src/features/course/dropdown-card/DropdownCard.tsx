@@ -23,7 +23,6 @@ export const DropdownCard = ({ className, title, children, blocks }: Props) => {
           {isOpenDropdown ? <ArrowUpIcon /> : <ArrowDownIcon />}
         </LessonItemTitle>
       </div>
-      {/*  className={s.dropdownContent}*/}
       {isOpenDropdown && (
         <div className={clsx(s.dropdownContent, className as string)}>{children}</div>
       )}
