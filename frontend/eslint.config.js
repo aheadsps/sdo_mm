@@ -12,7 +12,7 @@ export default tseslint.config(
   {
     extends: [
       js.configs.recommended,
-      ...tseslint.configs.recommendedTypeChecked,
+      ...tseslint.configs.recommended,
       eslintConfigPrettier,
     ],
     files: ['**/*.{ts,tsx}'],

@@ -1,3 +1,5 @@
+import { LessonTest } from '@features/lesson/test/Tests'
+import { Select } from '@shared/components'
 import { createBrowserRouter } from 'react-router-dom'
 
 import { AuthPage } from '@pages/auth'
@@ -38,7 +40,11 @@ export const router = createBrowserRouter([
 
   /* routes for testing components */
   {
-    path: '/modal',
-    element: <TestModal />,
+    path: '/select',
+    element: <Select options={options} />,
+  },
+  {
+    path: '/tests',
+    element: <LessonTest />,
   },
 ])
