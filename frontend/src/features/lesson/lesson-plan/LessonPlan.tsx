@@ -9,14 +9,19 @@ import { LessonPlanItem } from './lesson-plan-item/LessonPlanItem'
 import s from './lesson-plan.module.scss'
 
 type Props = {
-  setSelectedStep: (selectedStep: SelectedStep) => void
+  setIsMaterialsButtonClicked: (isMaterialsButtonClicked: boolean) => void
+  onClick: (item: SelectedStep) => void
 }
-export const LessonPlan = ({ setSelectedStep }: Props) => {
+export const LessonPlan = ({ setIsMaterialsButtonClicked, onClick }: Props) => {
   const [completedSteps, setCompletedSteps] = useState<number[]>([lessonStepsData[0].id])
 
   const onItemClick = (item: SelectedStep) => {
-    setSelectedStep(item)
+    onClick(item)
     setCompletedSteps([...completedSteps, item.id])
+  }
+
+  const onMaterialsButtonClicked = () => {
+    setIsMaterialsButtonClicked(true)
   }
   return (
     <DropdownCard title="План урока:" blocks="6 тем" className={s.drpdnContent}>
@@ -31,7 +36,7 @@ export const LessonPlan = ({ setSelectedStep }: Props) => {
           </LessonPlanItem>
         ))}
       </ul>
-      <Button variant="secondary" className={s.btn}>
+      <Button variant="secondary" className={s.btn} onClick={onMaterialsButtonClicked}>
         Материалы урока
       </Button>
     </DropdownCard>
