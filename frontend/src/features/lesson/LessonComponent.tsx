@@ -2,6 +2,7 @@ import { AiComponent, Typography } from '@shared/components'
 import Title from '@shared/components/title/Title'
 import { withLayout } from '@shared/HOC'
 import { useToggle } from '@shared/hooks/useToggle'
+import { useState } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 
 import { ArrowLeftIcon } from '@assets/icons'
@@ -9,9 +10,17 @@ import { ArrowLeftIcon } from '@assets/icons'
 import { LessonContent } from './lesson-content/LessonContent'
 import { LessonPlan } from './lesson-plan'
 import s from './lessonComponent.module.scss'
+import { lessonStepsData } from './lessonStepsData'
 
+export type SelectedStep = {
+  id: number
+  title: string
+  description: string
+}
 const LessonComponent = () => {
   const { isOpen: isOffcanvasOpen, close: closeOffcanvas, toggle: toggleOffCanvas } = useToggle()
+  const [selectedStep, setSelectedStep] = useState(lessonStepsData[0])
+
   const txt = 'English Check-Up: База и первые шаги'
   const btn1 = 'ИИ'
   const btn2 = 'Обсуждение урока'
@@ -36,9 +45,10 @@ const LessonComponent = () => {
       </Typography>
       <div className={s.content}>
         <div className={s.leftBox}>
-          <LessonPlan />
+          <LessonPlan setSelectedStep={setSelectedStep} />
         </div>
-        <LessonContent onClick={handleNavigate} />
+        <LessonContent onClick={handleNavigate} selectedStep={selectedStep} />
+        {/* <LessonTest /> */}
       </div>
       <AiComponent isOpen={isOffcanvasOpen} close={closeOffcanvas} />
     </div>

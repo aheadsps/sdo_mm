@@ -1,20 +1,35 @@
 import { DropdownCard } from '@features/course'
 import { Button } from '@shared/components'
+import { useState } from 'react'
+
+import { SelectedStep } from '../LessonComponent'
+import { lessonStepsData } from '../lessonStepsData'
 
 import { LessonPlanItem } from './lesson-plan-item/LessonPlanItem'
 import s from './lesson-plan.module.scss'
 
-export const LessonPlan = () => {
+type Props = {
+  setSelectedStep: (selectedStep: SelectedStep) => void
+}
+export const LessonPlan = ({ setSelectedStep }: Props) => {
+  const [completedSteps, setCompletedSteps] = useState<number[]>([lessonStepsData[0].id])
+
+  const onItemClick = (item: SelectedStep) => {
+    setSelectedStep(item)
+    setCompletedSteps([...completedSteps, item.id])
+  }
   return (
     <DropdownCard title="План урока:" blocks="6 тем" className={s.drpdnContent}>
       <ul>
-        <LessonPlanItem>1. Введение: Почему мы путаем слова?</LessonPlanItem>
-        <LessonPlanItem>2. Ложные друзья: похожие, но разные</LessonPlanItem>
-        <LessonPlanItem>3. Слова с несколькими значениями</LessonPlanItem>
-        <LessonPlanItem>4. Слова, которые мы используем неправильно</LessonPlanItem>
-        <LessonPlanItem>5. Как запоминать новые слова правильно?</LessonPlanItem>
-        <LessonPlanItem>6. Заключение: Закрепляем знания</LessonPlanItem>
-        <LessonPlanItem>7. Тестирование</LessonPlanItem>
+        {lessonStepsData?.map((item) => (
+          <LessonPlanItem
+            key={item.id}
+            onClick={() => onItemClick(item)}
+            checked={completedSteps.includes(item.id)}
+          >
+            {item.title}
+          </LessonPlanItem>
+        ))}
       </ul>
       <Button variant="secondary" className={s.btn}>
         Материалы урока

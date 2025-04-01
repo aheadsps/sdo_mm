@@ -2,28 +2,29 @@ import { Typography, Button } from '@shared/components'
 
 import { YouTubeLogo } from '@assets/icons'
 
+import { SelectedStep } from '../LessonComponent'
+
 import s from './lesson-content.module.scss'
 
 type Props = {
   onClick: () => void
+  selectedStep: SelectedStep
 }
 
-export const LessonContent = ({ onClick }: Props) => {
+export const LessonContent = ({ onClick, selectedStep }: Props) => {
   return (
     <div className={s.rightBox}>
       <div className={s.rightTop}>
         <div className={s.headerLesson}>
           <Typography variant="header_3" className={s.titleLesson}>
-            4. Слова, которые мы используем неправильно
+            {selectedStep.title}
           </Typography>
           <Typography variant="header_6" className={s.countLessons}>
-            4/6
+            {selectedStep.id}/6
           </Typography>
         </div>
         <Typography variant="body_2" className={s.lessonDesc}>
-          Многие английские слова кажутся знакомыми, но их настоящие значения могут сильно
-          отличаться. Это называется «ложные друзья переводчика». В этом уроке ты научишься их
-          распознавать.
+          {selectedStep.description}
         </Typography>
       </div>
       <div className={s.videoBox}>
