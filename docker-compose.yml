@@ -17,7 +17,7 @@ services:
       - db
 
   db:
-    restart: always 
+    restart: always
     image: postgres:16.3-alpine
     volumes:
       - postgres_data:/var/lib/postgresql/data/
@@ -57,6 +57,38 @@ services:
       - 15672:15672 # HTTP management UI
     networks:
       - backend
+
+  celery_worker:
+    build:
+      context: .
+      dockerfile: ./backend/docker/django/Dockerfile
+    command: /start
+    volumes:
+      - ./backend/:/app
+    env_file:
+      - backend/.env
+    networks:
+      - backend
+    depends_on:
+      - rabbitmq
+      - db
+      #- fast_api
+
+  celery_beat:
+    build:
+      context: .
+      dockerfile: ./backend/docker/django/Dockerfile
+    command: /start
+    volumes:
+      - ./backend/:/app
+    env_file:
+      - backend/.env
+    networks:
+      - backend
+    depends_on:
+      - rabbitmq
+      - db
+      #- fast_api
 
 volumes:
   postgres_data:
