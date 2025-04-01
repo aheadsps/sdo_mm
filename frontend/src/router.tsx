@@ -1,4 +1,4 @@
-import { LessonTest } from '@features/lessons/tests/Tests'
+import { LessonTest } from '@features/lesson/test/Tests'
 import { Select } from '@shared/components'
 import { createBrowserRouter } from 'react-router-dom'
 
