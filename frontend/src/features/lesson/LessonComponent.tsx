@@ -1,4 +1,3 @@
-import { DropdownCard } from '@features/course'
 import { AiComponent, Button, Typography } from '@shared/components'
 import Title from '@shared/components/title/Title'
 import { withLayout } from '@shared/HOC'
@@ -7,6 +6,7 @@ import { NavLink, useNavigate } from 'react-router-dom'
 
 import { ArrowLeftIcon, YouTubeLogo } from '@assets/icons'
 
+import { LessonPlan } from './lesson-plan'
 import s from './lessonComponent.module.scss'
 
 // interface Props {
@@ -46,51 +46,7 @@ const LessonComponent = () => {
       </Typography>
       <div className={s.content}>
         <div className={s.leftBox}>
-          <DropdownCard title="План урока:" blocks="6 тем" className={s.drpdnContent}>
-            <ul>
-              <li className={s.lessonTheme}>
-                <div className={s.checkboxContainer}>
-                  <input type="checkbox" className={s.checkbox} />
-                </div>
-                <Typography variant="body_2">1. Введение: Почему мы путаем слова?</Typography>
-              </li>
-              <li className={s.lessonTheme}>
-                <div className={s.checkboxContainer}>
-                  <input type="checkbox" className={s.checkbox} />
-                </div>
-                <Typography variant="body_2">2. Ложные друзья: похожие, но разные</Typography>
-              </li>
-              <li className={s.lessonTheme}>
-                <div className={s.checkboxContainer}>
-                  <input type="checkbox" className={s.checkbox} />
-                </div>
-                <Typography variant="body_2">3. Слова с несколькими значениями</Typography>
-              </li>
-              <li className={s.lessonTheme}>
-                <div className={s.checkboxContainer}>
-                  <input type="checkbox" className={s.checkbox} />
-                </div>
-                <Typography variant="body_2">
-                  4. Слова, которые мы используем неправильно
-                </Typography>
-              </li>
-              <li className={s.lessonTheme}>
-                <div className={s.checkboxContainer}>
-                  <input type="checkbox" className={s.checkbox} />
-                </div>
-                <Typography variant="body_2">5. Как запоминать новые слова правильно?</Typography>
-              </li>
-              <li className={s.lessonTheme}>
-                <div className={s.checkboxContainer}>
-                  <input type="checkbox" className={s.checkbox} />
-                </div>
-                <Typography variant="body_2">6. Заключение: Закрепляем знания</Typography>
-              </li>
-            </ul>
-            <Button variant="secondary" className={s.btn}>
-              Материалы урока
-            </Button>
-          </DropdownCard>
+          <LessonPlan />
         </div>
         <div className={s.rightBox}>
           <div className={s.rightTop}>
