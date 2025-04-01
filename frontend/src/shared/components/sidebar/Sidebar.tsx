@@ -9,7 +9,7 @@ type Props = {
   className?: string
 }
 export const Sidebar = ({ className }: Props) => {
-  const data = sidebarItemsMethodologist
+  const data = sidebarItemsStudent
   // sidebarItemsStudent
   // sidebarItemsMethodologist
   return (

@@ -1,6 +1,5 @@
 import { Button, Tabs, Typography, AiComponent } from '@shared/components'
 import { useToggle } from '@shared/hooks/useToggle'
-import { useState } from 'react'
 import { NavLink } from 'react-router-dom'
 
 import { ArrowLeftIcon } from '@assets/icons'
