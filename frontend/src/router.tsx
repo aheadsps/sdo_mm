@@ -1,5 +1,5 @@
-import { Select } from '@shared/components'
 import { LessonTest } from '@features/lessons/tests/Tests'
+import { Select } from '@shared/components'
 import { createBrowserRouter } from 'react-router-dom'
 
 import { AuthPage } from '@pages/auth'
@@ -48,10 +48,6 @@ export const router = createBrowserRouter([
     element: <AuthPage />,
   },
   {
-    path: '/tests',
-    element: <LessonTest />,
-  },
-  {
     path: '/',
     element: <div>Hello App</div>,
   },
@@ -60,5 +56,9 @@ export const router = createBrowserRouter([
   {
     path: '/select',
     element: <Select options={options} />,
+  },
+  {
+    path: '/tests',
+    element: <LessonTest />,
   },
 ])
