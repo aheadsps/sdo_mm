@@ -1,3 +1,4 @@
+import { LessonTest } from '@features/lesson/test/Tests'
 import { Select } from '@shared/components'
 import { createBrowserRouter } from 'react-router-dom'
 
@@ -55,5 +56,9 @@ export const router = createBrowserRouter([
   {
     path: '/select',
     element: <Select options={options} />,
+  },
+  {
+    path: '/tests',
+    element: <LessonTest />,
   },
 ])
