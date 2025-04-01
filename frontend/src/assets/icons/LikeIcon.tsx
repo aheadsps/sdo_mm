@@ -19,7 +19,7 @@ const LikeIcon = forwardRef<SVGSVGElement, SVGProps<SVGSVGElement>>(
         height="33.5"
         rx="16.75"
         stroke="#F8F9FA"
-        stroke-width="0.5"
+        strokeWidth="0.5"
       />
       <g clipPath="url(#clip0_5322_15994)">
         <path
