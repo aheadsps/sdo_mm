@@ -8,14 +8,17 @@
   border-radius: 4px;
   padding: 12px 0;
   z-index: +1000;
-  background: rgba(248, 249, 250, 1);
-  box-shadow: 0px 0px 15px 0px rgba(44, 11, 15, 0.04);
+  background: rgb(248 249 250 / 100%);
+  box-shadow: 0 0 15px 0 rgb(44 11 15 / 4%);
+
   @media screen and (min-width: 768px) and (max-width: 1349px) {
     left: -253px;
   }
+
   @media screen and (max-width: 767px) {
     left: 10%;
   }
+
   &__topBox {
     width: 322px;
     height: 35px;
@@ -24,12 +27,14 @@
     padding: 0 12px 8px;
     border-bottom: 1px solid var(--color-additional-border100);
   }
+
   &__titleImg {
     width: 27px;
     height: 27px;
     border-radius: 2px;
     padding: 5px 4px;
   }
+
   &__rightBox {
     width: 139px;
     height: 24px;
@@ -38,23 +43,25 @@
     gap: 8px;
     cursor: pointer;
   }
+
   &__txt {
     width: 107px;
     height: 18px;
-    font-family: Moscow Sans;
+    font-family: "Moscow Sans";
     font-weight: 300;
     font-size: 14px;
     line-height: 130%;
     letter-spacing: 0.25px;
     vertical-align: middle;
-    color: rgba(108, 117, 125, 1);
+    color: rgb(108 117 125 / 100%);
   }
+
   &__bottomBox {
     width: 298px;
     height: fit-content;
     gap: 10px;
     padding: 16px 12px 20px;
-    font-family: Moscow Sans;
+    font-family: "Moscow Sans";
     font-weight: 300;
     font-size: 14px;
     line-height: 130%;

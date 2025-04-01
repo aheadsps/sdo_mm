@@ -2,10 +2,17 @@ import { Typography } from '@shared/components'
 
 import s from '../tests.module.scss'
 
-import { AnswerVariant } from './AnswerVariant/AnswerVariant'
-import { cards } from './AnswerVariant/questionsData'
-export const PictureCard = ({ title, answers }) => {
-  //const answers = data.answers
+type PictureAnswer = {
+  id: number
+  engVary: string
+  answer: string
+}
+
+type Props = {
+  title: string
+  answers: PictureAnswer[]
+}
+export const PictureCard = ({ title, answers }: Props) => {
   return (
     <div>
       <div className={(s.question, s.pictureCard)}>
@@ -55,4 +62,3 @@ export const PictureCard = ({ title, answers }) => {
     </div>
   )
 }
-//className={clsx(s.card,s.question, className)}

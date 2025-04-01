@@ -1,17 +1,23 @@
-// ардиокнопка
-//брдер 50 проц
-//картинки в public
-//button
-import clsx from 'clsx'
 import { Typography } from '@shared/components'
+import clsx from 'clsx'
 
 import s from '../../tests.module.scss'
-export const AnswerVariant = ({ answer, name, isCorrect, descr, checked, onSelect }) => {
+import { Answer } from '../QuestionCard'
+
+type Props = {
+  answer: Answer
+  isCorrect: boolean
+  descr: string
+  checked: boolean
+  onSelect: () => void
+  disabled?: boolean
+}
+export const AnswerVariant = ({ answer, isCorrect, descr, checked, onSelect, disabled }: Props) => {
   return (
     <div className={clsx(s.answers, isCorrect ? s.green : s.red)}>
-      <label className={s.option}>
-        <input type="radio" name={name} checked={checked} onChange={onSelect} />{' '}
-        <Typography variant="body_1">{answer}</Typography>
+      <label className={clsx(s.option, disabled && s.disabled)}>
+        <input type="radio" checked={checked} onChange={onSelect} disabled={disabled} />{' '}
+        <Typography variant="body_1">{answer.answer}</Typography>
       </label>
       <div className={s.explanation}>
         <Typography variant="caption">{checked ? descr : ''}</Typography>
