@@ -47,7 +47,7 @@
   &__txt {
     width: 107px;
     height: 18px;
-    font-family: "Moscow Sans";
+    font-family: var(--font-family-secondary);
     font-weight: 300;
     font-size: 14px;
     line-height: 130%;
@@ -61,7 +61,7 @@
     height: fit-content;
     gap: 10px;
     padding: 16px 12px 20px;
-    font-family: "Moscow Sans";
+    font-family: var(--font-family-secondary);
     font-weight: 300;
     font-size: 14px;
     line-height: 130%;

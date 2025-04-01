@@ -1,25 +1,25 @@
 @mixin font($fs, $fc, $fw) {
-   font-family: $font;
-   font-size: $fs;
-   color: $fc;
-   font-weight: $fw;
- }
+  font-family: $font;
+  font-size: $fs;
+  color: $fc;
+  font-weight: $fw;
+}
 
- @mixin flex($fd, $jc, $ai) {
-   flex-direction: $fd;
-   justify-content: $jc;
-   align-items: $ai;
- }
- 
- // медиа миксин для экранов
- @mixin screen-tablet {
-   @media screen and (min-width: 768px) and (max-width: 1024px) {
-     @content;
-   }
- }
+@mixin flex($fd, $jc, $ai) {
+  flex-direction: $fd;
+  justify-content: $jc;
+  align-items: $ai;
+}
 
- @mixin screen-mobile {
-   @media screen and (min-width: 360px) and (max-width: 768px) {
-     @content;
-   }
- }
+// медиа миксин для экранов
+@mixin screen-tablet {
+  @media screen and (min-width: 768px) and (max-width: 1024px) {
+    @content;
+  }
+}
+
+@mixin screen-mobile {
+  @media screen and (min-width: 360px) and (max-width: 768px) {
+    @content;
+  }
+}

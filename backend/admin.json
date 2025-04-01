@@ -47,6 +47,15 @@
         "model": "lessons.answer",
         "pk": 5,
         "fields": {
+            "text": "Еети",
+            "correct": false,
+            "question": 1
+        }
+    },
+    {
+        "model": "lessons.answer",
+        "pk": 5,
+        "fields": {
             "text": "Да, хз",
             "correct": false,
             "question": 2
