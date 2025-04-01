@@ -1,12 +1,10 @@
 import { LessonTest } from '@features/lesson/test/Tests'
-import { Select } from '@shared/components'
 import { createBrowserRouter } from 'react-router-dom'
 
 import { AuthPage } from '@pages/auth'
 import { CoursePage } from '@pages/course/CoursePage'
 import { MainPage } from '@pages/main'
 import { MyLearning } from '@pages/my-learning/MyLearning'
-import { TestModal } from '@pages/test-for-modal-page/TestModal'
 
 export const router = createBrowserRouter([
   {
@@ -39,10 +37,6 @@ export const router = createBrowserRouter([
   },
 
   /* routes for testing components */
-  {
-    path: '/select',
-    element: <Select options={options} />,
-  },
   {
     path: '/tests',
     element: <LessonTest />,
