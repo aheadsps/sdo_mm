@@ -1,3 +1,5 @@
+import { Typography } from '@shared/components'
+
 import s from './block-header.module.scss'
 
 type Props = {
@@ -8,7 +10,7 @@ export const BlockHeader = ({ columns }: Props) => {
     <div className={s.header}>
       {columns.map((column, index) => (
         <div key={index} className={s.headerItem}>
-          {column}
+          <Typography variant="body_1">{column}</Typography>
         </div>
       ))}
     </div>
