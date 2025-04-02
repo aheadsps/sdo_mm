@@ -4,16 +4,16 @@ import zipfile
 import xml.etree.ElementTree as ET
 from loguru import logger
 
-from django.conf import settings
 from django.core.files.base import ContentFile
 
 from lessons.scorm.engine.exceptions import SCORMExtractError
 from lessons.scorm.engine.utils import is_dir
 from lessons.models import SCORM, SCORMFile
 from .datasets import DataSetCore
+from .base import BaseSCORMCore
 
 
-class CoreSCORM:
+class CoreSCORM(BaseSCORMCore):
     """
     Ядро работы конструктора SCORM
 
@@ -37,15 +37,12 @@ class CoreSCORM:
     scorm.resources['file']
     scorm.save()
     ```
-
     """
+
     def __init__(self,
                  zip_file: zipfile.ZipFile,
                  ):
-        self._file: zipfile.ZipFile = zip_file
-        self._infos = zip_file.infolist()
-        self._manifest: ET.ElementTree | None = None
-        self._manifest_file: IO[bytes] | None = None
+        super().__init__(zip_file)
         self._meta: ET.Element | None = None
         self._organizations: list[ET.Element] | None = None
         self._resources: ET.Element | None = None
@@ -91,19 +88,6 @@ class CoreSCORM:
         tree = ET.parse(manifest_file)
         return tree
 
-    def __enter__(self):
-        manifest_info = self._file.getinfo(settings.SCORM_MANIFEST_NAME)
-        logger.debug(f'seaching manifest {manifest_info}')
-        if not manifest_info:
-            raise SCORMExtractError(
-                "Не возможно найти imsmanifest.xml в zip архиве"
-            )
-        self._manifest_file = self._file.open(manifest_info)
-        return self._manifest_file
-
-    def __exit__(self, type, value, traceback):
-        self._manifest_file.close()
-
     def _get_all_data(self,
                       prefix: str,
                       manifest_tree: ET.ElementTree,
@@ -133,8 +117,8 @@ class CoreSCORM:
         )
         return organizations
 
-    def get_structure(self, index):
-
+    def _get_structure(self, index):
+        ...
 
     def _get_root_path(self,
                        zip_infos: list[zipfile.ZipInfo],
@@ -145,7 +129,7 @@ class CoreSCORM:
         root_depth = -1
         root_path = None
         for zipinfo in zip_infos:
-            if os.path.basename(zipinfo.filename) == settings.SCORM_MANIFEST_NAME:
+            if os.path.basename(zipinfo.filename) == self.root_name:
                 depth = len(os.path.split(zipinfo.filename))
                 if depth < root_depth or root_depth < 0:
                     root_path = os.path.dirname(zipinfo.filename)
