@@ -26,7 +26,7 @@ class TestSCORMCore(TestCase):
             scorm = CoreSCORM(zip_file=file)
             scorm.save()
 
-        self.assertEqual(scorm.resources['file'][0].get('href'), 'json/structure.json')
-        self.assertEqual(scorm.meta['schemaversion'][0].text, '2004 4th Edition')
+        self.assertEqual(scorm.resources['file'][0].element.get('href'), 'json/structure.json')
+        self.assertEqual(scorm.meta['schemaversion'][0].element.text, '2004 4th Edition')
         self.assertEqual(SCORM._default_manager.count(), 1)
         self.assertEqual(SCORM._default_manager.get().name, 'Просто курс')
