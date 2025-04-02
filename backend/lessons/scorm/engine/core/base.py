@@ -11,7 +11,7 @@ from lessons.scorm.engine.exceptions import SCORMExtractError
 from .datasets import DataSetCore
 
 
-class BaseSCORMCore(AbstractCore):
+class BaseCoreSCORM(AbstractCore):
     """
     Базовое ядро с базовыми функциями
 

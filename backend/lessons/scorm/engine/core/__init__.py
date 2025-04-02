@@ -1,8 +1,8 @@
 from .abc import AbstractCore
 from .core import CoreSCORM
-from .base import BaseSCORMCore
+from .base import BaseCoreSCORM
 
 __all__ = ('AbstractCore',
            'CoreSCORM',
-           'BaseSCORMCore',
+           'BaseCoreSCORM',
            )

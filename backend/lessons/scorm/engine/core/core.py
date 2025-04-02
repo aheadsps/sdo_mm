@@ -11,16 +11,17 @@ from lessons.scorm.engine.utils import is_dir
 from lessons.models import SCORM, SCORMFile
 from lessons.scorm.engine.utils import sanitize_input
 from lessons.scorm.engine.exceptions import SCORMExtractError
-from .base import BaseSCORMCore
+from .base import BaseCoreSCORM
 from .datasets import DataSetCore
 
 
-class CoreSCORM(BaseSCORMCore):
+class CoreSCORM(BaseCoreSCORM):
     """
     Ядро работы конструктора SCORM
 
     `Внутренее устроиство:`
-    - Получение JSON файла структуры
+    - Получение структуры курса
+    - Сохраниние исходников в систему
 
     `Пример использования:`
 

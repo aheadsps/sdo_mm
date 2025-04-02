@@ -2,7 +2,6 @@ import xml.etree.ElementTree as ET
 
 from lessons.scorm.engine.exceptions import ElementTypeError
 
-
 class DataSetCore:
     """
     DTO для взаимодействия с элементами
@@ -20,10 +19,10 @@ class DataSetCore:
         self.prefix = str(prefix)
 
     @property
-    def element(self):
+    def element(self) -> ET.Element:
         return self._element
 
-    def __getitem__(self, index: str) -> list[ET.Element]:
+    def __getitem__(self, index: str) -> list['DataSetCore']:
         index_p = self.prefix + str(index)
         element = self._element.find(index_p)
         if element is None:
