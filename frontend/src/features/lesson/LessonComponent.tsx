@@ -1,29 +1,45 @@
-import { DropdownCard } from '@features/course'
-import { AiComponent, Button, Typography } from '@shared/components'
+import { CourseMaterials } from '@features/course/course-materials'
+import { AiComponent, Typography, Button } from '@shared/components'
 import Title from '@shared/components/title/Title'
 import { withLayout } from '@shared/HOC'
 import { useToggle } from '@shared/hooks/useToggle'
+import { useState } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 
-import { ArrowLeftIcon, YouTubeLogo } from '@assets/icons'
+import { ArrowLeftIcon } from '@assets/icons'
 
+import { LessonContent } from './lesson-content/LessonContent'
+import { LessonPlan } from './lesson-plan'
 import s from './lessonComponent.module.scss'
+import { lessonStepsData } from './lessonStepsData'
+import { LessonTest } from './test/Tests'
 
-// interface Props {
-//   //   isLessonOpen: boolean
-//   setIsLessonOpen: (isLessonOpen: boolean) => void
-//   children?: ReactNode
-// }
-
+export type SelectedStep = {
+  id: number
+  title: string
+  description: string
+}
 const LessonComponent = () => {
   const { isOpen: isOffcanvasOpen, close: closeOffcanvas, toggle: toggleOffCanvas } = useToggle()
+  const [selectedStep, setSelectedStep] = useState(lessonStepsData[0])
+
+  const [isMaterialsButtonClicked, setIsMaterialsButtonClicked] = useState(false)
+
   const txt = 'English Check-Up: База и первые шаги'
   const btn1 = 'ИИ'
   const btn2 = 'Обсуждение урока'
   const navigate = useNavigate()
 
-  const hendleNavigate = async () => {
+  const handleNavigate = async () => {
     await navigate('/learning/course')
+  }
+
+  const onItemClick = (item: SelectedStep) => {
+    setSelectedStep(item)
+
+    if (isMaterialsButtonClicked) {
+      setIsMaterialsButtonClicked(false)
+    }
   }
 
   return (
@@ -31,99 +47,32 @@ const LessonComponent = () => {
       <NavLink to={'/learning/course'} className={s.backToPage}>
         <ArrowLeftIcon className={s.icon} />
         <Typography variant="body_2" className={s.backText}>
-          Вернуться к выбору курса
-        </Typography>
-      </NavLink>
-      {/* <div className={s.backToPage} onClick={() => hendleNavigate()}>
-        <ArrowLeftIcon className={s.icon} />
-        <Typography variant="body_2" className={s.backText}>
           Вернуться на общую страницу курса
         </Typography>
-      </div> */}
+      </NavLink>
+
       <Title txt={txt} btn1={btn1} btn2={btn2} fstBtn={toggleOffCanvas} />
       <Typography variant="body_2" className={s.desc}>
         Цель урока: проверить словарный запас и научиться избегать ложных друзей переводчика.
       </Typography>
       <div className={s.content}>
         <div className={s.leftBox}>
-          <DropdownCard title="План урока:" blocks="6 тем" className={s.drpdnContent}>
-            <ul>
-              <li className={s.lessonTheme}>
-                <div className={s.checkboxContainer}>
-                  <input type="checkbox" className={s.checkbox} />
-                </div>
-                <Typography variant="body_2">1. Введение: Почему мы путаем слова?</Typography>
-              </li>
-              <li className={s.lessonTheme}>
-                <div className={s.checkboxContainer}>
-                  <input type="checkbox" className={s.checkbox} />
-                </div>
-                <Typography variant="body_2">2. Ложные друзья: похожие, но разные</Typography>
-              </li>
-              <li className={s.lessonTheme}>
-                <div className={s.checkboxContainer}>
-                  <input type="checkbox" className={s.checkbox} />
-                </div>
-                <Typography variant="body_2">3. Слова с несколькими значениями</Typography>
-              </li>
-              <li className={s.lessonTheme}>
-                <div className={s.checkboxContainer}>
-                  <input type="checkbox" className={s.checkbox} />
-                </div>
-                <Typography variant="body_2">
-                  4. Слова, которые мы используем неправильно
-                </Typography>
-              </li>
-              <li className={s.lessonTheme}>
-                <div className={s.checkboxContainer}>
-                  <input type="checkbox" className={s.checkbox} />
-                </div>
-                <Typography variant="body_2">5. Как запоминать новые слова правильно?</Typography>
-              </li>
-              <li className={s.lessonTheme}>
-                <div className={s.checkboxContainer}>
-                  <input type="checkbox" className={s.checkbox} />
-                </div>
-                <Typography variant="body_2">6. Заключение: Закрепляем знания</Typography>
-              </li>
-            </ul>
-            <Button variant="secondary" className={s.btn}>
-              Материалы урока
-            </Button>
-          </DropdownCard>
+          <LessonPlan
+            setIsMaterialsButtonClicked={setIsMaterialsButtonClicked}
+            onClick={onItemClick}
+          />
         </div>
-        <div className={s.rightBox}>
-          <div className={s.rightTop}>
-            <div className={s.headerLesson}>
-              <Typography variant="header_3" className={s.titleLesson}>
-                4. Слова, которые мы используем неправильно
-              </Typography>
-              <Typography variant="header_6" className={s.countLessons}>
-                4/6
-              </Typography>
-            </div>
-            <Typography variant="body_2" className={s.lessonDesc}>
-              Многие английские слова кажутся знакомыми, но их настоящие значения могут сильно
-              отличаться. Это называется «ложные друзья переводчика». В этом уроке ты научишься их
-              распознавать.
-            </Typography>
-          </div>
-          <div className={s.videoBox}>
-            <YouTubeLogo />
-          </div>
-          <div className={s.hint}>
-            <p className={s.hintTxt}>
-              Чтобы не запоминать слова неправильно, всегда проверяй их значение в контексте!
-            </p>
-          </div>
-          <div className={s.buttonBox}>
-            <Button variant="secondary" onClick={() => hendleNavigate()}>
-              Выйти из урока
-            </Button>
 
-            <Button variant="primary">Перейти к следующей теме</Button>
+        {isMaterialsButtonClicked ? (
+          <div className={s.lessonMaterials}>
+            <Button className={s.materialsButton}>Скачать все материалы урока</Button>
+            <CourseMaterials />
           </div>
-        </div>
+        ) : selectedStep.id === lessonStepsData[lessonStepsData.length - 1].id ? (
+          <LessonTest />
+        ) : (
+          <LessonContent onClick={handleNavigate} selectedStep={selectedStep} />
+        )}
       </div>
       <AiComponent isOpen={isOffcanvasOpen} close={closeOffcanvas} />
     </div>
