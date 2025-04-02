@@ -1,12 +1,14 @@
-import { Button, Select, Typography } from '@shared/components'
+import { Button } from '@shared/components'
 import React, { useState } from 'react'
 
-import { ArrowDownIcon, ArrowUpIcon } from '@assets/icons'
+import { AddItemIcon, ArrowDownIcon, ArrowUpIcon } from '@assets/icons'
 
 import { BlockHeader } from './block-header/BlockHeader'
+import { ExpandedContent } from './exanded-content/ExpandedContent'
+import { LessonContent } from './lesson-content/LessonContent'
 import styles from './program.module.scss'
 
-interface Lesson {
+export type Lesson = {
   id: number
   title: string
   dateTime: string
@@ -50,6 +52,7 @@ const columns = ['Уроки', 'Дата и время занятия', 'Фор�
 
 export const Program: React.FC = () => {
   const [lessons, setLessons] = useState(lessonsData)
+  const [newItemCount, setNewItemCount] = useState<number[]>([])
 
   const toggleExpand = (id: number) => {
     setLessons((prevLessons) =>
@@ -59,19 +62,17 @@ export const Program: React.FC = () => {
     )
   }
 
+  const onAddNewItem = () => {
+    setNewItemCount((prev) => [...prev, prev.length + 1])
+  }
+
   return (
     <div className={styles.container}>
       <BlockHeader columns={columns} />
       <div className={styles.list}>
         {lessons.map((lesson) => (
           <div key={lesson.id} className={styles.lessonItem}>
-            <div className={styles.lessonContent}>
-              <div className={styles.title}>
-                <Typography variant="body_2">{lesson.title}</Typography>
-              </div>
-              <Select className={styles.date} placeholder={lesson.dateTime} options={options} />
-              <Select className={styles.format} placeholder={lesson.format} options={options} />
-            </div>
+            <LessonContent optionsDate={options} optionsFormat={options} lesson={lesson} />
             <Button
               variant="primary"
               className={styles.toggleButton}
@@ -82,12 +83,20 @@ export const Program: React.FC = () => {
             </Button>
             {lesson.expanded && (
               <div className={styles.expandedContent}>
-                Дополнительная информация по уроку {lesson.id}...
+                <ExpandedContent />
               </div>
             )}
           </div>
         ))}
+        {newItemCount.map((item) => (
+          <div key={item} className={styles.lessonItem}>
+            <LessonContent />
+          </div>
+        ))}
       </div>
+      <button className={styles.addButton}>
+        <AddItemIcon height={'12px'} width={'12px'} onClick={onAddNewItem} />
+      </button>
     </div>
   )
 }
