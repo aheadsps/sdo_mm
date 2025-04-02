@@ -3,6 +3,8 @@ import zipfile
 
 import xml.etree.ElementTree as ET
 
+from loguru import logger
+
 from django.core.files.base import ContentFile
 
 from lessons.scorm.engine.utils import is_dir
@@ -45,7 +47,7 @@ class CoreSCORM(BaseSCORMCore):
 
     def _get_items(self,
                    organization: DataSetCore,
-                   ) -> list[DataSetCore] | None:
+                   ) -> list[DataSetCore] | list[None]:
         items = organization['item']
         return items
 
@@ -82,13 +84,16 @@ class CoreSCORM(BaseSCORMCore):
                 f'{self.prefix}resources/{self.prefix}resource[@identifier="{identifier}"]',
             )
             resource_link = resource.get("href")
+        logger.debug(f'resource lisk is {resource_link}')
         return resource_link
 
     def _get_item_title(self,
                         organization: DataSetCore,
                         ) -> str:
         title = organization['title'][0].element.text
-        return sanitize_input(title)
+        sanitize_text = sanitize_input(title)
+        logger.debug(f'text title is {sanitize_text}')
+        return sanitize_text
 
     def _get_structures(self):
         structure_list = []
@@ -98,6 +103,7 @@ class CoreSCORM(BaseSCORMCore):
                 organization=organization,
                 root=root,
             ))
+        return structure_list
 
     def _process_stucture_data(self,
                                organization: DataSetCore,
@@ -116,6 +122,7 @@ class CoreSCORM(BaseSCORMCore):
             root=root,
         )
         if not sub_items:
+            logger.debug(f'add to structure list item - {title, resource_link}')
             return [(title, resource_link)]
         else:
             for item in sub_items:
