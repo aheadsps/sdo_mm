@@ -29,10 +29,10 @@ class CoreSCORM:
         with self as manifest:
             namespace = self._get_namespace(manifest)
             self.prefix = "{" + namespace + "}" if namespace else ""
-            self.tree = self._get_manifest_tree(manifest_file=manifest)
+            self._manifest = self._get_manifest_tree(manifest_file=manifest)
             self._get_all_data(
                 prefix=self.prefix,
-                manifest_tree=self.tree,
+                manifest_tree=self._manifest,
             )
 
     @property
@@ -51,14 +51,10 @@ class CoreSCORM:
     def resources(self):
         return self._resources
 
-    def __getitem__(self, index: str):
-        ...
-
     def _get_manifest_tree(self, manifest_file: IO[bytes]) -> ET.ElementTree:
         logger.debug(f'manifest_file is {manifest_file}')
         manifest_file.seek(0)
         tree = ET.parse(manifest_file)
-        self._manifest = tree
         return tree
 
     def __enter__(self):

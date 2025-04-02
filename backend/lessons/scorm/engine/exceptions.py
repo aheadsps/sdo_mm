@@ -12,3 +12,11 @@ class ManifestNotSetupError(Exception):
     """
 
     ...
+
+
+class ElementTypeError(Exception):
+    """
+    Ошибка типа элемента
+    """
+
+    ...
