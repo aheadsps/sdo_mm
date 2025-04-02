@@ -1,0 +1,18 @@
+.header {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  background: var(--color-bg-main);
+  border-radius: 8px;
+  border: 1px solid var(--color-additional-border100);
+  margin-bottom: 30px;
+  height: 37px;
+  line-height: 37px;
+}
+
+.headerItem {
+  text-align: center;
+
+  &:not(:last-child) {
+    border-right: 1px solid var(--color-additional-border100);
+  }
+}

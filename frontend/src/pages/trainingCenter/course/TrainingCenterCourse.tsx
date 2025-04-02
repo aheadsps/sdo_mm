@@ -5,6 +5,7 @@ import { useState } from 'react'
 
 import { EditIcon } from '@assets/icons'
 
+import { Program } from './program/Program'
 import s from './training-course.module.scss'
 
 const tabsData: Tab[] = [
@@ -14,7 +15,7 @@ const tabsData: Tab[] = [
   },
   {
     label: 'Программа',
-    content: <div>Программа</div>,
+    content: <Program />,
   },
   {
     label: 'Список студентов',

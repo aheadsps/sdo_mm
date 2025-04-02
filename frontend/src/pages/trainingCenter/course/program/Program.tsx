@@ -1,0 +1,93 @@
+import { Button, Select, Typography } from '@shared/components'
+import React, { useState } from 'react'
+
+import { ArrowDownIcon, ArrowUpIcon } from '@assets/icons'
+
+import { BlockHeader } from './block-header/BlockHeader'
+import styles from './program.module.scss'
+
+interface Lesson {
+  id: number
+  title: string
+  dateTime: string
+  format: string
+  expanded: boolean
+}
+
+const options = [
+  {
+    id: 1,
+    value: 'Cat',
+  },
+  {
+    id: 2,
+    value: 'Dog',
+  },
+  {
+    id: 3,
+    value: 'Apple',
+  },
+]
+
+const lessonsData: Lesson[] = [
+  {
+    id: 1,
+    title: 'Введение в безопасность: основные риски при работе с электроинструментом',
+    dateTime: '07.06.2025, 12:47',
+    format: 'Онлайн',
+    expanded: false,
+  },
+  {
+    id: 2,
+    title: 'Средства индивидуальной защиты: как минимизировать травмы',
+    dateTime: '10.06.2025, 03:05',
+    format: 'Онлайн',
+    expanded: false,
+  },
+]
+
+const columns = ['Уроки', 'Дата и время занятия', 'Формат']
+
+export const Program: React.FC = () => {
+  const [lessons, setLessons] = useState(lessonsData)
+
+  const toggleExpand = (id: number) => {
+    setLessons((prevLessons) =>
+      prevLessons.map((lesson) =>
+        lesson.id === id ? { ...lesson, expanded: !lesson.expanded } : lesson
+      )
+    )
+  }
+
+  return (
+    <div className={styles.container}>
+      <BlockHeader columns={columns} />
+      <div className={styles.list}>
+        {lessons.map((lesson) => (
+          <div key={lesson.id} className={styles.lessonItem}>
+            <div className={styles.lessonContent}>
+              <div className={styles.title}>
+                <Typography variant="body_2">{lesson.title}</Typography>
+              </div>
+              <Select className={styles.date} placeholder={lesson.dateTime} options={options} />
+              <Select className={styles.format} placeholder={lesson.format} options={options} />
+            </div>
+            <Button
+              variant="primary"
+              className={styles.toggleButton}
+              onClick={() => toggleExpand(lesson.id)}
+            >
+              {lesson.expanded ? 'Скрыть блоки' : 'Открыть блоки'}
+              {lesson.expanded ? <ArrowUpIcon /> : <ArrowDownIcon />}
+            </Button>
+            {lesson.expanded && (
+              <div className={styles.expandedContent}>
+                Дополнительная информация по уроку {lesson.id}...
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
