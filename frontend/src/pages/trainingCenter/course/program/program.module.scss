@@ -16,13 +16,15 @@
     display: flex;
     position: relative;
     flex-direction: column;
+    overflow: visible;
     
   }
   
   .lessonContent {
     display: grid;
     grid-template-columns: 2fr 1fr 1fr;
-    align-items: center;
+    grid-template-areas: 'title date format';
+    align-items: flex-end;
     padding-top: 12px;
     padding-bottom: 12px;
     width: 100%;
@@ -30,6 +32,26 @@
     &:first-child {
         text-align: left;
     }
+
+    @media screen and (max-width: 1349px){
+        grid-template-columns: 1fr 1fr;
+        grid-template-areas:
+          'title title'
+          'date format';
+      }
+  }
+
+  .title {
+    grid-area: title;
+
+  }
+
+  .date {
+    grid-area: date;
+  }
+
+  .format {
+    grid-area: format;
   }
   
   .title p {
@@ -37,11 +59,12 @@
         border-bottom: 1px solid var(--color-additional-border700);
         margin-right: 12px;
         padding-left: 24px;
+        padding-bottom: 9px;
 
     &::before {
         content: "⋮⋮";
         font-size: 16px;
-        color: #888;
+        color: var(--color-text-secondary);
         position: absolute;
         left: 4px;
         top: 35%;
@@ -67,8 +90,20 @@
     padding-left: 8px;
     padding-right: 8px;
 
+    &:first-child, :nth-child(4) {
+        min-height: 60px;
+    }
+
     div {
-        height: 100%;
+        width: 100%;
+
+        @media screen and (min-width: 1350px) {
+            max-width: 220px;
+        }
+
+        @media screen and (max-width: 1349px) {
+            left: 0;
+        }
     }
   }
   
