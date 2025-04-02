@@ -109,7 +109,8 @@ class CoreSCORM(BaseCoreSCORM):
     def _process_stucture_data(self,
                                organization: DataSetCore,
                                root: ET.Element,
-                               ) -> list[tuple[str, str], (list[tuple[str, str]] | None)]:
+                               ) -> (list[tuple[str, str],
+                                          (list[tuple[str, str]] | None)]):
         sub_titles = []
         sub_items = self._get_items(
             organization=organization

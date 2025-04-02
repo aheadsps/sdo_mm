@@ -5,3 +5,7 @@ class BaseParser(AbstractParser):
     """
     Базовый парсер
     """
+
+    def __init__(self,
+                 wrapper):
+        super().__init__()
