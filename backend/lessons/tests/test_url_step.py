@@ -1,3 +1,4 @@
+import json
 import datetime
 from pathlib import Path
 
@@ -7,7 +8,6 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group, Permission
 from django.contrib.contenttypes.models import ContentType
 from django.conf import settings
-from django.urls import reverse
 from django.core.files import File
 
 from lessons.models import Step, ContentAttachment
@@ -68,12 +68,12 @@ class TestStepUrl(APITestCase):
         """
         Добавление нового объекта в Step
         """
-        url = reverse("lessons:step-list")
+        url = '/api/v1/step'
         data = {
             "serial": 4,
             "title": "Шаг 4",
             "content_text": "content_text",
-            "content_attachment": [],
+            "attachments": [],
         }
         response = self.client.post(url, data, format="json")
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -85,12 +85,12 @@ class TestStepUrl(APITestCase):
         """
         Меняем объект в Step
         """
-        url = reverse("lessons:step-detail", kwargs={"pk": step.id})
+        url = f'/api/v1/step/{step.pk}'
         data = {
             "serial": 4,
             "title": "Шаг 4",
             "content_text": "Новый текст",
-            "content_attachment": [{"file": None, "file-type": "Image"}],
+            "attachments": [{"file": None, "file-type": "Image"}],
         }
         response = self.client.patch(url, data, format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -99,33 +99,33 @@ class TestStepUrl(APITestCase):
         """
         Выводим один объект Step
         """
-        url = reverse("lessons:step-detail", kwargs={"pk": step.id})
+        url = f'/api/v1/step/{step.pk}'
         response = self.client.get(url, data, format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         """
         Выводим все объекты Step
         """
-        url = reverse("lessons:step-list")
+        url = f'/api/v1/step'
         response = self.client.get(url, data, format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         """
         Удаляем объект Step 204_NO_CONTENT
         """
-        url = reverse("lessons:step-detail", kwargs={"pk": step.id})
+        url = f'/api/v1/step/{step.pk}'
         response = self.client.delete(url, data, format="json")
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
         """
         Добавление нового объекта в Step
         """
-        url = reverse("lessons:step-list")
+        url = '/api/v1/step'
         data = {
             "serial": -5,
             "title": "Шаг 4",
             "content_text": "content_text",
-            "content_attachment": [],
+            "attachments": [],
         }
         response = self.client.post(url, data, format="json")
         self.assertEqual(response.status_code, status.HTTP_422_UNPROCESSABLE_ENTITY)
@@ -147,7 +147,7 @@ class TestStepUrl(APITestCase):
             content_at = ContentAttachment._default_manager.create(
                 file=File(image),
                 file_type="Image",
-                content_attachment=step,
+                step=step,
             )
         with image_path_2.open("rb") as image:
 
@@ -155,8 +155,8 @@ class TestStepUrl(APITestCase):
                 "serial": 1,
                 "title": "Шаг 4",
                 "content_text": "content_text",
-                "content_attachment[0]file": image.raw,
-                "content_attachment[0]file_type": "Image",
+                "attachments[0]file": image.raw,
+                "attachments[0]file_type": "Image",
             }
             response = self.client.patch(url, data,  format='multipart')
         self.assertEqual(response.status_code, 200)

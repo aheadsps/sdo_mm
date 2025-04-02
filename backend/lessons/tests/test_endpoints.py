@@ -4,10 +4,9 @@ from rest_framework import status
 from rest_framework.test import APITestCase
 from django.contrib.auth import get_user_model
 from django.urls import reverse
-
 from lessons import models as lessons_models
-from users import models as users_models
 from lessons.utils import UTCTimeCast
+from users import models as users_models
 
 
 class TestEndpoints(APITestCase):
@@ -310,12 +309,14 @@ class TestEndpoints(APITestCase):
         self.assertEqual(response.status_code, 201)
         self.assertEqual(
             response.json(),
-            {'beginer': True,
-             'description': 'some_desc',
-             'experiences': [self.experience.pk],
-             'image': None,
-             'name': 'some_course',
-             'profession': self.profession.pk},
+            {
+                "beginer": True,
+                "description": "some_desc",
+                "experiences": [self.experience.pk],
+                "image": None,
+                "name": "some_course",
+                "profession": self.profession.pk,
+            },
         )
 
     def test_permission_create_course(self):
@@ -365,7 +366,7 @@ class TestEndpoints(APITestCase):
             format="json",
         )
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json()['name'], 'some_course_1')
+        self.assertEqual(response.json()["name"], "some_course_1")
 
     def test_permission_update_course(self):
         """
@@ -397,7 +398,7 @@ class TestEndpoints(APITestCase):
         """
         Тест удаления курса
         """
-        url = f'/api/v1/courses/{self.course.pk}'
+        url = f"/api/v1/courses/{self.course.pk}"
         response = self.client.delete(
             path=url,
         )
@@ -409,7 +410,7 @@ class TestEndpoints(APITestCase):
         """
         self.client.logout()
         self.client.force_authenticate(self.user_1)
-        url = f'/api/v1/courses/{self.course.pk}'
+        url = f"/api/v1/courses/{self.course.pk}"
         response = self.client.delete(
             path=url,
         )

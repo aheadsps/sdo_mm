@@ -1,0 +1,70 @@
+.main {
+  margin-top: 93px;
+  padding: 20px;
+}
+
+.contentBlock {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-areas:
+    'tasks warning'
+    'tasks courses';
+  column-gap: 40px;
+
+  @media (max-width: 1349px) {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      'warning'
+      'tasks'
+      'courses';
+    max-width: 520px;
+  }
+
+  @media screen and (min-width: 1350px) {
+    grid-template-rows: 0.2fr 1fr;
+  }
+
+  @media screen and (min-width: 768px) and (max-width: 1024px) {
+    max-width: 415px;
+  }
+}
+
+.warning {
+  grid-area: warning;
+}
+
+.tasks {
+  grid-area: tasks;
+  display: flex;
+  flex-direction: column;
+}
+
+.assignedCourses {
+  grid-area: courses;
+
+  @media screen and (max-width: 1349px) {
+    margin-top: 40px;
+  }
+}
+
+.title {
+  margin-bottom: 24px;
+  color: var(--color-text-primary);
+}
+
+.noTasksText {
+  color: var(--color-text-secondary);
+}
+
+.rightBlock {
+  margin-left: 32px;
+}
+
+.expiredTasks {
+  margin-top: 40px;
+  margin-bottom: 40px;
+}
+
+.appointedTask {
+  max-width: 100%;
+}

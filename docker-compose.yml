@@ -46,8 +46,8 @@ services:
       - backend
 
   rabbitmq:
-    image: 'rabbitmq:3.11-management'
-    container_name: 'rabbitmq'
+    image: rabbitmq:3.11-management
+    container_name: rabbitmq
     restart: unless-stopped
     volumes:
       - ./backend/docker/rabbitmq/rabbitmq.config:/etc/rabbitmq/rabbitmq.config:ro

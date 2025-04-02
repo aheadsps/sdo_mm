@@ -1,4 +1,5 @@
 from django.contrib import admin
+
 from lessons import models
 
 
@@ -18,7 +19,6 @@ class QuestionAdmin(admin.ModelAdmin):
     """
 
     list_display = ("text", "image")
-
 
 @admin.register(models.Step)
 class StepAdmin(admin.ModelAdmin):
@@ -70,6 +70,7 @@ class LessonAdmin(admin.ModelAdmin):
     Админ панель Урока
     """
     list_display = ("name", "serial", "course",)
+
 
 @admin.register(models.TestBlock)
 class TestBlockAdmin(admin.ModelAdmin):

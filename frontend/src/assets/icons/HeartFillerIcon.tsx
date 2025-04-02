@@ -19,12 +19,12 @@ const HeartFilledIcon = forwardRef<SVGSVGElement, SVGProps<SVGSVGElement>>(
         height="33.5"
         rx="16.75"
         stroke="#F8F9FA"
-        stroke-width="0.5"
+        strokeWidth="0.5"
       />
-      <g clip-path="url(#clip0_1070_41528)">
+      <g clipPath="url(#clip0_1070_41528)">
         <path
-          fill-rule="evenodd"
-          clip-rule="evenodd"
+          fillRule="evenodd"
+          clipRule="evenodd"
           d="M16.9998 11.3141C21.4378 6.75205 32.5338 14.7351 16.9998 25.0001C1.46578 14.7361 12.5618 6.75205 16.9998 11.3141Z"
           fill="#F8F9FA"
         />

@@ -9,9 +9,12 @@
   --color-bg-gray100: #f8f9fa;
   --color-bg-gray200: #e9ecef;
   --color-bg-red700: #831f29;
+  --color-bg-red800: #58151c;
   --color-bg-1: #831f291a;
   --color-bg-2: #831f2999;
   --color-bg-3: #48505666;
+  --color-bg-green: #1aa179;
+  --color-bg-modal: #48505666;
 
   /* text colors */
   --color-text-primary: #2c0b0f;
@@ -81,10 +84,10 @@
   src:
     local('Moscow Sans'),
     local('Moscow-Sans'),
-    url('/img/fonts/MoscowSans/moscowsansregular.ttf') format('ttf'),
-    url('/img/fonts/MoscowSans/moscowsansregular.woff2') format('woff2'),
-    url('/img/fonts/MoscowSans/moscowsansregular.eot') format('eot'),
-    url('/img/fonts/MoscowSans/moscowsansregular.woff') format('woff');
+    url('/fonts/MoscowSans/moscowsansregular.ttf') format('ttf'),
+    url('/fonts/MoscowSans/moscowsansregular.woff2') format('woff2'),
+    url('/fonts/MoscowSans/moscowsansregular.eot') format('eot'),
+    url('/fonts/MoscowSans/moscowsansregular.woff') format('woff');
   font-display: swap;
 }
 

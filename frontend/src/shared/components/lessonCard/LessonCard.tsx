@@ -1,4 +1,5 @@
 import { ReactNode, useState } from 'react'
+import { NavLink } from 'react-router-dom'
 
 import { ClockIcon, DislikeIcon, HourglassIcon, LikeIcon, StickersIcon } from '@assets/icons'
 import { Course } from '@pages/my-learning'
@@ -65,7 +66,9 @@ export const LessonCard: React.FC<Props> = (props) => {
             <p className={s.container__depiction}>{item.description}</p>
           </div>
         </div>
-        <Button className={s.container__btn} children="Перейти к обучению" />
+        <NavLink to={'/learning/course'}>
+          <Button className={s.container__btn} children="Перейти к обучению" />
+        </NavLink>
       </div>
     </div>
   )

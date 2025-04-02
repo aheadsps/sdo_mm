@@ -9,7 +9,9 @@ import { tabsData } from './tabs/tabsData'
 
 export const CourseComponent = () => {
   const { isOpen: isOffcanvasOpen, close: closeOffcanvas, toggle: toggleOffCanvas } = useToggle()
-
+  // const hendleNavigate = async () => {
+  //   await navigate('/learning/course')
+  // }
   return (
     <div className={s.courseContent}>
       <NavLink to={'/learning'} className={s.backToPage}>
@@ -35,4 +37,5 @@ export const CourseComponent = () => {
       <AiComponent isOpen={isOffcanvasOpen} close={closeOffcanvas} />
     </div>
   )
+  // )
 }
