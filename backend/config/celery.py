@@ -4,7 +4,7 @@ import celery
 
 
 app = celery.Celery(__name__, broker=CELERY_BROKER_URL)
-app.config_from_object('django.conf:settings', namespace='backend')
+app.config_from_object('config.settings', namespace='backend')
 app.autodiscover_tasks()
 
 

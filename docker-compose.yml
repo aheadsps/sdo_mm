@@ -62,7 +62,7 @@ services:
     build:
       context: .
       dockerfile: ./backend/docker/django/Dockerfile
-    command: /start
+    command: /start-celeryworker
     volumes:
       - ./backend/:/app
     env_file:
@@ -80,7 +80,7 @@ services:
     build:
       context: .
       dockerfile: ./backend/docker/django/Dockerfile
-    command: /start
+    command: /start-celerybeat
     volumes:
       - ./backend/:/app
     env_file:
@@ -96,7 +96,7 @@ services:
     build:
       context: .
       dockerfile: ./backend/docker/django/Dockerfile
-    command: /start
+    command: /start-flower
     volumes:
       - ./backend/:/app
     ports:
