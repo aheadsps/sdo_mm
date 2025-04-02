@@ -10,11 +10,34 @@ from django.core.files.base import ContentFile
 from lessons.scorm.engine.exceptions import SCORMExtractError
 from lessons.scorm.engine.utils import is_dir
 from lessons.models import SCORM, SCORMFile
+from .datasets import DataSetCore
 
 
 class CoreSCORM:
     """
     Ядро работы конструктора SCORM
+
+    `Внутренее устроиство:`
+
+    - Обработка полученного ZIP архива со SCORM
+    - Получение корня SCORM
+    - Нахождение imsmanifest.xml
+    - Вывод префикса для работы DOMTree
+    - Разбиение DOMTree на части и получение основных компонентов
+    - Основные компоненты обворачиваются в обочку class::DataSetCore::
+    - `DataSetCore` предоставляет удобной API для взаимодейсвия с конкретными
+    элементами древа
+
+    `Пример использования:`
+
+    ```python
+    with zipfile.ZipFile(zip_file_path) as file:
+            scorm = CoreSCORM(zip_file=file)
+
+    scorm.resources['file']
+    scorm.save()
+    ```
+
     """
     def __init__(self,
                  zip_file: zipfile.ZipFile,
@@ -24,8 +47,9 @@ class CoreSCORM:
         self._manifest: ET.ElementTree | None = None
         self._manifest_file: IO[bytes] | None = None
         self._meta: ET.Element | None = None
-        self._organizations: ET.Element | None = None
-        self._resources: list[ET.Element] | None = None
+        self._organizations: list[ET.Element] | None = None
+        self._resources: ET.Element | None = None
+        self._structure: bytes | None = None
         with self as manifest:
             namespace = self._get_namespace(manifest)
             self.prefix = "{" + namespace + "}" if namespace else ""
@@ -41,7 +65,10 @@ class CoreSCORM:
 
     @property
     def meta(self):
-        return self._meta
+        return DataSetCore(
+            element=self._meta,
+            prefix=self.prefix,
+        )
 
     @property
     def organizations(self):
@@ -49,7 +76,14 @@ class CoreSCORM:
 
     @property
     def resources(self):
-        return self._resources
+        return DataSetCore(
+            element=self._resources,
+            prefix=self.prefix,
+        )
+
+    @property
+    def structure(self):
+        return self._structure
 
     def _get_manifest_tree(self, manifest_file: IO[bytes]) -> ET.ElementTree:
         logger.debug(f'manifest_file is {manifest_file}')
@@ -79,7 +113,7 @@ class CoreSCORM:
             f"{prefix}resources/{prefix}resource[@href]"
         )
         self._meta = root.find(
-            f"{prefix}metadata/{prefix}schemaversion"
+            f"{prefix}metadata"
         )
         self._organizations = self._get_organizations(
             root=root,
@@ -98,6 +132,9 @@ class CoreSCORM:
             f"{prefix}organizations/{prefix}organization"
         )
         return organizations
+
+    def get_structure(self, index):
+
 
     def _get_root_path(self,
                        zip_infos: list[zipfile.ZipInfo],
