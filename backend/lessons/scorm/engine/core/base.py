@@ -1,4 +1,3 @@
-import os
 import zipfile
 
 import xml.etree.ElementTree as ET
@@ -123,33 +122,6 @@ class BaseSCORMCore(AbstractCore):
             f"{prefix}organizations/{prefix}organization"
         )
         return organizations
-
-    def _get_root_path(self,
-                       zip_infos: list[zipfile.ZipInfo],
-                       ) -> str:
-        """
-        Получение адресса корня
-        """
-        root_depth = -1
-        root_path = None
-        for zipinfo in zip_infos:
-            if os.path.basename(zipinfo.filename) == self.root_name:
-                depth = len(os.path.split(zipinfo.filename))
-                if depth < root_depth or root_depth < 0:
-                    root_path = os.path.dirname(zipinfo.filename)
-                    root_depth = depth
-
-        if root_path is None:
-            raise SCORMExtractError(
-                f"Не возможно найти {self.root_name} в zip архиве"
-            )
-
-        return root_path
-
-    def _get_name_course(self, prefix: str) -> str:
-        item_title = self._organizations[0].find(f"{prefix}title").text
-        logger.debug(f'title is {item_title}')
-        return item_title
 
     def _get_namespace(self, manifest_file: IO[bytes]) -> str:
         namespace = ""
