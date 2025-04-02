@@ -3,6 +3,7 @@ import json
 from django.utils import timezone
 from datetime import datetime
 from django.utils.crypto import get_random_string
+from config.celery import app
 
 
 class TaskManager:
@@ -174,10 +175,3 @@ class TaskManager:
     Создать шедулер
     """
 
-# Пусть пока будет тут
-def create_events(course_id: int, user_id: list, start_date, end_date) -> None:
-    """
-    создавать events
-    в любом количестве по списку пользователей
-    """
-    pass
