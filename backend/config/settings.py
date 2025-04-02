@@ -75,6 +75,7 @@ THIRD_PARTY_APPS = [
     "authemail",
     "phonenumbers",
     "corsheaders",
+    "channels",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + PROJECT_APPS + THIRD_PARTY_APPS
@@ -109,6 +110,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "config.wsgi.application"
+ASGI_APPLICATION = 'config.asgi.application'
 
 # OpenAPI
 
@@ -235,4 +237,11 @@ EMAIL_USE_SSL = False
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:8000",
     "http://localhost:5173",
+]
+
+CHANNELS_ALLOWED_WS_ORIGINS = [
+    "http://localhost:8000",
+    "http://localhost:5173",
+    "ws://localhost:8000",
+    "ws://localhost:5173",
 ]
