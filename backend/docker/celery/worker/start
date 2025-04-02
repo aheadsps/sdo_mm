@@ -6,4 +6,6 @@ set -o nounset
 celery -A config.celery.app \
   --broker=amqp://"${RABBITMQ_DEFAULT_USER}":"${RABBITMQ_DEFAULT_PASS}"@"${RMQ_HOST}":"${RMQ_PORT}" \
   worker \
-  --loglevel=info
+  --loglevel=INFO
+
+>&2 echo '****** Celery workers is available'

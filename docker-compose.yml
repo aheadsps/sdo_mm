@@ -72,7 +72,9 @@ services:
     depends_on:
       - rabbitmq
       - db
-      #- fast_api
+      - django
+      - celery_beat
+
 
   celery_beat:
     build:
@@ -88,7 +90,26 @@ services:
     depends_on:
       - rabbitmq
       - db
-      #- fast_api
+      - django
+
+  dashboard:
+    build:
+      context: .
+      dockerfile: ./backend/docker/django/Dockerfile
+    command: /start
+    volumes:
+      - ./backend/:/app
+    ports:
+      - 5555:5555
+    env_file:
+      - backend/.env
+    depends_on:
+      - celery_worker
+      - rabbitmq
+      - db
+      - django
+    networks:
+      - backend
 
 volumes:
   postgres_data:

@@ -233,6 +233,9 @@ CORS_ALLOWED_ORIGINS = [
 
 
 # CELERY
-CELERY_BROKER_URL = os.getenv("CELERY_BROKER_URL",
-                              default = 'amqp://localhost'
-                              )
+RABBITMQ_DEFAULT_USER = os.getenv("RABBITMQ_DEFAULT_USER")
+RABBITMQ_DEFAULT_PASS = os.getenv("RABBITMQ_DEFAULT_PASS")
+RMQ_HOST = os.getenv("RMQ_HOST")
+RMQ_PORT = os.getenv("RMQ_PORT")
+CELERY_BROKER_URL = f'amqp:{RABBITMQ_DEFAULT_USER}:{RABBITMQ_DEFAULT_PASS}"@"{RMQ_HOST}":"{RMQ_PORT}'
+
