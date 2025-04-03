@@ -1,7 +1,8 @@
-import { Button, type Option, Select, Textarea, Typography } from '@shared/components'
+import { Button, FormInput, type Option, Select, Textarea, Typography } from '@shared/components'
 import clsx from 'clsx'
 
 import { ArrowRightIcon } from '@assets/icons'
+import CalendarIcon from '@assets/icons/CalendarIcon'
 
 import { LessonType } from '../data'
 
@@ -43,12 +44,12 @@ export const LessonContent = <T extends LessonType>({
         </>
       ) : (
         <>
-          <Select
-            className={s.date}
-            placeholder={lesson?.dateTime ? lesson.dateTime : 'Введите дату урока'}
-            options={optionsDate}
-            isCalendar
-          />
+          <FormInput
+            className={s.formInput}
+            placeholder={lesson?.dateTime ? lesson?.dateTime : 'Введите дату урока'}
+          >
+            <CalendarIcon width={'12px'} height={'12px'} className={s.calendarIcon} />
+          </FormInput>
           <Select
             className={s.format}
             placeholder={lesson?.format ? lesson?.format : 'Формат'}
