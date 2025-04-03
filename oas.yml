@@ -236,7 +236,7 @@ paths:
           application/json:
             schema:
               type: object
-              $ref: "#/components/schemas/EventCreate"
+              $ref: "#/components/schemas/EventUpdate"
       responses:
         "200":
           description: JSON ответ с изменеными данными
@@ -244,7 +244,7 @@ paths:
             application/json:
               schema:
                 type: object
-                $ref: "#/components/schemas/EventCreate"
+                $ref: "#/components/schemas/EventUpdate"
         "400":
           $ref: "#/components/responses/BadRequest"
         "401":
@@ -2059,7 +2059,7 @@ components:
           nullable: false
 
     EventCreate:
-      description: Сущность создания и обновления курса
+      description: Сущность создания события
       additionalProperties: false
       type: object
       properties:
@@ -2076,6 +2076,47 @@ components:
           type: string
           format: date-time
           readOnly: false
+          nullable: true
+        end_date:
+          type: string
+          format: date-time
+          readOnly: false
+          nullable: true
+        favorite:
+          type: boolean
+          description: Флаг избранного
+          default: false
+          readOnly: false
+        status:
+          description: Статус прохождения курса
+          enum:
+            - done
+            - process
+            - failed
+            - expected
+          readOnly: true
+          default: expected
+
+    EventUpdate:
+      description: Сущность обновления события
+      additionalProperties: false
+      type: object
+      properties:
+        user:
+          type: integer
+          minimum: 1
+          readOnly: true
+        course:
+          type: integer
+          minimum: 1
+          readOnly: true
+        done_lessons:
+          type: integer
+          default: 0
+        start_date:
+          type: string
+          format: date-time
+          readOnly: true
           nullable: true
         end_date:
           type: string

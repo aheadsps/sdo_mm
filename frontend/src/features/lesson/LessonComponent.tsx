@@ -4,7 +4,7 @@ import Video from '@shared/components/video/VideoComponent'
 import { useToggle } from '@shared/hooks/useToggle'
 import { ReactNode } from 'react'
 
-import { ArrowLeftIcon, YouTubeLogo } from '@assets/icons'
+import { ArrowLeftIcon } from '@assets/icons'
 
 import s from './lessonComponent.module.scss'
 
