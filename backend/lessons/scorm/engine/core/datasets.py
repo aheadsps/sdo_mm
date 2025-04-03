@@ -1,8 +1,7 @@
-import xml.etree.ElementTree as ET
 from typing import TypeVar, Generic
 
 
-EL = TypeVar('ET', bound=list[ET.Element])
+EL = TypeVar('EL')
 
 
 class DataSetCore(Generic[EL]):
@@ -21,14 +20,14 @@ class DataSetCore(Generic[EL]):
     def element(self) -> EL:
         return self._element
 
-    def __getitem__(self, index: str) -> list['DataSetCore']:
+    def __getitem__(self, index: str) -> list[EL]:
         index_p = self.prefix + str(index)
         element = self._element.find(index_p)
         if element is None:
             element = self._element.findall(index_p)
             if element:
                 element = [
-                    DataSetCore(
+                    DataSetCore[EL](
                         element=el,
                         prefix=self.prefix,
                         )
@@ -36,7 +35,7 @@ class DataSetCore(Generic[EL]):
                     in element]
         else:
             element = [
-                DataSetCore(
+                DataSetCore[EL](
                     element=element,
                     prefix=self.prefix,
                     )

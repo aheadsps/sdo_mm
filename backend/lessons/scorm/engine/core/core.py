@@ -1,4 +1,6 @@
 import os
+import re
+from typing import TypeVar
 import zipfile
 
 import xml.etree.ElementTree as ET
@@ -13,6 +15,9 @@ from lessons.scorm.engine.utils import sanitize_input
 from lessons.scorm.engine.exceptions import SCORMExtractError
 from .base import BaseCoreSCORM
 from .datasets import DataSetCore
+
+
+DT = TypeVar('DT', bound=DataSetCore[ET.Element])
 
 
 class CoreSCORM(BaseCoreSCORM):
@@ -38,7 +43,7 @@ class CoreSCORM(BaseCoreSCORM):
                  zip_file: zipfile.ZipFile,
                  ):
         super().__init__(zip_file)
-        self._structures: list[tuple[str, str], str] | None = None
+        self._structures: list[list[tuple[str, str], str]] | None = None
 
     @property
     def structures(self):
@@ -47,8 +52,8 @@ class CoreSCORM(BaseCoreSCORM):
         return self._structures
 
     def _get_items(self,
-                   organization: DataSetCore,
-                   ) -> list[DataSetCore] | list[None]:
+                   organization: DT,
+                   ) -> list[DT] | list[None]:
         items = organization['item']
         return items
 
@@ -77,7 +82,7 @@ class CoreSCORM(BaseCoreSCORM):
     def _get_resource_depends_on_identifier(self,
                                             identifier: str | None,
                                             root: ET.Element,
-                                            ) -> list[DataSetCore]:
+                                            ) -> list[DT]:
         if not identifier:
             resource_link = "#"
         else:
@@ -88,8 +93,25 @@ class CoreSCORM(BaseCoreSCORM):
         logger.debug(f'resource lisk is {resource_link}')
         return resource_link
 
+    def _get_json_files_from_identifier(self,
+                                        identifier: str | None,
+                                        root: ET.Element,
+                                        ):
+        if identifier:
+            resources = root.findall(
+                f'{self.prefix}resources/{self.prefix}resource[@identifier="{identifier}"]/',
+            )
+            jsons = []
+            for elem in resources:
+                if re.match(r'^.*.json*$', elem.get('href')):
+                    jsons.append(elem)
+        else:
+            jsons = []
+        logger.debug(f'get jsons {jsons}')
+        return jsons
+
     def _get_item_title(self,
-                        organization: DataSetCore,
+                        organization: DT,
                         ) -> str:
         title = organization['title'][0].element.text
         sanitize_text = sanitize_input(title)
@@ -107,11 +129,11 @@ class CoreSCORM(BaseCoreSCORM):
         return structure_list
 
     def _process_stucture_data(self,
-                               organization: DataSetCore,
+                               organization: DT,
                                root: ET.Element,
                                ) -> (list[tuple[str, str],
                                           (list[tuple[str, str]] | None)]):
-        sub_titles = []
+        sub_titles = list()
         sub_items = self._get_items(
             organization=organization
         )
@@ -123,9 +145,16 @@ class CoreSCORM(BaseCoreSCORM):
             identifier=identifier,
             root=root,
         )
+        jsons = self._get_json_files_from_identifier(
+            identifier=identifier,
+            root=root,
+        )
         if not sub_items:
             logger.debug(f'add to structure list item - {title, resource_link}')
-            return [(title, resource_link)]
+            return [dict(title=title,
+                         resourse=resource_link,
+                         jsons=jsons,
+                         )]
         else:
             for item in sub_items:
                 if "isvisible" in item.element.attrib and item.element.attrib["isvisible"] == "true":
@@ -133,7 +162,10 @@ class CoreSCORM(BaseCoreSCORM):
                         organization=item,
                         root=root,
                     ))
-            return [(title, resource_link), sub_titles]
+            return [dict(title=title,
+                         resource=resource_link,
+                         jsons=jsons,
+                         ), sub_titles]
 
     def save(self) -> SCORM:
         """

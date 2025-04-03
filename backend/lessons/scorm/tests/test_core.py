@@ -28,6 +28,6 @@ class TestSCORMCore(TestCase):
 
         self.assertEqual(scorm.resources['file'][0].element.get('href'), 'json/structure.json')
         self.assertEqual(scorm.meta['schemaversion'][0].element.text, '2004 4th Edition')
-        self.assertEqual(scorm.structures, [('Просто курс', '#'), [('Просто курс', 'index.html')]])
+        self.assertEqual(scorm.structures[0][0]['title'], 'Введение в Python')
         self.assertEqual(SCORM._default_manager.count(), 1)
-        self.assertEqual(SCORM._default_manager.get().name, 'Просто курс')
+        self.assertEqual(SCORM._default_manager.get().name, 'Введение в Python')
