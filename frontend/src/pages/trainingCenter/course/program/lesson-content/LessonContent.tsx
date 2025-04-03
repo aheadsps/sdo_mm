@@ -1,23 +1,26 @@
 import { Button, type Option, Select, Textarea, Typography } from '@shared/components'
+import clsx from 'clsx'
 
-import ArrowRightIcon from '@assets/icons/ArrowLeftIcon'
+import { ArrowRightIcon } from '@assets/icons'
 
 import { LessonType } from '../data'
 
 import s from './lesson-content.module.scss'
 
-type Props = {
-  lesson?: LessonType
+//todo: добавить тип для lesson и лучше переименовать
+
+type Props<T extends LessonType> = {
+  lesson?: T
   optionsDate?: Option[]
   optionsFormat?: Option[]
   isExpandableContent?: boolean
 }
-export const LessonContent = ({
+export const LessonContent = <T extends LessonType>({
   lesson,
   optionsDate,
   optionsFormat,
   isExpandableContent = false,
-}: Props) => {
+}: Props<T>) => {
   return (
     <div className={s.lessonContent}>
       <div className={s.title}>
@@ -30,10 +33,9 @@ export const LessonContent = ({
       {isExpandableContent ? (
         <>
           <Select
-            className={s.date}
-            placeholder={lesson?.dateTime ? lesson.dateTime : 'Введите дату урока'}
+            className={clsx(s.date, s.access)}
+            placeholder={'Выберите доступ'}
             options={optionsDate}
-            isCalendar
           />
           <Button variant="secondary" className={s.constructorBtn}>
             <ArrowRightIcon width={'12px'} height={'12px'} />

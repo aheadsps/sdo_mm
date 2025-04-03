@@ -13,7 +13,8 @@ const columns = ['Уроки', 'Дата и время занятия', 'Фор�
 
 export const Program: React.FC = () => {
   const [lessons, setLessons] = useState(lessonsData)
-  const [newItemCount, setNewItemCount] = useState<number[]>([])
+  const [newLessonCount, setNewLessonCount] = useState<number[]>([])
+  const [newTopicCount, setNewTopicCount] = useState<number[]>([])
 
   const toggleExpand = (id: number) => {
     setLessons((prevLessons) =>
@@ -23,8 +24,12 @@ export const Program: React.FC = () => {
     )
   }
 
-  const onAddNewItem = () => {
-    setNewItemCount((prev) => [...prev, prev.length + 1])
+  const onAddNewLesson = () => {
+    setNewLessonCount((prev) => [...prev, prev.length + 1])
+  }
+
+  const onAddNewTopic = () => {
+    setNewTopicCount((prev) => [...prev, prev.length + 1])
   }
 
   return (
@@ -45,18 +50,26 @@ export const Program: React.FC = () => {
             {lesson.expanded && (
               <div className={styles.expandedContent}>
                 <ExpandedContent />
+                {newTopicCount.map((topic) => (
+                  <div key={topic} className={styles.lessonItem}>
+                    <LessonContent isExpandableContent />
+                  </div>
+                ))}
+                <button className={styles.addButton}>
+                  <AddItemIcon height={'12px'} width={'12px'} onClick={onAddNewTopic} />
+                </button>
               </div>
             )}
           </div>
         ))}
-        {newItemCount.map((item) => (
+        {newLessonCount.map((item) => (
           <div key={item} className={styles.lessonItem}>
             <LessonContent />
           </div>
         ))}
       </div>
       <button className={styles.addButton}>
-        <AddItemIcon height={'12px'} width={'12px'} onClick={onAddNewItem} />
+        <AddItemIcon height={'12px'} width={'12px'} onClick={onAddNewLesson} />
       </button>
     </div>
   )
