@@ -8,6 +8,218 @@
         }
     },
     {
+        "model": "lessons.event",
+        "pk": 1,
+        "fields": {
+            "user": 1,
+            "course": 1,
+            "done_lessons": 0,
+            "start_date": "2025-04-03T09:38:12Z",
+            "end_date": "2025-04-14T09:37:45Z",
+            "favorite": false,
+            "status": "process"
+        }
+    },
+    {
+        "model": "lessons.event",
+        "pk": 2,
+        "fields": {
+            "user": 1,
+            "course": 2,
+            "done_lessons": 0,
+            "start_date": "2025-04-02T14:07:47Z",
+            "end_date": "2025-04-03T14:08:04Z",
+            "favorite": true,
+            "status": "failed"
+        }
+    },
+    {
+        "model": "lessons.course",
+        "pk": 1,
+        "fields": {
+            "name": "Крутой курс",
+            "description": "Самый лучший курс для всех",
+            "beginer": false,
+            "create_date": "2025-04-03T09:33:23.353Z",
+            "update_date": "2025-04-03T09:33:23.353Z",
+            "image": "course/Крутой курс/обучение-персонала-1024x717.png",
+            "profession": 2,
+            "experiences": [
+                3,
+                4
+            ]
+        }
+    },
+    {
+        "model": "lessons.course",
+        "pk": 2,
+        "fields": {
+            "name": "Какой то курс",
+            "description": "Какой то курс для платформы",
+            "beginer": false,
+            "create_date": "2025-04-03T13:42:48.898Z",
+            "update_date": "2025-04-03T13:42:48.898Z",
+            "image": "course/Какой то курс/999040e8eabc54c98bb105dd42ddf495.jpg",
+            "profession": 1,
+            "experiences": [
+                2,
+                3,
+                4
+            ]
+        }
+    },
+    {
+        "model": "lessons.lesson",
+        "pk": 1,
+        "fields": {
+            "name": "Самый крутой урок",
+            "serial": 1,
+            "course": 1
+        }
+    },
+    {
+        "model": "lessons.lesson",
+        "pk": 2,
+        "fields": {
+            "name": "Еще Лучше Урок",
+            "serial": 2,
+            "course": 1
+        }
+    },
+    {
+        "model": "lessons.lesson",
+        "pk": 3,
+        "fields": {
+            "name": "Какой то урок",
+            "serial": 1,
+            "course": 2
+        }
+    },
+    {
+        "model": "lessons.lesson",
+        "pk": 4,
+        "fields": {
+            "name": "Какой то еще урок",
+            "serial": 2,
+            "course": 2
+        }
+    },
+    {
+        "model": "lessons.step",
+        "pk": 1,
+        "fields": {
+            "title": "Шаг 1",
+            "content_text": "Какой то тут контент",
+            "serial": 1,
+            "lesson": 1
+        }
+    },
+    {
+        "model": "lessons.step",
+        "pk": 2,
+        "fields": {
+            "title": "Шаг 2",
+            "content_text": "Хороший контент",
+            "serial": 2,
+            "lesson": 1
+        }
+    },
+    {
+        "model": "lessons.step",
+        "pk": 3,
+        "fields": {
+            "title": "Какой то шаг",
+            "content_text": "Кокой то контент для шага",
+            "serial": 1,
+            "lesson": 3
+        }
+    },
+    {
+        "model": "lessons.step",
+        "pk": 4,
+        "fields": {
+            "title": "Еще какой то шаг",
+            "content_text": "Еще какой то контент",
+            "serial": 1,
+            "lesson": 4
+        }
+    },
+    {
+        "model": "lessons.contentattachment",
+        "pk": 1,
+        "fields": {
+            "file": "content_attachment/Kakoy_to_shag/sample-5s.mp4",
+            "file_type": "Video",
+            "step": 3
+        }
+    },
+    {
+        "model": "lessons.contentattachment",
+        "pk": 2,
+        "fields": {
+            "file": "content_attachment/Shag_1/sample-10s.mp4",
+            "file_type": "Video",
+            "step": 1
+        }
+    },
+    {
+        "model": "lessons.testblock",
+        "pk": 1,
+        "fields": {
+            "lesson": null
+        }
+    },
+    {
+        "model": "lessons.testblock",
+        "pk": 2,
+        "fields": {
+            "lesson": 1
+        }
+    },
+    {
+        "model": "lessons.testblock",
+        "pk": 3,
+        "fields": {
+            "lesson": 4
+        }
+    },
+    {
+        "model": "lessons.question",
+        "pk": 1,
+        "fields": {
+            "text": "Кто ты такой?",
+            "image": "",
+            "test_block": 1
+        }
+    },
+    {
+        "model": "lessons.question",
+        "pk": 2,
+        "fields": {
+            "text": "Когда закончим?",
+            "image": "",
+            "test_block": 1
+        }
+    },
+    {
+        "model": "lessons.question",
+        "pk": 3,
+        "fields": {
+            "text": "Крутой вопрос",
+            "image": "",
+            "test_block": 2
+        }
+    },
+    {
+        "model": "lessons.question",
+        "pk": 4,
+        "fields": {
+            "text": "Какой то вопрос",
+            "image": "question/Какой то в/49_picture_66eaed78.jpg",
+            "test_block": 3
+        }
+    },
+    {
         "model": "lessons.answer",
         "pk": 1,
         "fields": {
@@ -40,15 +252,6 @@
         "fields": {
             "text": "Инопланетянин",
             "correct": true,
-            "question": 1
-        }
-    },
-    {
-        "model": "lessons.answer",
-        "pk": 5,
-        "fields": {
-            "text": "Еети",
-            "correct": false,
             "question": 1
         }
     },
@@ -89,27 +292,49 @@
         }
     },
     {
-        "model": "lessons.question",
-        "pk": 1,
+        "model": "lessons.answer",
+        "pk": 9,
         "fields": {
-            "text": "Кто ты такой?",
-            "image": "",
-            "test_block": 1
+            "text": "Крутой ответ",
+            "correct": true,
+            "question": 3
         }
     },
     {
-        "model": "lessons.question",
-        "pk": 2,
+        "model": "lessons.answer",
+        "pk": 10,
         "fields": {
-            "text": "Когда закончим?",
-            "image": "",
-            "test_block": 1
+            "text": "Хороший ответ",
+            "correct": false,
+            "question": 3
         }
     },
     {
-        "model": "lessons.testblock",
-        "pk": 1,
-        "fields": {}
+        "model": "lessons.answer",
+        "pk": 11,
+        "fields": {
+            "text": "Не очень ответ",
+            "correct": false,
+            "question": 3
+        }
+    },
+    {
+        "model": "lessons.answer",
+        "pk": 12,
+        "fields": {
+            "text": "Какой то ответ",
+            "correct": true,
+            "question": 4
+        }
+    },
+    {
+        "model": "lessons.answer",
+        "pk": 13,
+        "fields": {
+            "text": "Еще какой то ответ",
+            "correct": false,
+            "question": 4
+        }
     },
     {
         "model": "users.profession",
@@ -140,7 +365,7 @@
             "first_name": "Vasia",
             "last_name": "Petechkin",
             "date_joined": "2025-03-17T06:12:30.791Z",
-            "last_login": "2025-03-27T16:49:48.781Z",
+            "last_login": "2025-04-03T13:55:24.547Z",
             "date_commencement": "2024-01-01",
             "profession": 1,
             "groups": [],
