@@ -7,19 +7,25 @@ import s from './form-input.module.scss'
 
 type Props = {
   children?: ReactNode
+  icon?: ReactNode
   className?: string
+  isOpen?: boolean
+  onClick: () => void
 } & ComponentPropsWithoutRef<'input'>
 
-export const FormInput = ({ children, className, placeholder }: Props) => {
+export const FormInput = ({ children, className, placeholder, isOpen, icon, onClick }: Props) => {
   const { width } = useScreenWidth()
   return (
     <div className={s.inputBlock}>
-      {width < 400 ? (
+      {width < 425 ? (
         <Textarea className={className} placeholder={placeholder} />
       ) : (
         <Input className={className} placeholder={placeholder} />
       )}
-      {children}
+      <div className={s.icon} onClick={onClick}>
+        {icon}
+      </div>
+      {isOpen && <div className={s.dropdown}>{children}</div>}
     </div>
   )
 }

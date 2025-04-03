@@ -1,4 +1,4 @@
-import { Button, FormInput, type Option, Select, Textarea, Typography } from '@shared/components'
+import { Button, FormInput, Input, type Option, Select, Typography } from '@shared/components'
 import { useToggle } from '@shared/hooks/useToggle'
 import clsx from 'clsx'
 
@@ -19,7 +19,6 @@ type Props<T extends LessonType> = {
 }
 export const LessonContent = <T extends LessonType>({
   lesson,
-  optionsDate,
   optionsFormat,
   isExpandableContent = false,
 }: Props<T>) => {
@@ -28,7 +27,7 @@ export const LessonContent = <T extends LessonType>({
     <div className={s.lessonContent}>
       <div className={s.title}>
         {!lesson?.title ? (
-          <Textarea placeholder="Введите тему" />
+          <Input placeholder="Введите тему" />
         ) : (
           <Typography variant="body_2">{lesson?.title ? lesson.title : 'Введите тему'}</Typography>
         )}
@@ -38,7 +37,7 @@ export const LessonContent = <T extends LessonType>({
           <Select
             className={clsx(s.date, s.access)}
             placeholder={'Выберите доступ'}
-            options={optionsDate}
+            options={optionsFormat}
           />
           <Button variant="secondary" className={s.constructorBtn}>
             <ArrowRightIcon width={'12px'} height={'12px'} />
@@ -49,14 +48,12 @@ export const LessonContent = <T extends LessonType>({
           <FormInput
             className={s.formInput}
             placeholder={lesson?.dateTime ? lesson?.dateTime : 'Введите дату урока'}
+            content={'Здесь будет календарь'}
+            onClick={toggle}
+            icon={<CalendarIcon />}
+            isOpen={isOpen}
           >
-            <CalendarIcon
-              width={'12px'}
-              height={'12px'}
-              className={s.calendarIcon}
-              onClick={toggle}
-            />
-            {isOpen && <div className={s.dropdown}>Здесь будет календарь</div>}
+            Здесь будет календарь
           </FormInput>
           <Select
             className={s.format}

@@ -52,7 +52,7 @@ export const Program: React.FC = () => {
                 <ExpandedContent />
                 {newTopicCount.map((topic) => (
                   <div key={topic} className={styles.lessonItem}>
-                    <LessonContent isExpandableContent />
+                    <LessonContent isExpandableContent optionsFormat={options} />
                   </div>
                 ))}
                 <button className={styles.addButton}>
@@ -64,7 +64,7 @@ export const Program: React.FC = () => {
         ))}
         {newLessonCount.map((item) => (
           <div key={item} className={styles.lessonItem}>
-            <LessonContent />
+            <LessonContent optionsFormat={options} />
           </div>
         ))}
       </div>
