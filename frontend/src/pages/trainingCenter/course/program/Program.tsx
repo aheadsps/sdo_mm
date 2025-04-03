@@ -4,49 +4,10 @@ import React, { useState } from 'react'
 import { AddItemIcon, ArrowDownIcon, ArrowUpIcon } from '@assets/icons'
 
 import { BlockHeader } from './block-header/BlockHeader'
-import { ExpandedContent } from './exanded-content/ExpandedContent'
+import { lessonsData, options } from './data'
+import { ExpandedContent } from './expanded-content/ExpandedContent'
 import { LessonContent } from './lesson-content/LessonContent'
 import styles from './program.module.scss'
-
-export type Lesson = {
-  id: number
-  title: string
-  dateTime: string
-  format: string
-  expanded: boolean
-}
-
-const options = [
-  {
-    id: 1,
-    value: 'Cat',
-  },
-  {
-    id: 2,
-    value: 'Dog',
-  },
-  {
-    id: 3,
-    value: 'Apple',
-  },
-]
-
-const lessonsData: Lesson[] = [
-  {
-    id: 1,
-    title: 'Введение в безопасность: основные риски при работе с электроинструментом',
-    dateTime: '07.06.2025, 12:47',
-    format: 'Онлайн',
-    expanded: false,
-  },
-  {
-    id: 2,
-    title: 'Средства индивидуальной защиты: как минимизировать травмы',
-    dateTime: '10.06.2025, 03:05',
-    format: 'Онлайн',
-    expanded: false,
-  },
-]
 
 const columns = ['Уроки', 'Дата и время занятия', 'Формат']
 
