@@ -22,7 +22,7 @@ export const LessonContent = ({
     <div className={s.lessonContent}>
       <div className={s.title}>
         {!lesson?.title ? (
-          <Textarea placeholder="Введите тему" className={s.textarea} />
+          <Textarea placeholder="Введите тему" />
         ) : (
           <Typography variant="body_2">{lesson?.title ? lesson.title : 'Введите тему'}</Typography>
         )}
@@ -33,6 +33,7 @@ export const LessonContent = ({
             className={s.date}
             placeholder={lesson?.dateTime ? lesson.dateTime : 'Введите дату урока'}
             options={optionsDate}
+            isCalendar
           />
           <Button variant="secondary" className={s.constructorBtn}>
             <ArrowRightIcon width={'12px'} height={'12px'} />
@@ -44,6 +45,7 @@ export const LessonContent = ({
             className={s.date}
             placeholder={lesson?.dateTime ? lesson.dateTime : 'Введите дату урока'}
             options={optionsDate}
+            isCalendar
           />
           <Select
             className={s.format}

@@ -1,101 +1,93 @@
 .lessonContent {
-    display: grid;
-    grid-template-columns: 2fr 1fr 1fr;
-    grid-template-areas: 'title date format';
-    align-items: flex-end;
-    padding-top: 12px;
-    padding-bottom: 12px;
-    width: 100%;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  grid-template-areas: 'title date format';
+  align-items: flex-end;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  width: 100%;
 
-    &:first-child {
-        text-align: left;
-    }
-
-    @media screen and (max-width: 1349px){
-        grid-template-columns: 1fr 1fr;
-        grid-template-areas:
-          'title title'
-          'date format';
-      }
+  &:first-child {
+    text-align: left;
   }
 
-  .title {
-    grid-area: title;
-    display: flex;
-    padding-left: 8px;
-    padding-right: 8px;
-
+  @media screen and (max-width: 1349px){
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      'title title'
+      'date format';
   }
+}
 
-  .date {
-    grid-area: date;
-  }
+.title {
+  grid-area: title;
+  display: flex;
+  padding-left: 8px;
+  padding-right: 8px;
 
-  .format {
-    grid-area: format;
-  }
-  
-  .title p {
-        margin-left: 12px;
-        border-bottom: 1px solid var(--color-additional-border700);
-        margin-right: 12px;
-        padding-left: 18px;
-        padding-bottom: 9px;
+  &::before {
+    content: "⋮⋮";
+    font-size: 16px;
+    color: var(--color-text-secondary);
+    position: absolute;
+    left: 10px;
+    top: 30px;
+    transform: translateY(-50%);
+    line-height: 12px;
+    letter-spacing: -2px;
+    cursor: grab;
+}
 
-    &::before {
-        content: "⋮⋮";
-        font-size: 16px;
-        color: var(--color-text-secondary);
-        position: absolute;
-        left: 10px;
-        top: 30px;
-        transform: translateY(-50%);
-        line-height: 12px;
-        letter-spacing: -2px;
-        cursor: grab;
-    }
-
-    textarea {
-        resize: none;
-        padding-left: 9px;
-        padding-bottom: 12px;
-    }
-    
-  }
-  
-  .date,
-  .format {
-    width: 100%;
-    border-left: 1px solid var(--color-additional-border100);
-    margin: 0 auto;
-    padding-left: 8px;
-    padding-right: 8px;
-
-    &:first-child, :nth-child(4) {
-        min-height: 60px;
-    }
-
-    div {
-        width: 100%;
-
-        @media screen and (min-width: 1350px) {
-            max-width: 220px;
-        }
-
-        @media screen and (max-width: 1349px) {
-            left: 0;
-        }
-    }
-  }
-
-  .textarea {
-    height: 100%;
+  textarea {
     resize: none;
+    margin-left: 30px;
+    padding-bottom: 12px;
+    height: 100%;
     border-width: 1px;
   }
+}
 
-  .constructorBtn {
-    width: 40px;
-    height: 40px;
-    margin: 0 auto;
+.date {
+  grid-area: date;
+}
+
+.format {
+  grid-area: format;
+}
+
+.title p {
+  margin-left: 30px;
+  border-bottom: 1px solid var(--color-additional-border700);
+  padding-bottom: 9px;
+}
+  
+.date,
+.format {
+  width: 100%;
+  border-left: 1px solid var(--color-additional-border100);
+  margin: 0 auto;
+  padding-left: 8px;
+  padding-right: 8px;
+
+  &:first-child, :nth-child(4) {
+    min-height: 60px;
   }
+
+  div {
+    width: 100%;
+
+    @media screen and (min-width: 1350px) {
+      max-width: 220px;
+    }
+
+    @media screen and (max-width: 1349px) {
+      left: 0;
+    }
+  }
+}
+
+.constructorBtn {
+  width: 40px;
+  height: 40px;
+  margin: 0 auto;
+}
