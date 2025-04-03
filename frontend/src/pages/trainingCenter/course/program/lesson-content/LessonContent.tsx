@@ -1,15 +1,12 @@
 import { Button, FormInput, Input, type Option, Select, Typography } from '@shared/components'
-import { useToggle } from '@shared/hooks/useToggle'
+import { useToggle } from '@shared/hooks'
 import clsx from 'clsx'
 
-import { ArrowRightIcon } from '@assets/icons'
-import CalendarIcon from '@assets/icons/CalendarIcon'
+import { ArrowRightIcon, CalendarIcon } from '@assets/icons'
 
 import { LessonType } from '../data'
 
 import s from './lesson-content.module.scss'
-
-//todo: добавить тип для lesson и лучше переименовать
 
 type Props<T extends LessonType> = {
   lesson?: T
