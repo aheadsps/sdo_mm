@@ -66,14 +66,14 @@ class BaseCoreSCORM(AbstractCore):
 
     @property
     def meta(self):
-        return DataSetCore(
+        return DataSetCore[ET.Element](
             element=self._meta,
             prefix=self.prefix,
         )
 
     @property
     def organizations(self):
-        organizations = [DataSetCore(
+        organizations = [DataSetCore[ET.Element](
             element=organization,
             prefix=self.prefix,
         )
@@ -83,7 +83,7 @@ class BaseCoreSCORM(AbstractCore):
 
     @property
     def resources(self):
-        return DataSetCore(
+        return DataSetCore[ET.Element](
             element=self._resources,
             prefix=self.prefix,
         )

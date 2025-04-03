@@ -1,26 +1,24 @@
 import xml.etree.ElementTree as ET
+from typing import TypeVar, Generic
 
-from lessons.scorm.engine.exceptions import ElementTypeError
+
+EL = TypeVar('ET', bound=list[ET.Element])
 
 
-class DataSetCore:
+class DataSetCore(Generic[EL]):
     """
     DTO для взаимодействия с элементами
     """
 
     def __init__(self,
-                 element: ET.Element,
+                 element: EL,
                  prefix: str,
                  ):
-        if not isinstance(element, ET.Element):
-            raise ElementTypeError(
-                'Ожидался Element',
-            )
         self._element = element
         self.prefix = str(prefix)
 
     @property
-    def element(self) -> ET.Element:
+    def element(self) -> EL:
         return self._element
 
     def __getitem__(self, index: str) -> list['DataSetCore']:

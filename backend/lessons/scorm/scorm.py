@@ -1,16 +1,13 @@
-from typing import Generic, TypeVar, IO, ClassVar
+from typing import IO, ClassVar
 from pathlib import Path
 
 from zipfile import ZipFile
 
-from lessons.scorm.engine.parsers import BaseParser
 from lessons.scorm.engine.core import BaseSCORMCore, CoreSCORM
+from .s_types import ParserCallable
 
 
-P_co = TypeVar('P_co', covariant=True)
-
-
-class SCORMLoader(Generic[P_co]):
+class SCORMLoader:
     """
     Основная оболочка SCORM
     """
@@ -19,10 +16,8 @@ class SCORMLoader(Generic[P_co]):
 
     def __init__(self,
                  zip_archive: IO[bytes],
-                 parser: P_co,
                  ) -> None:
         self._zip_archive = zip_archive
-        self._parser = parser
         with ZipFile(zip_archive) as zip_file:
             self.scorm_core = self.core(zip_file)
 
@@ -34,9 +29,5 @@ class SCORMLoader(Generic[P_co]):
     def __exit__(self, type, value, traceback):
         self.file.close()
 
-    @property
-    def parser(self) -> P_co:
-        return self._parser
-
-    def entrypoint(self, parser: 'SCORMLoader'[BaseParser]) -> None:
+    def entrypoint(self, parser: ParserCallable) -> None:
         parser(self)

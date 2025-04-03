@@ -1,6 +1,17 @@
-from typing import TypeVar
-
-import xml.etree.ElementTree as ET
+from typing import Protocol, runtime_checkable
 
 
-EL = TypeVar('ET', bound=list[ET.Element])
+@runtime_checkable
+class ParserCallable(Protocol):
+    """
+    Протокол парсера
+    """
+    def parse(self): ...
+
+
+@runtime_checkable
+class WrapperCallable(Protocol):
+    """
+    Протокол обвертки
+    """
+    def entrypoint(self, parser: ParserCallable): ...

@@ -1,4 +1,5 @@
 from lessons.scorm.engine.parsers import AbstractParser
+from lessons.scorm.s_types import WrapperCallable
 
 
 class BaseParser(AbstractParser):
@@ -7,5 +8,6 @@ class BaseParser(AbstractParser):
     """
 
     def __init__(self,
-                 wrapper):
-        super().__init__()
+                 wrapper: WrapperCallable,
+                 ):
+        self._wrapper = wrapper
