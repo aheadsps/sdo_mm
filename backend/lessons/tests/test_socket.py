@@ -1,6 +1,7 @@
 import datetime
+import json
 
-from django.test import TestCase
+from rest_framework.test import APITestCase
 from django.contrib.auth import get_user_model
 from channels.testing import WebsocketCommunicator
 
@@ -9,10 +10,11 @@ from lessons import models as lessons_models
 from users import models as users_models
 
 
-class TestSocket(TestCase):
+class TestSocket(APITestCase):
     """
     Тесты сокета
     """
+
     def setUp(self):
         self.profession = users_models.Profession._default_manager.create(
             en_name="prof",
@@ -44,22 +46,140 @@ class TestSocket(TestCase):
         )
         group_profession.students.add(self.user)
         group_profession.save()
-        self.course = lessons_models.Course._default_manager.create(
+        course = lessons_models.Course._default_manager.create(
             name="course",
             description="some",
             profession=self.profession,
         )
-        self.course.experiences.add(
+        course.experiences.add(
             self.experience,
         )
-        self.course.save()
-        self.event = lessons_models.Event._default_manager.create(
+        course.save()
+        lesson = lessons_models.Lesson._default_manager.create(
+            name="lesson", course=course
+        )
+        lesson_1 = lessons_models.Lesson._default_manager.create(
+            name="lesson_1", course=course, serial=2,
+        )
+        lessons_models.LessonStory._default_manager.create(
+            course=course,
+            lesson=lesson,
             user=self.user,
-            course=self.course,
+        )
+        lessons_models.Step._default_manager.create(
+            title="step",
+            lesson=lesson,
+        )
+        self.test_block = lessons_models.TestBlock._default_manager.create(
+            lesson=lesson
+        )
+        question = lessons_models.Question._default_manager.create(
+            text="text",
+            test_block=self.test_block,
+        )
+        question_1 = lessons_models.Question._default_manager.create(
+            text="text_1",
+            test_block=self.test_block,
+        )
+        self.answer_1 = lessons_models.Answer._default_manager.create(
+            text="answer_1",
+            correct=False,
+            question=question,
+        )
+        self.answer_2 = lessons_models.Answer._default_manager.create(
+            text="answer_2",
+            correct=True,
+            question=question,
+        )
+        self.answer_3 = lessons_models.Answer._default_manager.create(
+            text="answer_3",
+            correct=False,
+            question=question,
+        )
+        self.answer_4 = lessons_models.Answer._default_manager.create(
+            text="answer_4",
+            correct=True,
+            question=question_1,
+        )
+        self.answer_5 = lessons_models.Answer._default_manager.create(
+            text="answer_5",
+            correct=True,
+            question=question_1,
+        )
+        self.answer_6 = lessons_models.Answer._default_manager.create(
+            text="answer_6",
+            correct=False,
+            question=question_1,
+        )
+        lessons_models.Event._default_manager.create(
+            user=self.user,
+            course=course,
             start_date=datetime.datetime(year=2026, month=1, day=1),
             end_date=None,
         )
         self.client.force_authenticate(self.user)
+        self.web_url = f"test-block/{self.test_block.pk}"
 
     async def test_consumer(self):
-        self.communicator = WebsocketCommunicator(AnswerCheckerConsumer.as_asgi())
+        communicator = WebsocketCommunicator(
+            application=AnswerCheckerConsumer.as_asgi(),
+            path=self.web_url,
+        )
+        communicator.scope.update(
+            user=self.user,
+            url_route=dict(kwargs=dict(block_id=self.test_block.pk)),
+        )
+        connected, subprotocol = await communicator.connect()
+        self.assertTrue(connected)
+
+        data = dict(answer_id=self.answer_2.pk, block_id=self.test_block.pk)
+        await communicator.send_json_to(data=data)
+        response = await communicator.receive_from()
+        self.assertEqual(
+            json.loads(response),
+            dict(
+                answer_id=self.answer_2.pk,
+                answer=self.answer_2.correct,
+            ),
+        )
+
+        data = dict(answer_id=self.answer_2.pk, block_id=self.test_block.pk)
+        await communicator.send_json_to(data=data)
+        response = await communicator.receive_from()
+        self.assertEqual(
+            json.loads(response),
+            {'message': 'Ответ уже был дан', 'type': 'error'},
+        )
+
+        data = dict(answer_id=self.answer_1.pk, block_id=self.test_block.pk)
+        await communicator.send_json_to(data=data)
+        response = await communicator.receive_from()
+        self.assertEqual(
+            json.loads(response),
+            {'answer': False, 'answer_id': self.answer_1.pk},
+        )
+
+        data = dict(answer_id=self.answer_5.pk, block_id=self.test_block.pk)
+        await communicator.send_json_to(data=data)
+        response = await communicator.receive_from()
+        self.assertEqual(
+            json.loads(response),
+            {'answer': True, 'answer_id': self.answer_5.pk},
+        )
+
+        data = dict(answer_id=self.answer_4.pk, block_id=self.test_block.pk)
+        await communicator.send_json_to(data=data)
+        response = await communicator.receive_from()
+        self.assertEqual(
+            json.loads(response),
+            {'answer': True, 'answer_id': self.answer_4.pk},
+        )
+
+        data = dict(answer_id=self.answer_6.pk, block_id=self.test_block.pk)
+        await communicator.send_json_to(data=data)
+        response = await communicator.receive_from()
+        self.assertEqual(
+            json.loads(response),
+            {'answer': False, 'answer_id': self.answer_6.pk},
+        )
+        await communicator.disconnect()

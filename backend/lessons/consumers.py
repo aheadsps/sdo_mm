@@ -11,16 +11,20 @@ class AnswerCheckerConsumer(WebsocketConsumer):
         """Инициализация соединения с проверкой доступа"""
         try:
             self.user = self.scope.get("user")
+            logger.debug(f'scope: {self.scope}')
+            logger.debug(f'user is {self.user}')
             if not self.user or not self.user.is_authenticated:
                 self._close_with_error(
                     "Требуется авторизация", 401)
                 return
 
             self.block_id = self.scope['url_route']['kwargs']['block_id']
+            logger.debug(f'get block_id {self.block_id}')
 
             try:
                 self.test_block = TestBlock.objects.select_related(
                     'lesson__course').get(pk=self.block_id)
+                logger.debug(f'get test_block {self.test_block}')
 
                 if not Event.objects.filter(
                         user=self.user,
@@ -50,30 +54,33 @@ class AnswerCheckerConsumer(WebsocketConsumer):
         """
         Обработка ответов пользователя
         """
-        try:
-            data = json.loads(text_data)
-            answer_id = data.get('answer_id')
-            block_id = data.get('block_id')
+        data = json.loads(text_data)
+        answer_id = data.get('answer_id')
+        block_id = data.get('block_id')
 
-            if not answer_id or not block_id:
-                return self._send_invalid_answer()
+        if not answer_id or not block_id:
+            return self._send_invalid_answer()
 
-            if str(block_id) != str(self.block_id):
-                return self._send_invalid_answer(answer_id)
+        if str(block_id) != str(self.block_id):
+            return self._send_invalid_answer(answer_id)
 
-            answer = Answer.objects.get(
-                pk=answer_id,
-                question__test_block=self.test_block
-            )
+        if UserStory._default_manager.filter(
+            user=self.user,
+            answer_id=answer_id,
+        ).exists():
+            self.send(text_data=json.dumps({
+                'type': 'error',
+                'message': 'Ответ уже был дан'
+            }))
+            return
 
-            self._process_user_answer(answer)
-            self._send_answer_result(answer)
+        answer = Answer.objects.get(
+            pk=answer_id,
+            question__test_block=self.test_block
+        )
 
-        except ObjectDoesNotExist:
-            self._send_invalid_answer()
-        except Exception as e:
-            logger.error(f"Ошибка обработки: {str(e)}")
-            self._send_invalid_answer()
+        self._process_user_answer(answer)
+        self._send_answer_result(answer)
 
     def disconnect(self, close_code):
         """
@@ -89,24 +96,30 @@ class AnswerCheckerConsumer(WebsocketConsumer):
         """
         Инициализация данных о тестовом блоке
         """
-        self.total_questions = Question.objects.filter(
-            test_block=self.test_block
+        self.total_answers = Answer.objects.filter(
+            correct=True,
+            question__test_block=self.test_block,
         ).count()
+        logger.debug(f'total correct answers expect {self.total_answers}')
 
         self.correct_answers = UserStory.objects.filter(
             user=self.user,
             test_block=self.test_block,
             answer__correct=True
         ).count()
+        logger.debug(f'total correct answers {self.correct_answers}')
 
-        self.done = (self.correct_answers / self.total_questions >= 0.8
-                     ) if self.total_questions > 0 else False
+        self.done = ((self.correct_answers / self.total_answers) >= 0.8
+                     ) if self.total_answers > 0 else False
+        logger.debug(f'test block is done {self.done}')
 
         current_lesson = self.test_block.lesson
+        logger.debug(f'current lesson is {current_lesson}')
         self.next_lesson = Lesson.objects.filter(
             course=current_lesson.course,
             serial=current_lesson.serial + 1
         ).first()
+        logger.debug(f'next_lesson is {self.next_lesson}')
 
         self.next_opened = True
         if self.next_lesson:
@@ -115,6 +128,7 @@ class AnswerCheckerConsumer(WebsocketConsumer):
                 user=self.user,
                 lesson=self.next_lesson
             ).exists()
+            logger.debug(f'next_opened {self.next_opened}')
         else:
             self.next_lesson_id = None
 
@@ -130,15 +144,19 @@ class AnswerCheckerConsumer(WebsocketConsumer):
 
         if answer.correct:
             self.correct_answers += 1
+            logger.debug(f'answer is correct and correct answers summary is {self.correct_answers}')
             self._check_progress()
+        logger.debug(f'correct answers after process is {self.correct_answers}')
 
     def _check_progress(self):
         """
         Проверка достижения 80% правильных ответов
         """
-        current_progress = self.correct_answers / self.total_questions
+        current_progress = self.correct_answers / self.total_answers
+        logger.debug(f'current_progress {current_progress}')
         was_done = self.done
         self.done = current_progress >= 0.8
+        logger.debug(f'done is now {self.done}')
 
         if (self.done and not was_done and not self.next_opened and
                 self.next_lesson_id):
@@ -148,6 +166,7 @@ class AnswerCheckerConsumer(WebsocketConsumer):
                 course=self.test_block.lesson.course
             )
             self.next_opened = True
+            logger.debug('next lesson is opened now')
 
     def _send_answer_result(self, answer):
         """
