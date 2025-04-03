@@ -2,7 +2,7 @@ import clsx from 'clsx'
 
 import { SidebarItem } from './sidebar-item/SidebarItem'
 import s from './sidebar.module.scss'
-import { sidebarItemsMethodologist, sidebarItemsStudent } from './sidebarItems'
+import { sidebarItemsMethodologist } from './sidebarItems'
 import { UserInfo } from './user-info/UserInfro'
 
 type Props = {
