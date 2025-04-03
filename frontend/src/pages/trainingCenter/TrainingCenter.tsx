@@ -1,6 +1,6 @@
+import { Title } from '@shared/components'
 import { CourseCard } from '@shared/components/courseCard'
 import { Search } from '@shared/components/search'
-import Title from '@shared/components/title/Title'
 import { withLayout } from '@shared/HOC'
 
 import s from './trainingCenter.module.scss'
