@@ -56,14 +56,13 @@
 .format {
   grid-area: format;
   width: 100%;
-
-  /* border-left: 1px solid var(--color-additional-border100); */
   margin: 0 auto;
   padding-left: 8px;
   padding-right: 8px;
   height: 100%;
   display: flex;
   justify-content: flex-end;
+  border-left: 1px solid var(--color-additional-border100);
 }
 
 .title p {
@@ -71,41 +70,39 @@
   border-bottom: 1px solid var(--color-additional-border700);
   padding-bottom: 9px;
 }
-  
-.date,
-.format {
-  width: 100%;
-  border-left: 1px solid var(--color-additional-border100);
-  margin: 0 auto;
-  padding-left: 8px;
-  padding-right: 8px;
-
-  &:first-child, :nth-child(4) {
-    min-height: 60px;
-  }
-
-  div {
-    width: 100%;
-
-    @media screen and (min-width: 1350px) {
-      max-width: 220px;
-    }
-
-    @media screen and (max-width: 1349px) {
-      left: 0;
-    }
-  }
-}
 
 .access {
   border-right: 1px solid var(--color-additional-border100);
 
   div {
     width: 100%;
+  }
+}
+  
+.date,
+.format {
+  width: 100%;
+  margin: 0 auto;
+  padding-left: 8px;
+  padding-right: 8px;
+  border-right: 1px solid var(--color-additional-border100);
 
-    @media screen and (min-width: 1350px) {
-      max-width: 205px;
+  div {
+    width: 100%;
+    
+    @media screen and (max-width: 1349px) {
+      left: 0;
     }
+  }
+
+  &:first-child, :nth-child(4) {
+    min-height: 60px;
+  }
+
+  div:nth-child(2) {
+    width: calc(100% + 2px);
+    left: -1px;
+    
   }
 }
 
@@ -125,10 +122,6 @@
   border-radius: 0;
   padding: 0;
 
-  @media screen and (max-width: 1349px){
-    margin-left: 37px;
-  }
-
   @media screen and (min-width: 361px){
     padding-top: 5px;
   }
@@ -145,4 +138,18 @@
   position: absolute;
   right: 10px;
   bottom: 30%;
+}
+
+.dropdown {
+  position: absolute;
+    padding: 12px;
+    width: calc(100% + 2px);
+    left: -1px;
+    top: 100%;
+    border-left: 1px solid var(--color-additional-border100);
+    border-right: 1px solid var(--color-additional-border100);
+    border-bottom: 1px solid var(--color-additional-border100);
+    z-index: 100;
+    background-color: var(--color-bg-main);
+    min-height: 200px;
 }

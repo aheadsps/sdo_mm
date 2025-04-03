@@ -1,4 +1,5 @@
 import { Button, FormInput, type Option, Select, Textarea, Typography } from '@shared/components'
+import { useToggle } from '@shared/hooks/useToggle'
 import clsx from 'clsx'
 
 import { ArrowRightIcon } from '@assets/icons'
@@ -22,6 +23,7 @@ export const LessonContent = <T extends LessonType>({
   optionsFormat,
   isExpandableContent = false,
 }: Props<T>) => {
+  const { isOpen, toggle } = useToggle()
   return (
     <div className={s.lessonContent}>
       <div className={s.title}>
@@ -48,7 +50,13 @@ export const LessonContent = <T extends LessonType>({
             className={s.formInput}
             placeholder={lesson?.dateTime ? lesson?.dateTime : 'Введите дату урока'}
           >
-            <CalendarIcon width={'12px'} height={'12px'} className={s.calendarIcon} />
+            <CalendarIcon
+              width={'12px'}
+              height={'12px'}
+              className={s.calendarIcon}
+              onClick={toggle}
+            />
+            {isOpen && <div className={s.dropdown}>Здесь будет календарь</div>}
           </FormInput>
           <Select
             className={s.format}
