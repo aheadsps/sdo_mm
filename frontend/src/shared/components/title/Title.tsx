@@ -13,7 +13,7 @@ interface Props {
   scndBtn?: () => void
   children?: ReactNode
 }
-const Title = ({ txt, btn1, btn2, fstBtn, scndBtn }: Props) => {
+export const Title = ({ txt, btn1, btn2, fstBtn, scndBtn }: Props) => {
   return (
     <div className={s.titleBlock}>
       <Typography variant="header_4" className={s.title}>
@@ -30,5 +30,3 @@ const Title = ({ txt, btn1, btn2, fstBtn, scndBtn }: Props) => {
     </div>
   )
 }
-
-export default Title
