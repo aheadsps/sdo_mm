@@ -19,6 +19,9 @@
   display: flex;
   flex-direction: column;
   gap: 30px;
+  @media screen and (max-width: 1349px) {
+   width: 100%;
+ }
 }
 .leftBlock__title {
   width: 100%;
@@ -45,9 +48,12 @@
   vertical-align: middle;
   color: var(--color-text-primary);
 }
-// .sutitleLeft {
-
-// }
+.select {
+   width: 100%;
+   &:first-child {
+      border-bottom: 1px solid #F8D7D9;
+   }
+}
 .rightBlock {
   width: 630px;
   height: fit-content;
