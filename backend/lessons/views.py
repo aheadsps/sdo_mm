@@ -1,4 +1,3 @@
-from django.utils import timezone
 from loguru import logger
 from rest_framework import permissions, status, mixins, viewsets
 from rest_framework.decorators import action
@@ -54,35 +53,18 @@ class EventViewSet(own_viewsets.GetCreateUpdateDeleteViewSet):
     def create(self, request, *args, **kwargs):
         self.check_object_permissions(request, None)
         self.serializer_class = serializers.EventSerializerCreate
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        response = super().create(request, *args, **kwargs)
+        super().create(request, *args, **kwargs)
 
-        if response.status_code == status.HTTP_201_CREATED:
-            try:
-                event = serializer.instance
-                if event:
-                    self._handle_lesson_stories(event)
-                else:
-                    event_id = response.data.get('id')
-                    if event_id:
-                        event = models.Event.objects.get(pk=event_id)
-                        self._handle_lesson_stories(event)
-            except Exception as e:
-                logger.error(f"Error processing lessons: {str(e)}")
-        return response
+    def perform_create(self, serializer):
+        instance = serializer.save()
+        self._create_first_lesson(
+            user=instance.user,
+            course=instance.course,
+        )
 
     def update(self, request, *args, **kwargs):
-        self.serializer_class = serializers.EventSerializerCreate
-        event = self.get_object()
-        old_start_date = event.start_date
-        response = super().update(request, *args, **kwargs)
-
-        if response.status_code == status.HTTP_200_OK:
-            updated_event = self.get_object()
-            self._handle_lesson_stories(updated_event, old_start_date)
-
-        return response
+        self.serializer_class = serializers.EventSerializerUpdate
+        return super().update(request, *args, **kwargs)
 
     @action(detail=True, url_path="toggle-favorite")
     def toggle_favorite(self, request, event_id=None):
@@ -113,38 +95,6 @@ class EventViewSet(own_viewsets.GetCreateUpdateDeleteViewSet):
             return self.get_paginated_response(serializer.data)
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
-
-    def _handle_lesson_stories(self, event, old_start_date=None):
-        """
-        Обрабатка LessonStory в зависимости от даты начала события.
-        - При создании: если дата в прошлом/настоящем → создаем первый урок
-        - При обновлении:
-        Если дата не менялась - ничего не делаем
-        Если дата стала будущей - сбрасываем прогресс (удаляем уроки)
-        Если дата стала прошлой - добавляем первый урок
-         (только если нет других уроков)
-        """
-        user = event.user
-        course = event.course
-        now = timezone.now()
-
-        if old_start_date is None:
-            if event.start_date and event.start_date <= now:
-                self._create_first_lesson(user, course)
-            return
-
-        if old_start_date == event.start_date:
-            return
-
-        if event.start_date and event.start_date > now:
-            models.LessonStory.objects.filter(user=user,
-                                              course=course).delete()
-            return
-
-        if event.start_date and event.start_date <= now:
-            if not models.LessonStory.objects.filter(user=user,
-                                                     course=course).exists():
-                self._create_first_lesson(user, course)
 
     def _create_first_lesson(self, user, course):
         """

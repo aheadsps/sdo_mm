@@ -13,20 +13,20 @@ class AnswerCheckerConsumer(WebsocketConsumer):
             self.user = self.scope.get("user")
             if not self.user or not self.user.is_authenticated:
                 self._close_with_error(
-                    "Требуется авторизация", 4001)
+                    "Требуется авторизация", 401)
                 return
 
             self.block_id = self.scope['url_route']['kwargs']['block_id']
 
             try:
                 self.test_block = TestBlock.objects.select_related(
-                    'yflesson__course').get(pk=self.block_id)
+                    'lesson__course').get(pk=self.block_id)
 
                 if not Event.objects.filter(
                         user=self.user,
                         course_id=self.test_block.lesson.course_id).exists():
                     self._close_with_error(
-                        "Доступ к тестовому блоку запрещен",403
+                        "Доступ к тестовому блоку запрещен", 403
                     )
                     return
 

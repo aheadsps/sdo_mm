@@ -507,3 +507,24 @@ class EventSerializerCreate(serializers.ModelSerializer):
         self._correct_status(self.validated_data)
         logger.debug(f"after {self.validated_data}")
         return super().save(**kwargs)
+
+
+class EventSerializerUpdate(serializers.ModelSerializer):
+    """
+    Сериализатор Создания в Изменения Эвента
+    """
+
+    status = serializers.CharField(read_only=True)
+
+    class Meta:
+        model = models.Event
+        fields = (
+            "user",
+            "course",
+            "start_date",
+            "end_date",
+            "favorite",
+            "status",
+        )
+        validators = (validators.TimeValidator("start_date", "end_date"),)
+        read_only_fields = ("id", "start_date", "course", "user")
