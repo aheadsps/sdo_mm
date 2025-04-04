@@ -5,13 +5,15 @@ import { useState } from 'react'
 
 import { EditIcon } from '@assets/icons'
 
+import { AboutCourse } from '../aboutCourse'
+
 import { Program } from './program/Program'
 import s from './training-course.module.scss'
 
 const tabsData: Tab[] = [
   {
     label: 'О курсе',
-    content: <div>О курсе</div>,
+    content: <AboutCourse />,
   },
   {
     label: 'Программа',

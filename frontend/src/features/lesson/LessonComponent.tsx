@@ -1,6 +1,5 @@
 import { CourseMaterials } from '@features/course/course-materials'
-import { AiComponent, Typography, Button } from '@shared/components'
-import Title from '@shared/components/title/Title'
+import { AiComponent, Typography, Button, Title } from '@shared/components'
 import { withLayout } from '@shared/HOC'
 import { useToggle } from '@shared/hooks/useToggle'
 import { useState } from 'react'
