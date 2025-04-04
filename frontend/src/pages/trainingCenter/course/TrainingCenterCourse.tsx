@@ -7,6 +7,7 @@ import { EditIcon } from '@assets/icons'
 
 import { AboutCourse } from '../aboutCourse'
 
+import { Program } from './program/Program'
 import s from './training-course.module.scss'
 
 const tabsData: Tab[] = [
@@ -16,7 +17,7 @@ const tabsData: Tab[] = [
   },
   {
     label: 'Программа',
-    content: <div>Программа</div>,
+    content: <Program />,
   },
   {
     label: 'Список студентов',

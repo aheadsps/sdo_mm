@@ -17,5 +17,5 @@ export const useScreenWidth = () => {
     }
   }, [])
 
-  return { isMobile, isTablet, isDesktop }
+  return { isMobile, isTablet, isDesktop, width }
 }
