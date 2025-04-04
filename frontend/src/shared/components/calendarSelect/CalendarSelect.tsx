@@ -2,7 +2,7 @@ import { useToggle } from '@shared/hooks/useToggle'
 import clsx from 'clsx'
 import { useState } from 'react'
 
-import CalendarIcon from '@assets/icons/CalendarIcon'
+import CalendarIconBig from '@assets/icons/CalendarIconBig'
 
 import { Typography } from '../typography'
 
@@ -45,7 +45,7 @@ export const CalendarSelect = ({ options, placeholder = 'Выбрать дату
         >
           {selected ? selected.value : placeholder}
         </Typography>
-        <CalendarIcon width={'12px'} height={'12px'} />
+        <CalendarIconBig width={'12px'} height={'12px'} />
       </div>
       {isOpen && (
         <div className={styles.dropdown} role="listbox" aria-labelledby="select-dropdown">

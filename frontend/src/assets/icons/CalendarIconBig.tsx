@@ -1,6 +1,6 @@
 import { forwardRef, Ref, SVGProps } from 'react'
 
-const CalendarIcon = forwardRef<SVGSVGElement, SVGProps<SVGSVGElement>>(
+const CalendarIconBig = forwardRef<SVGSVGElement, SVGProps<SVGSVGElement>>(
   (props, ref: Ref<SVGSVGElement>) => (
     <svg
       width="18"
@@ -31,4 +31,4 @@ const CalendarIcon = forwardRef<SVGSVGElement, SVGProps<SVGSVGElement>>(
   )
 )
 
-export default CalendarIcon
+export default CalendarIconBig
