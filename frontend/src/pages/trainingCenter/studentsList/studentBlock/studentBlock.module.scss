@@ -32,6 +32,12 @@
   flex-direction: column;
   align-items: center;
   gap: 8px;
+  @media screen and (max-width: 1349px) {
+    width: 100%;
+    height: 62px;
+    padding: 9px 12px;
+    justify-content: center;
+  }
 }
 .progress__txt {
   width: fit-content;
@@ -62,6 +68,15 @@
   padding: 0 18px;
   gap: 24px;
   border-left: 1px solid var(--color-additional-border100);
+  @media screen and (max-width: 1349px) {
+    width: 100%;
+    height: 62px;
+    padding: 9px 12px;
+    justify-content: center;
+  }
+  @media screen and (max-width: 767px) {
+    padding: 16px 8px 6px;
+  }
 }
 .btn {
   width: 40px;
@@ -72,7 +87,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  // background-color: transparent;
+  @media screen and (max-width: 767px) {
+    width: 36px;
+    height: 36px;
+  }
 }
 // /////////////////////////////////////////
 .lessonContent {
@@ -108,7 +126,7 @@
     resize: none;
     height: 100%;
     width: 602px;
-    border-bottom: 1px solid #F8D7D9;
+    border-bottom: 1px solid #f8d7d9;
 
     &::placeholder {
       font-weight: var(--font-weight-light);
@@ -120,6 +138,7 @@
 }
 
 .date {
+  padding: 9px 12px;
   grid-area: date;
   border-left: 1px solid var(--color-additional-border100);
   @media screen and (max-width: 1349px) {
@@ -129,6 +148,7 @@
 }
 
 .format {
+  padding: 9px 12px;
   grid-area: format;
   width: 100%;
   padding-left: 8px;
