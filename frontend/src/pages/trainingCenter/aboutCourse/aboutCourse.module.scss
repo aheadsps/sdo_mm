@@ -3,11 +3,13 @@
   height: fit-content;
   display: flex;
   gap: 30px;
+
   @media screen and (max-width: 1349px) {
     flex-direction: column;
     gap: 40px;
   }
 }
+
 .leftBlock {
   width: 337px;
   height: fit-content;
@@ -16,10 +18,12 @@
   display: flex;
   flex-direction: column;
   gap: 30px;
-  box-shadow: 0px 0px 15px 0px #2C0B0F0A;
+  box-shadow: 0 0 15px 0 #2c0b0f0a;
+
   @media screen and (max-width: 1349px) {
     width: 100%;
   }
+
   .title {
     width: 100%;
     min-height: 26;
@@ -31,6 +35,7 @@
     vertical-align: middle;
     color: var(--color-text-primary);
   }
+
   .subtitle {
     width: 100%;
     min-height: 22;
@@ -45,13 +50,16 @@
     vertical-align: middle;
     color: var(--color-text-primary);
   }
+
   .select {
     width: 100%;
+
     &:first-child {
       border-bottom: 1px solid #f8d7d9;
     }
   }
 }
+
 .rightBlock {
   width: 630px;
   height: fit-content;
@@ -59,29 +67,34 @@
   display: flex;
   flex-direction: column;
   gap: 30px;
+
   @media screen and (max-width: 1349px) {
     width: 100%;
     gap: 40px;
   }
+
   .top {
     width: 100%;
     padding: 20px;
     display: flex;
     flex-direction: column;
     gap: 30px;
-    box-shadow: 0px 0px 15px 0px #2C0B0F0A;
+    box-shadow: 0 0 15px 0 #2c0b0f0a;
   }
+
   .titleBox {
     width: 590px;
     height: 40px;
     display: flex;
     align-items: center;
     gap: 10px;
+
     .img {
       width: 40px;
       height: 40px;
       padding: 10px;
     }
+
     .title {
       width: 540px;
       height: 26px;
@@ -93,6 +106,7 @@
       vertical-align: middle;
     }
   }
+
   .txt {
     width: 100%;
     height: fit-content;
@@ -103,18 +117,22 @@
     letter-spacing: 0.25px;
     vertical-align: middle;
   }
+
   .buttonBox {
     width: 100%;
     height: fit-content;
     display: flex;
     align-items: center;
     gap: 30px;
+
     @media screen and (max-width: 1349px) {
       flex-direction: column;
       gap: 20px;
     }
+
     .button {
       width: 300px;
+
       @media screen and (max-width: 1349px) {
         width: 100%;
         font-family: var(--font-family-secondary);

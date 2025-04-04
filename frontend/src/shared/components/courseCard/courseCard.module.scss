@@ -1,20 +1,20 @@
 .card {
   width: 483px;
-  height: 236px;
   height: fit-content;
   border-radius: 8px;
   padding: 20px;
   display: flex;
   flex-direction: column;
   gap: 24px;
-  box-shadow: 0px 0px 15px 0px #2c0b0f0a;
+  box-shadow: 0 0 15px 0 #2c0b0f0a;
+
   @media screen and (max-width: 1349px) {
     width: 100%;
-    height: 222px;
     height: fit-content;
     padding: 20px;
   }
 }
+
 .title {
   width: 100%;
   min-height: 52px;
@@ -25,27 +25,30 @@
   letter-spacing: 0.25px;
   vertical-align: middle;
 }
+
 .content {
   width: 100%;
   min-height: 56px;
   display: flex;
   flex-direction: column;
   gap: 12px;
+
   @media screen and (max-width: 1349px) {
     flex-direction: column-reverse;
   }
 }
+
 .item {
-  width: 100%;
-  display: flex;
   width: 100%;
   height: 22px;
   display: flex;
   justify-content: space-between;
+
   @media screen and (max-width: 1349px) {
     flex-direction: row-reverse;
   }
 }
+
 .itemLeft {
   width: fit-content;
   height: 22px;
@@ -57,18 +60,23 @@
   vertical-align: middle;
   color: var(--color-text-secondary);
 }
+
 .colorGreen {
   color: var(--color-accent-success);
 }
+
 .colorOrange {
   color: var(--color-accent-orange);
 }
+
 .colorBlue {
   color: var(--color-accent-info);
 }
+
 .colorRed {
   color: var(--color-accent-red500);
 }
+
 .itemRight {
   width: fit-content;
   height: 22px;
@@ -80,18 +88,22 @@
   vertical-align: middle;
   color: var(--color-text-secondary);
 }
+
 .buttonBox {
   width: 100%;
   height: 40px;
   display: flex;
   gap: 12px;
 }
+
 .basket {
   width: 40px;
   height: 40px;
   border-radius: 8px;
+
   //   fill: #58151C;
 }
+
 .btn {
   width: 100%;
 }
