@@ -11,17 +11,16 @@ class TaskManager:
     Составление clocked_time задачи
     по передачи в функцию создания евента.
     Получает данные:
-    id-course, список пользователей, дата-тайм начала,  дата-тайм финиша (может null)
+    id-course, user-создатель, список пользователей, дата-тайм начала,
+    дата-тайм финиша (может null)
     """
 
 
-    def _crontab_schedule(self):
+    def _clocked_schedule(self, data_clocked):
         """
-        Назначаем шедулер
+        Назначаем шедулер или берем старый если есть
         """
-        # Проверка есть ли созданый шедулер
-        # если нет создаем новый
-        schedule, _ = ClockedSchedule._default_manager.get_or_create(clocked_time=self.data_start)
+        schedule, _ = ClockedSchedule._default_manager.get_or_create(clocked_time=data_clocked)
         return schedule
 
     def __init__(self,course: int=None,
@@ -30,17 +29,23 @@ class TaskManager:
                  data_start: datetime=None,
                  data_end: datetime=None
                  ):
+        if not data_start:
+            raise ValueError
+
         self.course = course
         self.user_create = user_create
+
         self.data_start = data_start
         if data_start:
             self.data_start = self._handle_datetime_to_task(data_start)
+
         self.data_end = data_end
         if data_end:
             self.data_end =  self._handle_datetime_to_task(data_end)
+
         self.user_list = user_list
         # Выбираем шедулер
-        self.schedule = self._crontab_schedule()
+        self.schedule = self._clocked_schedule(self.data_start)
 
 
     def _handle_datetime_to_task(self,
@@ -89,6 +94,25 @@ class TaskManager:
         return f'Course_{self.course}_{self.user_create}_at_{self.data_start}_{get_random_string(5)}'
 
 
+    def _update_events_failed(self, old_date):
+        """
+        Ищет задачу и шедулер закрытия курса.
+        Удаляет оттуда пользователей.
+        Создает новый шедулер на деактивацию event.
+        """
+        ...
+        # берем старую end_date,
+        # если она не устаревшая
+        #if datetime:
+         #   if datetime > сегодня:
+
+        # находим шедулер
+        # находим задачу  этого шедулера  и курса
+        # удаляем из этой задачи наших юзеров
+        # сохранием создаем новый шедулер
+        # создаем новую задачу
+
+
     def create(self):
         """
         Создать заадчу
@@ -102,7 +126,7 @@ class TaskManager:
             'start_date': TaskManager.date_str(self.data_start),
             'end_date': TaskManager.date_str(self.data_end),
         }
-
+        # Задача на активацию events
         instance = PeriodicTask._default_manager.create(
             clocked=self.schedule,
             one_off=True,
@@ -110,6 +134,17 @@ class TaskManager:
             task='lessons.task.create_events',
             kwargs=json.dumps(kwargs),
         )
+        # если ок создаем PeriodicTask на
+        # перевод по истечению времени events в failed
+        if instance:
+            PeriodicTask._default_manager.create(
+                clocked=self.schedule,
+                one_off=True,
+                name=self._create_unique_name_to_task(),
+                task='lessons.task.events_failed',
+                kwargs=json.dumps(kwargs),
+            )
+
         return instance
 
 
@@ -154,6 +189,9 @@ class TaskManager:
         }
         kwargs = json.dumps(kwargs_new)
         if kwargs != task.kwargs:
+            # тут изменение _update_events_failed
+            if data_end != kwargs_old.get('end_date'):
+                self._update_events_failed(kwargs_old.get('end_date'))
             task.kwargs = kwargs
             # если новый kwargs отличается от старого - update
             if data_start != kwargs_old.get('start_date'):
