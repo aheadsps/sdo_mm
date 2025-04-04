@@ -1,0 +1,48 @@
+.box {
+  width: 100%;
+  height: 62px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  //   border-bottom-width: 1px;
+  padding-top: 16px;
+  padding-bottom: 6px;
+  //   @media screen and (max-width: 1349px) {
+
+  //   }
+}
+.name {
+  width: 602px;
+  height: 40px;
+  border-radius: 2px;
+  border-bottom-width: 1px;
+  padding: 9px 12px;
+  background: #f8f9fa33;
+  border-bottom: 1px solid #831f29;
+  backdrop-filter: blur(60px);
+}
+.progress {
+  width: 200px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.btns {
+  width: 140px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  padding: 0 18px;
+  gap: 24px;
+}
+.btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  border-width: 1px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+}
