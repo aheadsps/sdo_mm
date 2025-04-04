@@ -29,14 +29,14 @@
   border-top-left-radius: 8px;
   border-bottom-left-radius: 8px;
   padding: 9px 12px;
-  font-family: Moscow Sans;
+  font-family: var(--font-family-secondary);
   font-weight: 300;
   font-size: var(--font-size-xs);
   line-height: 143%;
   letter-spacing: 0.25px;
   color: var(--color-text-primary);
   &::placeholder {
-    font-family: Moscow Sans;
+    font-family: var(--font-family-secondary);
     font-weight: 300;
     font-size: var(--font-size-s);
     line-height: 140%;

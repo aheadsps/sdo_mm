@@ -1,7 +1,10 @@
-import { Select } from '@shared/components'
+import { Select, Typography } from '@shared/components'
 import { CalendarSelect } from '@shared/components/calendarSelect/CalendarSelect'
 
+import { EditIcon } from '@assets/icons'
+
 import s from './aboutCourse.module.scss'
+
 type Option = {
   id: number
   value: string
@@ -30,17 +33,27 @@ export const AboutCourse = () => {
   return (
     <div className={s.container}>
       <div className={s.leftBlock}>
-        <h3 className={s.leftBlock__title}>Основная информация</h3>
+        <h3 className={s.title}>Основная информация</h3>
         <CalendarSelect options={dates} placeholder="Дата создания" className={s.select} />
         <CalendarSelect options={dates} placeholder="Дата окончания" className={s.select} />
-        <h6 className={s.leftBlock__subtitle}>
+        <h6 className={s.subtitle}>
           <p className={s.sutitleLeft}>Количество студентов:</p>
           <p className={s.sutitleRight}>654</p>
         </h6>
         <Select options={courseStatuses} placeholder="Статус курса" className={s.select} />
         <Select options={teachers} placeholder="Преподаватель" className={s.select} />
       </div>
-      <div className={s.rightBlock}></div>
+      <div className={s.rightBlock}>
+        <div className={s.titleBox}>
+          <div className={s.img}>
+            <EditIcon width={'15px'} height={'15px'} />
+          </div>
+
+          <Typography variant="header_3" className={s.title}>
+            Цель курса
+          </Typography>
+        </div>
+      </div>
     </div>
   )
 }

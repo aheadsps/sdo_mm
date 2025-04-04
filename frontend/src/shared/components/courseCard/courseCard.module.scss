@@ -7,7 +7,7 @@
   display: flex;
   flex-direction: column;
   gap: 24px;
-  box-shadow: 0px 0px 15px 0px #2C0B0F0A;
+  box-shadow: 0px 0px 15px 0px #2c0b0f0a;
   @media screen and (max-width: 1349px) {
     width: 100%;
     height: 222px;
@@ -18,7 +18,7 @@
 .title {
   width: 100%;
   min-height: 52px;
-  font-family: Manrope;
+  font-family: var(--font-family-primary)
   font-weight: 600;
   font-size: var(--font-size-h6);
   line-height: 130%;
@@ -32,7 +32,7 @@
   flex-direction: column;
   gap: 12px;
   @media screen and (max-width: 1349px) {
-   flex-direction: column-reverse;
+    flex-direction: column-reverse;
   }
 }
 .item {
@@ -43,13 +43,13 @@
   display: flex;
   justify-content: space-between;
   @media screen and (max-width: 1349px) {
-   flex-direction: row-reverse;
+    flex-direction: row-reverse;
   }
 }
 .itemLeft {
   width: fit-content;
   height: 22px;
-  font-family: Moscow Sans;
+  font-family: var(--font-family-secondary);
   font-weight: 300;
   font-size: 16px;
   line-height: 140%;
@@ -72,7 +72,7 @@
 .itemRight {
   width: fit-content;
   height: 22px;
-  font-family: Moscow Sans;
+  font-family: var(--font-family-secondary);
   font-weight: 300;
   font-size: 16px;
   line-height: 140%;
