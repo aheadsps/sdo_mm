@@ -36,7 +36,7 @@
   }
 
   &__rightBox {
-    width: 139px;
+    width: fit-content;
     height: 24px;
     display: flex;
     align-items: center;
@@ -45,7 +45,7 @@
   }
 
   &__txt {
-    width: 107px;
+    width: fit-content;
     height: 18px;
     font-family: var(--font-family-secondary);
     font-weight: 300;

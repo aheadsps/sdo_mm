@@ -1,4 +1,6 @@
-import { DropdownCard, Typography, Button } from '@shared/components'
+import { DropdownCard } from '@features/course'
+import { Button, Typography } from '@shared/components'
+import { NavLink } from 'react-router-dom'
 
 import s from './course-content.module.scss'
 
@@ -10,7 +12,9 @@ export const CourseContent = () => {
           <Typography variant="body_2">
             Цель урока: проверить словарный запас и научиться избегать ложных друзей переводчика.
           </Typography>
-          <Button className={s.lessonButton}>Открыть урок</Button>
+          <NavLink to={'/lesson'}>
+            <Button className={s.lessonButton}>Открыть урок</Button>
+          </NavLink>
         </div>
         <Typography variant="body_2">1. Введение: Почему мы путаем слова?</Typography>
       </DropdownCard>
@@ -20,7 +24,9 @@ export const CourseContent = () => {
           <Typography variant="body_2">
             Цель урока: проверить словарный запас и научиться избегать ложных друзей переводчика.
           </Typography>
-          <Button className={s.lessonButton}>Открыть урок</Button>
+          <NavLink to={'/lesson'}>
+            <Button className={s.lessonButton}>Открыть урок</Button>
+          </NavLink>
         </div>
         <Typography variant="body_2">1. Введение: Почему мы путаем слова?</Typography>
       </DropdownCard>
@@ -30,7 +36,9 @@ export const CourseContent = () => {
           <Typography variant="body_2">
             Цель урока: проверить словарный запас и научиться избегать ложных друзей переводчика.
           </Typography>
-          <Button className={s.lessonButton}>Открыть урок</Button>
+          <NavLink to={'/lesson'}>
+            <Button className={s.lessonButton}>Открыть урок</Button>
+          </NavLink>
         </div>
         <Typography variant="body_2">1. Введение: Почему мы путаем слова?</Typography>
       </DropdownCard>

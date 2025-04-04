@@ -9,10 +9,12 @@
   --color-bg-gray100: #f8f9fa;
   --color-bg-gray200: #e9ecef;
   --color-bg-red700: #831f29;
+  --color-bg-red800: #58151c;
   --color-bg-1: #831f291a;
   --color-bg-2: #831f2999;
   --color-bg-3: #48505666;
   --color-bg-green: #1aa179;
+  --color-bg-modal: #48505666;
 
   /* text colors */
   --color-text-primary: #2c0b0f;

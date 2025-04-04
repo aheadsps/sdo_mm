@@ -1,0 +1,52 @@
+.titleBlock {
+  width: auto;
+  display: flex;
+  justify-content: space-between;
+
+  @media screen and (max-width: 1349px) {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  @media screen and (max-width: 768px) {
+    margin-bottom: 40px;
+  }
+}
+
+.title {
+  color: var(--color-text-primary);
+  font-family: var(--font-family-primary);
+  font-weight: 700;
+  font-size: var(--font-size-xl);
+  line-height: 125%;
+  letter-spacing: 0.5px;
+  vertical-align: middle;
+
+  @media screen and (min-width: 768px) and (max-width: 1349px) {
+    font-size: var(--font-size-h6);
+  }
+
+  @media screen and (max-width: 768px) {
+    font-size: var(--font-size-m);
+  }
+}
+
+.buttonsBlock {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+
+  @media screen and (max-width: 1349px) {
+    gap: 24px;
+  }
+
+  @media screen and (max-width: 767px) {
+    gap: 14px;
+  }
+}
+
+.button {
+  @media screen and (max-width: 1349px) {
+    width: 100%;
+  }
+}

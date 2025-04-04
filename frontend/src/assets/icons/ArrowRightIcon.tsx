@@ -14,9 +14,9 @@ const ArrowRightIcon = forwardRef<SVGSVGElement, SVGProps<SVGSVGElement>>(
       <path
         d="M1.3335 12.8333L6.66683 7.49996L1.3335 2.16663"
         stroke="currentColor"
-        stroke-width="2.66667"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="2.66667"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   )

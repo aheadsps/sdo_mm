@@ -9,11 +9,10 @@ import { tabsData } from './tabs/tabsData'
 
 export const Course = () => {
   const { isOpen: isOffcanvasOpen, close: closeOffcanvas, toggle: toggleOffCanvas } = useToggle()
-  const [isLessonOpen, setIsLessonOpen] = useState(true)
-
-  return isLessonOpen ? (
-    <LessonComponent setIsLessonOpen={setIsLessonOpen} />
-  ) : (
+  // const hendleNavigate = async () => {
+  //   await navigate('/learning/course')
+  // }
+  return (
     <div className={s.courseContent}>
       <BackToPage to={routes.learning}>Вернуться к выбору курса</BackToPage>
       <div className={s.titleBlock}>
@@ -34,4 +33,5 @@ export const Course = () => {
       <AiComponent isOpen={isOffcanvasOpen} close={closeOffcanvas} />
     </div>
   )
+  // )
 }

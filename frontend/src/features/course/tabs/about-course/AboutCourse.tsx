@@ -19,12 +19,7 @@ export const AboutCourse = () => {
               2 урока из 4
             </Typography>
           </div>
-          <div className={s.progressBar}>
-            <div
-              className={s.progressBarIndicator}
-              style={{ width: `${calculateProgress(2, 4)}%` }}
-            ></div>
-          </div>
+          <ProgressBar progress={2} total={4} />
         </div>
         <HeartFilledIcon width={'34px'} height={'34px'} className={s.icon} />
       </Card>
