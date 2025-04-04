@@ -27,6 +27,11 @@ TEST_IMAGE_PATH_2 = BASE_DIR.joinpath(*("lessons", "tests", "image2.png"))
 
 TEST_SCORM_PATH = BASE_DIR.joinpath(*("lessons", "scorm", "tests", "SCORM.zip"))
 
+CONSTRUCTOR_ADAPTER = dict(
+    Lqyhp='json/structure.json',
+    default='res/data-1.json',
+)
+
 
 SCORM_MANIFEST_NAME = 'imsmanifest.xml'
 
