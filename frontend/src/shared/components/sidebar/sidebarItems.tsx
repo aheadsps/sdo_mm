@@ -6,7 +6,6 @@ import {
   WebinarAndSupportIcon,
   WebinarIcon,
   SettingsEyeIcon,
-  WebinarIcon,
   SupportIcon,
 } from '@assets/icons'
 import { routes } from '@routes/routes'

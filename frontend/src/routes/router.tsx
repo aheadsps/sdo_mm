@@ -1,13 +1,14 @@
 import { Lesson } from '@features/lesson/LessonComponent'
 import { LessonTest } from '@features/lesson/test/Tests'
-import { createBrowserRouter } from 'react-router-dom'
-
 import { AuthPage } from '@pages/auth'
 import { CoursePage } from '@pages/course'
 import { MainPage } from '@pages/main'
 import { MyLearning } from '@pages/my-learning/MyLearning'
 import { TrainingCenterCourse } from '@pages/trainingCenter/course/TrainingCenterCourse'
 import { TrainingCenter } from '@pages/trainingCenter/TrainingCenter'
+import { createBrowserRouter } from 'react-router-dom'
+
+import { routes } from './routes'
 
 export const router = createBrowserRouter([
   {
