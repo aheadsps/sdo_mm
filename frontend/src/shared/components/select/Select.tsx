@@ -8,15 +8,16 @@ import { Typography } from '../typography'
 
 import styles from './Select.module.scss'
 
-type Option = {
+export type Option = {
   id: number
   value: string
 }
 
 type Props = {
-  options: Option[]
+  options?: Option[]
   placeholder?: string
   className?: string
+  isCalendar?: boolean
 }
 
 export const Select = ({ options, placeholder = 'Выбрать', className }: Props) => {
@@ -51,9 +52,10 @@ export const Select = ({ options, placeholder = 'Выбрать', className }: P
           <ArrowDownIcon width={'12px'} height={'12px'} />
         )}
       </div>
-      {isOpen && (
+
+      {isOpen && options && (
         <div className={styles.dropdown} role="listbox" aria-labelledby="select-dropdown">
-          {options.map((option) => (
+          {options?.map((option) => (
             <div
               key={option.value}
               className={`${styles.option} ${selected?.value === option.value ? styles.selected : ''}`}
