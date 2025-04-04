@@ -4,17 +4,17 @@
   display: flex;
   flex-direction: column;
   gap: 30px;
-//   @media screen and (max-width: 1349px) {
+  //   @media screen and (max-width: 1349px) {
 
-//   }
+  //   }
 }
 .content {
   width: 100%;
   height: fit-content;
   display: flex;
   flex-direction: column;
-//   gap: 30px;
-  padding-bottom: 30px;
+  border-radius: 20px;
+  padding: 0px 12px 30px;
 }
 .addButton {
   border-radius: 50%;
