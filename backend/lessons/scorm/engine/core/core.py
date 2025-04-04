@@ -1,5 +1,4 @@
 import os
-import re
 from typing import TypeVar
 import zipfile
 
@@ -44,12 +43,37 @@ class CoreSCORM(BaseCoreSCORM):
                  ):
         super().__init__(zip_file)
         self._structures: list[list[tuple[str, str], str]] | None = None
+        self._constructor_type: str | None = None
 
     @property
     def structures(self):
         if not self._structures:
             self._structures = self._get_structures()
         return self._structures
+
+    @property
+    def constructor_type(self):
+        if not self._constructor_type:
+            self._constructor_type = self._get_constructor()
+        return self._constructor_type
+
+    def _get_constructor(self) -> str:
+        root = self._manifest.getroot()
+        manifest_identifier = root.find(f'{self.prefix}manifest').get('identifier')
+        logger.debug(f'manifest_identifier is {manifest_identifier}')
+        return self._process_struct_type_constructor(manifest_identifier)
+
+    def _process_struct_type_constructor(self, manifest_identifier: str) -> str:
+        if not manifest_identifier:
+            return
+        else:
+            first_part = manifest_identifier[0:2]
+            logger.debug(f'first part is {first_part}')
+            last_part = manifest_identifier[3:]
+            logger.debug(f'last part is {last_part}')
+            full_part = first_part + last_part
+            logger.debug(f'full part is {full_part}')
+            return full_part
 
     def _get_items(self,
                    organization: DT,
@@ -90,25 +114,21 @@ class CoreSCORM(BaseCoreSCORM):
                 f'{self.prefix}resources/{self.prefix}resource[@identifier="{identifier}"]',
             )
             resource_link = resource.get("href")
-        logger.debug(f'resource lisk is {resource_link}')
+        logger.debug(f'resource link is {resource_link}')
         return resource_link
 
-    def _get_json_files_from_identifier(self,
-                                        identifier: str | None,
-                                        root: ET.Element,
-                                        ):
+    def _get_files_from_identifier(self,
+                                   identifier: str | None,
+                                   root: ET.Element,
+                                   ):
         if identifier:
-            resources = root.findall(
-                f'{self.prefix}resources/{self.prefix}resource[@identifier="{identifier}"]/',
+            resource = root.find(
+                f'{self.prefix}resources/{self.prefix}resource[@identifier="{identifier}"]',
             )
-            jsons = []
-            for elem in resources:
-                if re.match(r'^.*.json*$', elem.get('href')):
-                    jsons.append(elem)
-        else:
-            jsons = []
-        logger.debug(f'get jsons {jsons}')
-        return jsons
+            resources = resource.findall(f'{self.prefix}file')
+            # logger.debug(f'files is {resources}')
+            return resources
+        return []
 
     def _get_item_title(self,
                         organization: DT,
@@ -137,15 +157,17 @@ class CoreSCORM(BaseCoreSCORM):
         sub_items = self._get_items(
             organization=organization
         )
+        logger.debug(f'have sub_items \n{sub_items}')
         title = self._get_item_title(
             organization=organization,
         )
         identifier = organization.element.get('identifierref')
+        logger.debug(f'get identifier {identifier}')
         resource_link = self._get_resource_depends_on_identifier(
             identifier=identifier,
             root=root,
         )
-        jsons = self._get_json_files_from_identifier(
+        files = self._get_files_from_identifier(
             identifier=identifier,
             root=root,
         )
@@ -153,18 +175,19 @@ class CoreSCORM(BaseCoreSCORM):
             logger.debug(f'add to structure list item - {title, resource_link}')
             return [dict(title=title,
                          resourse=resource_link,
-                         jsons=jsons,
+                         files=files,
                          )]
         else:
             for item in sub_items:
-                if "isvisible" in item.element.attrib and item.element.attrib["isvisible"] == "true":
-                    sub_titles.extend(self._process_stucture_data(
-                        organization=item,
-                        root=root,
-                    ))
+                logger.debug(f'process subitem {item}')
+                # if "isvisible" in item.element.attrib and item.element.attrib["isvisible"] == "true":
+                sub_titles.extend(self._process_stucture_data(
+                    organization=item,
+                    root=root,
+                ))
             return [dict(title=title,
                          resource=resource_link,
-                         jsons=jsons,
+                         files=files,
                          ), sub_titles]
 
     def save(self) -> SCORM:

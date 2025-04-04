@@ -1,3 +1,6 @@
+import os
+import zipfile
+
 from typing import Protocol, runtime_checkable
 
 
@@ -14,4 +17,6 @@ class WrapperCallable(Protocol):
     """
     Протокол обвертки
     """
-    def entrypoint(self, parser: ParserCallable): ...
+    def open(self, path: os.PathLike) -> zipfile.ZipExtFile: ...
+
+    def entrypoint(self, parser: ParserCallable) -> None: ...

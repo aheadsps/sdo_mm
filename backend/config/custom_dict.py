@@ -9,9 +9,7 @@ class ConstructorDict(UserDict):
     для конструктора
     """
 
-    DEFAULT_DATA: ClassVar[
-        MappingProxyType[dict[str, str]],
-        ] = MappingProxyType(dict(default='res/data-1.json'))
+    DEFAULT_DATA = MappingProxyType(dict(default='res/data-1.json'))
     DEFAULT_KEY: ClassVar[str] = 'default'
 
     def get(self, key, default=None):
