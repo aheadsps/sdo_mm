@@ -1,4 +1,4 @@
-import { Select, Typography } from '@shared/components'
+import { Button, Select, Typography } from '@shared/components'
 import { CalendarSelect } from '@shared/components/calendarSelect/CalendarSelect'
 
 import { EditIcon } from '@assets/icons'
@@ -44,14 +44,33 @@ export const AboutCourse = () => {
         <Select options={teachers} placeholder="Преподаватель" className={s.select} />
       </div>
       <div className={s.rightBlock}>
-        <div className={s.titleBox}>
-          <div className={s.img}>
-            <EditIcon width={'15px'} height={'15px'} />
+        <div className={s.top}>
+          <div className={s.titleBox}>
+            <div className={s.img}>
+              <EditIcon width={'15px'} height={'15px'} />
+            </div>
+            <Typography variant="header_3" className={s.title}>
+              Цель курса
+            </Typography>
           </div>
-
-          <Typography variant="header_3" className={s.title}>
-            Цель курса
+          <Typography variant="body_1" className={s.txt}>
+            Этот курс поможет тебе понять, на каком уровне ты находишься, выявить пробелы в знаниях
+            и исправить их. Ты разберёшь частые ошибки в грамматике и лексике, получишь персональные
+            рекомендации и выстроишь эффективную стратегию обучения.
           </Typography>
+          <Typography variant="body_1" className={s.txt}>
+            Курс состоит из четырёх уроков с тестами, видео и практикой. В среднем на его
+            прохождение потребуется около 120 минут, но можно проходить в удобном темпе. Материалы
+            доступны в любое время, а в чате можно задать вопросы и разобраться в сложных вопросах.
+          </Typography>
+        </div>
+        <div className={s.buttonBox}>
+          <Button
+            variant="secondary"
+            children="Посмотреть список учебных материалов"
+            className={s.button}
+          />
+          <Button variant="primary" children="Перейти к проверке работ" className={s.button} />
         </div>
       </div>
     </div>
