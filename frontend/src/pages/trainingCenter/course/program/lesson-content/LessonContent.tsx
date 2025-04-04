@@ -1,8 +1,7 @@
+import { ArrowRightIcon, CalendarIcon } from '@assets/icons'
 import { Button, FormInput, Input, type Option, Select, Typography } from '@shared/components'
 import { useToggle } from '@shared/hooks'
 import clsx from 'clsx'
-
-import { ArrowRightIcon, CalendarIcon } from '@assets/icons'
 
 import { LessonType } from '../data'
 
