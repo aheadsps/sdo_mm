@@ -8,7 +8,7 @@ export const Search = () => {
   return (
     <div className={s.container}>
       <div className={s.box}>
-        <Input className={s.input} placeholder="Поиск" />
+        <Input className={s.input} placeholder="Поиск" type="text" />
         <SearchIcon className={s.icon} />
       </div>
     </div>
