@@ -25,8 +25,30 @@
   width: 200px;
   height: 40px;
   display: flex;
+  flex-direction: column;
   align-items: center;
   gap: 8px;
+}
+.progress__txt {
+  width: fit-content;
+  height: 18px;
+  font-family: Moscow Sans;
+  font-weight: 300;
+  font-size: var(--font-size-xs);
+  line-height: 130%;
+  letter-spacing: 0.25px;
+  vertical-align: middle;
+  color: #6c757d;
+}
+.bar {
+  width: 181px;
+  height: 14px;
+  border-radius: 20px;
+  gap: 10px;
+}
+.indicator {
+  background-color: #4dd4ac;
+  height: 100%;
 }
 .btns {
   width: 140px;
@@ -39,10 +61,11 @@
 .btn {
   width: 40px;
   height: 40px;
+  padding: 0;
   border-radius: 8px;
   border-width: 1px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: transparent;
+  // background-color: transparent;
 }
