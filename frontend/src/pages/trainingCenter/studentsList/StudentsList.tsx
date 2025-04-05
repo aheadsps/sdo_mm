@@ -18,7 +18,7 @@ export const StudentsList = () => {
   }
   return (
     <div className={s.container}>
-      <Search />
+      <Search students={studentsData} />
       <BlockHeader columns={columns} className={s.blockHeader} />
       <div className={s.content}>
         {studentsData.map((student) => {

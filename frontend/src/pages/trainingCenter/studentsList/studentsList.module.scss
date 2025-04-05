@@ -4,13 +4,17 @@
   display: flex;
   flex-direction: column;
   gap: 30px;
-  //   @media screen and (max-width: 1349px) {
-
-  //   }
 }
 
 .blockHeader {
   grid-template-columns: 621px 216px 160px;
+  margin-bottom: 0;
+  @media screen and (max-width: 1349px) {
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      'lesson lesson'
+      'date format';
+  }
 }
 .content {
   width: 100%;
