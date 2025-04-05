@@ -176,34 +176,48 @@ class AnswerCheckerConsumer(WebsocketConsumer):
         по всему курсу, если да то обновляет статус Event в done
         """
         course = self.test_block.lesson.course
+        logger.debug(f'Проверка курса {course.name}')
+
+        if course is None:
+            logger.debug('Курс не найден')
+            return
 
         total_lessons = Lesson.objects.filter(course=course).count()
-        completed_lessons = LessonStory.objects.filter(
+        logger.debug(f'Всего уроков {total_lessons}')
+        opened_lessons = LessonStory.objects.filter(
             user=self.user,
             course=course
         ).count()
+        logger.debug(f'Доступно уроков: {opened_lessons}')
 
         total_correct_answers = UserStory.objects.filter(
             user=self.user,
             answer__correct=True,
             test_block__lesson__course=course
         ).count()
+        logger.debug(f'Кол-во правильных ответов пользователя'
+                     f' {total_correct_answers}')
 
         total_possible_answers = Answer.objects.filter(
             correct=True,
             question__test_block__lesson__course=course
         ).count()
+        logger.debug(f'Кол-во правильных ответов ВСЕГО:'
+                     f' {total_correct_answers}')
 
         course_progress = total_correct_answers / total_possible_answers\
             if total_possible_answers > 0 else 0
+        logger.debug(f'прогресс по курсу составил'
+                     f' {int(course_progress * 100)}%')
 
-        if completed_lessons == total_lessons and course_progress >= 0.8:
+        if opened_lessons == total_lessons and course_progress >= 0.8:
             event = Event.objects.get(user=self.user, course=course)
             event.status = 'done'
             event.done_lessons = total_lessons
             event.save()
             logger.debug(
-                f'Курс {course.id} имеет {course_progress}% правильных ответов')
+                f'Курс {course.name} имеет {int(course_progress * 100)}%'
+                f' правильных ответов, статус курса перешел в  {event.status}')
 
     def _send_answer_result(self, answer):
         """
