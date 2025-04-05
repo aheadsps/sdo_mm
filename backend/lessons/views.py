@@ -53,7 +53,7 @@ class EventViewSet(own_viewsets.GetCreateUpdateDeleteViewSet):
     def create(self, request, *args, **kwargs):
         self.check_object_permissions(request, None)
         self.serializer_class = serializers.EventSerializerCreate
-        super().create(request, *args, **kwargs)
+        return super().create(request, *args, **kwargs)
 
     def perform_create(self, serializer):
         instance = serializer.save()
