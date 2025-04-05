@@ -100,15 +100,8 @@ class UserStoryValidator:
         self.test_block = test_block
 
     def __call__(self):
-        self._validate_only_one_or_required_fields()
         self._validate_answer()
         self._validate_test_block()
-
-    def _validate_only_one_or_required_fields(self):
-        if not (self.answer or self.test_block):
-            raise ValidationError("Укажите answer или test_block")
-        if self.answer and self.test_block:
-            raise ValidationError("Можно указать только answer или test_block")
 
     def _validate_answer(self):
         if self.answer is not None and not hasattr(self.answer, 'question'):
