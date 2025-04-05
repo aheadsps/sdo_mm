@@ -78,3 +78,11 @@ class TestBlockAdmin(admin.ModelAdmin):
     Админ панель Эвента
     """
     list_display = ('id',)
+
+
+@admin.register(models.ContentAttachment)
+class AttachmentsAdmin(admin.ModelAdmin):
+    """
+    Админ для вложеностей
+    """
+    list_display = ('file', 'file_type', 'step')

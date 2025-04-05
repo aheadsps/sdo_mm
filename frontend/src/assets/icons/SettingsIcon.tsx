@@ -10,7 +10,6 @@ const SettingsIcon = forwardRef<SVGSVGElement, SVGProps<SVGSVGElement>>(
       xmlns="http://www.w3.org/2000/svg"
       {...props}
       ref={ref}
-      ref={ref}
     >
       <path
         d="M7.99998 10.7119C9.2217 10.7119 10.2121 9.72147 10.2121 8.49974C10.2121 7.27802 9.2217 6.28761 7.99998 6.28761C6.77825 6.28761 5.78784 7.27802 5.78784 8.49974C5.78784 9.72147 6.77825 10.7119 7.99998 10.7119Z"

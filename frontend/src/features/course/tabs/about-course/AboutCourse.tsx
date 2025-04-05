@@ -1,6 +1,5 @@
 import { HeartFilledIcon } from '@assets/icons'
-import { Card, Typography, Button } from '@shared/components'
-import { calculateProgress } from '@shared/utils'
+import { Card, Typography, Button, ProgressBar } from '@shared/components'
 
 import { LessonItemCard } from '../../lesson-item-card'
 

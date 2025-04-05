@@ -1,8 +1,6 @@
-import LessonComponent from '@features/lesson/LessonComponent'
 import { routes } from '@routes/routes'
 import { Button, Tabs, Typography, AiComponent, BackToPage } from '@shared/components'
 import { useToggle } from '@shared/hooks/useToggle'
-import { useState } from 'react'
 
 import s from './course.module.scss'
 import { tabsData } from './tabs/tabsData'
