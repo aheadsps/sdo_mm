@@ -327,11 +327,11 @@ class UserStory(models.Model):
                                        verbose_name=_('Дата события')
                                        )
 
-    # def clean(self):
-    #     UserStoryValidator(answer=self.answer, test_block=self.test_block)()
+    def clean(self):
+        UserStoryValidator(answer=self.answer, test_block=self.test_block)()
 
     def save(self, *args, **kwargs):
-        # self.full_clean()
+        self.full_clean()
         super().save(*args, **kwargs)
 
     class Meta:
