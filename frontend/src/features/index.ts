@@ -1,4 +1,4 @@
 export * from './main'
 export * from './auth'
 export * from './course'
-export * from '/trainingCenter'
+export * from '../pages/trainingCenter/TrainingCenter'

@@ -4,7 +4,6 @@ export type studentType = {
   id: number
   name: string
   progress: number
-  //   isExpandableContent?: boolean
 }
 
 export const studentsData: studentType[] = [
@@ -34,12 +33,12 @@ export const studentsData: studentType[] = [
     progress: 0,
   },
   {
-    id: 4,
+    id: 6,
     name: 'Соколов Иван Антонович',
     progress: 98,
   },
   {
-    id: 4,
+    id: 7,
     name: 'Степановa София Александровa',
     progress: 100,
   },

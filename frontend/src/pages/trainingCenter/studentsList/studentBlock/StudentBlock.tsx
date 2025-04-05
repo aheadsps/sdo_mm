@@ -1,5 +1,4 @@
 import { Button, Input, ProgressBar, Typography } from '@shared/components'
-import { useToggle } from '@shared/hooks'
 import clsx from 'clsx'
 
 import { BasketIcon, WebinarAndSupportIcon } from '@assets/icons'
@@ -10,11 +9,9 @@ import s from './studentBlock.module.scss'
 
 type Props<T extends studentType> = {
   student?: T
-  // optionsDate?: Option[]
-  // optionsFormat?: Option[]
-  // isExpandableContent?: boolean
 }
 export const StudentBlock = <T extends studentType>({ student }: Props<T>) => {
+  const buttonColor = student ? '#E9ECEF' : '#831f29'
   return (
     <div className={s.studentBox}>
       <div className={clsx(s.title, s.access)}>
@@ -27,9 +24,9 @@ export const StudentBlock = <T extends studentType>({ student }: Props<T>) => {
         )}
       </div>
       <div className={s.progress}>
-        <p className={s.progress__txt}>20 из 100%</p>
+        <p className={s.progress__txt}>{student?.progress ? student?.progress : 0} из 100%</p>
         <ProgressBar
-          progress={40}
+          progress={student?.progress ? student?.progress : 0}
           total={100}
           progressBarClassName={s.bar}
           progressIndicatorClassName={s.indicator}
@@ -37,11 +34,11 @@ export const StudentBlock = <T extends studentType>({ student }: Props<T>) => {
       </div>
 
       <div className={s.btns}>
-        <Button variant="secondary" className={s.btn}>
-          <BasketIcon width={'40px'} height={'40px'} />
+        <Button variant="secondary" className={student ? s.btn : s.btn_disPrymary}>
+          <BasketIcon width={'40px'} height={'40px'} fill={buttonColor} />
         </Button>
-        <Button variant="primary" className={s.btn}>
-          <WebinarAndSupportIcon width={'24px'} height={'24px'} />
+        <Button variant="primary" className={student ? s.btn : s.btn_disSecondary}>
+          <WebinarAndSupportIcon width={'24px'} height={'24px'} fill={buttonColor} />
         </Button>
       </div>
     </div>

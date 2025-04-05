@@ -1,13 +1,40 @@
-// .box {
-//   width: 100%;
-//   height: 62px;
-//   display: flex;
-//   justify-content: space-between;
-//   align-items: center;
-//   //   @media screen and (max-width: 1349px) {
+.studentBox {
+  display: grid;
+  grid-template-columns: 610px 216px 148px;
+  grid-template-areas: 'title date format';
+  align-items: flex-end;
+  padding-top: 16px;
+  padding-bottom: 6px;
+  width: 100%;
 
-//   //   }
-// }
+  @media screen and (max-width: 1349px) {
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      'title title'
+      'date format';
+  }
+}
+
+.title {
+  grid-area: title;
+  width: 100%;
+  height: 40px;
+
+  input {
+    resize: none;
+    height: 100%;
+    width: 602px;
+    border-bottom: 1px solid #f8d7d9;
+
+    &::placeholder {
+      font-weight: var(--font-weight-light);
+      line-height: var(--line-height-m);
+      font-size: var(--font-size-m);
+      font-family: var(--font-family-secondary);
+    }
+  }
+}
+
 .name {
   width: 602px;
   height: 40px;
@@ -17,14 +44,6 @@
   border-bottom: 1px solid #831f29;
   backdrop-filter: blur(60px);
 }
-// .content {
-//   width: 411px;
-//   height: 62px;
-//   display: flex;
-//   flex-direction: row;
-//   padding-top: 16px;
-//   padding-bottom: 6px;
-// }
 .progress {
   width: 200px;
   height: 40px;
@@ -42,7 +61,7 @@
 .progress__txt {
   width: fit-content;
   height: 18px;
-  font-family: Moscow Sans;
+  font-family: var(--font-family-secondary);
   font-weight: 300;
   font-size: var(--font-size-xs);
   line-height: 130%;
@@ -92,79 +111,37 @@
     height: 36px;
   }
 }
-// /////////////////////////////////////////
-.studentBox {
-  display: grid;
-  grid-template-columns: 610px 216px 148px;
-  grid-template-areas: 'title date format';
-  align-items: flex-end;
-  padding-top: 16px;
-  padding-bottom: 6px;
-  width: 100%;
-
-  @media screen and (max-width: 1349px) {
-    grid-template-columns: 1fr 1fr;
-    grid-template-areas:
-      'title title'
-      'date format';
-  }
-}
-
-.title {
-  grid-area: title;
-  width: 100%;
+.btn_disPrymary {
+  width: 40px;
   height: 40px;
-  // border-radius: 2px;
-  // padding: 9px 12px;
-  // margin-right: 8px;
-  // background: #f8f9fa33;
-  // border-bottom: 1px solid #831f29;
-  // border-right: 1px solid var(--color-additional-border100);
-  // backdrop-filter: blur(60px);
-
-  input {
-    resize: none;
-    height: 100%;
-    width: 602px;
-    border-bottom: 1px solid #f8d7d9;
-
-    &::placeholder {
-      font-weight: var(--font-weight-light);
-      line-height: var(--line-height-m);
-      font-size: var(--font-size-m);
-      font-family: var(--font-family-secondary);
-    }
-  }
-}
-
-.date {
-  padding: 9px 12px;
-  grid-area: date;
-  border-left: 1px solid var(--color-additional-border100);
-  @media screen and (max-width: 1349px) {
-    padding-left: 0;
-    margin-left: 30px;
-  }
-}
-
-.format {
-  padding: 9px 12px;
-  grid-area: format;
-  width: 100%;
-  padding-left: 8px;
-  padding-right: 8px;
-  height: 100%;
+  padding: 0;
   display: flex;
-  justify-content: flex-end;
-  border-left: 1px solid var(--color-additional-border100);
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+  fill: #e9ecef;
+  @media screen and (max-width: 1349px) {
+    width: 36px;
+    height: 36px;
+  }
 }
 
-// .title p {
-//   margin-left: 30px;
-//   border-bottom: 1px solid var(--color-additional-border700);
-//   padding-bottom: 9px;
-// }
-
+.btn_disSecondary {
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  background: #e9ecef;
+  fill: #acb5bd;
+  @media screen and (max-width: 1349px) {
+    width: 36px;
+    height: 36px;
+  }
+}
 .access {
   border-right: 1px solid var(--color-additional-border100);
 
@@ -172,39 +149,6 @@
     width: 100%;
   }
 }
-
-.date,
-.format {
-  width: 100%;
-  padding-left: 8px;
-  padding-right: 8px;
-  border-right: 1px solid var(--color-additional-border100);
-
-  div {
-    width: 100%;
-
-    @media screen and (max-width: 1349px) {
-      left: 0;
-      margin: 0 auto;
-    }
-  }
-
-  &:first-child,
-  :nth-child(4) {
-    min-height: 60px;
-  }
-
-  div:nth-child(2) {
-    width: calc(100% + 2px);
-    left: -1px;
-  }
-}
-
-// .constructorBtn {
-//   width: 40px;
-//   height: 40px;
-//   margin: 0 auto;
-// }
 
 .formInput {
   border-bottom: 1px solid var(--color-additional-border700);
