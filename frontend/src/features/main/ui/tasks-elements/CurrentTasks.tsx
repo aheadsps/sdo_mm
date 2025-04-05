@@ -1,10 +1,12 @@
 import { useGetCurrentEventsQuery } from '@services/events'
 import { Typography, Task } from '@shared/components'
+import { getDaysLeft } from '@shared/utils'
 
 import s from '../main.module.scss'
 
 export const CurrentTasks = () => {
   const { data: events } = useGetCurrentEventsQuery()
+  console.log(events?.results)
 
   return (
     <div>
@@ -13,12 +15,11 @@ export const CurrentTasks = () => {
       </Typography>
 
       {events?.results.length ? (
-        <>
-          <Task daysLeft={2}>Охрана труда</Task>
-          <Task daysLeft={4}>Работа с электроинструментом</Task>
-          <Task daysLeft={7}>Пожарная безопасность</Task>
-          <Task>Охрана труда</Task>
-        </>
+        events.results.map((result) => (
+          <Task key={result.id} daysLeft={getDaysLeft(result.end_date)}>
+            {result.course.name}
+          </Task>
+        ))
       ) : (
         <Typography variant="body_1" className={s.noTasksText}>
           Пока у вас нет актуальных задач. Как только появятся, они отобразятся здесь.
