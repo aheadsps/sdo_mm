@@ -168,6 +168,43 @@ class AnswerCheckerConsumer(WebsocketConsumer):
             self.next_opened = True
             logger.debug('next lesson is opened now')
 
+            self._check_course_completion()
+
+    def _check_course_completion(self):
+        """
+        Проверка завершения всех уроков курса и 80% правильных ответов
+        по всему курсу, если да то обновляет статус Event в done
+        """
+        course = self.test_block.lesson.course
+
+        total_lessons = Lesson.objects.filter(course=course).count()
+        completed_lessons = LessonStory.objects.filter(
+            user=self.user,
+            course=course
+        ).count()
+
+        total_correct_answers = UserStory.objects.filter(
+            user=self.user,
+            answer__correct=True,
+            test_block__lesson__course=course
+        ).count()
+
+        total_possible_answers = Answer.objects.filter(
+            correct=True,
+            question__test_block__lesson__course=course
+        ).count()
+
+        course_progress = total_correct_answers / total_possible_answers\
+            if total_possible_answers > 0 else 0
+
+        if completed_lessons == total_lessons and course_progress >= 0.8:
+            event = Event.objects.get(user=self.user, course=course)
+            event.status = 'done'
+            event.done_lessons = total_lessons
+            event.save()
+            logger.debug(
+                f'Курс {course.id} имеет {course_progress}% правильных ответов')
+
     def _send_answer_result(self, answer):
         """
         Отправка результата проверки ответа
