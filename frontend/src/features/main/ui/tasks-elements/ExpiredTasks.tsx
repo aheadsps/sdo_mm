@@ -1,13 +1,12 @@
-import { Event } from '@services/events'
+import { selectExpiredEvents } from '@services/events'
+import { useAppSelector } from '@services/store'
 import { Typography, Task } from '@shared/components'
 import { getDaysLeft } from '@shared/utils'
 
 import s from '../main.module.scss'
 
-type Props = {
-  failedEvents: Event[] | undefined
-}
-export const ExpiredTasks = ({ failedEvents }: Props) => {
+export const ExpiredTasks = () => {
+  const failedEvents = useAppSelector(selectExpiredEvents)
   return (
     <div className={s.expiredTasks}>
       <Typography variant="header_4" className={s.title}>

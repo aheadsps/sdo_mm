@@ -1,13 +1,12 @@
-import { type Event } from '@services/events'
+import { selectCurrentEvents } from '@services/events'
+import { useAppSelector } from '@services/store'
 import { Typography, Task } from '@shared/components'
 import { getDaysLeft } from '@shared/utils'
 
 import s from '../main.module.scss'
 
-type Props = {
-  currentEvents: Event[] | undefined
-}
-export const CurrentTasks = ({ currentEvents }: Props) => {
+export const CurrentTasks = () => {
+  const currentEvents = useAppSelector(selectCurrentEvents)
   return (
     <div>
       <Typography variant="header_4" className={s.title}>

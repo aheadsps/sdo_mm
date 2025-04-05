@@ -1,14 +1,13 @@
-import { Event } from '@services/events'
+import { selectExpiringEvents } from '@services/events'
+import { useAppSelector } from '@services/store'
 import { Typography, Button } from '@shared/components'
 import { formatDate, getDaysLeft } from '@shared/utils'
 
 import s from './warning-card.module.scss'
 
-type Props = {
-  expiringEvents: Event[] | undefined
-}
+export const WarningCard = () => {
+  const expiringEvents = useAppSelector(selectExpiringEvents)
 
-export const WarningCard = ({ expiringEvents }: Props) => {
   if (!expiringEvents || expiringEvents.length === 0) {
     return null
   }
