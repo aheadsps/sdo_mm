@@ -1,5 +1,5 @@
 import { useGetCurrentEventsQuery } from '@services/events'
-import { Calendar } from '@shared/components'
+import { Calendar, Loader } from '@shared/components'
 import { getDaysLeft } from '@shared/utils'
 import { useMemo } from 'react'
 
@@ -9,9 +9,8 @@ import { ExpiredTasks } from './tasks-elements/ExpiredTasks'
 import { WarningCard } from './warning-card'
 
 export const Main = () => {
-  const { data: events } = useGetCurrentEventsQuery()
+  const { data: events, isLoading } = useGetCurrentEventsQuery()
   console.log(events?.results)
-  const hasWarning = true
 
   const failedEvents = useMemo(() => {
     return events?.results.filter((result) => result.status === 'failed') ?? []
@@ -25,17 +24,19 @@ export const Main = () => {
     )
   }, [events?.results])
 
+  if (isLoading) {
+    return <Loader />
+  }
+
   return (
     <div className={s.contentBlock}>
       <div className={s.tasks}>
         <CurrentTasks currentEvents={events?.results} />
         <ExpiredTasks failedEvents={failedEvents} />
       </div>
-      {hasWarning && (
-        <div className={s.warning}>
-          <WarningCard expiringEvents={expiringEvents} />
-        </div>
-      )}
+      <div className={s.warning}>
+        <WarningCard expiringEvents={expiringEvents} />
+      </div>
       <Calendar />
     </div>
   )
