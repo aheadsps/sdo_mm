@@ -87,13 +87,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  @media screen and (max-width: 767px) {
+  @media screen and (max-width: 1349px) {
     width: 36px;
     height: 36px;
   }
 }
 // /////////////////////////////////////////
-.lessonContent {
+.studentBox {
   display: grid;
   grid-template-columns: 610px 216px 148px;
   grid-template-areas: 'title date format';

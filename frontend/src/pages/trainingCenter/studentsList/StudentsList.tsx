@@ -4,9 +4,8 @@ import { AddItemIcon } from '@assets/icons'
 import { StudentBlock } from '@pages/trainingCenter/studentsList/studentBlock'
 
 import { BlockHeader } from '../course/program/block-header/BlockHeader'
-import { LessonContent } from '../course/program/lesson-content/LessonContent'
 
-import { columns } from './MockData'
+import { columns, studentsData } from './data'
 import s from './studentsList.module.scss'
 
 export const StudentList = () => {
@@ -15,12 +14,15 @@ export const StudentList = () => {
       <Search />
       <BlockHeader columns={columns} />
       <div className={s.content}>
-        <StudentBlock />
-        {/* <StudentBlock />
-        <StudentBlock />
-        <StudentBlock /> */}
+        {studentsData.map((student) => {
+          return <StudentBlock student={student} />
+        })}
         <button className={s.addButton}>
-          <AddItemIcon height={'12px'} width={'12px'} />
+          <AddItemIcon
+            height={'12px'}
+            width={'12px'}
+            //  onClick={onAddNewStudent}
+          />
         </button>
       </div>
     </div>
