@@ -1,6 +1,7 @@
 import datetime
 import json
 
+from channels.db import database_sync_to_async
 from rest_framework.test import APITestCase
 from django.contrib.auth import get_user_model
 from channels.testing import WebsocketCommunicator
@@ -47,7 +48,7 @@ class TestSocket(APITestCase):
         group_profession.students.add(self.user)
         group_profession.save()
         course = lessons_models.Course._default_manager.create(
-            name="course",
+            name="course bobr",
             description="some",
             profession=self.profession,
         )
@@ -110,6 +111,16 @@ class TestSocket(APITestCase):
             text="answer_6",
             correct=False,
             question=question_1,
+        )
+        self.answer_7 = lessons_models.Answer._default_manager.create(
+            text="answer_7",
+            correct=True,
+            question=question_1,
+        )
+        self.answer_8 = lessons_models.Answer._default_manager.create(
+            text="answer_8",
+            correct=True,
+            question=question,
         )
         lessons_models.Event._default_manager.create(
             user=self.user,
@@ -181,5 +192,13 @@ class TestSocket(APITestCase):
         self.assertEqual(
             json.loads(response),
             {'answer': False, 'answer_id': self.answer_6.pk},
+        )
+
+        data = dict(answer_id=self.answer_7.pk, block_id=self.test_block.pk)
+        await communicator.send_json_to(data=data)
+        response = await communicator.receive_from()
+        self.assertEqual(
+            json.loads(response),
+            {'answer': True, 'answer_id': self.answer_7.pk},
         )
         await communicator.disconnect()
