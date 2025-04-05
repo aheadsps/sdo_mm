@@ -44,6 +44,7 @@
   border-bottom: 1px solid #831f29;
   backdrop-filter: blur(60px);
 }
+
 .progress {
   width: 200px;
   height: 40px;
@@ -51,6 +52,7 @@
   flex-direction: column;
   align-items: center;
   gap: 8px;
+
   @media screen and (max-width: 1349px) {
     width: 100%;
     height: 62px;
@@ -58,6 +60,7 @@
     justify-content: center;
   }
 }
+
 .progress__txt {
   width: fit-content;
   height: 18px;
@@ -69,16 +72,19 @@
   vertical-align: middle;
   color: #6c757d;
 }
+
 .bar {
   width: 181px;
   height: 14px;
   border-radius: 20px;
   gap: 10px;
 }
+
 .indicator {
   background-color: #4dd4ac;
   height: 100%;
 }
+
 .btns {
   width: 140px;
   height: 40px;
@@ -87,16 +93,19 @@
   padding: 0 18px;
   gap: 24px;
   border-left: 1px solid var(--color-additional-border100);
+
   @media screen and (max-width: 1349px) {
     width: 100%;
     height: 62px;
     padding: 9px 12px;
     justify-content: center;
   }
+
   @media screen and (max-width: 767px) {
     padding: 16px 8px 6px;
   }
 }
+
 .btn {
   width: 40px;
   height: 40px;
@@ -106,11 +115,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
+
   @media screen and (max-width: 1349px) {
     width: 36px;
     height: 36px;
   }
 }
+
 .btn_disPrymary {
   width: 40px;
   height: 40px;
@@ -121,6 +132,7 @@
   border-radius: 8px;
   border: 1px solid #e9ecef;
   fill: #e9ecef;
+
   @media screen and (max-width: 1349px) {
     width: 36px;
     height: 36px;
@@ -137,11 +149,13 @@
   border-radius: 8px;
   background: #e9ecef;
   fill: #acb5bd;
+
   @media screen and (max-width: 1349px) {
     width: 36px;
     height: 36px;
   }
 }
+
 .access {
   border-right: 1px solid var(--color-additional-border100);
 

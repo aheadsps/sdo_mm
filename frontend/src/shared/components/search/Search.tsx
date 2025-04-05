@@ -36,7 +36,7 @@ export const Search = ({ students }: Props) => {
         ) : (
           ''
         )}
-        <SearchIcon className={s.icon} />
+        <SearchIcon className={s.icon} onClick={() => setDatalistVisible(false)} />
       </div>
     </div>
   )

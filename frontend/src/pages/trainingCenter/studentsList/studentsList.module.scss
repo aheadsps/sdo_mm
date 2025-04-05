@@ -9,6 +9,7 @@
 .blockHeader {
   grid-template-columns: 621px 216px 160px;
   margin-bottom: 0;
+
   @media screen and (max-width: 1349px) {
     grid-template-columns: 1fr 1fr;
     grid-template-areas:
@@ -16,14 +17,16 @@
       'date format';
   }
 }
+
 .content {
   width: 100%;
   height: fit-content;
   display: flex;
   flex-direction: column;
   border-radius: 20px;
-  padding: 0px 12px 30px;
+  padding: 0 12px 30px;
 }
+
 .addButton {
   border-radius: 50%;
   background-color: var(--color-bg-gray100);
