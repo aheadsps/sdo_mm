@@ -3,10 +3,10 @@ export type EventsResponse = {
   count: number
   next: null
   previous: null
-  results: Result[]
+  results: Event[]
 }
 
-export type Result = {
+export type Event = {
   course: Course
   done_lessons: number
   end_date: string
