@@ -1,5 +1,4 @@
-import { ArrowRightIcon, CalendarIcon } from '@assets/icons'
-import { Button, FormInput, Input, type Option, Select, Typography } from '@shared/components'
+import { Button, InputWithIcon, Input, type Option, Select, Typography } from '@shared/components'
 import { useToggle } from '@shared/hooks'
 import clsx from 'clsx'
 
@@ -41,7 +40,7 @@ export const LessonContent = <T extends LessonType>({
         </>
       ) : (
         <>
-          <FormInput
+          <InputWithIcon
             className={s.formInput}
             placeholder={lesson?.dateTime ? lesson?.dateTime : 'Введите дату урока'}
             content={'Здесь будет календарь'}
@@ -50,7 +49,7 @@ export const LessonContent = <T extends LessonType>({
             isOpen={isOpen}
           >
             Здесь будет календарь
-          </FormInput>
+          </InputWithIcon>
           <Select
             className={s.format}
             placeholder={lesson?.format ? lesson?.format : 'Формат'}
