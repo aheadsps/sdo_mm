@@ -1,6 +1,18 @@
-import { selectCurrentEvents, selectExpiredEvents } from '@services/events'
+import {
+  selectCompletedEvents,
+  selectCurrentEvents,
+  selectExpiredEvents,
+  selectFavoriteEvents,
+} from '@services/events'
 import { useAppSelector } from '@services/store'
-import { AiComponent, Tooltipe, TabsButtons, Button, LessonCard } from '@shared/components'
+import {
+  AiComponent,
+  Tooltipe,
+  TabsButtons,
+  Button,
+  LessonCard,
+  Typography,
+} from '@shared/components'
 import { withLayout } from '@shared/HOC'
 import { useToggle } from '@shared/hooks'
 import { useState } from 'react'
@@ -21,6 +33,8 @@ const MyLearningComp: React.FC = () => {
 
   const currentEvents = useAppSelector(selectCurrentEvents)
   const expiredEvents = useAppSelector(selectExpiredEvents)
+  const favoriteEvents = useAppSelector(selectFavoriteEvents)
+  const completedEvents = useAppSelector(selectCompletedEvents)
 
   const displayCurrentCourses = () => {
     if (mode === 'Все курсы') {
@@ -29,7 +43,10 @@ const MyLearningComp: React.FC = () => {
     if (mode === 'Просроченные курсы') {
       return expiredEvents
     }
-    return currentEvents
+    if (mode === 'Избранные курсы') {
+      return favoriteEvents
+    }
+    return completedEvents
   }
 
   return (
@@ -42,11 +59,13 @@ const MyLearningComp: React.FC = () => {
           <Button children="ИИ" variant="secondary" onClick={toggleAI} />
         </div>
         <div className={s.container__content}>
-          {displayCurrentCourses()?.length > 0
-            ? displayCurrentCourses().map((event) => {
-                return <LessonCard event={event} key={event.id} />
-              })
-            : ''}
+          {displayCurrentCourses()?.length > 0 ? (
+            displayCurrentCourses().map((event) => {
+              return <LessonCard event={event} key={event.id} />
+            })
+          ) : (
+            <Typography variant="body_1">В данном списке нет курсов</Typography>
+          )}
         </div>
       </div>
     </>
