@@ -1,9 +1,7 @@
-from django_celery_beat.models import PeriodicTask, CrontabSchedule, ClockedSchedule
+from django_celery_beat.models import PeriodicTask, ClockedSchedule
 import json
 from django.utils import timezone
 from datetime import datetime
-from django.utils.crypto import get_random_string
-from config.celery import app
 
 
 class TaskManager:
@@ -111,18 +109,20 @@ class TaskManager:
         instance = PeriodicTask._default_manager.create(
             clocked=self.schedule_start,
             one_off=True,
-            name=self._create_unique_name_to_task(),
+            name=f'Event_{self.course}_at_{TaskManager.date_str(self.data_start)}',
             task="lessons.task.create_events",
             kwargs=json.dumps(kwargs),
         )
         # если ок создаем PeriodicTask на
         # перевод по истечению времени events в failed
         if instance:
+            kwargs = dict(course_id=self.course, users=self.user_list)
             PeriodicTask._default_manager.create(
                 clocked=self.schedule_end,
                 one_off=True,
-                name=self._create_unique_name_to_task(),
+                name=f'Fail_{self.course}_at_{TaskManager.date_str(self.data_end)}',
                 task="lessons.task.events_failed",
+                kwargs=json.dumps(kwargs),
             )
 
         return instance
