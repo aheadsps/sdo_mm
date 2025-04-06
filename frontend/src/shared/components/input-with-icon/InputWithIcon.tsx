@@ -3,7 +3,7 @@ import { ComponentPropsWithoutRef, ReactNode } from 'react'
 
 import { Input, Textarea } from '../text-field'
 
-import s from './form-input.module.scss'
+import s from './input-with-icon.module.scss'
 
 type Props = {
   children?: ReactNode
@@ -13,7 +13,14 @@ type Props = {
   onClick: () => void
 } & ComponentPropsWithoutRef<'input'>
 
-export const FormInput = ({ children, className, placeholder, isOpen, icon, onClick }: Props) => {
+export const InputWithIcon = ({
+  children,
+  className,
+  placeholder,
+  isOpen,
+  icon,
+  onClick,
+}: Props) => {
   const { width } = useScreenWidth()
   return (
     <div className={s.inputBlock}>
