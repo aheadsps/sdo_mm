@@ -1,13 +1,8 @@
-import datetime
-
 from rest_framework import serializers
-from django.utils import timezone
-from loguru import logger
 
 from lessons import models, validators
-from lessons.d_types import VD
-from lessons.patrials import set_status
 from users import serializers as user_serializers
+from lessons.taskmanager import TaskManager
 
 
 PROCESS = "process"
@@ -388,59 +383,31 @@ class EventSerializerCreate(serializers.ModelSerializer):
     """
     Сериализатор Создания в Изменения Эвента
     """
-
+    users = serializers.ListField(allow_empty=False, child=serializers.IntegerField())
     status = serializers.CharField(read_only=True)
+
+    def to_internal_value(self, data):
+        data['users'] = (data['users'].split(',')
+                         if data['users']
+                         else [])
+        return data
 
     class Meta:
         model = models.Event
         fields = (
-            "user",
+            "users",
             "course",
             "start_date",
             "end_date",
-            "favorite",
-            "status",
         )
         validators = (validators.TimeValidator("start_date", "end_date"),)
 
-    def _is_process(self, start_date: datetime.datetime) -> bool:
-        """
-        Определение является курс запущенным
-        """
-        time_now = timezone.now()
-        return time_now > start_date
-
-    def _change_status(self, validated_data: VD, process: bool) -> None:
-        """
-        Изменение статуса
-        """
-        set_status(
-            dict_data=validated_data,
-            value=PROCESS if process else EXPECTED,
+    def create(self, validated_data):
+        task_manager = TaskManager(
+            course=validated_data['course'].pk,
+            user_list=validated_data['users'],
+            data_start=validated_data.get('start_date'),
+            data_end=validated_data.get('end_date'),
         )
-
-    def _correct_status(self, validated_data: VD) -> VD:
-        """
-        Корректировка статуса исходя от даты начала
-        """
-        start_date = validated_data.get("start_date")
-        if start_date:
-            is_process = self._is_process(start_date=start_date)
-            if self.instance:
-                if self.instance.status not in [DONE, FAILED]:
-                    self._change_status(
-                        validated_data=validated_data,
-                        process=is_process,
-                    )
-                return
-            else:
-                self._change_status(
-                    validated_data=validated_data,
-                    process=is_process,
-                )
-
-    def save(self, **kwargs):
-        logger.debug(f"before {self.validated_data}")
-        self._correct_status(self.validated_data)
-        logger.debug(f"after {self.validated_data}")
-        return super().save(**kwargs)
+        task_manager.create()
+        return super().create(validated_data)
