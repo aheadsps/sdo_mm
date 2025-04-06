@@ -1,4 +1,5 @@
 import { ClockIcon, LikeIcon, DislikeIcon, StickersIcon, HourglassIcon } from '@assets/icons'
+import { routes } from '@routes/routes'
 import { Event } from '@services/events'
 import { getBackgroundColor, getDaysLeft } from '@shared/utils'
 import { useState } from 'react'
@@ -26,7 +27,9 @@ export const LessonCard: React.FC<Props> = ({ event }: Props) => {
       <div className={s.container__top}>
         <div className={s.container__likeBox}>
           <div className={s.container__courseBox}>
-            <p className={s.container__course}>Курс</p>
+            <Typography variant="header_6" className={s.container__course}>
+              Курс
+            </Typography>
           </div>
           <button className={s.container__like} onClick={() => setIsFav(!isFav)}>
             {isFav ? <LikeIcon /> : <DislikeIcon />}
@@ -48,29 +51,40 @@ export const LessonCard: React.FC<Props> = ({ event }: Props) => {
                     style={{ backgroundColor: `${deadlineColor}` }}
                   ></div>
                   <Typography variant="body_2" className={s.container__paramTxt}>
-                    {event.status === 'process' ? `${daysLeft} дней` : event.status}
+                    {event.status === 'process' ? `${daysLeft} дней` : 'Просрочен'}
                   </Typography>
                 </div>
                 <div className={s.container__param}>
                   <StickersIcon />
-                  <p className={s.container__paramTxt}>{event.course.lessons.length}</p>
+                  <Typography variant="body_2" className={s.container__paramTxt}>
+                    {event.course.lessons.length}
+                  </Typography>
                 </div>
                 <div className={s.container__param}>
                   <HourglassIcon />
-                  <p className={s.container__paramTxt}>120</p>
+                  <Typography variant="body_2" className={s.container__paramTxt}>
+                    120
+                  </Typography>
                 </div>
                 <div className={s.container__param}>
                   <ClockIcon />
-                  <p className={s.container__paramTxt}>50%</p>
+                  <Typography variant="body_2" className={s.container__paramTxt}>
+                    50%
+                  </Typography>
                 </div>
               </div>
             </div>
-            <p className={s.container__depiction}>{event.course.description}</p>
+            <Typography variant="body_2" className={s.container__depiction}>
+              {event.course.description}
+            </Typography>
           </div>
         </div>
-        <NavLink to={'/learning/course'}>
-          <Button className={s.container__btn} children="Перейти к обучению" />
-        </NavLink>
+        <Button
+          className={s.container__btn}
+          children="Перейти к обучению"
+          as={NavLink}
+          to={routes.course}
+        />
       </div>
     </div>
   )
