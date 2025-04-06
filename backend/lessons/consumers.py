@@ -225,7 +225,7 @@ class AnswerCheckerConsumer(WebsocketConsumer):
         """
         self.send(text_data=json.dumps({
             'answer_id': answer.id,
-            'answer': answer.correct
+            'correct': answer.correct
         }))
 
     def _send_invalid_answer(self, answer_id=None):
@@ -234,7 +234,7 @@ class AnswerCheckerConsumer(WebsocketConsumer):
         """
         self.send(text_data=json.dumps({
             'answer_id': int(answer_id) if answer_id else -1,
-            'answer': False
+            'correct': False
         }))
 
     def _close_with_error(self, message, code):
