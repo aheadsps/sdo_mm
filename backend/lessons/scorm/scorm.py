@@ -4,6 +4,7 @@ from typing import IO, ClassVar
 from zipfile import ZipFile, ZipExtFile
 
 from lessons.scorm.engine.core import BaseCoreSCORM, CoreSCORM
+from lessons.scorm.engine.parsers import CONSTRUCTOR_ADAPTER
 from .s_types import ParserCallable
 
 
@@ -34,5 +35,9 @@ class SCORMLoader:
         if self.file:
             self.file.close()
 
-    def entrypoint(self, parser: ParserCallable) -> None:
-        parser(self).parse()
+    def entrypoint(self) -> None:
+        class_adapter = CONSTRUCTOR_ADAPTER.get('default')
+        class_adapter(self).parse()
+
+    def save(self):
+        self.core.save()

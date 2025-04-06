@@ -2,6 +2,8 @@ from typing import ClassVar
 from types import MappingProxyType
 from collections import UserDict
 
+from .parsers import IspringParser
+
 
 class ConstructorDict(UserDict):
     """
@@ -9,7 +11,7 @@ class ConstructorDict(UserDict):
     для конструктора
     """
 
-    DEFAULT_DATA = MappingProxyType(dict(default='res/data-1.json'))
+    DEFAULT_DATA = MappingProxyType(dict(default=IspringParser))
     DEFAULT_KEY: ClassVar[str] = 'default'
 
     def get(self, key, default=None):

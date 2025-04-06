@@ -5,8 +5,6 @@ from zipfile import ZipExtFile
 from pathlib import Path
 import xml.etree.ElementTree as ET
 
-from django.conf import settings
-
 from lessons.scorm.engine.parsers import AbstractParser
 from lessons.scorm.s_types import WrapperCallable
 
@@ -16,15 +14,12 @@ class BaseParser(AbstractParser):
     Базовый парсер
     """
 
-    CONSTRUCTOR_ADAPTER = settings.CONSTRUCTOR_ADAPTER
+    CONSTRUCTOR_ADAPTER = None
 
     def __init__(self,
                  wrapper: WrapperCallable,
                  ):
         self._wrapper = wrapper
-        # self._path = self.CONSTRUCTOR_ADAPTER.get(
-        #     self._wrapper.core.constructor_type,
-        # )
 
     @property
     def wrapper(self):

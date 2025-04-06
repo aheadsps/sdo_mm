@@ -23,6 +23,7 @@ class TestSCORMCore(TestCase):
             return True
         with open(file=zip_file_path, mode='b+r') as file:
             scorm = SCORMLoader(file)
+            scorm.save()
             scorm.entrypoint(BaseParser)
 
         self.assertEqual(SCORM._default_manager.count(), 1)
