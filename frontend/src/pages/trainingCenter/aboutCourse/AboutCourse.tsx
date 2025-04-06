@@ -1,4 +1,4 @@
-import { Button, FormInput, Select, Typography } from '@shared/components'
+import { Button, InputWithIcon, Select, Typography } from '@shared/components'
 import { useToggle } from '@shared/hooks'
 
 import { CalendarIcon, EditIcon } from '@assets/icons'
@@ -30,28 +30,22 @@ export const AboutCourse = () => {
     <div className={s.container}>
       <div className={s.leftBlock}>
         <h3 className={s.title}>Основная информация</h3>
-        <FormInput
+        <InputWithIcon
+          children={'Здесь будет календарь'}
           className={s.select}
           placeholder="Дата создания"
-          content={'Здесь будет календарь'}
-          onClick={toggleStart}
-          icon={<CalendarIcon />}
           isOpen={isOpenStart}
-        >
-          Здесь будет календарь
-        </FormInput>
-        <FormInput
+          icon={<CalendarIcon />}
+          onClick={toggleStart}
+        />
+        <InputWithIcon
           className={s.select}
           placeholder="Дата окончания"
-          content={'Здесь будет календарь'}
+          children={'Здесь будет календарь'}
           onClick={toggleEnd}
           icon={<CalendarIcon />}
           isOpen={isOpenEnd}
-        >
-          Здесь будет календарь
-        </FormInput>
-        {/* <CalendarSelect options={dates} placeholder="Дата создания" className={s.select} />
-        <CalendarSelect options={dates} placeholder="Дата окончания" className={s.select} /> */}
+        />
         <h6 className={s.subtitle}>
           <p className={s.sutitleLeft}>Количество студентов:</p>
           <p className={s.sutitleRight}>654</p>
