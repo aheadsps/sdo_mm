@@ -1,25 +1,37 @@
+import { selectCurrentEvents, selectExpiredEvents } from '@services/events'
+import { useAppSelector } from '@services/store'
 import { AiComponent, Tooltipe, TabsButtons, Button, LessonCard } from '@shared/components'
 import { withLayout } from '@shared/HOC'
-import { useToggle } from '@shared/hooks/useToggle'
+import { useToggle } from '@shared/hooks'
 import { useState } from 'react'
 
-import { getCurrentCourses } from './mockData'
 import s from './myLearning.module.scss'
-import { Course } from './types'
 
 const buttons: string[] = [
-  'Назначенные курсы',
+  'Все курсы',
   'Просроченные курсы',
   'Избранные курсы',
   'Завершённые курсы',
 ]
 
 const MyLearningComp: React.FC = () => {
-  const [mode, setMode] = useState<number>(0)
+  const [mode, setMode] = useState<string>('Все курсы')
   const { isOpen: isTooltipeOpen, close: closeTooltipe } = useToggle(true)
   const { isOpen: isAIOpen, close: closeAI, toggle: toggleAI } = useToggle()
 
-  const currentCourses: Course[] = getCurrentCourses(mode)
+  const currentEvents = useAppSelector(selectCurrentEvents)
+  const expiredEvents = useAppSelector(selectExpiredEvents)
+
+  const displayCurrentCourses = () => {
+    if (mode === 'Все курсы') {
+      return currentEvents
+    }
+    if (mode === 'Просроченные курсы') {
+      return expiredEvents
+    }
+    return currentEvents
+  }
+
   return (
     <>
       <AiComponent isOpen={isAIOpen} close={closeAI} />
@@ -30,9 +42,9 @@ const MyLearningComp: React.FC = () => {
           <Button children="ИИ" variant="secondary" onClick={toggleAI} />
         </div>
         <div className={s.container__content}>
-          {currentCourses.length > 0
-            ? currentCourses.map((course: Course) => {
-                return <LessonCard course={course} key={course.id} />
+          {displayCurrentCourses()?.length > 0
+            ? displayCurrentCourses().map((event) => {
+                return <LessonCard event={event} key={event.id} />
               })
             : ''}
         </div>

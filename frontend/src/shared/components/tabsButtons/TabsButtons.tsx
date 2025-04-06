@@ -6,27 +6,23 @@ import s from './tabsButtons.module.scss'
 
 type Props = {
   tabs: string[]
-  activeTab: number
-  setActiveTab: (activeTab: number) => void
+  activeTab: string
+  setActiveTab: (activeTab: string) => void
   children?: ReactNode
 } & ComponentPropsWithoutRef<'button'>
 
 export const TabsButtons = ({ tabs, activeTab, setActiveTab, ...props }: Props) => {
-  const counter = [0, 0, 3, 0]
   return (
     <div className={s.tabBox}>
-      {tabs.map((tab, index) => {
+      {tabs.map((tab) => {
         return (
-          <div className={s.tabList} key={index}>
-            <div className={counter[index] === 0 ? s.counterBox_hidden : s.counterBox}>
-              <p className={s.counter}>{counter[index]}</p>
-            </div>
+          <div className={s.tabList} key={tab}>
             <Button
-              key={index}
+              key={tab}
               className={s.tab}
               children={tab}
-              variant={activeTab === index ? 'primary' : 'secondary'}
-              onClick={() => setActiveTab(index)}
+              variant={activeTab === tab ? 'primary' : 'secondary'}
+              onClick={() => setActiveTab(tab)}
               {...props}
             />
           </div>

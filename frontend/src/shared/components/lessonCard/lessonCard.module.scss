@@ -93,8 +93,6 @@
   &__dataBox {
     width: 100%;
     display: flex;
-
-    // justify-content: center;
   }
 
   &__data {
@@ -113,41 +111,13 @@
   }
 
   &__paramTxt {
-    font-family: var(--font-family-secondary);
-    font-weight: 300;
-    font-size: var(--font-size-s);
-    line-height: 140%;
-    letter-spacing: 0.25px;
-    vertical-align: middle;
     color: var(--color-text-secondary);
   }
 
-  &__circle_blue {
+  &__circle {
     width: 24px;
     height: 24px;
     border-radius: 50%;
-    background-color: var(--color-accent-info);
-  }
-
-  &__circle_green {
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    background-color: var(--color-accent-success);
-  }
-
-  &__circle_orange {
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    background-color: var(--color-accent-orange);
-  }
-
-  &__circle_red {
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    background-color: var(--color-accent-red500);
   }
 
   &__depiction {

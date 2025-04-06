@@ -15,7 +15,9 @@ export const ExpiredTasks = () => {
 
       {failedEvents?.length ? (
         failedEvents.map((result) => (
-          <Task daysLeft={getDaysLeft(result.end_date)}>{result.course.name}</Task>
+          <Task key={result.id} daysLeft={getDaysLeft(result.end_date)}>
+            {result.course.name}
+          </Task>
         ))
       ) : (
         <Typography variant="body_1" className={s.noTasksText}>
