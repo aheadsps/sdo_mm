@@ -6,6 +6,7 @@ import { useState } from 'react'
 import { EditIcon } from '@assets/icons'
 
 import { AboutCourse } from '../aboutCourse'
+import { AssignmentsGrades } from '../assignments-grades'
 import { StudentsList } from '../studentsList'
 
 import { Program } from './program/Program'
@@ -26,7 +27,7 @@ const tabsData: Tab[] = [
   },
   {
     label: 'Оценки и задания',
-    content: <div>Оценки и задания</div>,
+    content: <AssignmentsGrades />,
   },
 ]
 

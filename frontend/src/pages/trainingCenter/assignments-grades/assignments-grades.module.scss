@@ -1,0 +1,46 @@
+.cardsBlock {
+    margin-top: 26px;
+    display: grid;
+    gap: 30px;
+    grid-template-columns: 1fr;
+
+    @media screen and (min-width: 1350px) {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+.card {
+    padding: 30px;
+    min-width: 312px;
+    width: 100%;
+}
+
+.cardTitle {
+    margin-bottom: 40px;
+    color: var(--color-text-primary);
+}
+
+.cardTitle, .text {
+    color: var(--color-text-primary);
+}
+
+.caption {
+    color: var(--color-text-secondary);
+}
+
+.infoBlock {
+    display: flex;
+    flex-direction: column;
+    gap: 8px
+}
+
+.infoItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--color-text-primary);
+}
+
+.button {
+    margin-top: 40px;
+}
