@@ -89,14 +89,25 @@ class TaskManager:
         """
         Создать задачу на удаления эвента
         """
-        kwargs = dict(course_id=self.course, users=self.user_list)
-        PeriodicTask._default_manager.create(
-            clocked=self.schedule_end,
-            one_off=True,
-            name=f'Fail_{self.course}_at_{TaskManager.date_str(self.data_end)}',
-            task="lessons.task.events_failed",
-            kwargs=json.dumps(kwargs),
-        )
+        name = f'Fail_{self.course}_at_{TaskManager.date_str(self.data_end)}'
+        # Проверка на наличие
+        task = PeriodicTask._default_manager.filter(name=name).first()
+        if task:
+            # Если таск есть - Плюсуем пользователей в user_list
+            kwargs: dict = json.loads(task.kwargs)
+            users = set(kwargs.get('users')).union(set(self.user_list))
+            kwargs["users"] = list(users)
+            task.kwargs = json.dumps(kwargs)
+            task.save()
+        else:
+            kwargs = dict(course_id=self.course, users=self.user_list)
+            PeriodicTask._default_manager.create(
+                clocked=self.schedule_end,
+                one_off=True,
+                name=name,
+                task="lessons.task.events_failed",
+                kwargs=json.dumps(kwargs),
+            )
 
     def create(self):
         """

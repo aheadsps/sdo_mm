@@ -155,16 +155,52 @@ class TestStepUrl(APITestCase):
 
 
         """
+        Бессрочный курс
+        """
+        TaskManager(1, [1, 2], date_time_obj2).upload()
+        rezults_5 = PeriodicTask.objects.get(name='Event_1_at_2038-06-30 09:00')
+        rezults_json_5 = json.dumps({"course_id": 1,
+                                     "users": [1, 2],
+                                     "start_date": "2038-06-30 09:00",
+                                     "end_date": None,
+                                     })
+        self.assertEqual(rezults_5.kwargs, rezults_json_5)
+
+        rezults_6 = PeriodicTask.objects.get(name='Fail_1_at_2040-06-29 00:00')
+        rezults_json_6 = json.dumps({"course_id": 1,
+                                     "users": [],
+                                     })
+        self.assertEqual(rezults_6.kwargs, rezults_json_6)
+
+
+
+        """
         Удаляем пользователя [1] из списка
         """
-        #TaskManager(1, [1], date_time_obj2).delete()
-        rezults_2 = PeriodicTask.objects.all()
-        rezults_json_2 = json.dumps({"course_id": 1,
+        TaskManager(1, [1, 2], date_time_obj2, date_end_time_obj3).upload()
+        rezults_7 = PeriodicTask.objects.get(name='Event_1_at_2038-06-30 09:00')
+        rezults_json_7 = json.dumps({"course_id": 1,
+                                     "users": [1, 2],
+                                     "start_date": "2038-06-30 09:00",
+                                     "end_date": "2040-06-29 00:00",
+                                     })
+        self.assertEqual(rezults_7.kwargs, rezults_json_7)
+
+        TaskManager(1, [1], date_time_obj2, date_end_time_obj3).delete()
+        rezults_8 = PeriodicTask.objects.get(name='Event_1_at_2038-06-30 09:00')
+        rezults_json_8 = json.dumps({"course_id": 1,
                                      "users": [2],
                                      "start_date": "2038-06-30 09:00",
-                                     "end_date": "2039-06-29 09:00"
+                                     "end_date": "2040-06-29 00:00"
                                      })
-        #self.assertEqual(rezults_2[3].kwargs, rezults_json_2)
+        self.assertEqual(rezults_8.kwargs, rezults_json_8)
+
+        rezults_9 = PeriodicTask.objects.get(name='Fail_1_at_2040-06-29 00:00')
+        rezults_json_9 = json.dumps({"course_id": 1,
+                                     "users": [2]
+                                     })
+        self.assertEqual(rezults_9.kwargs, rezults_json_9)
+
 
 
 
