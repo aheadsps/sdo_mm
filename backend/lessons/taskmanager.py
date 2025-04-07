@@ -68,12 +68,12 @@ class TaskManager:
         if dt:
             return dt.strftime("%Y-%m-%d %H:%M")
 
-    def _create_unique_name_to_task(self) -> str:
-        """
-        Создание уникального имени для
-        периодической задачи
-        """
-        return f"Event_{self.course}_at_{TaskManager.date_str(self.data_start)}"
+    # def _create_unique_name_to_task(self) -> str:
+    #     """
+    #     Создание уникального имени для
+    #     периодической задачи
+    #     """
+    #     return f"Event_{self.course}_at_{TaskManager.date_str(self.data_start)}"
 
     def _update_events_failed(self, old_date):
         """
@@ -115,7 +115,7 @@ class TaskManager:
         )
         # если ок создаем PeriodicTask на
         # перевод по истечению времени events в failed
-        if instance:
+        if instance and self.data_end:
             kwargs = dict(course_id=self.course, users=self.user_list)
             PeriodicTask._default_manager.create(
                 clocked=self.schedule_end,
@@ -131,53 +131,30 @@ class TaskManager:
         """
         Редактировать задачу
         """
-        task = PeriodicTask._default_manager.get(id=id_task)
+        tasks = list()
+        name_task = f'Event_{self.course}_at_{TaskManager.date_str(self.data_start)}'
+        task = PeriodicTask._default_manager.get(name=name_task)
 
         # Подготовка данных
-        kwargs_old = json.loads(task.kwargs)
-        if self.course:
-            course = self.course
-        else:
-            course = kwargs_old.get("course_id")
-
-        if self.user_list:
-            user_list = self.user_list
-        else:
-            user_list = kwargs_old.get("user")
+        kwargs_old: dict = json.loads(task.kwargs)
+        kwargs_old['start_date'] = (TaskManager.date_str(self.data_start)
+                                    if self.data_start
+                                    else kwargs_old['start_date'])
+        kwargs_old['end_date'] = (TaskManager.date_str(self.data_end)
+                                  if self.data_start
+                                  else kwargs_old['end_date'])
+        task.kwargs = json.dumps(kwargs_old)
+        tasks.append(task)
 
         if self.data_start:
-            data_start = TaskManager.date_str(self.data_start)
-        else:
-            data_start = kwargs_old.get("start_date")
-
+            task.clocked = self.schedule_start
         if self.data_end:
-            data_end = TaskManager.date_str(self.data_end)
-        else:
-            data_end = kwargs_old.get("end_date", None)
-            if data_end:
-                data_end = TaskManager.date_str(data_end)
+            name_task_failed = f'Fail_{self.course}_at_{TaskManager.date_str(self.data_end)}'
+            task_to_fail = PeriodicTask._default_manager.get(name=name_task_failed)
+            task_to_fail.clocked = self.schedule_end
+            tasks.append(task_to_fail)
 
-        kwargs_new = {
-            "course_id": course,
-            "user_creata": kwargs_old.get("user_creata"),
-            "user": user_list,
-            "start_date": data_start,
-            "end_date": data_end,
-        }
-        kwargs = json.dumps(kwargs_new)
-        if kwargs != task.kwargs:
-            # тут изменение _update_events_failed
-            if data_end != kwargs_old.get("end_date"):
-                self._update_events_failed(kwargs_old.get("end_date"))
-            task.kwargs = kwargs
-            # если новый kwargs отличается от старого - update
-            if data_start != kwargs_old.get("start_date"):
-                # если новая дата старта делаем новый шедулер
-                task.clocked = self.schedule
-            else:
-                task.name = self._create_unique_name_to_task()
-
-            task.save()
+        PeriodicTask._default_manager.bulk_update(tasks)
 
     def __repr__(self):
         return f"task: {self.data_start}"
