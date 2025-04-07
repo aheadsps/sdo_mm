@@ -1,4 +1,3 @@
-from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -10,40 +9,10 @@ from lessons.utils import (
     path_maker_content_attachment,
     path_maker_scorm,
 )
-from lessons.validators import validate_path
-
-
-class SCORM(models.Model):
-    """
-    Модель представления SCORM
-    """
-    name = models.CharField(_("название"),
-                            max_length=256,
-                            unique=True,
-                            validators=[validate_path],
-                            )
-
-    class Meta:
-        verbose_name = _("SCORM пакет")
-        verbose_name_plural = _("SCORM пакеты")
-
-    def __str__(self):
-        return self.name
-
-
-class SCORMFile(models.Model):
-    """
-    Модель представления SCORM файлов
-    """
-    scorm = models.ForeignKey(SCORM,
-                              verbose_name=_("SCORM"),
-                              on_delete=models.CASCADE,
-                              )
-    file = models.FileField(_("файл scorm"),
-                            upload_to=path_maker_scorm,
-                            )
-
-from lessons.validators import UserStoryValidator, LessonStoryValidator
+from lessons.validators import (validate_path,
+                                UserStoryValidator,
+                                LessonStoryValidator,
+                                )
 
 
 class Event(models.Model):
@@ -153,6 +122,53 @@ class Course(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class SCORM(models.Model):
+    """
+    Модель представления SCORM
+    """
+    course = models.ForeignKey(Course,
+                               verbose_name=_("курс"),
+                               on_delete=models.CASCADE,
+                               related_name='SCORMs',
+                               )
+    name = models.CharField(_("название"),
+                            max_length=256,
+                            unique=True,
+                            validators=[validate_path],
+                            )
+    version = models.CharField(_('версия'),
+                               max_length=50,
+                               choices=settings.VERSIONS_SCORM,
+                               )
+
+    class Meta:
+        verbose_name = _("SCORM")
+        verbose_name_plural = _("SCORMs")
+
+    def __str__(self):
+        return self.name
+
+
+class SCORMFile(models.Model):
+    """
+    Модель представления SCORM файлов
+    """
+    scorm = models.ForeignKey(SCORM,
+                              verbose_name=_("SCORM"),
+                              on_delete=models.CASCADE,
+                              )
+    file = models.FileField(_("файл scorm"),
+                            upload_to=path_maker_scorm,
+                            )
+
+    class Meta:
+        verbose_name = _("SCORMFile")
+        verbose_name_plural = _("SCORMFiles")
+
+    def __str__(self):
+        return self.file.name
 
 
 class Lesson(models.Model):

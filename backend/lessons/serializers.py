@@ -324,6 +324,14 @@ class CreateCourseSerializer(serializers.ModelSerializer):
     Сериализатор на обработку создания и обновления курсов
     """
 
+    scorms = serializers.ListField(child=serializers.FileField(), required=False)
+
+    def to_internal_value(self, data):
+        data['scorms'] = (data['scorms'].split(',')
+                          if data['scorms']
+                          else [])
+        return data
+
     class Meta:
         model = models.Course
         fields = (
@@ -332,6 +340,7 @@ class CreateCourseSerializer(serializers.ModelSerializer):
             "beginer",
             "image",
             "profession",
+            "scorms",
             "experiences",
         )
 
