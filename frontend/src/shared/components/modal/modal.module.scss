@@ -23,6 +23,10 @@
   justify-content: center;
   background-color: var(--color-bg-main);
   position: relative;
+  @media screen and (max-width: 767px) {
+    padding: 20px;
+    min-width: 320px;
+  }
 }
 
 .modalTitle {
