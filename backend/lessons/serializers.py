@@ -16,6 +16,34 @@ DONE = "done"
 FAILED = "failed"
 
 
+class UserStorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.UserStory
+        fields = ['id', 'user', 'answer', 'test_block', 'date_opened']
+        read_only_fields = ['id', 'user', 'date_opened']
+
+    def validate(self, data):
+        validators.UserStoryValidator(
+            answer=data.get('answer'),
+            test_block=data.get('test_block')
+        )()
+        return data
+
+
+class LessonStorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.LessonStory
+        fields = ['course', 'lesson', 'user', 'date_opened']
+        read_only_fields = ['user', 'date_opened']
+
+    def validate(self, data):
+        validators.LessonStoryValidator(
+            course=data.get('course'),
+            lesson=data.get('lesson')
+        )()
+        return data
+
+
 class AnswerSerializer(serializers.ModelSerializer):
     """
     Сериализатор Answer
@@ -215,7 +243,7 @@ class TestBlockSerializersDetail(serializers.ModelSerializer):
     """
 
     questions = QuestionSerializer(many=True)
-    # user_story = UserStorySerialuzer(many=True)
+    user_story = UserStorySerializer(many=True)
 
     class Meta:
         model = models.TestBlock
@@ -244,6 +272,7 @@ class LessonSerializer(serializers.ModelSerializer):
     """
     steps = StepSerializer(many=True)
     test_block = serializers.PrimaryKeyRelatedField(read_only=True)
+    lesson_story = LessonStorySerializer()
 
     class Meta:
         model = models.Lesson
@@ -254,6 +283,7 @@ class LessonSerializer(serializers.ModelSerializer):
             "course",
             "steps",
             "test_block",
+            "lesson_story",
         )
 
 
@@ -263,6 +293,7 @@ class LessonViewSerializer(serializers.ModelSerializer):
     """
     steps = StepViewSerializer(many=True)
     test_block = TestBlockSerializersDetail()
+    lesson_story = serializers.SerializerMethodField()
 
     class Meta:
         model = models.Lesson
@@ -273,7 +304,19 @@ class LessonViewSerializer(serializers.ModelSerializer):
             "course",
             "steps",
             "test_block",
+            "lesson_story",
         )
+
+    def get_lesson_story(self, obj):
+        request = self.context.get('request')
+        if request and request.user.is_authenticated:
+            lesson_story = models.LessonStory.objects.filter(
+                user=request.user,
+                lesson=obj
+            ).first()
+            if lesson_story:
+                return LessonStorySerializer(lesson_story).data
+        return None
 
 
 class CreateCourseSerializer(serializers.ModelSerializer):
@@ -323,7 +366,7 @@ class ViewCourseSerializer(serializers.ModelSerializer):
     experiences = user_serializers.WorkExperienceSerializer(many=True)
     profession = user_serializers.ProfessionSerializer()
     lessons = LessonViewSerializer(many=True)
-    # lesson_story = LessonStorySerializer(many=True)
+    lesson_story = LessonStorySerializer(many=True)
 
     class Meta:
         model = models.Course
@@ -338,7 +381,7 @@ class ViewCourseSerializer(serializers.ModelSerializer):
             "profession",
             "experiences",
             "lessons",
-            # "lesson_story",
+            "lesson_story",
         )
 
 
@@ -348,6 +391,7 @@ class EventViewSerializer(serializers.ModelSerializer):
     """
 
     course = ViewCourseSerializer()
+    lesson_story = serializers.SerializerMethodField()
 
     class Meta:
         model = models.Event
@@ -360,7 +404,16 @@ class EventViewSerializer(serializers.ModelSerializer):
             "end_date",
             "favorite",
             "status",
+            "lesson_story",
         )
+
+    def get_lesson_story(self, obj):
+        stories = models.LessonStory.objects.filter(
+            user=obj.user,
+            course=obj.course
+        ).select_related('lesson')
+
+        return LessonStorySerializer(stories, many=True).data
 
 
 class EventSerializer(serializers.ModelSerializer):
@@ -369,6 +422,7 @@ class EventSerializer(serializers.ModelSerializer):
     """
 
     course = CourseSerializer()
+    lesson_story = serializers.SerializerMethodField()
 
     class Meta:
         model = models.Event
@@ -381,6 +435,15 @@ class EventSerializer(serializers.ModelSerializer):
             "end_date",
             "favorite",
             "status",
+            "lesson_story",
+        )
+
+    def get_lesson_story(self, obj):
+        return list(
+            models.LessonStory.objects.filter(
+                user=obj.user,
+                course=obj.course
+            ).values_list('lesson_id', flat=True)
         )
 
 
@@ -444,3 +507,24 @@ class EventSerializerCreate(serializers.ModelSerializer):
         self._correct_status(self.validated_data)
         logger.debug(f"after {self.validated_data}")
         return super().save(**kwargs)
+
+
+class EventSerializerUpdate(serializers.ModelSerializer):
+    """
+    Сериализатор Создания в Изменения Эвента
+    """
+
+    status = serializers.CharField(read_only=True)
+
+    class Meta:
+        model = models.Event
+        fields = (
+            "user",
+            "course",
+            "start_date",
+            "end_date",
+            "favorite",
+            "status",
+        )
+        validators = (validators.TimeValidator("start_date", "end_date"),)
+        read_only_fields = ("id", "start_date", "course", "user")

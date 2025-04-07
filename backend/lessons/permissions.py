@@ -122,3 +122,53 @@ class CanReadBlock(permissions.BasePermission):
         )
 
         return event_exists.exists()
+
+
+class CanReadUserStory(permissions.BasePermission):
+    """
+    Права доступа на чтение истории пользователя
+    """
+    message = {
+        "forbidden": "Доступ к истории пользователя запрещен",
+    }
+    code = status.HTTP_403_FORBIDDEN
+
+    def has_object_permission(self, request, view, user_story):
+        if not user_story:
+            return False
+
+        user = request.user
+
+        if user.is_staff or user.is_superuser:
+            return True
+
+        return user == user_story.user
+
+
+class CanReadLessonStory(permissions.BasePermission):
+    """
+    Права доступа на чтение истории уроков
+    """
+    message = {
+        "forbidden": "Доступ к истории уроков запрещен",
+    }
+    code = status.HTTP_403_FORBIDDEN
+
+    def has_object_permission(self, request, view, lesson_story):
+        if not lesson_story:
+            return False
+
+        user = request.user
+
+        if user.is_staff or user.is_superuser:
+            return True
+
+        if user != lesson_story.user:
+            return False
+
+        event_exists = models.Event.objects.filter(
+            Q(user=user) &
+            Q(course=lesson_story.course)
+        )
+
+        return event_exists.exists()

@@ -52,8 +52,8 @@ class CustomLogout(Logout):
 
     permission_classes = (IsAuthenticated,)
 
-    def get(self, request, format=None):
-        """Обрабатывает GET-запрос для выхода пользователя."""
+    def post(self, request, format=None):
+        """Обрабатывает POST-запрос для выхода пользователя."""
         tokens = Token.objects.filter(user=request.user)
         for token in tokens:
             token.delete()

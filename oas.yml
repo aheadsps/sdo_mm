@@ -18,6 +18,34 @@ info:
 servers:
   - url: https://localhost:8000/api/v1
     description: Адресс Производственного сервера
+  - url: ws://localhost:8080/
+    description: Адресс Веб Сокета
+
+tags:
+  - name: Profile
+    description: Профиль
+  - name: Password
+    description: Все что связанно с паролями
+  - name: Auth
+    description: Выход - выход
+  - name: Event
+    description: Эвенты для пользователей
+  - name: Course
+    description: Курсы
+  - name: Lesson
+    description: Уроки
+  - name: Step
+    description: Шаги
+  - name: TestBlock
+    description: Тестовый Блок
+  - name: Question
+    description: Вопросы
+  - name: Answer
+    description: Ответы
+  - name: Rate
+    description: Оценка
+  - name: WS
+    description: Веб Сокеты
 
 paths:
   /profile:
@@ -236,7 +264,7 @@ paths:
           application/json:
             schema:
               type: object
-              $ref: "#/components/schemas/EventCreate"
+              $ref: "#/components/schemas/EventUpdate"
       responses:
         "200":
           description: JSON ответ с изменеными данными
@@ -244,7 +272,7 @@ paths:
             application/json:
               schema:
                 type: object
-                $ref: "#/components/schemas/EventCreate"
+                $ref: "#/components/schemas/EventUpdate"
         "400":
           $ref: "#/components/responses/BadRequest"
         "401":
@@ -1267,6 +1295,43 @@ paths:
         "422":
           $ref: "#/components/responses/UnprocessableEntity"
 
+  /ws/test-block/{block_id}:
+    post:
+      summary: WebSocket отправка данных (без /ws в начале url, костыль в силу не возможности документировать WebSocket)
+      parameters:
+        - in: path
+          name: block_id
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+      tags:
+        - WS
+      security:
+        - Token: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: "#/components/schemas/WSPull"
+      responses:
+        "200":
+          description: JSON ответ
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/WSAnswer"
+        "401":
+          $ref: "#/components/responses/WSUnauthorized"
+        "403":
+          $ref: "#/components/responses/WSForbidden"
+        "404":
+          $ref: "#/components/responses/WSNotFound"
+        "500":
+          $ref: "#/components/responses/WSInternalServerError"
+
 components:
   responses:
     NotFound:
@@ -1300,6 +1365,43 @@ components:
           schema:
             $ref: "#/components/schemas/Error"
 
+    WSNotFound:
+      description: Ресурс не был найден
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/WSError"
+    WSUnprocessableEntity:
+      description: Полезная нагрузка имеет не валидные данные
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/WSError"
+    WSUnauthorized:
+      description: Пользователь не авторизован или не активный (бан) или логин - пароль не правильный
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/WSError"
+    WSBadRequest:
+      description: Произошла ошибка при обработке данных
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/WSError"
+    WSForbidden:
+      description: Нет прав доступа
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/WSError"
+    WSInternalServerError:
+      description: Ошибка сервера
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/WSError"
+
   schemas:
     Error:
       type: object
@@ -1311,6 +1413,47 @@ components:
       required:
         - detail
       additionalProperties: false
+
+    WSError:
+      type: object
+      properties:
+        type:
+          type: string
+        message:
+          type: string
+      required:
+        - type
+        - message
+      additionalProperties: false
+
+    WSAnswer:
+      description: Сущность WebSocket
+      additionalProperties: false
+      type: object
+      properties:
+        answer_id:
+          type: integer
+          minimum: 1
+        correct:
+          type: boolean
+      required:
+        - answer_id
+        - correct
+
+    WSPull:
+      description: Сущность отправки в WS
+      additionalProperties: false
+      type: object
+      properties:
+        block_id:
+          type: integer
+          minimum: 1
+        answer_id:
+          type: integer
+          minimum: 1
+      required:
+        - block_id
+        - answer_id
 
     User:
       description: Сущность учетной записи
@@ -2059,7 +2202,7 @@ components:
           nullable: false
 
     EventCreate:
-      description: Сущность создания и обновления курса
+      description: Сущность создания события
       additionalProperties: false
       type: object
       properties:
@@ -2076,6 +2219,47 @@ components:
           type: string
           format: date-time
           readOnly: false
+          nullable: true
+        end_date:
+          type: string
+          format: date-time
+          readOnly: false
+          nullable: true
+        favorite:
+          type: boolean
+          description: Флаг избранного
+          default: false
+          readOnly: false
+        status:
+          description: Статус прохождения курса
+          enum:
+            - done
+            - process
+            - failed
+            - expected
+          readOnly: true
+          default: expected
+
+    EventUpdate:
+      description: Сущность обновления события
+      additionalProperties: false
+      type: object
+      properties:
+        user:
+          type: integer
+          minimum: 1
+          readOnly: true
+        course:
+          type: integer
+          minimum: 1
+          readOnly: true
+        done_lessons:
+          type: integer
+          default: 0
+        start_date:
+          type: string
+          format: date-time
+          readOnly: true
           nullable: true
         end_date:
           type: string
