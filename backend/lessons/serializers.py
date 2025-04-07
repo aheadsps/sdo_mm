@@ -134,7 +134,9 @@ class StepCreateSerializer(serializers.ModelSerializer):
                   "content_text",
                   "lesson",
                   )
-        validators = (validators.MoreThanZeroValidator("serial"),)
+        validators = (validators.MoreThanZeroValidator("serial"),
+                      validators.LessonScormValidator('lesson'),
+                      )
 
     # def create(self, validated_data: dict[int, str, str, dict]):
     #     """
@@ -267,6 +269,7 @@ class LessonCreateSerializer(serializers.ModelSerializer):
             "scorm",
         )
         read_only_fields = ("id",)
+        validators = (validators.StepScormValidator('scorm'))
 
 
 class LessonSerializer(serializers.ModelSerializer):

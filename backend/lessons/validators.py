@@ -4,7 +4,6 @@ from pathlib import Path
 from django.core.exceptions import ValidationError
 from django.utils import timezone
 from django.conf import settings
-from django.core.exceptions import ValidationError
 from loguru import logger
 
 from lessons import exceptions
@@ -106,6 +105,83 @@ class TimeValidator:
                 start_date=start_date,
                 end_date=end_date,
             )
+
+
+class StepScormValidator:
+    """
+    Валидатор на проверку возможности сохранения SCORM
+    """
+
+    requires_context = True
+
+    def __init__(self, scorm: str) -> None:
+        self.scorm = str(scorm)
+        self.error_detail = dict()
+
+    def _check_scorm_pass(
+        self,
+        instance
+    ) -> None:
+        """
+        Проверка возможности присвоения SCORM пакета
+        """
+        if instance.steps:
+            self.error_detail.update(
+                'Не возможно присвоить SCORM пакет к уроку который имеет шаги'
+            )
+        self._process_error(error_detail=self.error_detail)
+
+    def _process_error(self, error_detail: dict[str, str]) -> None:
+        if error_detail:
+            raise exceptions.UnprocessableEntityError(
+                error_detail,
+            )
+
+    def __call__(self, attrs, serializer):
+        self.error_detail = dict()
+        need_check = tigger_to_check(attrs, self.scorm)
+        if need_check:
+            scorm = get_value(self.scorm, attrs, serializer)
+            if scorm and serializer.instance:
+                self._check_scorm_pass(serializer.instance)
+
+
+class LessonScormValidator:
+    """
+    Валидатор на проверку возможности сохранения SCORM
+    """
+
+    requires_context = True
+
+    def __init__(self, lesson: str) -> None:
+        self.lesson = str(lesson)
+        self.error_detail = dict()
+
+    def _check_scorm_pass(
+        self,
+        lesson
+    ) -> None:
+        """
+        Проверка возможности присвоения SCORM пакета
+        """
+        if lesson.scorm:
+            self.error_detail.update(
+                'Не возможно присвоить шаг уроку который имеет SCORM пакет'
+            )
+        self._process_error(error_detail=self.error_detail)
+
+    def _process_error(self, error_detail: dict[str, str]) -> None:
+        if error_detail:
+            raise exceptions.UnprocessableEntityError(
+                error_detail,
+            )
+
+    def __call__(self, attrs, serializer):
+        self.error_detail = dict()
+        need_check = tigger_to_check(attrs, self.lesson)
+        if need_check:
+            lesson = get_value(self.lesson, attrs, serializer)
+            self._check_scorm_pass(lesson)
 
 
 class UserStoryValidator:
