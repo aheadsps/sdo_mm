@@ -94,26 +94,41 @@ class TaskManager:
             "end_date": TaskManager.date_str(self.data_end),
         }
         # Задача на активацию events
-        instance = PeriodicTask._default_manager.create(
-            clocked=self.schedule_start,
-            one_off=True,
-            name=f'Event_{self.course}_at_{TaskManager.date_str(self.data_start)}',
-            task="lessons.task.create_events",
-            kwargs=json.dumps(kwargs),
-        )
-        # если ок создаем PeriodicTask на
-        # перевод по истечению времени events в failed
-        if instance and self.data_end:
-            kwargs = dict(course_id=self.course, users=self.user_list)
-            PeriodicTask._default_manager.create(
-                clocked=self.schedule_end,
+        name = f'Event_{self.course}_at_{TaskManager.date_str(self.data_start)}'
+        # Проверить есть ли таск для этого курса
+        task = PeriodicTask._default_manager.filter(
+            name=name
+        ).first()
+
+        if not task:
+            instance = PeriodicTask._default_manager.create(
+                clocked=self.schedule_start,
                 one_off=True,
-                name=f'Fail_{self.course}_at_{TaskManager.date_str(self.data_end)}',
-                task="lessons.task.events_failed",
+                name=name,
+                task="lessons.task.create_events",
                 kwargs=json.dumps(kwargs),
             )
+            # если ок создаем PeriodicTask на
+            # перевод по истечению времени events в failed
+            if instance and self.data_end:
+                kwargs = dict(course_id=self.course, users=self.user_list)
+                PeriodicTask._default_manager.create(
+                    clocked=self.schedule_end,
+                    one_off=True,
+                    name=f'Fail_{self.course}_at_{TaskManager.date_str(self.data_end)}',
+                    task="lessons.task.events_failed",
+                    kwargs=json.dumps(kwargs),
+                )
+            return instance
+        else:
+            # Если таск есть - Плюсуем пользователей в user_list
+            kwargs: dict = json.loads(task.kwargs)
+            users =  set(kwargs.get('users')).union(set(self.user_list))
+            kwargs["users"] = list(users)
+            task.kwargs = json.dumps(kwargs)
+            task.save()
+            return task
 
-        return instance
 
     def upload(self):
         """
@@ -134,6 +149,9 @@ class TaskManager:
         kwargs_old['end_date'] = (TaskManager.date_str(self.data_end)
                                   if self.data_start
                                   else kwargs_old['end_date'])
+        # Изменение пользователей
+        kwargs_old['users'] = self.user_list
+
         task.kwargs = json.dumps(kwargs_old)
         tasks.append(task)
 
@@ -147,7 +165,7 @@ class TaskManager:
             task_to_fail.clocked = self.schedule_end
             tasks.append(task_to_fail)
 
-        PeriodicTask._default_manager.bulk_update(tasks)
+        PeriodicTask._default_manager.bulk_update(tasks, ['kwargs', 'clocked',  ])
 
     def delete(self):
         """
