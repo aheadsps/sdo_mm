@@ -17,12 +17,16 @@
   padding: 30px;
   min-width: 602px;
   color: var(--color-text-primary);
-  border-radius: 8px;
+  border-radius: 20px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   background-color: var(--color-bg-main);
   position: relative;
+  @media screen and (max-width: 1349px) {
+    min-width: 434px;
+    width: calc(100% - 40px);
+  }
   @media screen and (max-width: 767px) {
     padding: 20px;
     min-width: 320px;

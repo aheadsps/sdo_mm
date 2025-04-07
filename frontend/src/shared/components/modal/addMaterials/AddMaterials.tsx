@@ -1,6 +1,7 @@
 import { Button } from '@shared/components/button'
 import { Select } from '@shared/components/select'
 import { Input } from '@shared/components/text-field'
+import clsx from 'clsx'
 
 import s from './addMaterials.module.scss'
 
@@ -12,7 +13,17 @@ export const AddMaterials = () => {
         <Input className={s.inputTitle} placeholder="Название материала" />
       </div>
       <Button variant="primary" children="Загрузить файл" className={s.btn} />
-      <div className={s.content}></div>
+      <div className={s.content}>
+        <p className={s.txt}>При загрузке материалов соблюдайте следующие ограничения:</p>
+        <br></br>
+        <p className={s.txt}>1. Разрешённые форматы: PDF, DOCX, PPTX, MP4, MP3, JPG, PNG</p>
+        <br></br>
+        <p className={s.txt}>2. Максимальный размер файла: 100 МБ</p>
+        <br></br>
+        <span className={clsx(s.txt, s.span)}>
+          Если у вас возникли вопросы, обратитесь к администратору платформы"
+        </span>
+      </div>
     </div>
   )
 }

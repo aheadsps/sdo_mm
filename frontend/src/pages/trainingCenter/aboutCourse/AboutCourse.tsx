@@ -30,7 +30,7 @@ export const AboutCourse = () => {
   const { isOpen: isOpenModal, toggle: toggleModal } = useToggle()
   return (
     <div className={s.container}>
-      {!isOpenModal && (
+      {isOpenModal && (
         <Modal
           close={toggleModal}
           title="Добавить материалы"
