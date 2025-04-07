@@ -54,8 +54,7 @@ def update_events(course_id: int,
     if end_date:
         end_date = datetime.strftime(str(end_date), "%Y-%m-%d %H:%M")
     events = list(Event._default_manager
-                  .filter(Q(course_id=course_id) &
-                          Q(user_id__in=users)))
+                  .filter(Q(course_id=course_id) & Q(user_id__in=users)))
     update_events = list()
     for event in events:
         event.start_date = start_date

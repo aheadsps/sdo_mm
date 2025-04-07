@@ -1,6 +1,7 @@
 from django_celery_beat.models import PeriodicTask, ClockedSchedule
 import json
 from django.utils import timezone
+from django.db.models import Q
 from datetime import datetime
 
 
@@ -24,41 +25,50 @@ class TaskManager:
         self.data_start = data_start
         self.data_end = data_end
         self.user_list = user_list
-        # Выбираем шедулер
-        self.schedule_start = self._clocked_schedule(self.data_start)
-        self.schedule_end = self._clocked_schedule(self.data_end)
+        if self.data_start:
+            with_timezone = self._handle_datetime_to_task(self.data_start)
+            self.schedule_start = self._clocked_schedule(with_timezone)
+        else:
+            self.schedule_start = self._clocked_schedule(timezone.now())
+
+        if self.data_end:
+            with_timezone = self._handle_datetime_to_task(self.data_end)
+            self.schedule_end = self._clocked_schedule(with_timezone)
+        else:
+            self.schedule_end = None
 
     def _clocked_schedule(self, data_clocked):
         """
         Назначаем шедулер или берем старый если есть
         """
-        schedule, _ = ClockedSchedule._default_manager.get_or_create(
-            clocked_time=data_clocked
+        if data_clocked:
+            schedule, _ = ClockedSchedule._default_manager.get_or_create(
+                clocked_time=data_clocked
+            )
+            return schedule
+
+    def _handle_datetime_to_task(
+        self,
+        start_time: datetime,
+    ) -> datetime:
+        """
+        Перерабатывает date в datatime время
+        """
+        year = start_time.year
+        month = start_time.month
+        day = start_time.day
+        hour = start_time.hour
+        minute = start_time.minute
+
+        date_to_task = datetime(
+            year=year,
+            month=month,
+            day=day,
+            hour=hour,
+            minute=minute,
+            tzinfo=timezone.get_current_timezone(),
         )
-        return schedule
-
-    # def _handle_datetime_to_task(
-    #     self,
-    #     start_time: datetime,
-    # ) -> datetime:
-    #     """
-    #     Перерабатывает date в datatime время
-    #     """
-    #     year = start_time.year
-    #     month = start_time.month
-    #     day = start_time.day
-    #     hour = start_time.hour
-    #     minute = start_time.minute
-
-    #     date_to_task = datetime(
-    #         year=year,
-    #         month=month,
-    #         day=day,
-    #         hour=hour,
-    #         minute=minute,
-    #         tzinfo=timezone.get_current_timezone(),
-    #     )
-    #     return date_to_task
+        return date_to_task
 
     @staticmethod
     def date_str(dt: datetime):
@@ -67,31 +77,6 @@ class TaskManager:
         """
         if dt:
             return dt.strftime("%Y-%m-%d %H:%M")
-
-    # def _create_unique_name_to_task(self) -> str:
-    #     """
-    #     Создание уникального имени для
-    #     периодической задачи
-    #     """
-    #     return f"Event_{self.course}_at_{TaskManager.date_str(self.data_start)}"
-
-    def _update_events_failed(self, old_date):
-        """
-        Ищет задачу и шедулер закрытия курса.
-        Удаляет оттуда пользователей.
-        Создает новый шедулер на деактивацию event.
-        """
-        ...
-        # берем старую end_date,
-        # если она не устаревшая
-        # if datetime:
-        #   if datetime > сегодня:
-
-        # находим шедулер
-        # находим задачу  этого шедулера  и курса
-        # удаляем из этой задачи наших юзеров
-        # сохранием создаем новый шедулер
-        # создаем новую задачу
 
     def create(self):
         """
@@ -127,7 +112,7 @@ class TaskManager:
 
         return instance
 
-    def upload(self, id_task):
+    def upload(self):
         """
         Редактировать задачу
         """
@@ -155,6 +140,26 @@ class TaskManager:
             tasks.append(task_to_fail)
 
         PeriodicTask._default_manager.bulk_update(tasks)
+
+    def delete(self):
+        """
+        Удаление пользователей из таски
+        """
+        name_task = f'Event_{self.course}_at_{TaskManager.date_str(self.data_start)}'
+        name_task_failed = f'Fail_{self.course}_at_{TaskManager.date_str(self.data_end)}'
+        tasks = list(PeriodicTask._default_manager
+                     .filter(Q(name=name_task) |
+                             Q(name=name_task_failed)
+                             .delete()))
+
+        for task in tasks:
+            json_item = json.loads(task.kwargs)
+            users = set(json_item['users'])
+            users_delete = set(self.user_list)
+            json_item['users'] = list(users - users_delete)
+            task.kwargs = json.dumps(json_item)
+
+        PeriodicTask._default_manager.bulk_update(tasks, ('kwargs',))
 
     def __repr__(self):
         return f"task: {self.data_start}"
