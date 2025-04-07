@@ -1,4 +1,5 @@
 import datetime
+import re
 
 from rest_framework import serializers
 from django.utils import timezone
@@ -7,6 +8,7 @@ from loguru import logger
 from lessons import models, validators
 from lessons.d_types import VD
 from lessons.patrials import set_status
+from lessons.scorm import SCORMLoader
 from users import serializers as user_serializers
 
 
@@ -134,9 +136,7 @@ class StepCreateSerializer(serializers.ModelSerializer):
                   "content_text",
                   "lesson",
                   )
-        validators = (validators.MoreThanZeroValidator("serial"),
-                      validators.LessonScormValidator('lesson'),
-                      )
+        validators = (validators.MoreThanZeroValidator("serial"),)
 
     # def create(self, validated_data: dict[int, str, str, dict]):
     #     """
@@ -257,8 +257,6 @@ class LessonCreateSerializer(serializers.ModelSerializer):
     Сериализатор создания и обновления урока
     """
 
-    scorm = serializers.FileField(required=False)
-
     class Meta:
         model = models.Lesson
         fields = (
@@ -266,10 +264,9 @@ class LessonCreateSerializer(serializers.ModelSerializer):
             "name",
             "serial",
             "course",
-            "scorm",
         )
         read_only_fields = ("id",)
-        validators = (validators.StepScormValidator('scorm'))
+        validators = (validators.LessonScormValidator('course'),)
 
 
 class LessonSerializer(serializers.ModelSerializer):
@@ -325,10 +322,33 @@ class LessonViewSerializer(serializers.ModelSerializer):
         return None
 
 
+class ZIPFileField(serializers.FileField):
+
+    def to_internal_value(self, data):
+        try:
+            file_name = data.name
+            file_size = data.size
+        except AttributeError:
+            self.fail('invalid')
+        if not re.match(r'\S*.zip', file_name):
+            self.fail('non zip')
+
+        if not file_name:
+            self.fail('no_name')
+        if not self.allow_empty_file and not file_size:
+            self.fail('empty')
+        if self.max_length and len(file_name) > self.max_length:
+            self.fail('max_length', max_length=self.max_length, length=len(file_name))
+
+        return data
+
+
 class CreateCourseSerializer(serializers.ModelSerializer):
     """
     Сериализатор на обработку создания и обновления курсов
     """
+
+    scorm = ZIPFileField(required=False)
 
     class Meta:
         model = models.Course
@@ -338,8 +358,18 @@ class CreateCourseSerializer(serializers.ModelSerializer):
             "beginer",
             "image",
             "profession",
+            "scorm",
             "experiences",
         )
+        validators = (validators.CourseScormValidator('scorm'),)
+
+    def create(self, validated_data: dict):
+        logger.debug(validated_data)
+        zip_scorm = validated_data.pop('scorm', None)
+        if zip_scorm:
+            scorm_packpage = SCORMLoader(zip_archive=zip_scorm).save()
+            validated_data.update(scorm=scorm_packpage)
+        return super().create(validated_data)
 
 
 class CourseSerializer(serializers.ModelSerializer):

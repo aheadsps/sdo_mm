@@ -1,47 +1,13 @@
 import datetime
-from pathlib import Path
 
 from django.core.exceptions import ValidationError
 from django.utils import timezone
-from django.conf import settings
+
 from loguru import logger
 
 from lessons import exceptions
 from lessons.utils import get_value, tigger_to_check
-
-
-def validate_path(value: str):
-    logger.debug(value)
-    media = Path(settings.MEDIA_ROOT)
-    fp = media.joinpath('scorm', value)
-    if fp.exists():
-        raise ValidationError(
-            'Курс с данным именем уже имеется',
-            code='course_exists',
-            params={"value": value},
-            )
-
-
-class MoreThanZeroValidator:
-    """
-    Валидатор на проверку нумерации int >= 1
-    """
-
-    requires_context = True
-
-    def __init__(self, serial: str) -> None:
-        self.serial = serial
-
-    def __call__(self, attrs, serializer_field):
-        """
-        Проверка корректности serial >= 1
-        """
-        need_check = tigger_to_check(attrs, self.serial)
-        if need_check:
-            if int(serializer_field.initial_data.get(self.serial)) < 1:
-                raise exceptions.UnprocessableEntityError(
-                    dict(serial="Не может быть меньше 1")
-                )
+from lessons.models import SCORM, Lesson
 
 
 class TimeValidator:
@@ -107,7 +73,7 @@ class TimeValidator:
             )
 
 
-class StepScormValidator:
+class CourseScormValidator:
     """
     Валидатор на проверку возможности сохранения SCORM
     """
@@ -125,9 +91,9 @@ class StepScormValidator:
         """
         Проверка возможности присвоения SCORM пакета
         """
-        if instance.steps:
+        if Lesson._default_manager.filter(course=instance):
             self.error_detail.update(
-                'Не возможно присвоить SCORM пакет к уроку который имеет шаги'
+                'Не возможно присвоить SCORM пакет к курсу который имеет уроки'
             )
         self._process_error(error_detail=self.error_detail)
 
@@ -146,27 +112,27 @@ class StepScormValidator:
                 self._check_scorm_pass(serializer.instance)
 
 
-class LessonScormValidator:
+class SCORMUniqueValidator:
     """
-    Валидатор на проверку возможности сохранения SCORM
+    Валидатор на проверку уникальности SCORM
     """
 
     requires_context = True
 
-    def __init__(self, lesson: str) -> None:
-        self.lesson = str(lesson)
+    def __init__(self, name: str) -> None:
+        self.name = str(name)
         self.error_detail = dict()
 
     def _check_scorm_pass(
         self,
-        lesson
+        name,
     ) -> None:
         """
         Проверка возможности присвоения SCORM пакета
         """
-        if lesson.scorm:
+        if SCORM._default_manager.filter(name=name).exists():
             self.error_detail.update(
-                'Не возможно присвоить шаг уроку который имеет SCORM пакет'
+                'SCORM пакет с таким именем уже существует'
             )
         self._process_error(error_detail=self.error_detail)
 
@@ -178,44 +144,67 @@ class LessonScormValidator:
 
     def __call__(self, attrs, serializer):
         self.error_detail = dict()
-        need_check = tigger_to_check(attrs, self.lesson)
+        need_check = tigger_to_check(attrs, self.name)
         if need_check:
-            lesson = get_value(self.lesson, attrs, serializer)
-            self._check_scorm_pass(lesson)
+            name = get_value(self.name, attrs, serializer)
+            self._check_scorm_pass(name)
 
 
-class UserStoryValidator:
-    """Валидатор для модели UserStory"""
-    def __init__(self, answer=None, test_block=None):
-        self.answer = answer
-        self.test_block = test_block
-
-    def __call__(self):
-        self._validate_answer()
-        self._validate_test_block()
-
-    def _validate_answer(self):
-        if self.answer is not None and not hasattr(self.answer, 'question'):
-            raise ValidationError("Ответ должен быть связан с вопросом")
-
-    def _validate_test_block(self):
-        if self.test_block is not None and not hasattr(self.test_block,
-                                                       'lesson'):
-            raise ValidationError("Тест должен быть связан с уроком")
-
-
-class LessonStoryValidator:
+class LessonScormValidator:
     """
-    Валидатор для модели LessonStory
+    Валидатор на проверку возможности сохранения SCORM
     """
 
-    def __init__(self, course=None, lesson=None):
-        self.course = course
-        self.lesson = lesson
+    requires_context = True
 
-    def __call__(self):
-        self._validate_lesson_have_course()
+    def __init__(self, course: str) -> None:
+        self.course = str(course)
+        self.error_detail = dict()
 
-    def _validate_lesson_have_course(self):
-        if self.lesson.course != self.course:
-            raise ValidationError("Урок не принадлежит указанному курсу")
+    def _check_scorm_pass(
+        self,
+        course,
+    ) -> None:
+        """
+        Проверка возможности присвоения SCORM пакета
+        """
+        if course.scorm:
+            self.error_detail.update(
+                'Не возможно присвоить урок курсу который имеет SCORM пакет'
+            )
+        self._process_error(error_detail=self.error_detail)
+
+    def _process_error(self, error_detail: dict[str, str]) -> None:
+        if error_detail:
+            raise exceptions.UnprocessableEntityError(
+                error_detail,
+            )
+
+    def __call__(self, attrs, serializer):
+        self.error_detail = dict()
+        need_check = tigger_to_check(attrs, self.course)
+        if need_check:
+            course = get_value(self.course, attrs, serializer)
+            self._check_scorm_pass(course)
+
+
+class MoreThanZeroValidator:
+    """
+    Валидатор на проверку нумерации int >= 1
+    """
+
+    requires_context = True
+
+    def __init__(self, serial: str) -> None:
+        self.serial = serial
+
+    def __call__(self, attrs, serializer_field):
+        """
+        Проверка корректности serial >= 1
+        """
+        need_check = tigger_to_check(attrs, self.serial)
+        if need_check:
+            if int(serializer_field.initial_data.get(self.serial)) < 1:
+                raise exceptions.UnprocessableEntityError(
+                    dict(serial="Не может быть меньше 1")
+                )

@@ -9,10 +9,9 @@ from lessons.utils import (
     path_maker_content_attachment,
     path_maker_scorm,
 )
-from lessons.validators import (validate_path,
-                                UserStoryValidator,
-                                LessonStoryValidator,
-                                )
+from lessons.validators_models import (UserStoryValidator,
+                                       LessonStoryValidator,
+                                       )
 
 
 class Event(models.Model):
@@ -68,6 +67,46 @@ class Event(models.Model):
         return f"event_for_user_{self.user.pk}_{self.pk}"
 
 
+class SCORM(models.Model):
+    """
+    Модель представления SCORM
+    """
+    name = models.CharField(_("название"),
+                            max_length=256,
+                            )
+    version = models.CharField(_('версия'),
+                               max_length=50,
+                               choices=settings.VERSIONS_SCORM,
+                               )
+
+    class Meta:
+        verbose_name = _("SCORM")
+        verbose_name_plural = _("SCORMs")
+
+    def __str__(self):
+        return self.name
+
+
+class SCORMFile(models.Model):
+    """
+    Модель представления SCORM файлов
+    """
+    scorm = models.ForeignKey(SCORM,
+                              verbose_name=_("SCORM"),
+                              on_delete=models.CASCADE,
+                              )
+    file = models.FileField(_("файл scorm"),
+                            upload_to=path_maker_scorm,
+                            )
+
+    class Meta:
+        verbose_name = _("SCORMFile")
+        verbose_name_plural = _("SCORMFiles")
+
+    def __str__(self):
+        return self.file.name
+
+
 class Course(models.Model):
     """
     Модель представления курса
@@ -110,6 +149,13 @@ class Course(models.Model):
         blank=True,
         related_name='courses',
     )
+    scorm = models.ForeignKey(SCORM,
+                              verbose_name=_("SCORM"),
+                              on_delete=models.CASCADE,
+                              null=True,
+                              blank=True,
+                              related_name='lesson',
+                              )
     experiences = models.ManyToManyField(
         "users.WorkExperience",
         verbose_name=_("Стаж"),
@@ -122,48 +168,6 @@ class Course(models.Model):
 
     def __str__(self):
         return self.name
-
-
-class SCORM(models.Model):
-    """
-    Модель представления SCORM
-    """
-    name = models.CharField(_("название"),
-                            max_length=256,
-                            unique=True,
-                            validators=[validate_path],
-                            )
-    version = models.CharField(_('версия'),
-                               max_length=50,
-                               choices=settings.VERSIONS_SCORM,
-                               )
-
-    class Meta:
-        verbose_name = _("SCORM")
-        verbose_name_plural = _("SCORMs")
-
-    def __str__(self):
-        return self.name
-
-
-class SCORMFile(models.Model):
-    """
-    Модель представления SCORM файлов
-    """
-    scorm = models.ForeignKey(SCORM,
-                              verbose_name=_("SCORM"),
-                              on_delete=models.CASCADE,
-                              )
-    file = models.FileField(_("файл scorm"),
-                            upload_to=path_maker_scorm,
-                            )
-
-    class Meta:
-        verbose_name = _("SCORMFile")
-        verbose_name_plural = _("SCORMFiles")
-
-    def __str__(self):
-        return self.file.name
 
 
 class Lesson(models.Model):
@@ -190,13 +194,6 @@ class Lesson(models.Model):
                                null=True,
                                blank=True,
                                )
-    scorm = models.ForeignKey(SCORM,
-                              verbose_name=_("SCORM"),
-                              on_delete=models.CASCADE,
-                              null=True,
-                              blank=True,
-                              related_name='lesson',
-                              )
 
     class Meta:
         verbose_name = _("Lesson")

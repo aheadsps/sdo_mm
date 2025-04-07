@@ -183,6 +183,7 @@ class LessonViewSet(viewsets.ModelViewSet):
         if self.action == 'retrieve':
             return serializers.LessonViewSerializer
         elif self.action in ['create', 'update', 'partial_update']:
+            logger.debug(self.request.data)
             return serializers.LessonCreateSerializer
         return serializers.LessonSerializer
 

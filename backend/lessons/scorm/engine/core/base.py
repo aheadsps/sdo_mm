@@ -8,6 +8,7 @@ from loguru import logger
 from .abc import AbstractCore
 from typing import IO, ClassVar
 from lessons.scorm.engine.exceptions import SCORMExtractError
+from lessons.scorm.engine.utils import sanitize_input
 from .datasets import DataSetCore
 
 
@@ -87,6 +88,10 @@ class BaseCoreSCORM(AbstractCore):
             element=self._resources,
             prefix=self.prefix,
         )
+
+    def get_shema(self) -> str:
+        schema = self.meta['schemaversion'][0].element.text
+        return sanitize_input(schema)
 
     def _get_manifest_tree(self, manifest_file: IO[bytes]) -> ET.ElementTree:
         logger.debug(f'manifest_file is {manifest_file}')

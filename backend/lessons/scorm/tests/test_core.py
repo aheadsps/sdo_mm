@@ -5,7 +5,6 @@ from django.test import TestCase
 from django.conf import settings
 
 from lessons.scorm import SCORMLoader
-from lessons.scorm.engine.parsers import BaseParser
 from lessons.models import SCORM
 
 
@@ -24,7 +23,6 @@ class TestSCORMCore(TestCase):
         with open(file=zip_file_path, mode='b+r') as file:
             scorm = SCORMLoader(file)
             scorm.save()
-            scorm.entrypoint(BaseParser)
 
         self.assertEqual(SCORM._default_manager.count(), 1)
         self.assertEqual(SCORM._default_manager.get().name, 'Введение в Python')

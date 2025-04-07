@@ -198,8 +198,10 @@ class CoreSCORM(BaseCoreSCORM):
             zip_infos=self._infos,
         )
         title = self._get_item_title(self.organizations[0])
+        version = self.get_shema()
         scorm_lesson = SCORM._default_manager.create(
             name=title,
+            version=version,
             )
         list_files = []
         for zipinfo in self._infos:
