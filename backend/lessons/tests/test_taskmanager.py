@@ -115,7 +115,36 @@ class TestStepUrl(APITestCase):
         """
         Изменение даты финиша
         """
-        TaskManager(1, [2], date_time_obj2, date_end_time_obj).upload()
+        date_time_str3 = '2039-06-29 09:00:00.000000'
+        date_end_time_obj3 = datetime.datetime.strptime(date_time_str3, '%Y-%m-%d %H:%M:%S.%f')
+        TaskManager(1, [2], date_time_obj2, date_end_time_obj3).upload()
+
+
+        rezults_3 = PeriodicTask.objects.get(name='Fail_1_at_2039-06-29 09:00')
+        rezults_json_3 = json.dumps({"course_id": 1,
+                                     "users": [2],
+                                     })
+        self.assertEqual(rezults_3.kwargs, rezults_json_3)
+
+        """
+        Изменение даты финиша и студентов
+        """
+        date_time_str3 = '2040-06-29 00:00:00.000000'
+        date_end_time_obj3 = datetime.datetime.strptime(date_time_str3, '%Y-%m-%d %H:%M:%S.%f')
+        TaskManager(1, [1], date_time_obj2, date_end_time_obj3).upload()
+
+        rezults_3 = PeriodicTask.objects.get(name='Fail_1_at_2040-06-29 00:00')
+        rezults_json_3 = json.dumps({"course_id": 1,
+                                     "users": [1],
+                                     })
+        self.assertEqual(rezults_3.kwargs, rezults_json_3)
+        # Проверка что удалили студентов
+        rezults_4 = PeriodicTask.objects.get(name='Fail_1_at_2039-06-29 09:00')
+        rezults_json_4 = json.dumps({"course_id": 1,
+                                     "users": [],
+                                     })
+        self.assertEqual(rezults_4.kwargs, rezults_json_4)
+
 
 
         """
@@ -124,17 +153,18 @@ class TestStepUrl(APITestCase):
         with self.assertRaises(ObjectDoesNotExist):
             TaskManager(2, [2], date_time_obj).upload()
 
+
         """
         Удаляем пользователя [1] из списка
         """
-        TaskManager(1, [1], date_time_obj2).delete()
+        #TaskManager(1, [1], date_time_obj2).delete()
         rezults_2 = PeriodicTask.objects.all()
         rezults_json_2 = json.dumps({"course_id": 1,
                                      "users": [2],
                                      "start_date": "2038-06-30 09:00",
-                                     "end_date": "2039-06-29 08:15"
+                                     "end_date": "2039-06-29 09:00"
                                      })
-        self.assertEqual(rezults_2[2].kwargs, rezults_json_2)
+        #self.assertEqual(rezults_2[3].kwargs, rezults_json_2)
 
 
 

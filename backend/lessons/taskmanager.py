@@ -45,10 +45,12 @@ class TaskManager:
         """
         Назначаем шедулер или берем старый если есть
         """
-        schedule, _ = ClockedSchedule._default_manager.get_or_create(
-            clocked_time=data_clocked
-        )
-        return schedule
+        if data_clocked:
+            schedule, _ = ClockedSchedule._default_manager.get_or_create(
+                clocked_time=data_clocked
+            )
+            return schedule
+        return None
 
     def _handle_datetime_to_task(
         self,
@@ -80,6 +82,8 @@ class TaskManager:
         """
         if dt:
             return dt.strftime("%Y-%m-%d %H:%M")
+        else:
+            return None
 
     def _create_failed(self):
         """
@@ -172,23 +176,36 @@ class TaskManager:
         #kwargs_old['end_date'] = (TaskManager.date_str(self.data_end)
         #                          if self.data_start
         #                          else kwargs_old['end_date'])
+
+        # Если изменилась дата завершения
+        end_date_old = kwargs_old['end_date']
+        if end_date_old != self.data_end:
+            kwargs_old['end_date'] = TaskManager.date_str(self.data_end)
+
+            # берем такс со старой датой
+            name_task_failed = f'Fail_{self.course}_at_{end_date_old}'
+            task_to_fail = PeriodicTask._default_manager.filter(name=name_task_failed).first()
+            if task_to_fail:
+                # если таск есть, то удаляем из него пользователей
+                kwargs_old_task_to_fail: dict = json.loads(task_to_fail.kwargs)
+                new_list_user = set(kwargs_old_task_to_fail.get('users')) - set(kwargs_old['users'])
+                kwargs_old_task_to_fail['users'] = list(new_list_user)
+                task_to_fail.kwargs = json.dumps(kwargs_old_task_to_fail)
+
+                tasks.append(task_to_fail)
+
+            if self.data_end:
+                # Если end_date есть создаем новый такс на завершения event
+                TaskManager._create_failed(self)
+
         # Изменение пользователей
         kwargs_old['users'] = self.user_list
+
 
         task.kwargs = json.dumps(kwargs_old)
         tasks.append(task)
 
-        #if self.data_start:
-        #    task.clocked = self.schedule_start
-        if self.data_end:
-            name_task_failed = f'Fail_{self.course}_at_{TaskManager.date_str(self.data_end)}'
-            task_to_fail = PeriodicTask._default_manager.filter(name=name_task_failed)
-            if not task_to_fail.exists():
-                raise ObjectDoesNotExist(f'Задача по pk {self.course} на статус - не найдена')
-            task_to_fail.clocked = self.schedule_end
-            #tasks.append(task_to_fail)
-
-        PeriodicTask._default_manager.bulk_update(tasks, ['kwargs', 'clocked',  ])
+        PeriodicTask._default_manager.bulk_update(tasks, ['kwargs' ])
 
     def delete(self):
         """
