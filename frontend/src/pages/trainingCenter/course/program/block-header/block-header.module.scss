@@ -9,7 +9,7 @@
   min-height: 37px;
   line-height: 37px;
 
-  @media screen and (max-width: 1349px){
+  @media screen and (max-width: 1349px) {
     grid-template-columns: 1fr 1fr;
     grid-template-areas:
       'lesson lesson'
@@ -30,7 +30,7 @@
   &:first-child {
     grid-area: lesson;
 
-    @media screen and (max-width: 1349px){
+    @media screen and (max-width: 1349px) {
       border-bottom: 1px solid var(--color-additional-border100);
     }
   }

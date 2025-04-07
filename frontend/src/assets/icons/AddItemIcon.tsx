@@ -14,9 +14,9 @@ const AddItemIcon = forwardRef<SVGSVGElement, SVGProps<SVGSVGElement>>(
       <path
         d="M7 1.34314V12.6568M1.34315 6.99999H12.6569"
         stroke="#58151C"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   )
