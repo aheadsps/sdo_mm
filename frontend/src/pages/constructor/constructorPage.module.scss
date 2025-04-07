@@ -16,12 +16,13 @@
 .main {
   width: 100%;
   height: fit-content;
-  background-color: burlywood;
   height: 264px;
   padding: 30px;
   display: flex;
   flex-direction: column;
   gap: 20px;
+  box-shadow: 0px 0px 15px 0px #2C0B0F0F;
+
 }
 .visible {
   width: 40px;

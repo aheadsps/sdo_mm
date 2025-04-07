@@ -9,7 +9,6 @@ import s from './layout.module.scss'
 export const withLayout = <T extends object>(Component: ComponentType<T>) => {
   return (props: T) => {
     const path = useLocation()
-    console.log(path)
     const { isMobile } = useScreenWidth()
     const [isLoading, setIsLoading] = useState(true)
 
