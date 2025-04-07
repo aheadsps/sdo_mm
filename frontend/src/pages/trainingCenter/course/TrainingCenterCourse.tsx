@@ -5,10 +5,10 @@ import { useState } from 'react'
 
 import { EditIcon } from '@assets/icons'
 
-import { AboutCourse } from '../aboutCourse'
-import { AssignmentsGrades } from '../assignments-grades'
-import { StudentsList } from '../studentsList'
+import { StudentsList } from '../course/studentsList'
 
+import { AboutCourse } from './aboutCourse'
+import { AssignmentsGrades } from './assignments-grades'
 import { Program } from './program/Program'
 import s from './training-course.module.scss'
 

@@ -2,11 +2,11 @@ import { Search } from '@shared/components/search'
 import { useState } from 'react'
 
 import { AddItemIcon } from '@assets/icons'
-import { StudentBlock } from '@pages/trainingCenter/studentsList/studentBlock'
 
-import { BlockHeader } from '../course/program/block-header/BlockHeader'
+import { BlockHeader } from '../program'
 
 import { columns, studentsData } from './data'
+import { StudentBlock } from './studentBlock'
 import s from './studentsList.module.scss'
 
 export const StudentsList = () => {
