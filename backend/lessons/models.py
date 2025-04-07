@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -8,6 +9,8 @@ from lessons.utils import (
     path_maker_course,
     path_maker_content_attachment,
 )
+
+from lessons.validators import UserStoryValidator, LessonStoryValidator
 
 
 class Event(models.Model):
@@ -287,3 +290,97 @@ class Answer(models.Model):
 
     def __str__(self):
         return self.text[0:10] + "..."
+
+
+class UserStory(models.Model):
+    """
+    Модель представления истории пользователя,
+    содержит один из двух типов событий:
+    - Ответ на вопрос
+    - Прохождение тест блока
+
+    """
+    user = models.ForeignKey(get_user_model(),
+                             verbose_name=_('Пользователь'),
+                             on_delete=models.CASCADE,
+                             related_name='user_story',
+                             help_text='Пользователь'
+                             )
+    answer = models.ForeignKey(Answer,
+                               verbose_name=_('Ответ'),
+                               null=True,
+                               blank=True,
+                               on_delete=models.CASCADE,
+                               related_name='user_story',
+                               help_text='Ответ'
+                               )
+
+    test_block = models.ForeignKey(TestBlock,
+                                   verbose_name=_('Тест блок'),
+                                   null=True,
+                                   blank=True,
+                                   on_delete=models.CASCADE,
+                                   related_name='user_story',
+                                   help_text='Тест блок'
+                                   )
+    date_opened = models.DateTimeField(auto_now_add=True,
+                                       verbose_name=_('Дата события')
+                                       )
+
+    def clean(self):
+        UserStoryValidator(answer=self.answer, test_block=self.test_block)()
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        super().save(*args, **kwargs)
+
+    class Meta:
+        verbose_name = _("User story")
+        verbose_name_plural = _("User stories")
+
+    def __str__(self):
+        if self.answer:
+            return f'{self.user.email} ответ {self.answer.id}'
+        return f'{self.user.email} тест {self.test_block.id}'
+
+
+class LessonStory(models.Model):
+    """
+    История открытых уроков
+    """
+    course = models.ForeignKey(Course,
+                               verbose_name=_('Курс'),
+                               on_delete=models.CASCADE,
+                               related_name='lesson_story',
+                               help_text='Курс'
+                               )
+    lesson = models.ForeignKey(Lesson,
+                               verbose_name=_('Урок'),
+                               on_delete=models.CASCADE,
+                               related_name='lesson_story'
+                               )
+    user = models.ForeignKey(get_user_model(),
+                             verbose_name=_('Пользователь'),
+                             on_delete=models.CASCADE,
+                             related_name='lesson_story',
+                             help_text='Пользователь'
+                             )
+    date_opened = models.DateTimeField(auto_now_add=True,
+                                       verbose_name=_('Дата открытия')
+                                       )
+
+    def clean(self):
+        LessonStoryValidator(course=self.course, lesson=self.lesson)()
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        super().save(*args, **kwargs)
+
+    class Meta:
+        verbose_name = _("Lesson story")
+        verbose_name_plural = _('Lesson stories')
+        unique_together = ('user', 'lesson')
+
+    def __str__(self):
+        return (f"{self.user.email} открыл {self.course.title}"
+                f" / Урок {self.lesson.id}")
