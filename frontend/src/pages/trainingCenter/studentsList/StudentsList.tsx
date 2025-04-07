@@ -1,4 +1,7 @@
+import { Modal } from '@shared/components'
+import { AddComment } from '@shared/components/modal/addComment'
 import { Search } from '@shared/components/search'
+import { useToggle } from '@shared/hooks'
 import { useState } from 'react'
 
 import { AddItemIcon } from '@assets/icons'
@@ -10,14 +13,22 @@ import { columns, studentsData } from './data'
 import s from './studentsList.module.scss'
 
 export const StudentsList = () => {
-  // const [students, setStudents] = useState(studentsData)
   const [newStudentCount, setNewStudentCount] = useState<number[]>([])
+  const { isOpen: isOpenModal, toggle: toggleModal } = useToggle()
 
   const onAddNewStudent = () => {
     setNewStudentCount((prev) => [...prev, prev.length + 1])
   }
   return (
     <div className={s.container}>
+      {isOpenModal && (
+        <Modal
+          close={toggleModal}
+          title="Васильевa Владислава Геннадиевнa"
+          children={<AddComment />}
+          titleStyle="header_6"
+        />
+      )}
       <Search students={studentsData} />
       <BlockHeader columns={columns} className={s.blockHeader} />
       <div className={s.content}>

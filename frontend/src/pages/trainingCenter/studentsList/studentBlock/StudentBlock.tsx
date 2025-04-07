@@ -9,8 +9,9 @@ import s from './studentBlock.module.scss'
 
 type Props<T extends studentType> = {
   student?: T
+  onClick?: () => void
 }
-export const StudentBlock = <T extends studentType>({ student }: Props<T>) => {
+export const StudentBlock = <T extends studentType>({ student, onClick }: Props<T>) => {
   const buttonColor = student ? '#E9ECEF' : '#831f29'
   return (
     <div className={s.studentBox}>
@@ -37,7 +38,11 @@ export const StudentBlock = <T extends studentType>({ student }: Props<T>) => {
         <Button variant="secondary" className={student ? s.btn : s.btn_disPrymary}>
           <BasketIcon width={'40px'} height={'40px'} fill={buttonColor} />
         </Button>
-        <Button variant="primary" className={student ? s.btn : s.btn_disSecondary}>
+        <Button
+          variant="primary"
+          className={student ? s.btn : s.btn_disSecondary}
+          onClick={onClick}
+        >
           <WebinarAndSupportIcon width={'24px'} height={'24px'} fill={buttonColor} />
         </Button>
       </div>

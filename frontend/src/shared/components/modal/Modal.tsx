@@ -10,7 +10,6 @@ type Props = {
   close: () => void
   title: string
   children: ReactNode
-  // className: string
   titleStyle: Variant
 }
 
