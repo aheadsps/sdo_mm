@@ -1,11 +1,10 @@
-import { Sidebar, Header, CMenu, Title } from '@shared/components'
+import { Sidebar, Header } from '@shared/components'
 import Loader from '@shared/components/loader/Loader'
 import { useScreenWidth } from '@shared/hooks'
 import { ComponentType, useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 
 import s from './layout.module.scss'
-import SettingsIcon from '@assets/icons/SettingsIcon'
 
 export const withLayout = <T extends object>(Component: ComponentType<T>) => {
   return (props: T) => {

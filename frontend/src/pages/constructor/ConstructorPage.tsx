@@ -8,7 +8,7 @@ import s from './constructorPage.module.scss'
 const Constructor: React.FC = () => {
   // nullBtn, fstBtn, scndBtn,
   return (
-    <div className={s.container}>
+    <div className={s.wrapper}>
       <Title
         txt="Конструктор курса"
         btn0={<SettingsIcon />}
@@ -16,12 +16,14 @@ const Constructor: React.FC = () => {
         btn2="Опубликовать"
         className={s.visible}
       />
-      <aside>
-        <CMenu />
-      </aside>
-      <main className={s.main}>
-        <Button variant="primary" />
-      </main>
+      <div className={s.container}>
+        <aside>
+          <CMenu />
+        </aside>
+        <main className={s.main}>
+          <Button variant="primary" />
+        </main>
+      </div>
     </div>
   )
 }

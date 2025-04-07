@@ -1,5 +1,12 @@
 .container {
-   width: 50%;
-   height: 100%;
-   background-color: red;
+  width: 300px;
+  height: fit-content;
+  height: 504px;
+  display: flex;
+  flex-direction: column;
+//   top: 183px;
+//   left: 30px;
+  gap: 30px;
+
+  background-color: red;
 }
