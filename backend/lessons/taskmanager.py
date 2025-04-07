@@ -1,5 +1,9 @@
-from django_celery_beat.models import PeriodicTask, ClockedSchedule
 import json
+
+from celery.local import Proxy
+
+from django_celery_beat.models import PeriodicTask, ClockedSchedule
+from django.core.exceptions import ObjectDoesNotExist
 from django.utils import timezone
 from django.db.models import Q
 from datetime import datetime
@@ -41,11 +45,10 @@ class TaskManager:
         """
         Назначаем шедулер или берем старый если есть
         """
-        if data_clocked:
-            schedule, _ = ClockedSchedule._default_manager.get_or_create(
-                clocked_time=data_clocked
-            )
-            return schedule
+        schedule, _ = ClockedSchedule._default_manager.get_or_create(
+            clocked_time=data_clocked
+        )
+        return schedule
 
     def _handle_datetime_to_task(
         self,
@@ -118,7 +121,10 @@ class TaskManager:
         """
         tasks = list()
         name_task = f'Event_{self.course}_at_{TaskManager.date_str(self.data_start)}'
-        task = PeriodicTask._default_manager.get(name=name_task)
+        task = PeriodicTask._default_manager.filter(name=name_task)
+        if not task.exists():
+            raise ObjectDoesNotExist(f'Задача по pk {self.course} не найдена')
+        task = task.get()
 
         # Подготовка данных
         kwargs_old: dict = json.loads(task.kwargs)
@@ -135,7 +141,9 @@ class TaskManager:
             task.clocked = self.schedule_start
         if self.data_end:
             name_task_failed = f'Fail_{self.course}_at_{TaskManager.date_str(self.data_end)}'
-            task_to_fail = PeriodicTask._default_manager.get(name=name_task_failed)
+            task_to_fail = PeriodicTask._default_manager.filter(name=name_task_failed)
+            if not task_to_fail.exists():
+                raise ObjectDoesNotExist(f'Задача по pk {self.course} на статус - не найдена')
             task_to_fail.clocked = self.schedule_end
             tasks.append(task_to_fail)
 
@@ -147,11 +155,12 @@ class TaskManager:
         """
         name_task = f'Event_{self.course}_at_{TaskManager.date_str(self.data_start)}'
         name_task_failed = f'Fail_{self.course}_at_{TaskManager.date_str(self.data_end)}'
-        tasks = list(PeriodicTask._default_manager
-                     .filter(Q(name=name_task) |
-                             Q(name=name_task_failed)
-                             .delete()))
-
+        tasks = (PeriodicTask._default_manager
+                 .filter(Q(name=name_task) |
+                         Q(name=name_task_failed)))
+        if not tasks.exists():
+            raise ObjectDoesNotExist(f'Задача по pk {self.course} не найдена')
+        tasks = list(tasks)
         for task in tasks:
             json_item = json.loads(task.kwargs)
             users = set(json_item['users'])
@@ -160,6 +169,10 @@ class TaskManager:
             task.kwargs = json.dumps(json_item)
 
         PeriodicTask._default_manager.bulk_update(tasks, ('kwargs',))
+
+    @classmethod
+    def flash_task(cls, task: Proxy, **kwargs) -> None:
+        task.delay(**kwargs)
 
     def __repr__(self):
         return f"task: {self.data_start}"
