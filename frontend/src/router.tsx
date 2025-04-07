@@ -3,6 +3,7 @@ import { LessonTest } from '@features/lesson/test/Tests'
 import { createBrowserRouter } from 'react-router-dom'
 
 import { AuthPage } from '@pages/auth'
+import { ConstructorPage } from '@pages/constructor'
 import { CoursePage } from '@pages/course/CoursePage'
 import { MainPage } from '@pages/main'
 import { MyLearning } from '@pages/my-learning/MyLearning'
@@ -49,6 +50,10 @@ export const router = createBrowserRouter([
   {
     path: '/lesson',
     element: <Lesson />,
+  },
+  {
+    path: '/constructor',
+    element: <ConstructorPage />,
   },
 
   /* routes for testing components */
