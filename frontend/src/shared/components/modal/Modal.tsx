@@ -22,10 +22,12 @@ export const Modal = ({ close, title, children, titleStyle }: Props) => {
   return ReactDOM.createPortal(
     <div className={s.modalContainer}>
       <div className={s.modal}>
-        <Typography variant={titleStyle} className={s.modalTitle}>
-          {title}
-        </Typography>
-        <CloseIcon height={'8px'} width={'8px'} onClick={close} className={s.closeIcon} />
+        <div className={s.header}>
+          <Typography variant={titleStyle} className={s.modalTitle}>
+            {title}
+          </Typography>
+          <CloseIcon height={'8px'} width={'8px'} onClick={close} className={s.closeIcon} />
+        </div>
         {children}
       </div>
     </div>,

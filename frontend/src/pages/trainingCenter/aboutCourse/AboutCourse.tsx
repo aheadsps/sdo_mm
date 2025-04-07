@@ -1,4 +1,5 @@
 import { Button, InputWithIcon, Modal, Select, Typography } from '@shared/components'
+import { AddMaterials } from '@shared/components/modal/addMaterials'
 import { useToggle } from '@shared/hooks'
 
 import { CalendarIcon, EditIcon } from '@assets/icons'
@@ -33,7 +34,7 @@ export const AboutCourse = () => {
         <Modal
           close={toggleModal}
           title="Добавить материалы"
-          children={<Typography variant="body_2" />}
+          children={<AddMaterials />}
           titleStyle="header_2"
         />
       )}

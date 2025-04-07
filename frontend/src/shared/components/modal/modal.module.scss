@@ -28,13 +28,17 @@
     min-width: 320px;
   }
 }
-
+.header {
+  display: flex;
+  justify-content: space-between;
+}
 .modalTitle {
+  width: 80%;
   margin-bottom: 30px;
 }
 
 .closeIcon {
-  position: absolute;
+  // position: absolute;
   right: 3%;
   top: 20%;
   cursor: pointer;
