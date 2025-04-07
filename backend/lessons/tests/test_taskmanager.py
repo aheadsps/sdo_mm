@@ -53,21 +53,24 @@ class TestStepUrl(APITestCase):
         """
         date_time_str = '2038-06-29 08:15:27.243860'
         date_time_obj = datetime.datetime.strptime(date_time_str, '%Y-%m-%d %H:%M:%S.%f')
+
+        date_end_time_str = '2039-06-29 08:15:27.243860'
+        date_end_time_obj = datetime.datetime.strptime(date_end_time_str, '%Y-%m-%d %H:%M:%S.%f')
         # создается задача
         TaskManager(1, [1], date_time_obj).create()
-        TaskManager(1, [1], date_time_obj).create()
+        TaskManager(1, [1], date_time_obj, date_end_time_obj).create()
 
         # проверка
         rezults = PeriodicTask.objects.all()
-        for rezult in rezults:
-            rezult_ok = {
+        #for rezult in rezults:
+        rezult_ok = {
                 "course_id": 1,
                 "users": [1],
                 "start_date": "2038-06-29 08:15",
                 "end_date": None
-            }
-            rezult_ok = json.dumps(rezult_ok)
-            self.assertEqual(rezult.kwargs, rezult_ok)
+        }
+        rezult_ok = json.dumps(rezult_ok)
+        self.assertEqual(rezults[0].kwargs, rezult_ok)
 
         """
         Изменение задачи для эвента
@@ -94,20 +97,25 @@ class TestStepUrl(APITestCase):
                                      "start_date": "2038-06-29 08:15",
                                      "end_date": None,
                                      })
-        self.assertEqual(rezults_2[1].kwargs, rezults_json_1)
+        self.assertEqual(rezults_2[2].kwargs, rezults_json_1)
 
         rezults_json_2 = json.dumps({"course_id": 1,
                                      "users": [1, 2],
                                      "start_date": "2038-06-30 09:00",
                                      "end_date": None,
                                      })
-        self.assertEqual(rezults_2[0].kwargs, rezults_json_2)
+        self.assertEqual(rezults_2[1].kwargs, rezults_json_2)
 
-        self.assertEqual(rezults_2[1].schedule.clocked_time.strftime("%Y-%m-%d %H:%M"),
+        self.assertEqual(rezults_2[2].schedule.clocked_time.strftime("%Y-%m-%d %H:%M"),
                          "2038-06-29 05:15")
 
-        self.assertEqual(rezults_2[0].schedule.clocked_time.strftime("%Y-%m-%d %H:%M"),
+        self.assertEqual(rezults_2[1].schedule.clocked_time.strftime("%Y-%m-%d %H:%M"),
                          "2038-06-30 06:00")
+
+        """
+        Изменение даты финиша
+        """
+        TaskManager(1, [2], date_time_obj2, date_end_time_obj).upload()
 
 
         """
@@ -124,9 +132,11 @@ class TestStepUrl(APITestCase):
         rezults_json_2 = json.dumps({"course_id": 1,
                                      "users": [2],
                                      "start_date": "2038-06-30 09:00",
-                                     "end_date": None,
+                                     "end_date": "2039-06-29 08:15"
                                      })
-        self.assertEqual(rezults_2[1].kwargs, rezults_json_2)
+        self.assertEqual(rezults_2[2].kwargs, rezults_json_2)
+
+
 
 
 
