@@ -1,8 +1,9 @@
 import { LogOutIcon } from '@assets/icons'
 import { routes } from '@routes/routes'
-import { useGetProfileQuery } from '@services/auth'
+import { useGetProfileQuery, useLogoutMutation } from '@services/auth'
 import { clearUser, setUser } from '@services/auth/authSlice'
 import { useAppDispatch } from '@services/store'
+import { Loader } from '@shared/components/loader'
 import { handleError } from '@shared/utils'
 import { useEffect } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
@@ -13,6 +14,7 @@ import s from './user-info.module.scss'
 
 export const UserInfo = () => {
   const { data: profile, isLoading, error } = useGetProfileQuery()
+  const [logout, { error: logoutError }] = useLogoutMutation()
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
 
@@ -22,13 +24,14 @@ export const UserInfo = () => {
     }
   }, [dispatch, profile])
 
-  const onLogout = () => {
+  const onLogout = async () => {
+    await logout().unwrap()
     dispatch(clearUser())
     navigate(routes.auth, { replace: true })
   }
 
   if (isLoading) {
-    return <div>Loading...</div>
+    return <Loader />
   }
 
   return (
@@ -44,6 +47,7 @@ export const UserInfo = () => {
         <LogOutIcon width={'24px'} height={'24px'} />
         <Typography variant="caption">Выйти</Typography>
       </NavLink>
+      {logoutError && <Typography variant="body_1">{handleError(logoutError)}</Typography>}
     </div>
   )
 }

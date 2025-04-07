@@ -21,6 +21,17 @@ export const authApi = createApi({
         method: 'POST',
         body: loginData,
       }),
+      invalidatesTags: ['Profile'],
+    }),
+    logout: build.mutation<void, void>({
+      query: () => ({
+        url: '/logout',
+        method: 'POST',
+        headers: {
+          Authorization: `Token ${getToken()}`,
+        },
+      }),
+      invalidatesTags: ['Profile'],
     }),
     getProfile: build.query<ProfileResponse, void>({
       query: () => ({
@@ -35,4 +46,4 @@ export const authApi = createApi({
   }),
 })
 
-export const { useLoginMutation, useGetProfileQuery } = authApi
+export const { useLoginMutation, useGetProfileQuery, useLogoutMutation } = authApi
