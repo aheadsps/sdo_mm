@@ -3,6 +3,7 @@ from rest_framework import permissions, status, mixins, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
+from rest_framework.renderers import MultiPartRenderer, JSONRenderer
 
 from lessons import models, serializers
 from lessons import viewsets as own_viewsets
@@ -119,6 +120,7 @@ class CourseViewSet(mixins.ListModelMixin,
     queryset = models.Course._default_manager.get_queryset()
     lookup_field = "pk"
     lookup_url_kwarg = "course_id"
+    renderer_classes = [JSONRenderer, MultiPartRenderer]
 
     def get_permissions(self):
         logger.debug(f"action is {self.action}")

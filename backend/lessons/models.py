@@ -128,11 +128,6 @@ class SCORM(models.Model):
     """
     Модель представления SCORM
     """
-    course = models.ForeignKey(Course,
-                               verbose_name=_("курс"),
-                               on_delete=models.CASCADE,
-                               related_name='SCORMs',
-                               )
     name = models.CharField(_("название"),
                             max_length=256,
                             unique=True,
@@ -195,6 +190,13 @@ class Lesson(models.Model):
                                null=True,
                                blank=True,
                                )
+    scorm = models.ForeignKey(SCORM,
+                              verbose_name=_("SCORM"),
+                              on_delete=models.CASCADE,
+                              null=True,
+                              blank=True,
+                              related_name='lesson',
+                              )
 
     class Meta:
         verbose_name = _("Lesson")
