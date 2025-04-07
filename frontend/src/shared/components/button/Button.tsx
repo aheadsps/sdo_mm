@@ -1,11 +1,12 @@
 import clsx from 'clsx'
-import { ComponentPropsWithRef } from 'react'
+import { ComponentPropsWithRef, MouseEvent } from 'react'
 import { ElementType } from 'react'
 
 import s from './button.module.scss'
 
 type Props<T extends ElementType = 'button'> = {
   variant?: 'primary' | 'secondary'
+  onClick?: (event: MouseEvent<HTMLButtonElement>) => void
   as?: T
 } & ComponentPropsWithRef<T>
 

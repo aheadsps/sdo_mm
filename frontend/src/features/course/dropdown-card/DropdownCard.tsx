@@ -1,4 +1,5 @@
 import { useToggle } from '@shared/hooks/useToggle'
+import clsx from 'clsx'
 import { ComponentPropsWithoutRef } from 'react'
 
 import { ArrowDownIcon, ArrowUpIcon } from '@assets/icons'
@@ -6,7 +7,6 @@ import { ArrowDownIcon, ArrowUpIcon } from '@assets/icons'
 import { LessonItemTitle } from '../lesson-item-title/LessonItemTitle'
 
 import s from './dropdown-card.module.scss'
-import clsx from 'clsx'
 
 type Props = {
   title: string
@@ -23,7 +23,6 @@ export const DropdownCard = ({ className, title, children, blocks }: Props) => {
           {isOpenDropdown ? <ArrowUpIcon /> : <ArrowDownIcon />}
         </LessonItemTitle>
       </div>
-      {/*  className={s.dropdownContent}*/}
       {isOpenDropdown && (
         <div className={clsx(s.dropdownContent, className as string)}>{children}</div>
       )}

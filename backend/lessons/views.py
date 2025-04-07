@@ -13,6 +13,8 @@ from lessons.permissions import (
     CanReadLesson,
     CanReadStep,
     CanReadBlock,
+    CanReadUserStory,
+    CanReadLessonStory,
     )
 
 
@@ -53,8 +55,15 @@ class EventViewSet(own_viewsets.GetCreateUpdateDeleteViewSet):
         self.serializer_class = serializers.EventSerializerCreate
         return super().create(request, *args, **kwargs)
 
+    def perform_create(self, serializer):
+        instance = serializer.save()
+        self._create_first_lesson(
+            user=instance.user,
+            course=instance.course,
+        )
+
     def update(self, request, *args, **kwargs):
-        self.serializer_class = serializers.EventSerializerCreate
+        self.serializer_class = serializers.EventSerializerUpdate
         return super().update(request, *args, **kwargs)
 
     @action(detail=True, url_path="toggle-favorite")
@@ -86,6 +95,18 @@ class EventViewSet(own_viewsets.GetCreateUpdateDeleteViewSet):
             return self.get_paginated_response(serializer.data)
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
+
+    def _create_first_lesson(self, user, course):
+        """
+        Создает запись о первом уроке курса
+        """
+        first_lesson = course.lessons.order_by('serial').first()
+        if first_lesson:
+            models.LessonStory.objects.create(
+                user=user,
+                course=course,
+                lesson=first_lesson
+            )
 
 
 class CourseViewSet(mixins.ListModelMixin,
@@ -265,3 +286,35 @@ class AnswerViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAdminOrIsStaff]
     lookup_field = 'pk'
     lookup_url_kwarg = 'answer_id'
+
+
+class UserStoryViewSet(viewsets.ModelViewSet):
+    queryset = models.UserStory.objects.all()
+    permission_classes = [IsAdminOrIsStaff]
+    serializer_class = serializers.UserStorySerializer
+
+    def get_permissions(self):
+        if self.action in ["retrieve",
+                           ]:
+            permission_classes = [permissions.IsAuthenticated &
+                                  (CanReadUserStory | IsAdminOrIsStaff)]
+        else:
+            permission_classes = [permissions.IsAuthenticated &
+                                  IsAdminOrIsStaff]
+        return [permission() for permission in permission_classes]
+
+
+class LessonStoryViewSet(viewsets.ModelViewSet):
+    queryset = models.LessonStory.objects.all()
+    permission_classes = [IsAdminOrIsStaff]
+    serializer_class = serializers.LessonStorySerializer
+
+    def get_permissions(self):
+        if self.action in ["retrieve",
+                           ]:
+            permission_classes = [permissions.IsAuthenticated &
+                                  (CanReadLessonStory | IsAdminOrIsStaff)]
+        else:
+            permission_classes = [permissions.IsAuthenticated &
+                                  IsAdminOrIsStaff]
+        return [permission() for permission in permission_classes]

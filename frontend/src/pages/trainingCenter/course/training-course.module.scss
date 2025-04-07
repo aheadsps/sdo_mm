@@ -1,0 +1,62 @@
+.container {
+    max-width: 100vw;
+    overflow-x: hidden;
+    height: 100%;
+  }
+
+.titleBlock {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 50px;
+  margin-bottom: 30px;
+  width: 100%;
+
+  button {
+    min-width: 170px;
+  }
+
+  input {
+    font-weight: var(--font-weight-bold);
+    font-size: var(--font-size-xl);
+  }
+
+  textarea {
+    font-weight: var(--font-weight-bold);
+    font-size: var(--font-size-xl);
+    resize: none;
+  }
+
+  @media screen and (max-width: 1349px) {
+    flex-direction: column;
+    gap: 30px;
+
+    button {
+      width: 100%;
+    }
+  }
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  padding-left: 8px;
+}
+
+.tabs {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 45px;
+  max-width: 100vw;
+  overflow-x: auto;
+  white-space: nowrap;
+  scrollbar-width: none;
+
+    button {
+        flex: 0 0 auto;
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+  }
