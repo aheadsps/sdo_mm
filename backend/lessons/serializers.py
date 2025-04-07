@@ -255,6 +255,8 @@ class LessonCreateSerializer(serializers.ModelSerializer):
     Сериализатор создания и обновления урока
     """
 
+    scorm = serializers.FileField(required=False)
+
     class Meta:
         model = models.Lesson
         fields = (
@@ -262,6 +264,7 @@ class LessonCreateSerializer(serializers.ModelSerializer):
             "name",
             "serial",
             "course",
+            "scorm",
         )
         read_only_fields = ("id",)
 
@@ -324,10 +327,6 @@ class CreateCourseSerializer(serializers.ModelSerializer):
     Сериализатор на обработку создания и обновления курсов
     """
 
-    scorms = serializers.ListField(child=serializers.FileField(),
-                                   required=False,
-                                   )
-
     class Meta:
         model = models.Course
         fields = (
@@ -336,18 +335,8 @@ class CreateCourseSerializer(serializers.ModelSerializer):
             "beginer",
             "image",
             "profession",
-            "scorms",
             "experiences",
         )
-
-    def to_internal_value(self, data):
-        data['scorms'] = (data['scorms'].split(',')
-                          if data['scorms']
-                          else [])
-        return data
-
-    def create(self, validated_data):
-        return super().create(validated_data)
 
 
 class CourseSerializer(serializers.ModelSerializer):

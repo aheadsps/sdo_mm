@@ -120,7 +120,6 @@ class CourseViewSet(mixins.ListModelMixin,
     queryset = models.Course._default_manager.get_queryset()
     lookup_field = "pk"
     lookup_url_kwarg = "course_id"
-    renderer_classes = [JSONRenderer, MultiPartRenderer]
 
     def get_permissions(self):
         logger.debug(f"action is {self.action}")
@@ -165,6 +164,7 @@ class LessonViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.LessonSerializer
     lookup_field = 'id'
     lookup_url_kwarg = 'lesson_id'
+    renderer_classes = [JSONRenderer, MultiPartRenderer]
 
     def get_permissions(self):
         if self.action == 'retrieve':
