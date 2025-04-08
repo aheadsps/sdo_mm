@@ -1,4 +1,3 @@
-from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -8,9 +7,11 @@ from lessons.utils import (
     path_maker_question,
     path_maker_course,
     path_maker_content_attachment,
+    path_maker_scorm,
 )
-
-from lessons.validators import UserStoryValidator, LessonStoryValidator
+from lessons.validators_models import (UserStoryValidator,
+                                       LessonStoryValidator,
+                                       )
 
 
 class Event(models.Model):
@@ -66,6 +67,48 @@ class Event(models.Model):
         return f"event_for_user_{self.user.pk}_{self.pk}"
 
 
+class SCORM(models.Model):
+    """
+    Модель представления SCORM
+    """
+    name = models.CharField(_("название"),
+                            max_length=256,
+                            unique=True,
+                            )
+    version = models.CharField(_('версия'),
+                               max_length=50,
+                               choices=settings.VERSIONS_SCORM,
+                               )
+
+    class Meta:
+        verbose_name = _("SCORM")
+        verbose_name_plural = _("SCORMs")
+
+    def __str__(self):
+        return self.name
+
+
+class SCORMFile(models.Model):
+    """
+    Модель представления SCORM файлов
+    """
+    scorm = models.ForeignKey(SCORM,
+                              verbose_name=_("SCORM"),
+                              related_name='files',
+                              on_delete=models.CASCADE,
+                              )
+    file = models.FileField(_("файл scorm"),
+                            upload_to=path_maker_scorm,
+                            )
+
+    class Meta:
+        verbose_name = _("SCORMFile")
+        verbose_name_plural = _("SCORMFiles")
+
+    def __str__(self):
+        return self.file.name
+
+
 class Course(models.Model):
     """
     Модель представления курса
@@ -108,6 +151,13 @@ class Course(models.Model):
         blank=True,
         related_name='courses',
     )
+    scorm = models.ForeignKey(SCORM,
+                              verbose_name=_("SCORM"),
+                              on_delete=models.SET_NULL,
+                              null=True,
+                              blank=True,
+                              related_name='lesson',
+                              )
     experiences = models.ManyToManyField(
         "users.WorkExperience",
         verbose_name=_("Стаж"),

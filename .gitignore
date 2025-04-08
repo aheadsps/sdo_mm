@@ -12,7 +12,6 @@ __pycache__/
 .python-version
 */migrations/
 media
-
 # Distribution / packaging
 .Python
 build/
