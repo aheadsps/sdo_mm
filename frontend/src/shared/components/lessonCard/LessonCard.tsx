@@ -1,6 +1,6 @@
 import { ClockIcon, LikeIcon, DislikeIcon, StickersIcon, HourglassIcon } from '@assets/icons'
 import { routes } from '@routes/routes'
-import { Event } from '@services/slices/events'
+import { Event } from '@services/api'
 import { getBackgroundColor, getDaysLeft } from '@shared/utils'
 import { useState } from 'react'
 import { NavLink } from 'react-router-dom'
@@ -19,8 +19,6 @@ export const LessonCard: React.FC<Props> = ({ event }: Props) => {
   const [isFav, setIsFav] = useState(false)
   const daysLeft = getDaysLeft(event.end_date)
   const deadlineColor = getBackgroundColor(daysLeft)
-
-  console.log(event.course.image)
 
   return (
     <div className={s.container}>
