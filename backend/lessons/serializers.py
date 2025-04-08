@@ -401,6 +401,18 @@ class CourseSerializer(serializers.ModelSerializer):
         )
 
 
+class SCORMSerializer(serializers.ModelSerializer):
+
+    index = serializers.SerializerMethodField(read_only=True)
+
+    class Meta:
+        model = models.SCORM
+        fields = ('id', 'name', 'version', 'index')
+
+    def get_index(self, obj):
+        ...
+
+
 class ViewCourseSerializer(serializers.ModelSerializer):
     """
     Сериализатор вывода детального курса

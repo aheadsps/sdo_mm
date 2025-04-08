@@ -94,6 +94,7 @@ class SCORMFile(models.Model):
     """
     scorm = models.ForeignKey(SCORM,
                               verbose_name=_("SCORM"),
+                              related_name='files',
                               on_delete=models.CASCADE,
                               )
     file = models.FileField(_("файл scorm"),

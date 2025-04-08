@@ -196,6 +196,14 @@ class LessonViewSet(viewsets.ModelViewSet):
         return super().list(request, *args, **kwargs)
 
 
+class SCROMViewSet(mixins.RetrieveModelMixin,
+                   viewsets.GenericViewSet):
+    queryset = models.SCORM._default_manager.get_queryset()
+    serializer_class = ...
+    lookup_field = 'id'
+    lookup_url_kwarg = 'scorm_id'
+
+
 class StepViewSet(ModelViewSet):
     """
     Просмотр всех шагов уроков list
