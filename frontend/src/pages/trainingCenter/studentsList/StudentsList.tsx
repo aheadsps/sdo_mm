@@ -21,7 +21,7 @@ export const StudentsList = () => {
   }
   return (
     <div className={s.container}>
-      {isOpenModal && (
+      {!isOpenModal && (
         <Modal
           close={toggleModal}
           title="Васильевa Владислава Геннадиевнa"
