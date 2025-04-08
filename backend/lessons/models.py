@@ -153,7 +153,7 @@ class Course(models.Model):
     )
     scorm = models.ForeignKey(SCORM,
                               verbose_name=_("SCORM"),
-                              on_delete=models.CASCADE,
+                              on_delete=models.SET_NULL,
                               null=True,
                               blank=True,
                               related_name='lesson',

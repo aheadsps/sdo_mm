@@ -5,6 +5,7 @@ from rest_framework import serializers
 from rest_framework.validators import ValidationError
 from django.db.utils import IntegrityError
 from django.utils import timezone
+from django.conf import settings
 from loguru import logger
 
 from lessons import models, validators
@@ -387,6 +388,9 @@ class CourseSerializer(serializers.ModelSerializer):
 
 
 class SCORMSerializer(serializers.ModelSerializer):
+    """
+    Сериализатор SCORM пакета
+    """
 
     index = serializers.SerializerMethodField(read_only=True)
 
@@ -395,7 +399,15 @@ class SCORMSerializer(serializers.ModelSerializer):
         fields = ('id', 'name', 'version', 'index')
 
     def get_index(self, obj):
-        ...
+        files = obj.files.get_queryset()
+        logger.debug(f'get files {files}')
+        if files.exists():
+            for file in list(files):
+                logger.debug(f'file name is {file.file.name.split("/")[-1]}')
+                if file.file.name.split('/')[-1] == settings.SCORM_INDEX_NAME:
+                    return file.file.url
+        else:
+            return
 
 
 class ViewCourseSerializer(serializers.ModelSerializer):
@@ -406,6 +418,7 @@ class ViewCourseSerializer(serializers.ModelSerializer):
     experiences = user_serializers.WorkExperienceSerializer(many=True)
     profession = user_serializers.ProfessionSerializer()
     lessons = LessonViewSerializer(many=True)
+    scorm = SCORMSerializer()
     lesson_story = LessonStorySerializer(many=True)
 
     class Meta:

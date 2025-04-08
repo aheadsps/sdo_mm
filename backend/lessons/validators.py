@@ -92,7 +92,7 @@ class CourseScormValidator:
         """
         if Lesson._default_manager.filter(course=instance).exists():
             self.error_detail.update(
-                'Не возможно присвоить SCORM пакет к курсу который имеет уроки'
+                scorm='Не возможно присвоить SCORM пакет к курсу, который имеет уроки'
             )
         self._process_error(error_detail=self.error_detail)
 
@@ -131,7 +131,7 @@ class SCORMUniqueValidator:
         """
         if SCORM._default_manager.filter(name=name).exists():
             self.error_detail.update(
-                'SCORM пакет с таким именем уже существует'
+                scorm='SCORM пакет с таким именем уже существует'
             )
         self._process_error(error_detail=self.error_detail)
 
@@ -169,7 +169,7 @@ class LessonScormValidator:
         """
         if course.scorm:
             self.error_detail.update(
-                'Не возможно присвоить урок курсу который имеет SCORM пакет'
+                course='Не возможно присвоить урок курсу, который имеет SCORM пакет'
             )
         self._process_error(error_detail=self.error_detail)
 

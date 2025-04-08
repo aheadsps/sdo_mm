@@ -31,6 +31,8 @@ TEST_SCORM_PATH = BASE_DIR.joinpath(*("lessons", "scorm", "tests", "SCORM.zip"))
 
 SCORM_MANIFEST_NAME = 'imsmanifest.xml'
 
+SCORM_INDEX_NAME = 'index.html'
+
 OS_PATH_ALT_SEP = '\\'
 
 

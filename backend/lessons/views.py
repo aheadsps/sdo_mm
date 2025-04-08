@@ -199,7 +199,7 @@ class LessonViewSet(viewsets.ModelViewSet):
 class SCROMViewSet(mixins.RetrieveModelMixin,
                    viewsets.GenericViewSet):
     queryset = models.SCORM._default_manager.get_queryset()
-    serializer_class = ...
+    serializer_class = serializers.SCORMSerializer
     lookup_field = 'id'
     lookup_url_kwarg = 'scorm_id'
 

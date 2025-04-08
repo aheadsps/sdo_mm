@@ -5,6 +5,7 @@ import zipfile
 import xml.etree.ElementTree as ET
 
 from loguru import logger
+from pytils.translit import slugify
 
 from django.core.files.base import ContentFile
 
@@ -197,7 +198,7 @@ class CoreSCORM(BaseCoreSCORM):
         root_path = self._get_root_path(
             zip_infos=self._infos,
         )
-        title = self._get_item_title(self.organizations[0])
+        title = slugify(self._get_item_title(self.organizations[0]))
         version = self.get_shema()
         scorm_lesson = SCORM._default_manager.create(
             name=title,
