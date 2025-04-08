@@ -52,6 +52,9 @@ class EventAdmin(admin.ModelAdmin):
     """
     Админ панель Эвента
     """
+    # Убрать возможность добавлять Event
+    def has_add_permission(self, request, obj = None):
+        return False
 
     list_display = (
         'user',
@@ -78,3 +81,20 @@ class TestBlockAdmin(admin.ModelAdmin):
     Админ панель Эвента
     """
     list_display = ('id',)
+
+from django import forms
+
+class FormEvents(forms.Form):
+    start_at = forms.DateTimeField(
+        widget=forms.DateTimeInput(
+            attrs={
+                "class": "form-control",
+                "type": "datetime-local",
+                "title": "дата создания",
+            },
+            format="%Y-%m-%dT%H:%M",
+        ),
+        label="Время начала рассылки",
+    )
+    class Meta:
+        fields = ["start_at"]
