@@ -19,4 +19,8 @@ export default defineConfig({
     sourcemap: true,
     cssCodeSplit: true,
   },
+  server: {
+    allowedHosts: ['sdo-metro.ru'],
+    host: true,
+  },
 })
