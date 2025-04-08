@@ -33,7 +33,7 @@ export const LessonCard: React.FC<Props> = ({ event }: Props) => {
             {isFav ? <LikeIcon /> : <DislikeIcon />}
           </button>
         </div>
-        <ImageComponent src={event.course.image} alt="course" className={s.container__img} />
+        <ImageComponent src={event.course.image} alt="course" className={s.img} />
       </div>
       <div className={s.container__bottom}>
         <div className={s.container__card}>

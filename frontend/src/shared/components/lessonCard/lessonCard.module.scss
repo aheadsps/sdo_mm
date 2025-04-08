@@ -151,11 +151,6 @@
       height: fit-content;
     }
 
-    &__img {
-      width: 100%;
-      height: fit-content;
-    }
-
     &__likeBox {
       width: 33%;
       height: 7%;
@@ -225,6 +220,11 @@
       padding: 11px 14px;
     }
   }
+}
+
+.img {
+  width: 100%;
+  height: fit-content;
 }
 
 @media screen and (max-width: 767px) {
