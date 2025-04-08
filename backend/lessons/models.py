@@ -20,6 +20,7 @@ class Event(models.Model):
         "overdue": "Просроченный",
         "failed": "Неуспешный",
         "successful": "Сдано",
+        "deleted": "Удален",
     }
     user = models.ForeignKey(get_user_model(),
                              verbose_name=_("пользователь"),

@@ -18,14 +18,14 @@ def create_events(
         start_date = datetime.strftime(str(start_date), "%Y-%m-%d %H:%M")
     if end_date:
         end_date = datetime.strftime(str(end_date), "%Y-%m-%d %H:%M")
+    # Получаем курс
+    course = Course._default_manager.get(pk=course_id)
 
+    # 1. Получаем студентов, которым надо создать курс
     users = list(User._default_manager
                  .filter(~Q(events__course_id=course_id) &
                          Q(user_id__in=users))
                  .get_queryset())
-    # Получаем курс
-    course = Course._default_manager.get(pk=course_id)
-
     # Назначаем курсы студентам - добавляем в БД
     objs = Event._default_manager.bulk_create(
         [Event(
@@ -37,6 +37,16 @@ def create_events(
          for user
          in users]
     )
+    # 2. Получаем Events студентов, которым надо обновить курс
+    events = list(Event._default_manager
+                  .filter(Q(course_id=course_id) & Q(user_id__in=users)))
+    update_events = list()
+    for event in events:
+        event.start_date = start_date
+        event.end_date = end_date
+        event.status = 'current'
+        update_events.append(event)
+    events.bulk_update(update_events, ('start_date', 'end_date', 'status'))
 
 
 @app.task
