@@ -399,12 +399,13 @@ class EventSerializerCreate(serializers.ModelSerializer):
             "course",
             "start_date",
             "end_date",
+            "status",
         )
         validators = (validators.TimeValidator("start_date", "end_date"),)
 
     def create(self, validated_data):
         task_manager = TaskManager(
-            course=validated_data['course'].pk,
+            course=validated_data['course'],
             user_list=validated_data['users'],
             data_start=validated_data.get('start_date'),
             data_end=validated_data.get('end_date'),

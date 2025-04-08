@@ -30,14 +30,16 @@ class TaskManager:
         self.data_end = data_end
         self.user_list = user_list
         if self.data_start:
-            with_timezone = self._handle_datetime_to_task(self.data_start)
-            self.schedule_start = self._clocked_schedule(with_timezone)
+            self.data_start = datetime.strptime(self.data_start, "%Y-%m-%d %H:%M")
+            self.data_start = timezone.make_aware(self.data_start)
+            self.schedule_start = self._clocked_schedule(self.data_start)
         else:
             self.schedule_start = self._clocked_schedule(timezone.now())
 
         if self.data_end:
-            with_timezone = self._handle_datetime_to_task(self.data_end)
-            self.schedule_end = self._clocked_schedule(with_timezone)
+            self.data_end = datetime.strptime(self.data_end, "%Y-%m-%d %H:%M")
+            self.data_end = timezone.make_aware(self.data_end)
+            self.schedule_end = self._clocked_schedule(self.data_end)
         else:
             self.schedule_end = None
 
@@ -52,7 +54,7 @@ class TaskManager:
             return schedule
         return None
 
-    def _handle_datetime_to_task(
+    '''def _handle_datetime_to_task(
         self,
         start_time: datetime,
     ) -> datetime:
@@ -73,7 +75,7 @@ class TaskManager:
             minute=minute,
             tzinfo=timezone.get_current_timezone(),
         )
-        return date_to_task
+        return date_to_task'''
 
     @staticmethod
     def date_str(dt: datetime):
