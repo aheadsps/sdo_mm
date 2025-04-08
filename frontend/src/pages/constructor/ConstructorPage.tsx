@@ -1,7 +1,6 @@
+import SettingsIcon from '@assets/icons/SettingsIcon'
 import { Button, CMenu, Title } from '@shared/components'
 import { withLayout } from '@shared/HOC'
-
-import SettingsIcon from '@assets/icons/SettingsIcon'
 
 import s from './constructorPage.module.scss'
 
