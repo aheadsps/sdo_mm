@@ -1,6 +1,5 @@
-import { Typography, Button } from '@shared/components'
-
 import { YouTubeLogo } from '@assets/icons'
+import { Typography, Button } from '@shared/components'
 
 import { SelectedStep } from '../LessonComponent'
 
