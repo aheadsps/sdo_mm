@@ -1,5 +1,5 @@
 from config.celery import app
-from lessons.models import Event, Course
+from lessons.models import Event, Course, Lesson
 from django.db.models import Q
 from users.models import User
 from datetime import datetime
@@ -49,7 +49,7 @@ def create_events(course_id: int | None = None,
     for event in events:
         event.start_date = start_date
         event.end_date = end_date
-        event.status = 'current'
+        event.status = 'expected'
         update_events.append(event)
     events.bulk_update(update_events, ('start_date', 'end_date', 'status'))
 
@@ -95,12 +95,27 @@ def delete_events(course_id: int,
 def events_failed(course_id: int, users: list[int]) -> None:
     """
     Установка статуса failed
+    если количество уроков = пройденым то успех
+    иначе провал
     """
-    events = (Event._default_manager
-              .filter(course_id=course_id, user_id__in=users)
-              .get_queryset())
+    # получить количесто уроков в курсе
+    quantity_lesson = Lesson._default_manager.filter(course_id=course_id).count()
+    # успешно закончили курс
+    events = (Event._default_manager.filter(course_id=course_id,
+                                            user_id__in=users, done_lessons=quantity_lesson))
+    update_events = list()
+    for event in events:
+        event.status = 'done'
+        update_events.append(event)
+    events.bulk_update(update_events, ('status',))
+
+    # НЕ закончили курс
+    events = (Event._default_manager.filter(course_id=course_id,
+                                            user_id__in=users, done_lessons__lt=quantity_lesson))
     update_events = list()
     for event in events:
         event.status = 'failed'
         update_events.append(event)
     events.bulk_update(update_events, ('status',))
+
+
