@@ -1,4 +1,4 @@
-import { Button, CMenu, Title } from '@shared/components'
+import { CMenu, Title } from '@shared/components'
 import { withLayout } from '@shared/HOC'
 
 import SettingsIcon from '@assets/icons/SettingsIcon'
@@ -6,7 +6,6 @@ import SettingsIcon from '@assets/icons/SettingsIcon'
 import s from './constructorPage.module.scss'
 
 const Constructor: React.FC = () => {
-  // nullBtn, fstBtn, scndBtn,
   return (
     <div className={s.wrapper}>
       <Title
@@ -20,9 +19,7 @@ const Constructor: React.FC = () => {
         <aside>
           <CMenu />
         </aside>
-        <main className={s.main}>
-          <Button variant="primary" />
-        </main>
+        <main className={s.main}></main>
       </div>
     </div>
   )
