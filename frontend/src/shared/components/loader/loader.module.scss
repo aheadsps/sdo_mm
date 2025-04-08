@@ -9,7 +9,6 @@
   border-radius: 10px;
 }
 
-
 .loader {
   color: var(--color-additional-icons-red);
   font-size: 45px;
@@ -35,7 +34,6 @@
       0 -0.83em 0 -0.477em;
   }
 
-
   5%,
   95% {
     box-shadow:
@@ -45,7 +43,6 @@
       0 -0.83em 0 -0.46em,
       0 -0.83em 0 -0.477em;
   }
-
 
   10%,
   59% {
@@ -57,7 +54,6 @@
       -0.297em -0.775em 0 -0.477em;
   }
 
-
   20% {
     box-shadow:
       0 -0.83em 0 -0.4em,
@@ -67,7 +63,6 @@
       -0.749em -0.34em 0 -0.477em;
   }
 
-
   38% {
     box-shadow:
       0 -0.83em 0 -0.4em,
@@ -76,7 +71,6 @@
       -0.775em -0.297em 0 -0.46em,
       -0.82em -0.09em 0 -0.477em;
   }
-
 
   100% {
     box-shadow:
@@ -92,7 +86,6 @@
   0% {
     transform: rotate(0deg);
   }
-
 
   100% {
     transform: rotate(360deg);

@@ -1,11 +1,10 @@
+import { ArrowLeftIcon } from '@assets/icons'
 import { CourseMaterials } from '@features/course/course-materials'
 import { AiComponent, Typography, Button, Title } from '@shared/components'
 import { withLayout } from '@shared/HOC'
 import { useToggle } from '@shared/hooks/useToggle'
 import { useState } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
-
-import { ArrowLeftIcon } from '@assets/icons'
 
 import { LessonContent } from './lesson-content/LessonContent'
 import { LessonPlan } from './lesson-plan'

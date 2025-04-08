@@ -1,9 +1,8 @@
+import { EditIcon } from '@assets/icons'
 import { Typography, Button, Input, Tabs, Textarea, type Tab } from '@shared/components'
 import { withLayout } from '@shared/HOC'
 import { useScreenWidth } from '@shared/hooks'
 import { useState } from 'react'
-
-import { EditIcon } from '@assets/icons'
 
 import { AboutCourse } from '../aboutCourse'
 import { StudentsList } from '../studentsList'
