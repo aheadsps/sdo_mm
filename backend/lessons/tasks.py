@@ -6,26 +6,32 @@ from datetime import datetime
 
 
 @app.task
-def create_events(
-    course_id=None, users=None, start_date=None, end_date=None
-) -> None:
+def create_events(course_id: int | None = None,
+                  users: list[int] | None = None,
+                  start_date: str = None,
+                  end_date: str | None = None
+                  ) -> None:
     """
     Создавать events
     в любом количестве по списку пользователей
     Если event есть обновляются даты начала и конца курса
     """
+    print("**********************")
+    print(course_id,users,start_date,end_date)
     if start_date:
-        start_date = datetime.strftime(str(start_date), "%Y-%m-%d %H:%M")
+        start_date = datetime.strptime(start_date, "%Y-%m-%d %H:%M")
+    else:
+        raise ValueError
     if end_date:
-        end_date = datetime.strftime(str(end_date), "%Y-%m-%d %H:%M")
+        end_date = datetime.strptime(end_date, "%Y-%m-%d %H:%M")
     # Получаем курс
     course = Course._default_manager.get(pk=course_id)
 
     # 1. Получаем студентов, которым надо создать курс
     users = list(User._default_manager
                  .filter(~Q(events__course_id=course_id) &
-                         Q(user_id__in=users))
-                 .get_queryset())
+                         Q(id__in=users))
+                 )
     # Назначаем курсы студентам - добавляем в БД
     objs = Event._default_manager.bulk_create(
         [Event(
@@ -38,8 +44,7 @@ def create_events(
          in users]
     )
     # 2. Получаем Events студентов, которым надо обновить курс
-    events = list(Event._default_manager
-                  .filter(Q(course_id=course_id) & Q(user_id__in=users)))
+    events = Event._default_manager.filter(Q(course_id=course_id) & Q(user_id__in=users))
     update_events = list()
     for event in events:
         event.start_date = start_date

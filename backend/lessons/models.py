@@ -14,14 +14,6 @@ class Event(models.Model):
     """
     Модель представления Ивента
     """
-    STATUS_EVENTS = {
-        "expect": "Ожидание",
-        "current": "Текущий",
-        "overdue": "Просроченный",
-        "failed": "Неуспешный",
-        "successful": "Сдано",
-        "deleted": "Удален",
-    }
     user = models.ForeignKey(get_user_model(),
                              verbose_name=_("пользователь"),
                              on_delete=models.CASCADE,
