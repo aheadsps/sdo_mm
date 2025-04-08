@@ -28,7 +28,7 @@ class TaskManager:
         self.course = course
         self.data_start = data_start
         self.data_end = data_end
-        self.user_list = user_list
+        self.user_list = [int(user) for user in user_list]
         if self.data_start:
             self.data_start = datetime.strptime(self.data_start, "%Y-%m-%d %H:%M")
             self.data_start = timezone.make_aware(self.data_start)
