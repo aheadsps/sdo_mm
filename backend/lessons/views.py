@@ -16,6 +16,7 @@ from lessons.permissions import (
     CanReadBlock,
     CanReadUserStory,
     CanReadLessonStory,
+    CanReadSCORM,
     )
 
 
@@ -202,6 +203,8 @@ class SCROMViewSet(mixins.RetrieveModelMixin,
     serializer_class = serializers.SCORMSerializer
     lookup_field = 'id'
     lookup_url_kwarg = 'scorm_id'
+    permission_classes = [permissions.IsAuthenticated &
+                          (CanReadSCORM | IsAdminOrIsStaff)]
 
 
 class StepViewSet(ModelViewSet):
