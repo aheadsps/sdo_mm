@@ -1,7 +1,7 @@
-import { Button, Select, Typography } from '@shared/components'
-import { CalendarSelect } from '@shared/components/calendarSelect/CalendarSelect'
+import { Button, InputWithIcon, Select, Typography } from '@shared/components'
+import { useToggle } from '@shared/hooks'
 
-import { EditIcon } from '@assets/icons'
+import { CalendarIcon, EditIcon } from '@assets/icons'
 
 import s from './aboutCourse.module.scss'
 
@@ -23,19 +23,29 @@ const teachers: Option[] = [
   { id: 14, value: 'Гуру А.С.' },
 ]
 
-const dates: Option[] = [
-  { id: 101, value: '25.06.2024' },
-  { id: 102, value: '13.02.2025' },
-  { id: 103, value: '04.07.2022' },
-  { id: 104, value: '18.12.2024' },
-]
 export const AboutCourse = () => {
+  const { isOpen: isOpenStart, toggle: toggleStart } = useToggle()
+  const { isOpen: isOpenEnd, toggle: toggleEnd } = useToggle()
   return (
     <div className={s.container}>
       <div className={s.leftBlock}>
         <h3 className={s.title}>Основная информация</h3>
-        <CalendarSelect options={dates} placeholder="Дата создания" className={s.select} />
-        <CalendarSelect options={dates} placeholder="Дата окончания" className={s.select} />
+        <InputWithIcon
+          children={'Здесь будет календарь'}
+          className={s.select}
+          placeholder="Дата создания"
+          isOpen={isOpenStart}
+          icon={<CalendarIcon />}
+          onClick={toggleStart}
+        />
+        <InputWithIcon
+          className={s.select}
+          placeholder="Дата окончания"
+          children={'Здесь будет календарь'}
+          onClick={toggleEnd}
+          icon={<CalendarIcon />}
+          isOpen={isOpenEnd}
+        />
         <h6 className={s.subtitle}>
           <p className={s.sutitleLeft}>Количество студентов:</p>
           <p className={s.sutitleRight}>654</p>
