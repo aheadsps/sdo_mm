@@ -2,6 +2,8 @@ import datetime
 import re
 
 from rest_framework import serializers
+from rest_framework.validators import ValidationError
+from django.db.utils import IntegrityError
 from django.utils import timezone
 from loguru import logger
 
@@ -9,6 +11,7 @@ from lessons import models, validators
 from lessons.d_types import VD
 from lessons.patrials import set_status
 from lessons.scorm import SCORMLoader
+from lessons.utils import parse_exeption_error
 from users import serializers as user_serializers
 
 
@@ -367,7 +370,10 @@ class CreateCourseSerializer(serializers.ModelSerializer):
         logger.debug(validated_data)
         zip_scorm = validated_data.pop('scorm', None)
         if zip_scorm:
-            scorm_packpage = SCORMLoader(zip_archive=zip_scorm).save()
+            try:
+                scorm_packpage = SCORMLoader(zip_archive=zip_scorm).save()
+            except IntegrityError as er:
+                raise ValidationError(dict(scorm=f'This SCORM packpage {parse_exeption_error(er)}'))
             validated_data.update(scorm=scorm_packpage)
         return super().create(validated_data)
 
@@ -389,6 +395,7 @@ class CourseSerializer(serializers.ModelSerializer):
             "update_date",
             "image",
             "profession",
+            "scorm",
             "experiences",
             "lessons",
         )
@@ -416,6 +423,7 @@ class ViewCourseSerializer(serializers.ModelSerializer):
             "image",
             "profession",
             "experiences",
+            "scorm",
             "lessons",
             "lesson_story",
         )

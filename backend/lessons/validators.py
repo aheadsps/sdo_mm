@@ -1,6 +1,5 @@
 import datetime
 
-from django.core.exceptions import ValidationError
 from django.utils import timezone
 
 from loguru import logger
@@ -91,7 +90,7 @@ class CourseScormValidator:
         """
         Проверка возможности присвоения SCORM пакета
         """
-        if Lesson._default_manager.filter(course=instance):
+        if Lesson._default_manager.filter(course=instance).exists():
             self.error_detail.update(
                 'Не возможно присвоить SCORM пакет к курсу который имеет уроки'
             )

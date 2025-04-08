@@ -12,6 +12,11 @@ if TYPE_CHECKING:
     from lessons.models import Question, Course, ContentAttachment, SCORMFile
 
 
+def parse_exeption_error(er) -> str:
+    sep = er.args[0].split('=')[-1]
+    return sep
+
+
 def latinizator(dic):
     """
     Заменяет все русские буквы на английские

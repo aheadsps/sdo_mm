@@ -73,6 +73,7 @@ class SCORM(models.Model):
     """
     name = models.CharField(_("название"),
                             max_length=256,
+                            unique=True,
                             )
     version = models.CharField(_('версия'),
                                max_length=50,
