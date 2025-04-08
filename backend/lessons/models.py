@@ -14,6 +14,13 @@ class Event(models.Model):
     """
     Модель представления Ивента
     """
+    STATUS_EVENTS = {
+        "expect": "Ожидание",
+        "current": "Текущий",
+        "overdue": "Просроченный",
+        "failed": "Неуспешный",
+        "successful": "Сдано",
+    }
     user = models.ForeignKey(get_user_model(),
                              verbose_name=_("пользователь"),
                              on_delete=models.CASCADE,
@@ -50,7 +57,7 @@ class Event(models.Model):
                                              'ивент избранным')
     status = models.CharField(choices=settings.STATUS_EVENTS,
                               null=True,
-                              default='expected',
+                              default='expect',
                               verbose_name='статус ивента',
                               help_text='Текущий статус данного ивента',
                               )
