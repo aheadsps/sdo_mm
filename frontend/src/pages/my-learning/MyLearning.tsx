@@ -3,7 +3,7 @@ import {
   selectCurrentEvents,
   selectExpiredEvents,
   selectFavoriteEvents,
-} from '@services/events'
+} from '@services/slices/events'
 import { useAppSelector } from '@services/store'
 import {
   AiComponent,

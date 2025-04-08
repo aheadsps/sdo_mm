@@ -1,5 +1,5 @@
 import { LogoIcon, MobileVersionHeaderIcon } from '@assets/icons'
-import { selectIsAuth } from '@services/auth/authSlice'
+import { selectIsAuth } from '@services/slices'
 import { useAppSelector } from '@services/store'
 import { useScreenWidth } from '@shared/hooks'
 import React, { useState } from 'react'

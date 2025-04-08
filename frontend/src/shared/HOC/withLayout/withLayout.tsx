@@ -1,4 +1,5 @@
-import { useGetCurrentEventsQuery, setCurrentEvents } from '@services/events'
+import { useGetUserCurrentEventsQuery } from '@services/api'
+import { setCurrentEvents } from '@services/slices/events'
 import { useAppDispatch } from '@services/store'
 import { Header, Loader, Sidebar } from '@shared/components'
 import { useScreenWidth } from '@shared/hooks'
@@ -12,7 +13,7 @@ export const withLayout = <T extends object>(Component: ComponentType<T>) => {
     const path = useLocation()
     const { isMobile } = useScreenWidth()
 
-    const { data: events, isLoading } = useGetCurrentEventsQuery()
+    const { data: events, isLoading } = useGetUserCurrentEventsQuery()
     const dispatch = useAppDispatch()
 
     useEffect(() => {
@@ -36,10 +37,6 @@ export const withLayout = <T extends object>(Component: ComponentType<T>) => {
             </main>
           </div>
         )}
-        {/* <div className={s.appWrapper}>
-          {!isMobile && <Sidebar />}
-          <main className={s.main}>{isLoading ? <Loader /> : <Component {...props} />}</main>
-        </div> */}
       </>
     )
   }

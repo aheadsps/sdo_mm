@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
-import { LoginResponse, LoginData, ProfileResponse } from '../auth/auth.types'
+import { LoginResponse, LoginData, ProfileResponse, EventsResponse } from './user.types'
 
 /* export const baseUrl = import.meta.env.VITE_BASE_URL */
 export const baseUrl = 'http://localhost:8080/api/v1'
@@ -11,9 +11,9 @@ export const getToken = () => {
   return token
 }
 
-export const authApi = createApi({
-  reducerPath: 'authApi',
-  tagTypes: ['Profile'],
+export const userApi = createApi({
+  reducerPath: 'userApi',
+  tagTypes: ['Profile', 'CurrentEvents'],
   baseQuery: fetchBaseQuery({ baseUrl }),
   endpoints: (build) => ({
     login: build.mutation<LoginResponse, LoginData>({
@@ -22,7 +22,7 @@ export const authApi = createApi({
         method: 'POST',
         body: loginData,
       }),
-      invalidatesTags: ['Profile'],
+      invalidatesTags: () => ['Profile', 'CurrentEvents'],
     }),
     logout: build.mutation<void, void>({
       query: () => ({
@@ -44,7 +44,22 @@ export const authApi = createApi({
       }),
       providesTags: ['Profile'],
     }),
+    getUserCurrentEvents: build.query<EventsResponse, void>({
+      query: () => ({
+        url: '/events/currents',
+        method: 'GET',
+        headers: {
+          Authorization: `Token ${getToken()}`,
+        },
+      }),
+      providesTags: () => ['CurrentEvents'],
+    }),
   }),
 })
 
-export const { useLoginMutation, useGetProfileQuery, useLogoutMutation } = authApi
+export const {
+  useLoginMutation,
+  useGetProfileQuery,
+  useLogoutMutation,
+  useGetUserCurrentEventsQuery,
+} = userApi

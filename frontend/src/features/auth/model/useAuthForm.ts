@@ -1,7 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { SerializedError } from '@reduxjs/toolkit'
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query'
-import { useLoginMutation } from '@services/auth'
+import { useLoginMutation } from '@services/api'
 import { handleError } from '@shared/utils'
 import { useCallback, useState } from 'react'
 import { useEffect } from 'react'

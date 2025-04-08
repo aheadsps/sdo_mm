@@ -1,4 +1,4 @@
-import { selectUser } from '@services/auth'
+import { selectUser } from '@services/slices'
 import { useAppSelector } from '@services/store'
 import { getUserInitials } from '@shared/utils'
 

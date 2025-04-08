@@ -1,4 +1,4 @@
-import { selectExpiringEvents } from '@services/events'
+import { selectExpiringEvents } from '@services/slices/events'
 import { useAppSelector } from '@services/store'
 import { Typography, Button } from '@shared/components'
 import { formatDate, getDaysLeft } from '@shared/utils'

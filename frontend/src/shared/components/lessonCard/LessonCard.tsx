@@ -1,6 +1,6 @@
 import { ClockIcon, LikeIcon, DislikeIcon, StickersIcon, HourglassIcon } from '@assets/icons'
 import { routes } from '@routes/routes'
-import { Event } from '@services/events'
+import { Event } from '@services/slices/events'
 import { getBackgroundColor, getDaysLeft } from '@shared/utils'
 import { useState } from 'react'
 import { NavLink } from 'react-router-dom'
