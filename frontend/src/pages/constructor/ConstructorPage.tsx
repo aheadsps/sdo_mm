@@ -1,9 +1,8 @@
+import SettingsIcon from '@assets/icons/SettingsIcon'
 import { CMenu, Title } from '@shared/components'
 // import { Tooltipe } from '@shared/components/tooltipe'
 import { withLayout } from '@shared/HOC'
 // import { useToggle } from '@shared/hooks'
-
-import SettingsIcon from '@assets/icons/SettingsIcon'
 
 import s from './constructorPage.module.scss'
 
