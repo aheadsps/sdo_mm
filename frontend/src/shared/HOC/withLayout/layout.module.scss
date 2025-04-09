@@ -1,3 +1,17 @@
+.constructorWrapper {
+  max-width: 1350px;
+  display: flex;
+  margin: 0 auto;
+  width: 100%;
+  padding: 30px;
+  padding-top: 123px;
+
+  @media screen and (max-width: 767px) {
+    padding: 20px;
+    padding-top: 123px;
+  }
+}
+
 .appWrapper {
   max-width: 1350px;
   display: flex;
@@ -12,8 +26,7 @@
 
   main {
     position: relative;
-
-    // overflow-y: hidden;
+    overflow: hidden;
     width: 100%;
 
     @media screen and (min-width: 768px) and (max-width: 1349px) {

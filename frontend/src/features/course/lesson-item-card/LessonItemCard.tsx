@@ -1,7 +1,6 @@
+import { ArrowUpRightIcon } from '@assets/icons'
 import { Typography } from '@shared/components'
 import { ComponentPropsWithoutRef } from 'react'
-
-import { ArrowUpRightIcon } from '@assets/icons'
 
 import { LessonItemTitle } from '../lesson-item-title/LessonItemTitle'
 

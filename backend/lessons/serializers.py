@@ -1,12 +1,18 @@
 import datetime
+import re
 
 from rest_framework import serializers
+from rest_framework.validators import ValidationError
+from django.db.utils import IntegrityError
 from django.utils import timezone
+from django.conf import settings
 from loguru import logger
 
 from lessons import models, validators
 from lessons.d_types import VD
 from lessons.patrials import set_status
+from lessons.scorm import SCORMLoader
+from lessons.utils import parse_exeption_error
 from users import serializers as user_serializers
 
 
@@ -264,6 +270,7 @@ class LessonCreateSerializer(serializers.ModelSerializer):
             "course",
         )
         read_only_fields = ("id",)
+        validators = (validators.LessonScormValidator('course'),)
 
 
 class LessonSerializer(serializers.ModelSerializer):
@@ -272,7 +279,6 @@ class LessonSerializer(serializers.ModelSerializer):
     """
     steps = StepSerializer(many=True)
     test_block = serializers.PrimaryKeyRelatedField(read_only=True)
-    lesson_story = LessonStorySerializer()
 
     class Meta:
         model = models.Lesson
@@ -283,7 +289,6 @@ class LessonSerializer(serializers.ModelSerializer):
             "course",
             "steps",
             "test_block",
-            "lesson_story",
         )
 
 
@@ -293,7 +298,6 @@ class LessonViewSerializer(serializers.ModelSerializer):
     """
     steps = StepViewSerializer(many=True)
     test_block = TestBlockSerializersDetail()
-    lesson_story = serializers.SerializerMethodField()
 
     class Meta:
         model = models.Lesson
@@ -304,25 +308,36 @@ class LessonViewSerializer(serializers.ModelSerializer):
             "course",
             "steps",
             "test_block",
-            "lesson_story",
         )
 
-    def get_lesson_story(self, obj):
-        request = self.context.get('request')
-        if request and request.user.is_authenticated:
-            lesson_story = models.LessonStory.objects.filter(
-                user=request.user,
-                lesson=obj
-            ).first()
-            if lesson_story:
-                return LessonStorySerializer(lesson_story).data
-        return None
+
+class ZIPFileField(serializers.FileField):
+
+    def to_internal_value(self, data):
+        try:
+            file_name = data.name
+            file_size = data.size
+        except AttributeError:
+            self.fail('invalid')
+        if not re.match(r'\S*.zip', file_name):
+            self.fail('non zip')
+
+        if not file_name:
+            self.fail('no_name')
+        if not self.allow_empty_file and not file_size:
+            self.fail('empty')
+        if self.max_length and len(file_name) > self.max_length:
+            self.fail('max_length', max_length=self.max_length, length=len(file_name))
+
+        return data
 
 
 class CreateCourseSerializer(serializers.ModelSerializer):
     """
     Сериализатор на обработку создания и обновления курсов
     """
+
+    scorm = ZIPFileField(required=False)
 
     class Meta:
         model = models.Course
@@ -332,8 +347,21 @@ class CreateCourseSerializer(serializers.ModelSerializer):
             "beginer",
             "image",
             "profession",
+            "scorm",
             "experiences",
         )
+        validators = (validators.CourseScormValidator('scorm'),)
+
+    def create(self, validated_data: dict):
+        logger.debug(validated_data)
+        zip_scorm = validated_data.pop('scorm', None)
+        if zip_scorm:
+            try:
+                scorm_packpage = SCORMLoader(zip_archive=zip_scorm).save()
+            except IntegrityError as er:
+                raise ValidationError(dict(scorm=f'This SCORM packpage {parse_exeption_error(er)}'))
+            validated_data.update(scorm=scorm_packpage)
+        return super().create(validated_data)
 
 
 class CourseSerializer(serializers.ModelSerializer):
@@ -353,9 +381,33 @@ class CourseSerializer(serializers.ModelSerializer):
             "update_date",
             "image",
             "profession",
+            "scorm",
             "experiences",
             "lessons",
         )
+
+
+class SCORMSerializer(serializers.ModelSerializer):
+    """
+    Сериализатор SCORM пакета
+    """
+
+    index = serializers.SerializerMethodField(read_only=True)
+
+    class Meta:
+        model = models.SCORM
+        fields = ('id', 'name', 'version', 'index')
+
+    def get_index(self, obj):
+        files = obj.files.get_queryset()
+        logger.debug(f'get files {files}')
+        if files.exists():
+            for file in list(files):
+                logger.debug(f'file name is {file.file.name.split("/")[-1]}')
+                if file.file.name.split('/')[-1] == settings.SCORM_INDEX_NAME:
+                    return file.file.url
+        else:
+            return
 
 
 class ViewCourseSerializer(serializers.ModelSerializer):
@@ -366,6 +418,7 @@ class ViewCourseSerializer(serializers.ModelSerializer):
     experiences = user_serializers.WorkExperienceSerializer(many=True)
     profession = user_serializers.ProfessionSerializer()
     lessons = LessonViewSerializer(many=True)
+    scorm = SCORMSerializer()
     lesson_story = LessonStorySerializer(many=True)
 
     class Meta:
@@ -380,6 +433,7 @@ class ViewCourseSerializer(serializers.ModelSerializer):
             "image",
             "profession",
             "experiences",
+            "scorm",
             "lessons",
             "lesson_story",
         )
@@ -391,7 +445,6 @@ class EventViewSerializer(serializers.ModelSerializer):
     """
 
     course = ViewCourseSerializer()
-    lesson_story = serializers.SerializerMethodField()
 
     class Meta:
         model = models.Event
@@ -404,16 +457,7 @@ class EventViewSerializer(serializers.ModelSerializer):
             "end_date",
             "favorite",
             "status",
-            "lesson_story",
         )
-
-    def get_lesson_story(self, obj):
-        stories = models.LessonStory.objects.filter(
-            user=obj.user,
-            course=obj.course
-        ).select_related('lesson')
-
-        return LessonStorySerializer(stories, many=True).data
 
 
 class EventSerializer(serializers.ModelSerializer):
@@ -422,7 +466,6 @@ class EventSerializer(serializers.ModelSerializer):
     """
 
     course = CourseSerializer()
-    lesson_story = serializers.SerializerMethodField()
 
     class Meta:
         model = models.Event
@@ -435,15 +478,6 @@ class EventSerializer(serializers.ModelSerializer):
             "end_date",
             "favorite",
             "status",
-            "lesson_story",
-        )
-
-    def get_lesson_story(self, obj):
-        return list(
-            models.LessonStory.objects.filter(
-                user=obj.user,
-                course=obj.course
-            ).values_list('lesson_id', flat=True)
         )
 
 

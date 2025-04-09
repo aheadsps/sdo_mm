@@ -1,6 +1,6 @@
-import { AboutCourse } from './about-course/AboutCourse'
-import { CourseContent } from './course-content/CourseContent'
-import { Materials } from './materials/Materials'
+import { AboutCourse } from './about-course'
+import { CourseContent } from './course-content'
+import { Materials } from './materials'
 
 export type Tab = {
   label: string

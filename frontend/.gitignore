@@ -12,6 +12,8 @@ dist
 dist-ssr
 *.local
 
+.env
+
 *.module.css
 *.module.css.map
 

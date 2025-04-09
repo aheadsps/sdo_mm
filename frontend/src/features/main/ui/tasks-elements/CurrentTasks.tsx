@@ -1,23 +1,24 @@
-import { Typography } from '@shared/components'
+import { selectCurrentEvents } from '@services/slices/events'
+import { useAppSelector } from '@services/store'
+import { Typography, Task } from '@shared/components'
+import { getDaysLeft } from '@shared/utils'
 
 import s from '../main.module.scss'
-import { Task } from '../task'
 
 export const CurrentTasks = () => {
-  const hasTasks = true
+  const currentEvents = useAppSelector(selectCurrentEvents)
   return (
     <div>
       <Typography variant="header_4" className={s.title}>
         Ваши актуальные задачи
       </Typography>
 
-      {hasTasks ? (
-        <>
-          <Task daysLeft={2}>Охрана труда</Task>
-          <Task daysLeft={4}>Работа с электроинструментом</Task>
-          <Task daysLeft={7}>Пожарная безопасность</Task>
-          <Task>Охрана труда</Task>
-        </>
+      {currentEvents?.length ? (
+        currentEvents.map((result) => (
+          <Task key={result.id} daysLeft={getDaysLeft(result.end_date)}>
+            {result.course.name}
+          </Task>
+        ))
       ) : (
         <Typography variant="body_1" className={s.noTasksText}>
           Пока у вас нет актуальных задач. Как только появятся, они отобразятся здесь.

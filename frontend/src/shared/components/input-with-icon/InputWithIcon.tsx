@@ -10,7 +10,7 @@ type Props = {
   icon?: ReactNode
   className?: string
   isOpen?: boolean
-  onClick: () => void
+  onClick?: () => void
 } & ComponentPropsWithoutRef<'input'>
 
 export const InputWithIcon = ({

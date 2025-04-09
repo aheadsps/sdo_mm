@@ -1,21 +1,21 @@
-import { Typography } from '@shared/components'
+import { LogoIcon, MobileVersionHeaderIcon } from '@assets/icons'
+import { selectIsAuth } from '@services/slices'
+import { useAppSelector } from '@services/store'
 import { useScreenWidth } from '@shared/hooks'
 import React, { useState } from 'react'
 
-import { LogoIcon, MobileVersionHeaderIcon } from '@assets/icons'
-
 import '@fontsource/manrope/600.css'
 import { Sidebar } from '../sidebar'
+import { Typography } from '../typography'
 
 import styles from './header.module.scss'
 import { HeaderAvatar } from './HeaderAvatar'
 
 const Header: React.FC = () => {
-  const [isLoggedIn] = useState()
+  const isAuth = useAppSelector(selectIsAuth)
+  const { isMobile } = useScreenWidth()
 
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false)
-
-  const { isMobile } = useScreenWidth()
 
   const onToggleMobileSidebar = () => {
     setIsMobileSidebarOpen(!isMobileSidebarOpen)
@@ -35,7 +35,7 @@ const Header: React.FC = () => {
             Корпоративный университет Транспортного комплекса
           </Typography>
         </div>
-        {isLoggedIn && <HeaderAvatar />}
+        {isAuth && <HeaderAvatar />}
         <MobileVersionHeaderIcon
           className={styles.header__mobileIcon}
           width={40}
