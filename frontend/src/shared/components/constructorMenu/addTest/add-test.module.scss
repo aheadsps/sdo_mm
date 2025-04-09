@@ -1,0 +1,28 @@
+.container {
+    width: 100&;
+}
+
+.textfieldBlock {
+    width: 100%;
+}
+
+.input, .textarea {
+    border: none
+}
+
+.textarea {
+    resize: none;
+}
+
+.testItemsBlock {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding-left: 30px;
+}
+
+.testItem {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}

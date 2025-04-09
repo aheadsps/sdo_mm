@@ -6,6 +6,7 @@ import { Input, Textarea } from '../text-field'
 import { Typography } from '../typography'
 
 import { AddCard } from './addCard/AddCard'
+import { AddTest } from './addTest/AddTest'
 import s from './constructorMenu.module.scss'
 import { addTest } from './data'
 
@@ -18,7 +19,6 @@ export const CMenu = ({ setNewItem }: Props) => {
       ...prev,
       {
         type: 'text',
-        description: ['Hello', 'World'],
         layout: (
           <div className={s.newTextFields}>
             <Input placeholder="Enter title" />
@@ -49,6 +49,16 @@ export const CMenu = ({ setNewItem }: Props) => {
     ])
   }
 
+  const addNewItemITest = () => {
+    setNewItem((prev) => [
+      ...prev,
+      {
+        type: 'test',
+        layout: <AddTest />,
+      },
+    ])
+  }
+
   return (
     <aside className={s.container}>
       <div className={s.block}>
@@ -64,7 +74,7 @@ export const CMenu = ({ setNewItem }: Props) => {
           className={s.title}
         />
         {addTest.map((test) => {
-          return <AddCard children={test.title} key={test.id} />
+          return <AddCard children={test.title} key={test.id} onClick={addNewItemITest} />
         })}
       </div>
       <div className={s.block}>
