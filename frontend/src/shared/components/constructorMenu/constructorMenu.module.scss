@@ -9,6 +9,7 @@
     box-shadow: 0 0 15px 0 #2c0b0f0f;
   }
 }
+
 .block {
   width: 100%;
   height: fit-content;
@@ -16,6 +17,7 @@
   flex-direction: column;
   gap: 10px;
 }
+
 .title {
   color: #6c757d;
   font-family: var(--font-family-secondary);
@@ -25,6 +27,7 @@
   letter-spacing: 0.25px;
   vertical-align: middle;
 }
+
 // .card {
 //   width: 100%;
 //   height: 40px;

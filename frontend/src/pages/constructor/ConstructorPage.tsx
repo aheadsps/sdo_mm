@@ -4,6 +4,7 @@ import { CMenu, Title } from '@shared/components'
 import { withLayout } from '@shared/HOC'
 // import { useToggle } from '@shared/hooks'
 
+import { BlockDropdown } from './block-dropdown/BlockDropdown'
 import s from './constructorPage.module.scss'
 
 const Constructor: React.FC = () => {
@@ -28,7 +29,11 @@ const Constructor: React.FC = () => {
         <aside>
           <CMenu />
         </aside>
-        <main className={s.main}></main>
+        <main className={s.main}>
+          <BlockDropdown />
+          <BlockDropdown />
+          <BlockDropdown />
+        </main>
       </div>
     </div>
   )

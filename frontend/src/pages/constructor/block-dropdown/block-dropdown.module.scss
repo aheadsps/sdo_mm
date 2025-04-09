@@ -1,0 +1,27 @@
+.dropdownHeader {
+  min-height: 80px;
+
+  p {
+    position: relative;
+    margin-left: 20px;
+
+    &::before {
+      content: '⋮⋮';
+      font-size: 16px;
+      color: var(--color-text-secondary);
+      position: absolute;
+      left: -40px;
+      bottom: 0;
+      transform: translateY(-50%);
+      line-height: 12px;
+      letter-spacing: -2px;
+      cursor: grab;
+    }
+  }
+}
+
+.dropdownContent {
+  border: none;
+  display: flex;
+  justify-content: center;
+}
