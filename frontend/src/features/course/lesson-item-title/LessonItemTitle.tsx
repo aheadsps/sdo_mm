@@ -24,6 +24,3 @@ export const LessonItemTitle = ({ children, className, title, blocks }: Props) =
     </>
   )
 }
-
-/* Урок 1. Проверка стартового уровня */
-/* 2 блока */

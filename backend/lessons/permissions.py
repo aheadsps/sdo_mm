@@ -76,6 +76,29 @@ class CanReadLesson(permissions.BasePermission):
         return event_exists.exists()
 
 
+class CanReadSCORM(permissions.BasePermission):
+    """
+    Права доступа на чтение SCORM
+    """
+    message = {
+        'forbidden': 'Данный урок не доступен',
+    }
+    code = status.HTTP_403_FORBIDDEN
+
+    def has_object_permission(self, request, view, scorm):
+        if not scorm:
+            return
+
+        user = request.user
+
+        event_exists = models.Event.objects.filter(
+            Q(user=user) &
+            Q(course__scorm=scorm)
+        )
+
+        return event_exists.exists()
+
+
 class CanReadStep(permissions.BasePermission):
     """
     Права доступа на просмотр Шага
@@ -87,7 +110,7 @@ class CanReadStep(permissions.BasePermission):
     code = status.HTTP_403_FORBIDDEN
 
     def has_object_permission(self, request, view, step):
-        if not step or not step.lesson or not step.lesson:
+        if not step or not step.lesson:
             return
 
         user = request.user
@@ -111,7 +134,7 @@ class CanReadBlock(permissions.BasePermission):
     code = status.HTTP_403_FORBIDDEN
 
     def has_object_permission(self, request, view, test_block):
-        if not test_block:
+        if not test_block or not test_block.lesson:
             return
 
         user = request.user

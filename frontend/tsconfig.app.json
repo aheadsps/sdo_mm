@@ -11,6 +11,8 @@
       "@pages/*": ["pages/*"],
       "@assets/*": ["assets/*"],
       "@shared/*": ["shared/*"],
+      "@routes/*": ["routes/*"],
+      "@services/*": ["services/*"],
       "@features/*": ["features/*"]
     },
 

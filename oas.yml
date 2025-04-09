@@ -586,6 +586,30 @@ paths:
         "422":
           $ref: "#/components/responses/UnprocessableEntity"
 
+  /scorms/{scorm_id}:
+    get:
+      operationId: api_scorms_retrieve
+      summary: Вывод Scorm пакета
+      tags:
+        - SCORM
+      security:
+        - Token: []
+      responses:
+        '200':
+          description: JSON ответ с деталями SCORM пакета
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SCORM"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+
   /lessons:
     get:
       operationId: api_lessons_list
@@ -1636,6 +1660,11 @@ components:
           description: Для какой профессии предназначен курс
           nullable: false
           $ref: "#/components/schemas/Profession"
+        scorm:
+          type: object
+          description: SCORM пакет
+          nullable: true
+          $ref: "#/components/schemas/SCORM"
         experiences:
           type: array
           description: Список стажевых интервалов для которых подходит данный курс
@@ -1675,6 +1704,11 @@ components:
         profession:
           type: integer
           description: Для какой профессии предназначен курс
+          nullable: true
+          minimum: 1
+        scorm:
+          type: integer
+          description: SCORM пакет (заменяет собой уроки)
           nullable: true
           minimum: 1
         experiences:
@@ -1722,6 +1756,10 @@ components:
         profession:
           type: integer
           description: Для какой профессии предназначен курс
+          nullable: true
+          minimum: 1
+        scorm:
+          type: integer
           nullable: true
           minimum: 1
         experiences:
@@ -1855,6 +1893,33 @@ components:
           type: integer
           description: Тестовый блок
           minimum: 1
+
+    SCORM:
+      description: SCORM пакет
+      additionalProperties: false
+      type: object
+      properties:
+        id:
+          type: integer
+          minimum: 1
+        name:
+          type: string
+          maxLength: 256
+          nullable: false
+        version:
+          type: string
+          maxItems: 50
+          enum:
+            - SCORM 1.0
+            - SCORM 1.1
+            - SCORM 1.2
+            - 2004 1st Edition
+            - 2004 2nd Edition
+            - 2004 3rd Edition
+            - 2004 4th Edition
+        index:
+          type: string
+          format: path
 
     StepCreate:
       description: Шаги урока создание

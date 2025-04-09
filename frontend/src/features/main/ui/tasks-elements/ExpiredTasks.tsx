@@ -1,18 +1,24 @@
-import { Typography } from '@shared/components'
+import { selectExpiredEvents } from '@services/slices/events'
+import { useAppSelector } from '@services/store'
+import { Typography, Task } from '@shared/components'
+import { getDaysLeft } from '@shared/utils'
 
 import s from '../main.module.scss'
-import { Task } from '../task'
 
 export const ExpiredTasks = () => {
-  const hasExpired = true
+  const failedEvents = useAppSelector(selectExpiredEvents)
   return (
     <div className={s.expiredTasks}>
       <Typography variant="header_4" className={s.title}>
         Просроченные задачи
       </Typography>
 
-      {hasExpired ? (
-        <Task daysLeft={0}>Экстренные ситуации на рабочем месте</Task>
+      {failedEvents?.length ? (
+        failedEvents.map((result) => (
+          <Task key={result.id} daysLeft={getDaysLeft(result.end_date)}>
+            {result.course.name}
+          </Task>
+        ))
       ) : (
         <Typography variant="body_1" className={s.noTasksText}>
           У вас нет просроченных задач. Следите за обновлениями, чтобы оставаться в курсе!

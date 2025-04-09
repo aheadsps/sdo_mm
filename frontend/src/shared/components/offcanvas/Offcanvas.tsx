@@ -1,8 +1,7 @@
+import { CloseIcon } from '@assets/icons'
 import clsx from 'clsx'
 import { ReactNode } from 'react'
 import ReactDOM from 'react-dom'
-
-import { CloseIcon } from '@assets/icons'
 
 import { Typography } from '../typography'
 

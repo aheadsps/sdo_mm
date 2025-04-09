@@ -150,7 +150,7 @@ class TestSocket(APITestCase):
             json.loads(response),
             dict(
                 answer_id=self.answer_2.pk,
-                answer=self.answer_2.correct,
+                correct=self.answer_2.correct,
             ),
         )
 
@@ -167,7 +167,7 @@ class TestSocket(APITestCase):
         response = await communicator.receive_from()
         self.assertEqual(
             json.loads(response),
-            {'answer': False, 'answer_id': self.answer_1.pk},
+            {'correct': False, 'answer_id': self.answer_1.pk},
         )
 
         data = dict(answer_id=self.answer_5.pk, block_id=self.test_block.pk)
@@ -175,7 +175,7 @@ class TestSocket(APITestCase):
         response = await communicator.receive_from()
         self.assertEqual(
             json.loads(response),
-            {'answer': True, 'answer_id': self.answer_5.pk},
+            {'correct': True, 'answer_id': self.answer_5.pk},
         )
 
         data = dict(answer_id=self.answer_4.pk, block_id=self.test_block.pk)
@@ -183,7 +183,7 @@ class TestSocket(APITestCase):
         response = await communicator.receive_from()
         self.assertEqual(
             json.loads(response),
-            {'answer': True, 'answer_id': self.answer_4.pk},
+            {'correct': True, 'answer_id': self.answer_4.pk},
         )
 
         data = dict(answer_id=self.answer_6.pk, block_id=self.test_block.pk)
@@ -191,7 +191,7 @@ class TestSocket(APITestCase):
         response = await communicator.receive_from()
         self.assertEqual(
             json.loads(response),
-            {'answer': False, 'answer_id': self.answer_6.pk},
+            {'correct': False, 'answer_id': self.answer_6.pk},
         )
 
         data = dict(answer_id=self.answer_7.pk, block_id=self.test_block.pk)
@@ -199,6 +199,6 @@ class TestSocket(APITestCase):
         response = await communicator.receive_from()
         self.assertEqual(
             json.loads(response),
-            {'answer': True, 'answer_id': self.answer_7.pk},
+            {'correct': True, 'answer_id': self.answer_7.pk},
         )
         await communicator.disconnect()

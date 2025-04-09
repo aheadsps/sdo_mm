@@ -1,7 +1,7 @@
-import { LessonItemCard } from '@features/course'
-import { Button, Card, Typography, ProgressBar } from '@shared/components'
-
 import { HeartFilledIcon } from '@assets/icons'
+import { Card, Typography, Button, ProgressBar } from '@shared/components'
+
+import { LessonItemCard } from '../../lesson-item-card'
 
 import s from './about-course.module.scss'
 

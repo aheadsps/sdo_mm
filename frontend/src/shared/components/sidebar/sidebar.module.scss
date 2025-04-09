@@ -24,7 +24,7 @@
 }
 
 .container {
-  position: relative;
+  position: fixed;
   height: calc(100vh - 103px);
   display: flex;
   flex-direction: column;
