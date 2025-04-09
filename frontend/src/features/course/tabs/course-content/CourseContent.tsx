@@ -1,4 +1,4 @@
-import { DropdownCard } from '@features/course'
+import { DropdownCard } from '@shared/components'
 import { Button, Typography } from '@shared/components'
 import { NavLink } from 'react-router-dom'
 

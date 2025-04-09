@@ -1,7 +1,6 @@
+import { AddItemIcon, ArrowDownIcon, ArrowUpIcon } from '@assets/icons'
 import { Button } from '@shared/components'
 import React, { useState } from 'react'
-
-import { AddItemIcon, ArrowDownIcon, ArrowUpIcon } from '@assets/icons'
 
 import { BlockHeader } from './block-header/BlockHeader'
 import { lessonsData, options } from './data'

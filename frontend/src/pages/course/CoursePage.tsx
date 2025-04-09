@@ -1,8 +1,8 @@
-import { CourseComponent } from '@features/course/Course'
+import { Course } from '@features/course'
 import { withLayout } from '@shared/HOC'
 
-export const Course = () => {
-  return <CourseComponent />
+export const CourseComponent = () => {
+  return <Course />
 }
 
-export const CoursePage = withLayout(Course)
+export const CoursePage = withLayout(CourseComponent)
