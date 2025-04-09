@@ -1,0 +1,38 @@
+.commentBox {
+   display: flex;
+   flex-direction: column;
+   gap: 16px;
+  .headerBlock {
+    display: flex;
+    flex-direction: column;
+  }
+  .name {
+    //  font-family: var(--font-family-secondary);
+    font-weight: 300;
+    font-size: 18px;
+    line-height: 140%;
+    letter-spacing: 0.25px;
+  }
+  .dateBox {
+    width: fit-content;
+    height: 18;
+    display: flex;
+    gap: 12px;
+    .date,
+    .time {
+      // font-family: var(--font-family-secondary);
+      font-weight: 300;
+      font-size: 14px;
+      line-height: 130%;
+      letter-spacing: 0.25px;
+      color: #6c757d;
+    }
+  }
+  .txt {
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 140%;
+    letter-spacing: 0.25px;
+    color: #2c0b0f;
+  }
+}

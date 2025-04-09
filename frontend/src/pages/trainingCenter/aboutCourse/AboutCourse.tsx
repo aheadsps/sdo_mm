@@ -1,5 +1,6 @@
 import { CalendarIcon, EditIcon } from '@assets/icons'
-import { Button, InputWithIcon, Select, Typography } from '@shared/components'
+import { Button, InputWithIcon, Modal, Select, Typography } from '@shared/components'
+import { AddMaterials } from '@shared/components/modal/addMaterials'
 import { useToggle } from '@shared/hooks'
 
 import s from './aboutCourse.module.scss'
@@ -25,8 +26,17 @@ const teachers: Option[] = [
 export const AboutCourse = () => {
   const { isOpen: isOpenStart, toggle: toggleStart } = useToggle()
   const { isOpen: isOpenEnd, toggle: toggleEnd } = useToggle()
+  const { isOpen: isOpenModal, toggle: toggleModal } = useToggle()
   return (
     <div className={s.container}>
+      {!isOpenModal && (
+        <Modal
+          close={toggleModal}
+          title="Добавить материалы"
+          children={<AddMaterials />}
+          titleStyle="header_2"
+        />
+      )}
       <div className={s.leftBlock}>
         <h3 className={s.title}>Основная информация</h3>
         <InputWithIcon
