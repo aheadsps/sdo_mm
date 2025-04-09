@@ -16,6 +16,7 @@ from pathlib import Path
 from django.core.management.utils import get_random_secret_key
 from dotenv import load_dotenv
 
+
 load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -23,6 +24,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 TEST_IMAGE_PATH = BASE_DIR.joinpath(*("lessons", "tests", "image.png"))
 TEST_IMAGE_PATH_2 = BASE_DIR.joinpath(*("lessons", "tests", "image2.png"))
+
+
+TEST_SCORM_PATH = BASE_DIR.joinpath(*("lessons", "scorm", "tests", "SCORM.zip"))
+
+
+SCORM_MANIFEST_NAME = 'imsmanifest.xml'
+
+SCORM_INDEX_NAME = 'index.html'
+
+OS_PATH_ALT_SEP = '\\'
 
 
 TYPE_CONTENTS = [
@@ -201,6 +212,8 @@ SPECTACULAR_SETTINGS = {
     "VERSION": "1.0.0",
     "SERVE_INCLUDE_SCHEMA": False,
 }
+
+
 STATUS_EVENTS = [
     (
         "done",
@@ -217,6 +230,37 @@ STATUS_EVENTS = [
     (
         "expected",
         "Ожидает начало",
+    ),
+]
+
+VERSIONS_SCORM = [
+    (
+        'SCORM 1.0',
+        '1.0',
+    ),
+    (
+        'SCORM 1.1',
+        '1.1',
+    ),
+    (
+        'SCORM 1.2',
+        '1.2',
+    ),
+    (
+        '2004 1st Edition',
+        'SCORM 2004.1',
+    ),
+    (
+        '2004 2nd Edition',
+        'SCORM 2004.2',
+    ),
+    (
+        '2004 3rd Edition',
+        'SCORM 2004.3',
+    ),
+    (
+        '2004 4th Edition',
+        'SCORM 2004.4',
     ),
 ]
 
