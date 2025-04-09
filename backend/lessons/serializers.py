@@ -410,5 +410,21 @@ class EventSerializerCreate(serializers.ModelSerializer):
             data_start=validated_data.get('start_date'),
             data_end=validated_data.get('end_date'),
         )
-        task_manager.create()
-        return super().create(validated_data)
+        instance = task_manager.create()
+        return instance
+
+
+"""   def save(self, **kwargs):
+        validated_data = {**self.validated_data, **kwargs}
+        if self.instance is not None:
+            self.instance = self.update(self.instance, validated_data)
+            assert self.instance is not None, (
+                '`update()` did not return an object instance.'
+            )
+        else:
+            self.instance = self.create(validated_data)
+            assert self.instance is not None, (
+                '`create()` did not return an object instance.'
+            )
+
+        return self.instance"""

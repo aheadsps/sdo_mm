@@ -51,7 +51,14 @@ class EventViewSet(own_viewsets.GetCreateUpdateDeleteViewSet):
     def create(self, request, *args, **kwargs):
         self.check_object_permissions(request, None)
         self.serializer_class = serializers.EventSerializerCreate
-        return super().create(request, *args, **kwargs)
+
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        #headers = self.get_success_headers(serializer.data)
+        headers = self.get_success_headers(serializer.validated_data)
+        #return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+        return Response(serializer.validated_data, status=status.HTTP_201_CREATED, headers=headers)
 
     def update(self, request, *args, **kwargs):
         self.serializer_class = serializers.EventSerializerCreate

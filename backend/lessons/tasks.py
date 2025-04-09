@@ -16,8 +16,6 @@ def create_events(course_id: int | None = None,
     в любом количестве по списку пользователей
     Если event есть обновляются даты начала и конца курса
     """
-    print("**********************")
-    print(course_id,users,start_date,end_date)
     if start_date:
         start_date = datetime.strptime(start_date, "%Y-%m-%d %H:%M")
     else:

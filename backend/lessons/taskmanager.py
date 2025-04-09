@@ -1,5 +1,5 @@
 import json
-
+from lessons import models
 from celery.local import Proxy
 
 from django_celery_beat.models import PeriodicTask, ClockedSchedule
@@ -54,28 +54,6 @@ class TaskManager:
             return schedule
         return None
 
-    '''def _handle_datetime_to_task(
-        self,
-        start_time: datetime,
-    ) -> datetime:
-        """
-        Перерабатывает date в datatime время
-        """
-        year = start_time.year
-        month = start_time.month
-        day = start_time.day
-        hour = start_time.hour
-        minute = start_time.minute
-
-        date_to_task = datetime(
-            year=year,
-            month=month,
-            day=day,
-            hour=hour,
-            minute=minute,
-            tzinfo=timezone.get_current_timezone(),
-        )
-        return date_to_task'''
 
     @staticmethod
     def date_str(dt: datetime):
@@ -107,7 +85,7 @@ class TaskManager:
                 clocked=self.schedule_end,
                 one_off=True,
                 name=name,
-                task="lessons.task.events_failed",
+                task="lessons.tasks.events_failed",
                 kwargs=json.dumps(kwargs),
             )
 
@@ -135,13 +113,22 @@ class TaskManager:
                 clocked=self.schedule_start,
                 one_off=True,
                 name=name,
-                task="lessons.task.create_events",
+                task="lessons.tasks.create_events",
                 kwargs=json.dumps(kwargs),
             )
             # если ок создаем PeriodicTask на
             # перевод по истечению времени events в failed
             if instance and self.data_end:
                 TaskManager._create_failed(self)
+                # Подделка ответа
+                """course = models.Course._default_manager.get(pk=1)
+                kwargs2 = {
+                    "course_id": course,
+                    "user": 1,
+                    "start_date": TaskManager.date_str(self.data_start),
+                    "end_date": TaskManager.date_str(self.data_end),
+                }
+                #instance = models.Event(kwargs)"""
             return instance
         else:
             # Если таск есть - Плюсуем пользователей в user_list
