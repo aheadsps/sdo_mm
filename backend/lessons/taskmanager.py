@@ -22,8 +22,8 @@ class TaskManager:
         self,
         course: int = None,
         user_list: list = None,
-        data_start: datetime = None,
-        data_end: datetime = None,
+        data_start: str = None,
+        data_end: str = None,
     ):
         self.course = course
         self.data_start = data_start

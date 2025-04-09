@@ -51,14 +51,14 @@ class TestStepUrl(APITestCase):
         """
         Создание задачи для эвента
         """
-        date_time_str = '2038-06-29 08:15:27.243860'
-        date_time_obj = datetime.datetime.strptime(date_time_str, '%Y-%m-%d %H:%M:%S.%f')
+        date_time_str = '2038-06-29 08:15'
+        #date_time_obj = datetime.datetime.strptime(date_time_str, '%Y-%m-%d %H:%M:%S.%f')
 
-        date_end_time_str = '2039-06-29 08:15:27.243860'
-        date_end_time_obj = datetime.datetime.strptime(date_end_time_str, '%Y-%m-%d %H:%M:%S.%f')
+        date_end_time_str = '2039-06-29 08:15'
+        #date_end_time_obj = datetime.datetime.strptime(date_end_time_str, '%Y-%m-%d %H:%M:%S.%f')
         # создается задача
-        TaskManager(1, [1], date_time_obj).create()
-        TaskManager(1, [1], date_time_obj, date_end_time_obj).create()
+        TaskManager(1, [1], date_time_str).create()
+        TaskManager(1, [1], date_time_str, date_end_time_str).create()
 
         # проверка
         rezults = PeriodicTask.objects.all()
@@ -76,18 +76,18 @@ class TestStepUrl(APITestCase):
         Изменение задачи для эвента
         """
 
-        TaskManager(1, [1, 2], date_time_obj).upload()
+        TaskManager(1, [1, 2], date_time_str).upload()
 
-        date_time_str2 = '2038-06-30 09:00:00.000000'
-        date_time_obj2 = datetime.datetime.strptime(date_time_str2, '%Y-%m-%d %H:%M:%S.%f')
+        date_time_str2 = '2038-06-30 09:00'
+        #date_time_obj2 = datetime.datetime.strptime(date_time_str2, '%Y-%m-%d %H:%M:%S.%f')
 
-        TaskManager(1, [1], date_time_obj2).create()
-        TaskManager(1, [2], date_time_obj2).create()
+        TaskManager(1, [1], date_time_str2).create()
+        TaskManager(1, [2], date_time_str2).create()
         """
         Изменение задачи для эвента и шедулера
         """
 
-        TaskManager(1, [2], date_time_obj).upload()
+        TaskManager(1, [2], date_time_str).upload()
 
         # проверка
         rezults_2 = PeriodicTask.objects.all()
@@ -115,9 +115,9 @@ class TestStepUrl(APITestCase):
         """
         Изменение даты финиша
         """
-        date_time_str3 = '2039-06-29 09:00:00.000000'
-        date_end_time_obj3 = datetime.datetime.strptime(date_time_str3, '%Y-%m-%d %H:%M:%S.%f')
-        TaskManager(1, [2], date_time_obj2, date_end_time_obj3).upload()
+        date_time_str3 = '2039-06-29 09:00'
+        #date_end_time_obj3 = datetime.datetime.strptime(date_time_str3, '%Y-%m-%d %H:%M:%S.%f')
+        TaskManager(1, [2], date_time_str2, date_time_str3).upload()
 
 
         rezults_3 = PeriodicTask.objects.get(name='Fail_1_at_2039-06-29 09:00')
@@ -129,9 +129,9 @@ class TestStepUrl(APITestCase):
         """
         Изменение даты финиша и студентов
         """
-        date_time_str3 = '2040-06-29 00:00:00.000000'
-        date_end_time_obj3 = datetime.datetime.strptime(date_time_str3, '%Y-%m-%d %H:%M:%S.%f')
-        TaskManager(1, [1], date_time_obj2, date_end_time_obj3).upload()
+        date_time_str3 = '2040-06-29 00:00'
+        #date_end_time_obj3 = datetime.datetime.strptime(date_time_str3, '%Y-%m-%d %H:%M:%S.%f')
+        TaskManager(1, [1], date_time_str2, date_time_str3).upload()
 
         rezults_3 = PeriodicTask.objects.get(name='Fail_1_at_2040-06-29 00:00')
         rezults_json_3 = json.dumps({"course_id": 1,
@@ -151,13 +151,13 @@ class TestStepUrl(APITestCase):
         А если нет такой задачи? 
         """
         with self.assertRaises(ObjectDoesNotExist):
-            TaskManager(2, [2], date_time_obj).upload()
+            TaskManager(2, [2], date_time_str).upload()
 
 
         """
         Бессрочный курс
         """
-        TaskManager(1, [1, 2], date_time_obj2).upload()
+        TaskManager(1, [1, 2], date_time_str2).upload()
         rezults_5 = PeriodicTask.objects.get(name='Event_1_at_2038-06-30 09:00')
         rezults_json_5 = json.dumps({"course_id": 1,
                                      "users": [1, 2],
@@ -177,7 +177,7 @@ class TestStepUrl(APITestCase):
         """
         Удаляем пользователя [1] из списка
         """
-        TaskManager(1, [1, 2], date_time_obj2, date_end_time_obj3).upload()
+        TaskManager(1, [1, 2], date_time_str2, date_time_str3).upload()
         rezults_7 = PeriodicTask.objects.get(name='Event_1_at_2038-06-30 09:00')
         rezults_json_7 = json.dumps({"course_id": 1,
                                      "users": [1, 2],
@@ -186,7 +186,7 @@ class TestStepUrl(APITestCase):
                                      })
         self.assertEqual(rezults_7.kwargs, rezults_json_7)
 
-        TaskManager(1, [1], date_time_obj2, date_end_time_obj3).delete()
+        TaskManager(1, [1], date_time_str2, date_time_str3).delete()
         rezults_8 = PeriodicTask.objects.get(name='Event_1_at_2038-06-30 09:00')
         rezults_json_8 = json.dumps({"course_id": 1,
                                      "users": [2],
