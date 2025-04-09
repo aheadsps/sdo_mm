@@ -1,5 +1,4 @@
-import { Typography } from '@shared/components'
-import { Button } from '@shared/components'
+import { Typography, Button } from '@shared/components'
 import { ReactNode } from 'react'
 
 import s from './course-material-item.module.scss'

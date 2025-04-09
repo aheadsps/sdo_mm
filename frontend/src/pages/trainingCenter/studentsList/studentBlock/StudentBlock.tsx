@@ -1,7 +1,6 @@
+import { BasketIcon, WebinarAndSupportIcon } from '@assets/icons'
 import { Button, Input, ProgressBar, Typography } from '@shared/components'
 import clsx from 'clsx'
-
-import { BasketIcon, WebinarAndSupportIcon } from '@assets/icons'
 
 import { studentType } from '../data'
 

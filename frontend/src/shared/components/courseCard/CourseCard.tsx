@@ -1,6 +1,5 @@
-import { Link } from 'react-router-dom'
-
 import Basket from '@assets/icons/BasketIcon'
+import { Link } from 'react-router-dom'
 
 import { Button } from '../button'
 

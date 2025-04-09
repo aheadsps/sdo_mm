@@ -1,32 +1,33 @@
 import {
   MainIcon,
-  LibraryIcon,
   StudyIcon,
+  LibraryIcon,
   NewsIcon,
   WebinarAndSupportIcon,
-  SettingsEyeIcon,
   WebinarIcon,
+  SettingsEyeIcon,
   SupportIcon,
 } from '@assets/icons'
+import { routes } from '@routes/routes'
 
 export const sidebarItemsStudent = [
   {
     id: 'main',
     icon: <MainIcon width={24} height={24} />,
     text: 'Главное',
-    path: '/main',
+    path: routes.main,
   },
   {
     id: 'my-learning',
     icon: <StudyIcon width={24} height={24} />,
     text: 'Мое обучение',
-    path: '/learning',
+    path: routes.learning,
   },
   {
     id: 'knowledge-library',
     icon: <LibraryIcon width={24} height={24} />,
     text: 'Библиотека знаний',
-    path: '/library',
+    path: routes.library,
   },
   {
     id: 'news',
@@ -41,7 +42,7 @@ export const sidebarItemsStudent = [
     path: '/',
   },
   {
-    id: 'support',
+    id: 'consultations',
     icon: <WebinarAndSupportIcon width={24} height={24} />,
     text: 'Поддержка',
     path: '/',

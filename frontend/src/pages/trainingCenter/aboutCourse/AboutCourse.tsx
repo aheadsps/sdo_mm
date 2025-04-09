@@ -1,8 +1,7 @@
+import { CalendarIcon, EditIcon } from '@assets/icons'
 import { Button, InputWithIcon, Modal, Select, Typography } from '@shared/components'
 import { AddMaterials } from '@shared/components/modal/addMaterials'
 import { useToggle } from '@shared/hooks'
-
-import { CalendarIcon, EditIcon } from '@assets/icons'
 
 import s from './aboutCourse.module.scss'
 

@@ -1,0 +1,40 @@
+.courseContent {
+  position: relative;
+  height: 100%;
+}
+
+.titleBlock {
+  width: auto;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 40px;
+
+  @media screen and (max-width: 1349px) {
+    flex-direction: column;
+    gap: 20px;
+  }
+}
+
+.title {
+  color: var(--color-text-primary);
+}
+
+.buttonsBlock {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+
+  @media screen and (max-width: 1349px) {
+    gap: 24px;
+  }
+
+  @media screen and (max-width: 767px) {
+    gap: 16px;
+  }
+}
+
+.button {
+  @media screen and (max-width: 1349px) {
+    width: 100%;
+  }
+}

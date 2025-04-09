@@ -1,3 +1,4 @@
+//todo: rewrite the logic
 export const getBackgroundColor = (days?: number) => {
   if (days === undefined) return 'var(--color-accent-info)'
   if (days < 3) return 'var(--color-accent-negative)'

@@ -1,11 +1,10 @@
 import { Modal } from '@shared/components'
 import { AddComment } from '@shared/components/modal/addComment'
+import { AddItemIcon } from '@assets/icons'
+import { StudentBlock } from '@pages/trainingCenter/studentsList/studentBlock'
 import { Search } from '@shared/components/search'
 import { useToggle } from '@shared/hooks'
 import { useState } from 'react'
-
-import { AddItemIcon } from '@assets/icons'
-import { StudentBlock } from '@pages/trainingCenter/studentsList/studentBlock'
 
 import { BlockHeader } from '../course/program/block-header/BlockHeader'
 

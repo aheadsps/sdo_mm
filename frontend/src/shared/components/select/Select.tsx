@@ -1,8 +1,7 @@
+import { ArrowDownIcon, ArrowUpIcon } from '@assets/icons'
 import { useToggle } from '@shared/hooks/useToggle'
 import clsx from 'clsx'
 import { useState } from 'react'
-
-import { ArrowDownIcon, ArrowUpIcon } from '@assets/icons'
 
 import { Typography } from '../typography'
 
