@@ -3,6 +3,7 @@ from rest_framework import permissions, status, mixins, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
+from rest_framework.renderers import MultiPartRenderer, JSONRenderer
 
 from lessons import models, serializers
 from lessons import viewsets as own_viewsets
@@ -15,6 +16,7 @@ from lessons.permissions import (
     CanReadBlock,
     CanReadUserStory,
     CanReadLessonStory,
+    CanReadSCORM,
     )
 
 
@@ -119,6 +121,7 @@ class CourseViewSet(mixins.ListModelMixin,
     queryset = models.Course._default_manager.get_queryset()
     lookup_field = "pk"
     lookup_url_kwarg = "course_id"
+    renderer_classes = [JSONRenderer, MultiPartRenderer]
 
     def get_permissions(self):
         logger.debug(f"action is {self.action}")
@@ -181,6 +184,7 @@ class LessonViewSet(viewsets.ModelViewSet):
         if self.action == 'retrieve':
             return serializers.LessonViewSerializer
         elif self.action in ['create', 'update', 'partial_update']:
+            logger.debug(self.request.data)
             return serializers.LessonCreateSerializer
         return serializers.LessonSerializer
 
@@ -191,6 +195,16 @@ class LessonViewSet(viewsets.ModelViewSet):
     def list(self, request, *args, **kwargs):
         self.check_object_permissions(request=request, obj=None)
         return super().list(request, *args, **kwargs)
+
+
+class SCROMViewSet(mixins.RetrieveModelMixin,
+                   viewsets.GenericViewSet):
+    queryset = models.SCORM._default_manager.get_queryset()
+    serializer_class = serializers.SCORMSerializer
+    lookup_field = 'id'
+    lookup_url_kwarg = 'scorm_id'
+    permission_classes = [permissions.IsAuthenticated &
+                          (CanReadSCORM | IsAdminOrIsStaff)]
 
 
 class StepViewSet(ModelViewSet):

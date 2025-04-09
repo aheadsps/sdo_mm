@@ -18,6 +18,8 @@ dist/
 downloads/
 eggs/
 .eggs/
+*.zip
+test_scorm.py
 lib/
 lib64/
 parts/
@@ -65,6 +67,7 @@ cover/
 local_settings.py
 db.sqlite3
 db.sqlite3-journal
+xblock
 
 # Flask stuff:
 instance/
