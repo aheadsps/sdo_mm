@@ -1,7 +1,6 @@
 import { ArrowDownIcon, ArrowUpIcon } from '@assets/icons'
-import { useToggle } from '@shared/hooks/useToggle'
 import clsx from 'clsx'
-import { ComponentPropsWithoutRef, ReactNode } from 'react'
+import { ComponentPropsWithoutRef, Fragment, ReactNode } from 'react'
 
 import { LessonItemTitle } from '../../../features/course/lesson-item-title/LessonItemTitle'
 
@@ -12,6 +11,8 @@ type Props = {
   blocks?: string
   icons?: ReactNode[]
   wrapperClassName?: string
+  isOpen: boolean
+  toggle: () => void
 } & ComponentPropsWithoutRef<'div'>
 
 export const DropdownCard = ({
@@ -21,22 +22,20 @@ export const DropdownCard = ({
   blocks,
   icons,
   wrapperClassName,
+  isOpen,
+  toggle,
 }: Props) => {
-  const { isOpen: isOpenDropdown, toggle: toggleDropdown } = useToggle()
-
   return (
     <div className={clsx(s.dropdownCard, wrapperClassName)}>
-      <div className={s.dropdownHeader} onClick={toggleDropdown}>
-        <LessonItemTitle onClick={toggleDropdown} title={title} blocks={blocks}>
+      <div className={s.dropdownHeader} onClick={toggle}>
+        <LessonItemTitle onClick={toggle} title={title} blocks={blocks}>
           <div className={s.icons}>
-            {icons}
-            {isOpenDropdown ? <ArrowUpIcon /> : <ArrowDownIcon />}
+            {icons && icons.map((icon, index) => <Fragment key={index}>{icon}</Fragment>)}
+            {isOpen ? <ArrowUpIcon /> : <ArrowDownIcon />}
           </div>
         </LessonItemTitle>
       </div>
-      {isOpenDropdown && (
-        <div className={clsx(s.dropdownContent, className as string)}>{children}</div>
-      )}
+      {isOpen && <div className={clsx(s.dropdownContent, className as string)}>{children}</div>}
     </div>
   )
 }

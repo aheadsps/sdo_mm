@@ -23,5 +23,13 @@
 .dropdownContent {
   border: none;
   display: flex;
+  flex-direction: column;
   justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+
+.newTextFields {
+  display: flex;
+  flex-direction: column;
 }
