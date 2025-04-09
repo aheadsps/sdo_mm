@@ -3,31 +3,6 @@
   height: 100%;
 }
 
-.backToPage {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  margin-bottom: 30px;
-  text-decoration: none;
-  transition: var(--transition-effect);
-
-  &:visited {
-    color: var(--color-text-secondary);
-  }
-
-  &:hover {
-    transform: var(--transform-effect);
-  }
-}
-
-.backText {
-  color: var(--color-text-secondary);
-}
-
-.icon {
-  color: var(--color-additional-red800);
-}
-
 .titleBlock {
   width: auto;
   display: flex;

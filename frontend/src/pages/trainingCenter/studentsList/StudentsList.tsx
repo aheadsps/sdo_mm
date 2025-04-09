@@ -1,8 +1,7 @@
-import { Search } from '@shared/components/search'
-import { useState } from 'react'
-
 import { AddItemIcon } from '@assets/icons'
 import { StudentBlock } from '@pages/trainingCenter/studentsList/studentBlock'
+import { Search } from '@shared/components/search'
+import { useState } from 'react'
 
 import { BlockHeader } from '../course/program/block-header/BlockHeader'
 

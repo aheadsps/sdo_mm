@@ -1,9 +1,9 @@
-import { Typography } from '@shared/components'
+import { ArrowRightIcon } from '@assets/icons'
 import { getBackgroundColor } from '@shared/utils'
 import clsx from 'clsx'
 import { ComponentPropsWithRef, ReactNode } from 'react'
 
-import ArrowRightIcon from '@assets/icons/ArrowRightIcon'
+import { Typography } from '../typography'
 
 import s from './task.module.scss'
 

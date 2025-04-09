@@ -1,9 +1,8 @@
+import { CalendarIcon } from '@assets/icons'
 import { InputWithIcon, Select, Search } from '@shared/components'
 import { useToggle } from '@shared/hooks'
 import clsx from 'clsx'
 import { useState } from 'react'
-
-import { CalendarIcon } from '@assets/icons'
 
 import s from './trainingCenter.module.scss'
 

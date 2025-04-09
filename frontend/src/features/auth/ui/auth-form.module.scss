@@ -10,6 +10,7 @@
 
   &__container {
     position: absolute;
+    width: 300px;
     left: 200px;
     top: 153px;
     background-color: var(--color-bg-main);
@@ -43,37 +44,22 @@
   }
 
   &__inputs {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
     margin-bottom: 12px;
-  }
-
-  &__input {
-    font-size: 16px;
-    position: relative;
-
-    &:first-child {
-      margin-bottom: 24px;
-    }
-
-    @media (max-width: 768px) {
-      font-size: 14px;
-    }
-  }
-
-  &__inputError {
-    color: var(--color-accent-red500);
-    border-bottom: 2px solid var(--color-accent-red500);
   }
 
   &__passwordWrapper {
     position: relative;
-    width: 300px;
   }
 
   &__links {
     display: flex;
     justify-content: space-between;
     padding: 0 12px;
-    margin-bottom: 48px;
+    margin-bottom: 24px;
+    margin-top: 24px;
   }
 
   &__link {
@@ -94,21 +80,10 @@
     width: 100%;
   }
 
-  &__error {
-    color: var(--color-accent-red500);
-    font-family: 'Moscow Sans', sans-serif;
-    font-weight: 300;
-    font-size: 14px;
-    line-height: 130%;
-    letter-spacing: 0.25px;
-    padding: 0 12px;
-    text-align: center;
-  }
-
   &__eyeIconWrapper {
     position: absolute;
     top: 40%;
-    right: 12px;
+    right: 0;
     transform: translateY(-50%);
     cursor: pointer;
   }
@@ -116,4 +91,10 @@
 
 .auth__input::placeholder {
   font-family: 'Moscow Sans', sans-serif;
+}
+
+.error {
+  color: var(--color-accent-red500);
+  margin-top: 15px;
+  margin-bottom: 15px;
 }

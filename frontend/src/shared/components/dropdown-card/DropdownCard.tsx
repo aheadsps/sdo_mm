@@ -1,10 +1,9 @@
+import { ArrowDownIcon, ArrowUpIcon } from '@assets/icons'
 import { useToggle } from '@shared/hooks/useToggle'
 import clsx from 'clsx'
 import { ComponentPropsWithoutRef } from 'react'
 
-import { ArrowDownIcon, ArrowUpIcon } from '@assets/icons'
-
-import { LessonItemTitle } from '../lesson-item-title/LessonItemTitle'
+import { LessonItemTitle } from '../../../features/course/lesson-item-title/LessonItemTitle'
 
 import s from './dropdown-card.module.scss'
 

@@ -1,5 +1,4 @@
-import { DropdownCard } from '@features/course'
-import { Button } from '@shared/components'
+import { DropdownCard, Button } from '@shared/components'
 import { useState } from 'react'
 
 import { SelectedStep } from '../LessonComponent'

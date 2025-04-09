@@ -1,4 +1,4 @@
-import { Typography } from '@shared/components'
+import { Typography } from '../typography'
 
 import s from './calendar.module.scss'
 
