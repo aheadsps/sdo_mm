@@ -1,7 +1,6 @@
+import { CloseIcon } from '@assets/icons'
 import { ReactNode } from 'react'
 import ReactDOM from 'react-dom'
-
-import { CloseIcon } from '@assets/icons'
 
 import { Typography, Variant } from '../typography'
 
