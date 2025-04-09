@@ -52,7 +52,13 @@ const MyLearningComp: React.FC = () => {
   return (
     <>
       <AiComponent isOpen={isAIOpen} close={closeAI} />
-      {isTooltipeOpen && <Tooltipe close={closeTooltipe} />}
+      {isTooltipeOpen && (
+        <Tooltipe
+          time="12 секунд назад"
+          txt="Курс добавлен в избранное! Теперь ты легко найдёшь его в своём профиле."
+          close={closeTooltipe}
+        />
+      )}
       <div className={s.container}>
         <div className={s.container__headBox}>
           <TabsButtons tabs={buttons} activeTab={mode} setActiveTab={setMode} />

@@ -1,11 +1,19 @@
 .wrapper {
   width: 100%;
+  height: fit-content;
   display: flex;
   flex-direction: column;
   gap: 20px;
+  position: relative;
+}
+.span {
+  top: 0;
+  left: 0;
+  z-index: 2000;
 }
 
 .container {
+  position: relative;
   width: 100%;
   display: flex;
   gap: 30px;
