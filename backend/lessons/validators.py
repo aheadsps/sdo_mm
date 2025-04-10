@@ -43,8 +43,8 @@ class TimeValidator:
 
     def _check_up_time(
         self,
-        start_date: datetime.datetime,
-        end_date: datetime.datetime,
+        start_date: str,
+        end_date: str,
     ) -> None:
         """
         Проверка корректности временых рамок
@@ -58,12 +58,12 @@ class TimeValidator:
         """
 
         time_now = timezone.now()
-
-        start_date = datetime.datetime.strptime(start_date, "%Y-%m-%d %H:%M")
-        start_date = timezone.make_aware(start_date)
-
-        end_date = datetime.datetime.strptime(end_date, "%Y-%m-%d %H:%M")
-        end_date = timezone.make_aware(end_date)
+        if start_date:
+            start_date = datetime.datetime.strptime(start_date, "%Y-%m-%d %H:%M")
+            start_date = timezone.make_aware(start_date)
+        if end_date:
+            end_date = datetime.datetime.strptime(end_date, "%Y-%m-%d %H:%M")
+            end_date = timezone.make_aware(end_date)
 
         logger.debug(f'dates in validator \nstart_date:{start_date} \nend_date: {end_date} \ntime_now: {time_now}')
         if start_date and (time_now > start_date):

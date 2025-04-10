@@ -1,4 +1,5 @@
 import datetime
+import json
 
 from rest_framework import status
 from rest_framework.test import APITestCase
@@ -85,18 +86,12 @@ class TestEndpoints(APITestCase):
         """
         url = "/api/v1/events"
         data = dict(
-            user=self.user.pk,
+            users=str(self.user.pk),
             course=self.course.pk,
             favorite=True,
-            start_date=datetime.datetime(
-                year=2023,
-                month=1,
-                day=1,
-                hour=23,
-                minute=1,
-                second=1,
-            ),
+            start_date="2023-01-01 23:01",
         )
+        #data = json.dumps(data)
         response = self.client.post(
             path=url,
             data=data,
@@ -110,18 +105,12 @@ class TestEndpoints(APITestCase):
         """
         url = "/api/v1/events"
         data = dict(
-            user=self.user.pk,
+            users=str(self.user.pk),
             course=self.course.pk,
             favorite=True,
-            end_date=datetime.datetime(
-                year=2023,
-                month=1,
-                day=1,
-                hour=23,
-                minute=1,
-                second=1,
-            ),
+            end_date="2023-01-01 23:01",
         )
+        #data = json.dumps(data)
         response = self.client.post(
             path=url,
             data=data,
@@ -135,26 +124,14 @@ class TestEndpoints(APITestCase):
         """
         url = "/api/v1/events"
         data = dict(
-            user=self.user.pk,
+            users=str(self.user.pk),
             course=self.course.pk,
             favorite=True,
-            start_date=datetime.datetime(
-                year=2026,
-                month=1,
-                day=1,
-                hour=23,
-                minute=1,
-                second=1,
-            ),
-            end_date=datetime.datetime(
-                year=2025,
-                month=1,
-                day=1,
-                hour=23,
-                minute=1,
-                second=1,
-            ),
+            start_date="2026-01-01 23:01",
+            end_date="2025-01-01 23:01",
+
         )
+        #data = json.dumps(data)
         response = self.client.post(
             path=url,
             data=data,
@@ -168,26 +145,13 @@ class TestEndpoints(APITestCase):
         """
         url = "/api/v1/events"
         data = dict(
-            user=self.user.pk,
+            users=str(self.user.pk),
             course=self.course.pk,
             favorite=True,
-            start_date=datetime.datetime(
-                year=2026,
-                month=1,
-                day=1,
-                hour=23,
-                minute=1,
-                second=1,
-            ),
-            end_date=datetime.datetime(
-                year=2027,
-                month=1,
-                day=1,
-                hour=23,
-                minute=1,
-                second=1,
-            ),
+            start_date="2026-01-01 23:01",
+            end_date="2027-01-01 23:01",
         )
+        #data = json.dumps(data)
         response = self.client.post(
             path=url,
             data=data,
@@ -197,12 +161,11 @@ class TestEndpoints(APITestCase):
         self.assertEqual(
             response.json(),
             {
-                "user": self.user.pk,
-                "course": self.course.pk,
-                "start_date": "2026-01-01T23:01:01+03:00",
-                "end_date": "2027-01-01T23:01:01+03:00",
+                "users": [str(self.user.pk)],
                 "favorite": True,
-                "status": "expected",
+                "start_date": "2026-01-01 23:01",
+                "end_date": "2027-01-01 23:01",
+                "course": self.course.pk,
             },
         )
 

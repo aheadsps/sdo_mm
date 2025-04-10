@@ -61,7 +61,7 @@ class EventViewSet(own_viewsets.GetCreateUpdateDeleteViewSet):
         return Response(serializer.validated_data, status=status.HTTP_201_CREATED, headers=headers)
 
     def update(self, request, *args, **kwargs):
-        self.serializer_class = serializers.EventSerializerCreate
+        self.serializer_class = serializers.EventSerializer
         return super().update(request, *args, **kwargs)
 
     @action(detail=True, url_path="toggle-favorite")
