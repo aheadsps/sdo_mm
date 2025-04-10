@@ -22,14 +22,18 @@ export const CMenu: React.FC<Props> = ({ setCurrentBlock }) => {
           Добавить текст
         </AddCard>
         <AddCard onClick={() => setCurrentBlock(
-       <ConstructorCard>
-       <CardActionsBar />
-       <ConstructorContent type="video" />
-     </ConstructorCard>
-          )}>
+          <ConstructorCard>
+            <CardActionsBar description="Описание (не обязательно)" />
+            <ConstructorContent type="video" />
+          </ConstructorCard>
+        )}>
           Добавить видео
         </AddCard>
-        <AddCard onClick={() => setCurrentBlock(<ConstructorContent type="image" />)}>
+        <AddCard onClick={() => setCurrentBlock(
+          <ConstructorCard>
+            <CardActionsBar description="Описание (не обязательно)" />
+            <ConstructorContent type="image" />
+          </ConstructorCard>)}>
           Добавить изображение
         </AddCard>
       </div>

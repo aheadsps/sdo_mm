@@ -21,7 +21,7 @@ export const ConstructorContent: React.FC<Props> = ({
 
     return (
         <div className={s.wrapper}>
- {/*           <Typography variant="header_4">{title}</Typography>
+            {/*           <Typography variant="header_4">{title}</Typography>
             <Typography variant="body_1">{description}</Typography> */ }
 
             <div className={s.block}>
