@@ -9,8 +9,17 @@ import {
   SupportIcon,
 } from '@assets/icons'
 import { routes } from '@routes/routes'
+import { ReactNode } from 'react'
 
-export const sidebarItemsStudent = [
+type SidebarItem = {
+  id: string
+  icon: ReactNode
+  text: string
+  path: string
+  disabled?: boolean
+}
+
+export const sidebarItemsStudent: SidebarItem[] = [
   {
     id: 'main',
     icon: <MainIcon width={24} height={24} />,
@@ -26,36 +35,41 @@ export const sidebarItemsStudent = [
   {
     id: 'knowledge-library',
     icon: <LibraryIcon width={24} height={24} />,
-    text: 'Библиотека знаний',
+    text: 'Библиотека',
     path: routes.tbd,
+    disabled: true,
   },
   {
     id: 'news',
     icon: <NewsIcon width={24} height={24} />,
     text: 'Новости',
     path: routes.tbd,
+    disabled: true,
   },
   {
     id: 'webinars',
     icon: <WebinarIcon width={24} height={24} />,
     text: 'Вебинары',
     path: routes.tbd,
+    disabled: true,
   },
   {
     id: 'consultations',
     icon: <WebinarAndSupportIcon width={24} height={24} />,
     text: 'Поддержка',
     path: routes.tbd,
+    disabled: true,
   },
   {
     id: 'settings',
     icon: <SettingsEyeIcon width={24} height={24} />,
     text: 'Настройки',
     path: routes.tbd,
+    disabled: true,
   },
 ]
 
-export const sidebarItemsMethodologist = [
+export const sidebarItemsMethodologist: SidebarItem[] = [
   {
     id: 'main',
     icon: <MainIcon width={24} height={24} />,
@@ -67,35 +81,41 @@ export const sidebarItemsMethodologist = [
     icon: <StudyIcon width={24} height={24} />,
     text: 'Центр обучения',
     path: routes.trainingCenter,
+    disabled: true,
   },
   {
     id: 'analytics',
     icon: <LibraryIcon width={24} height={24} />,
     text: 'Аналитика',
     path: routes.tbd,
+    disabled: true,
   },
   {
     id: 'webinars',
     icon: <WebinarIcon width={24} height={24} />,
     text: 'Вебинары',
     path: routes.tbd,
+    disabled: true,
   },
   {
     id: 'consultations',
     icon: <WebinarAndSupportIcon width={24} height={24} />,
     text: 'Консультации',
     path: routes.tbd,
+    disabled: true,
   },
   {
     id: 'settings',
     icon: <SettingsEyeIcon width={24} height={24} />,
     text: 'Настройки',
     path: routes.tbd,
+    disabled: true,
   },
   {
     id: 'support',
     icon: <SupportIcon width={24} height={24} />,
     text: 'Поддержка',
     path: routes.tbd,
+    disabled: true,
   },
 ]

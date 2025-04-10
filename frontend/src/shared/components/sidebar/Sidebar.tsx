@@ -24,7 +24,7 @@ export const Sidebar = ({ className }: Props) => {
         <div className={s.container}>
           <div>
             {data.map((item) => (
-              <SidebarItem key={item.id} text={item.text} path={item.path}>
+              <SidebarItem key={item.id} text={item.text} path={item.path} disabled={item.disabled}>
                 {item.icon}
               </SidebarItem>
             ))}
