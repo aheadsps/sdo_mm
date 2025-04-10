@@ -311,6 +311,29 @@ class LessonViewSerializer(serializers.ModelSerializer):
         )
 
 
+class SCORMSerializer(serializers.ModelSerializer):
+    """
+    Сериализатор SCORM пакета
+    """
+
+    index = serializers.SerializerMethodField(read_only=True)
+
+    class Meta:
+        model = models.SCORM
+        fields = ('id', 'name', 'version', 'index')
+
+    def get_index(self, obj):
+        files = obj.files.get_queryset()
+        logger.debug(f'get files {files}')
+        if files.exists():
+            for file in list(files):
+                logger.debug(f'file name is {file.file.name.split("/")[-1]}')
+                if file.file.name.split('/')[-1] == settings.SCORM_INDEX_NAME:
+                    return file.file.url
+        else:
+            return
+
+
 class ZIPFileField(serializers.FileField):
 
     def to_internal_value(self, data):
@@ -355,13 +378,13 @@ class CreateCourseSerializer(serializers.ModelSerializer):
     def create(self, validated_data: dict):
         logger.debug(validated_data)
         zip_scorm = validated_data.pop('scorm', None)
+        course = super().create(validated_data)
         if zip_scorm:
             try:
-                scorm_packpage = SCORMLoader(zip_archive=zip_scorm).save()
+                course = SCORMLoader(zip_archive=zip_scorm).save(self.Meta.model, validated_data)
             except IntegrityError as er:
                 raise ValidationError(dict(scorm=f'This SCORM packpage {parse_exeption_error(er)}'))
-            validated_data.update(scorm=scorm_packpage)
-        return super().create(validated_data)
+        return course
 
 
 class CourseSerializer(serializers.ModelSerializer):
@@ -369,6 +392,7 @@ class CourseSerializer(serializers.ModelSerializer):
     Сериализатор Оптимизированого вывода
     """
     lessons = LessonSerializer(many=True)
+    scorms = serializers.PrimaryKeyRelatedField(many=True)
 
     class Meta:
         model = models.Course
@@ -381,33 +405,10 @@ class CourseSerializer(serializers.ModelSerializer):
             "update_date",
             "image",
             "profession",
-            "scorm",
+            "scorms",
             "experiences",
             "lessons",
         )
-
-
-class SCORMSerializer(serializers.ModelSerializer):
-    """
-    Сериализатор SCORM пакета
-    """
-
-    index = serializers.SerializerMethodField(read_only=True)
-
-    class Meta:
-        model = models.SCORM
-        fields = ('id', 'name', 'version', 'index')
-
-    def get_index(self, obj):
-        files = obj.files.get_queryset()
-        logger.debug(f'get files {files}')
-        if files.exists():
-            for file in list(files):
-                logger.debug(f'file name is {file.file.name.split("/")[-1]}')
-                if file.file.name.split('/')[-1] == settings.SCORM_INDEX_NAME:
-                    return file.file.url
-        else:
-            return
 
 
 class ViewCourseSerializer(serializers.ModelSerializer):
@@ -418,7 +419,7 @@ class ViewCourseSerializer(serializers.ModelSerializer):
     experiences = user_serializers.WorkExperienceSerializer(many=True)
     profession = user_serializers.ProfessionSerializer()
     lessons = LessonViewSerializer(many=True)
-    scorm = SCORMSerializer()
+    scorms = SCORMSerializer(many=True)
     lesson_story = LessonStorySerializer(many=True)
 
     class Meta:
@@ -433,7 +434,7 @@ class ViewCourseSerializer(serializers.ModelSerializer):
             "image",
             "profession",
             "experiences",
-            "scorm",
+            "scorms",
             "lessons",
             "lesson_story",
         )

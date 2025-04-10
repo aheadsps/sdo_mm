@@ -40,10 +40,17 @@ class SCORMLoader:
         class_adapter(self).parse()
         self.zip_file.close()
 
-    def save(self) -> SCORM:
+    def save(self, instance, data: dict) -> SCORM:
         """
         Распаковка и сохранение zip архива
         """
-        scorm = self.core.save()
+        data = dict(**data)
+        scorm = self.core.save(instance, data)
         self.zip_file.close()
         return scorm
+
+    def delete(self) -> None:
+        """
+        Удаление scorm
+        """
+        self.core.delete()

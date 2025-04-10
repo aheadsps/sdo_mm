@@ -5,7 +5,6 @@ import zipfile
 import xml.etree.ElementTree as ET
 
 from loguru import logger
-from pytils.translit import slugify
 
 from django.core.files.base import ContentFile
 
@@ -139,19 +138,22 @@ class CoreSCORM(BaseCoreSCORM):
         logger.debug(f'text title is {sanitize_text}')
         return sanitize_text
 
-    def _get_structures(self):
+    def _get_structures(self, version: str, instance):
         structure_list = []
         root = self._manifest.getroot()
+        lesson_data = dict(version=version, course=instance)
         for organization in self.organizations:
             structure_list.append(self._process_stucture_data(
                 organization=organization,
                 root=root,
+                data=lesson_data,
             ))
         return structure_list
 
     def _process_stucture_data(self,
                                organization: DT,
                                root: ET.Element,
+                               data: dict | None = None
                                ) -> (list[tuple[str, str],
                                           (list[tuple[str, str]] | None)]):
         sub_titles = list()
@@ -174,6 +176,10 @@ class CoreSCORM(BaseCoreSCORM):
         )
         if not sub_items:
             logger.debug(f'add to structure list item - {title, resource_link}')
+            SCORM._default_manager.create(**data,
+                                          name=title,
+                                          resource=resource_link,
+                                          )
             return [dict(title=title,
                          resourse=resource_link,
                          files=files,
@@ -191,27 +197,38 @@ class CoreSCORM(BaseCoreSCORM):
                          files=files,
                          ), sub_titles]
 
-    def save(self) -> SCORM:
+    def delete(self) -> None:
+        """
+        Удаление курса из системы
+        """
+        # root_path = self._get_root_path(
+        #     zip_infos=self._infos,
+        #     )
+        # title = slugify(self._get_item_title(self.organizations[0]))
+        scorm_packpage = SCORM._default_manager.filter(name=title)
+        if not scorm_packpage.exists():
+            return
+        scorm_packpage.delete()
+
+    def save(self, instance, data: dict) -> SCORM:
         """
         Сохранение курса в систему
         """
         root_path = self._get_root_path(
             zip_infos=self._infos,
         )
-        title = slugify(self._get_item_title(self.organizations[0]))
+        original_title = self._get_item_title(self.organizations[0])
+        course = instance._default_manager.create(name=original_title, **data)
         version = self.get_shema()
-        scorm_lesson = SCORM._default_manager.create(
-            name=title,
-            version=version,
-            )
+        self._get_structures(version=version, instance=course)
         list_files = []
         for zipinfo in self._infos:
             if zipinfo.filename.startswith(root_path):
                 if not is_dir(zipinfo):
                     list_files.append(SCORMFile(
-                        scorm=scorm_lesson,
+                        course=course,
                         file=ContentFile(self._file.read(zipinfo.filename),
                                          zipinfo.filename,),
                         ))
         SCORMFile._default_manager.bulk_create(list_files)
-        return scorm_lesson
+        return course

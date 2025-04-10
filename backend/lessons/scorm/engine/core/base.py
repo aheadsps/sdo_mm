@@ -139,3 +139,6 @@ class BaseCoreSCORM(AbstractCore):
 
     def save(self):
         return super().save()
+
+    def delete(self):
+        return super().delete()
