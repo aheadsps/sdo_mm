@@ -26,3 +26,21 @@
     align-items: center;
     gap: 16px;
 }
+
+.addVariant {
+    margin-top: 31px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding-left: 20px;
+    
+    svg {
+        stroke: var(--color-bg-main);
+    }
+}
+
+.toggles {
+    margin-top: 40px;
+    display: flex;
+    justify-content: space-between;
+}

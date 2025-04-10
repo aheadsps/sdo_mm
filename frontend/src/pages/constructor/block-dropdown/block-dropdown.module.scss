@@ -1,7 +1,7 @@
 .dropdownHeader {
   min-height: 80px;
 
-  p {
+ /*  p {
     position: relative;
     margin-left: 20px;
 
@@ -17,7 +17,7 @@
       letter-spacing: -2px;
       cursor: grab;
     }
-  }
+  } */
 }
 
 .dropdownContent {
@@ -25,11 +25,15 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
   gap: 20px;
 }
 
 .newTextFields {
   display: flex;
   flex-direction: column;
+}
+
+.icon {
+  display: block;
+  margin: 0 auto;
 }

@@ -26,7 +26,7 @@ export const BlockDropdown = ({ newItems, isActiveBlock }: Props) => {
       {newItems.map((item, index) => (
         <Fragment key={`${index}${item.layout}`}>{item.layout}</Fragment>
       ))}
-      <AddItemIcon />
+      <AddItemIcon className={s.icon} />
     </DropdownCard>
   )
 }
