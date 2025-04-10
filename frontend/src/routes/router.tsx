@@ -1,5 +1,4 @@
 import { Lesson } from '@features/lesson/LessonComponent'
-import { LessonTest } from '@features/lesson/test/Tests'
 import { AuthPage } from '@pages/auth'
 import { ConstructorPage } from '@pages/constructor'
 import { CoursePage } from '@pages/course/CoursePage'
@@ -37,29 +36,19 @@ export const router = createBrowserRouter([
     element: <AuthPage />,
   },
   {
-    path: '/',
-    element: <div>Hello App</div>,
-  },
-  {
-    path: '/trainingCenter',
+    path: routes.trainingCenter,
     element: <TrainingCenter />,
   },
   {
-    path: '/trainingCenter/course',
+    path: routes.trainingCenterCourse,
     element: <TrainingCenterCourse />,
   },
   {
-    path: '/lesson',
+    path: routes.lesson,
     element: <Lesson />,
   },
   {
-    path: '/constructor',
+    path: routes.constructor,
     element: <ConstructorPage />,
-  },
-
-  /* routes for testing components */
-  {
-    path: '/tests',
-    element: <LessonTest />,
   },
 ])
