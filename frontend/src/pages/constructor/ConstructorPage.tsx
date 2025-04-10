@@ -14,8 +14,44 @@ export type NewItem = {
   layout: ReactNode
 }
 
+const dropdowns = [
+  {
+    id: 1,
+    title: 'Зачем нужны СИЗ? Психология безопасности',
+  },
+  {
+    id: 2,
+    title: 'Основные виды СИЗ и их роль',
+  },
+  {
+    id: 3,
+    title: 'Как выбрать СИЗ? Комфорт vs безопасность',
+  },
+]
+
 export const ConstructorPage: React.FC = () => {
-  const [newItems, setNewItem] = useState<NewItem[]>([])
+  const [activeBlockId, setActiveBlockId] = useState<number | null>(null)
+
+  const [blocksItems, setBlocksItems] = useState<{ [key: number]: NewItem[] }>({
+    1: [],
+    2: [],
+    3: [],
+  })
+
+  const onBlockActive = (id: number) => {
+    setActiveBlockId((prevId) => (prevId === id ? null : id))
+  }
+
+  const onAddNewItem = (newItem: NewItem) => {
+    if (activeBlockId === null) return
+    setBlocksItems((prevBlocksItems) => {
+      const updatedItems = [...(prevBlocksItems[activeBlockId] || []), newItem]
+      return {
+        ...prevBlocksItems,
+        [activeBlockId]: updatedItems,
+      }
+    })
+  }
 
   return (
     <>
@@ -30,9 +66,17 @@ export const ConstructorPage: React.FC = () => {
             className={s.visible}
           />
           <div className={s.container}>
-            <CMenu setNewItem={setNewItem} />
+            <CMenu setNewItem={onAddNewItem} />
             <main className={s.main}>
-              <BlockDropdown newItems={newItems} isActiveBlock />
+              {dropdowns.map((item) => (
+                <BlockDropdown
+                  key={item.id}
+                  isActiveBlock={activeBlockId === item.id}
+                  title={item.title}
+                  newItems={blocksItems[item.id] || []}
+                  onActive={() => onBlockActive(item.id)}
+                />
+              ))}
             </main>
           </div>
         </div>

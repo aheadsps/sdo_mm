@@ -41,8 +41,6 @@ export const AddTest = () => {
     }
   }, [isOneCorrect])
 
-  console.log(testItems)
-
   return (
     <div className={s.container}>
       <div className={s.textfieldBlock}>

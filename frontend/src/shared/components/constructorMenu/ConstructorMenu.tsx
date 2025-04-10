@@ -1,84 +1,74 @@
 import { NewItem } from '@pages/constructor'
-import { Dispatch, SetStateAction } from 'react'
-
-import { ImageComponent } from '../image'
-import { Input, Textarea } from '../text-field'
-import { Typography } from '../typography'
+import { Input, Textarea } from '@shared/components'
+import { Typography } from '@shared/components'
+import { ImageComponent } from '@shared/components'
 
 import { AddCard } from './addCard/AddCard'
 import { AddTest } from './addTest/AddTest'
 import s from './constructorMenu.module.scss'
-import { addTest } from './data'
 
 type Props = {
-  setNewItem: Dispatch<SetStateAction<NewItem[]>>
+  setNewItem: (newItem: NewItem) => void
 }
+
 export const CMenu = ({ setNewItem }: Props) => {
   const addNewItemText = () => {
-    setNewItem((prev) => [
-      ...prev,
-      {
-        type: 'text',
-        layout: (
-          <div className={s.newTextFields}>
-            <Input placeholder="Enter title" />
-            <Textarea placeholder="Enter description" />
-          </div>
-        ),
-      },
-    ])
+    const newItem: NewItem = {
+      type: 'text',
+      layout: (
+        <div className={s.newTextFields}>
+          <Input placeholder="Enter title" />
+          <Textarea placeholder="Enter description" />
+        </div>
+      ),
+    }
+    setNewItem(newItem)
   }
 
   const addNewItemVideo = () => {
-    setNewItem((prev) => [
-      ...prev,
-      {
-        type: 'video',
-        layout: <div className={s.newTextFields}>Hello Video</div>,
-      },
-    ])
+    const newItem: NewItem = {
+      type: 'video',
+      layout: <div className={s.newTextFields}>Hello Video</div>,
+    }
+    setNewItem(newItem)
   }
 
   const addNewItemImage = () => {
-    setNewItem((prev) => [
-      ...prev,
-      {
-        type: 'image',
-        layout: <ImageComponent src="/img/car.png" />,
-      },
-    ])
+    const newItem: NewItem = {
+      type: 'image',
+      layout: <ImageComponent src="/img/car.png" />,
+    }
+    setNewItem(newItem)
   }
 
   const addNewItemITest = () => {
-    setNewItem((prev) => [
-      ...prev,
-      {
-        type: 'test',
-        layout: <AddTest />,
-      },
-    ])
+    const newItem: NewItem = {
+      type: 'test',
+      layout: <AddTest />,
+    }
+    setNewItem(newItem)
   }
 
   return (
     <aside className={s.container}>
       <div className={s.block}>
-        <Typography variant="caption" children={'Теоретический материал'} className={s.title} />
+        <Typography variant="caption" className={s.title}>
+          Теоретический материал
+        </Typography>
         <AddCard children={'Добавить текст'} onClick={addNewItemText} />
         <AddCard children={'Добавить видео'} onClick={addNewItemVideo} />
         <AddCard children={'Добавить изображение'} onClick={addNewItemImage} />
       </div>
       <div className={s.block}>
-        <Typography
-          variant="caption"
-          children={'Интерактивные задания (добавить тест)'}
-          className={s.title}
-        />
-        {addTest.map((test) => {
-          return <AddCard children={test.title} key={test.id} onClick={addNewItemITest} />
-        })}
+        <Typography variant="caption" className={s.title}>
+          Интерактивные задания (добавить тест)
+        </Typography>
+        <AddCard children={'Добавить тест'} onClick={addNewItemITest} />
       </div>
       <div className={s.block}>
-        <Typography variant="caption" children={'Структура курса'} className={s.title} />
+        <Typography variant="caption" className={s.title}>
+          Структура курса
+        </Typography>
         <AddCard children={'Добавить модуль'} />
       </div>
     </aside>

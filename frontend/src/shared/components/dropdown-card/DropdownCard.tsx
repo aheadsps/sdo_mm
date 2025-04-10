@@ -27,11 +27,11 @@ export const DropdownCard = ({
 }: Props) => {
   return (
     <div className={clsx(s.dropdownCard, wrapperClassName)}>
-      <div className={s.dropdownHeader} onClick={toggle}>
+      <div className={s.dropdownHeader}>
         <LessonItemTitle onClick={toggle} title={title} blocks={blocks}>
           <div className={s.icons}>
             {icons && icons.map((icon, index) => <Fragment key={index}>{icon}</Fragment>)}
-            {isOpen ? <ArrowUpIcon /> : <ArrowDownIcon />}
+            {isOpen ? <ArrowUpIcon onClick={toggle} /> : <ArrowDownIcon onClick={toggle} />}
           </div>
         </LessonItemTitle>
       </div>
