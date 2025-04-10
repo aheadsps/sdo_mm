@@ -11,9 +11,10 @@ type Props = {
   isActiveBlock: boolean
   title?: string
   onActive: () => void
+  deleteBlock: () => void
 }
 
-export const BlockDropdown = ({ newItems, isActiveBlock, title, onActive }: Props) => {
+export const BlockDropdown = ({ newItems, isActiveBlock, title, onActive, deleteBlock }: Props) => {
   const toggleDropdown = () => {
     onActive()
   }
@@ -21,7 +22,7 @@ export const BlockDropdown = ({ newItems, isActiveBlock, title, onActive }: Prop
   return (
     <DropdownCard
       title={title || ''}
-      icons={[<EditIcon height={'12px'} width={'12px'} />, <BasketIcon />]}
+      icons={[<EditIcon height={'12px'} width={'12px'} />, <BasketIcon onClick={deleteBlock} />]}
       wrapperClassName={s.dropdownHeader}
       className={s.dropdownContent}
       isOpen={isActiveBlock}

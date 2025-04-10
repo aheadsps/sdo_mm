@@ -31,6 +31,7 @@ const dropdowns = [
 
 export const ConstructorPage: React.FC = () => {
   const [activeBlockId, setActiveBlockId] = useState<number | null>(null)
+  const [blocks, setBlocks] = useState(dropdowns)
 
   const [blocksItems, setBlocksItems] = useState<{ [key: number]: NewItem[] }>({
     1: [],
@@ -53,6 +54,11 @@ export const ConstructorPage: React.FC = () => {
     })
   }
 
+  const deleteBlock = (blockId: number) => {
+    const filteredBlocks = blocks.filter((block) => block.id !== blockId)
+    setBlocks(filteredBlocks)
+  }
+
   return (
     <>
       <Header />
@@ -68,13 +74,14 @@ export const ConstructorPage: React.FC = () => {
           <div className={s.container}>
             <CMenu setNewItem={onAddNewItem} />
             <main className={s.main}>
-              {dropdowns.map((item) => (
+              {blocks.map((item) => (
                 <BlockDropdown
                   key={item.id}
                   isActiveBlock={activeBlockId === item.id}
                   title={item.title}
                   newItems={blocksItems[item.id] || []}
                   onActive={() => onBlockActive(item.id)}
+                  deleteBlock={() => deleteBlock(item.id)}
                 />
               ))}
             </main>
