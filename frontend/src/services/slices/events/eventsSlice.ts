@@ -1,8 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
+import { Event } from '@services/api'
 import { getDaysLeft } from '@shared/utils'
-
-import { Event } from './events.types'
 
 type InitialState = {
   currentEvents: Event[]

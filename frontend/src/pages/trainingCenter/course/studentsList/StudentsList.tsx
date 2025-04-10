@@ -1,14 +1,14 @@
 import { AddItemIcon } from '@assets/icons'
-import { StudentBlock } from '@pages/trainingCenter/studentsList/studentBlock'
 import { Modal } from '@shared/components'
 import { AddComment } from '@shared/components/modal/addComment'
 import { Search } from '@shared/components/search'
 import { useToggle } from '@shared/hooks'
 import { useState } from 'react'
 
-import { BlockHeader } from '../course/program/block-header/BlockHeader'
+import { BlockHeader } from '../program'
 
 import { columns, studentsData } from './data'
+import { StudentBlock } from './studentBlock'
 import s from './studentsList.module.scss'
 
 export const StudentsList = () => {
