@@ -115,5 +115,3 @@ def events_failed(course_id: int, users: list[int]) -> None:
         event.status = 'failed'
         update_events.append(event)
     events.bulk_update(update_events, ('status',))
-
-

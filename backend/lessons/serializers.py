@@ -389,16 +389,15 @@ class EventSerializerCreate(serializers.ModelSerializer):
     status = serializers.CharField(read_only=True)
 
     def to_internal_value(self, data):
-        """if not data['users']:
+        if not data.get('users'):
             raise exceptions.UnprocessableEntityError(
                 dict(serial="Нет 'users'")
-            )"""
-        """if type(data['users']) is not str:
+            )
+        if type(data['users']) is not str:
             raise exceptions.UnprocessableEntityError(
                 dict(serial="'users' не str")
-            )"""
+            )
         #data = json.load(data)
-        print(data, "-********************************",type(data))
         data['users'] = (data['users'].split(',')
                          if data['users']
                          else [])

@@ -42,9 +42,9 @@ class TimeValidator:
         self.error_detail = dict()
 
     def _check_up_time(
-        self,
-        start_date: str,
-        end_date: str,
+            self,
+            start_date: str,
+            end_date: str,
     ) -> None:
         """
         Проверка корректности временых рамок
@@ -105,6 +105,7 @@ class BadDataEventValidator:
     Валидатор на проверку наличия полей course и users
     """
     requires_context = True
+
     def __init__(self, course: str, users: str) -> None:
         self.course = course
         self.users = users
@@ -140,6 +141,5 @@ class BadDataEventValidator:
                 user = int(user)
             except:
                 raise exceptions.UnprocessableEntityError(
-                    dict(serial="Не число, не правильный формат ")
+                    dict(serial="'users' не число, не правильный формат ")
                 )
-
