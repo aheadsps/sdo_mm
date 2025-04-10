@@ -1,7 +1,8 @@
 import { EditIcon } from '@assets/icons'
-import { Typography, Button, Input, Tabs, Textarea, type Tab } from '@shared/components'
+import { Typography, Button, Input, Tabs, Textarea, type Tab, Modal } from '@shared/components'
+import { AddMaterials } from '@shared/components'
 import { withLayout } from '@shared/HOC'
-import { useScreenWidth } from '@shared/hooks'
+import { useScreenWidth, useToggle } from '@shared/hooks'
 import { useState } from 'react'
 
 import { StudentsList } from '../course/studentsList'
@@ -35,6 +36,7 @@ const Course = () => {
   const initialValue = 'Безопасность при работе с электроинструментом'
   const [title, setTitle] = useState(initialValue)
   const { isTablet } = useScreenWidth()
+  const { isOpen: isModalOpen, close: closeModal, open: openModal } = useToggle()
 
   const toggleEditClick = () => {
     setIsEditMode(!isEditMode)
@@ -57,11 +59,19 @@ const Course = () => {
             </Typography>
           )}
         </div>
-        <Button>Добавить материал</Button>
+        <Button onClick={openModal}>Добавить материал</Button>
       </div>
       <div className={s.container}>
         <Tabs tabs={tabsData} variant="secondary" className={s.tabs} />
       </div>
+      {isModalOpen && (
+        <Modal
+          close={closeModal}
+          title="Добавить материалы"
+          children={<AddMaterials />}
+          titleStyle="header_2"
+        />
+      )}
     </>
   )
 }
