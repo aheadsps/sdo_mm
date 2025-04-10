@@ -1,11 +1,13 @@
 import os
-from typing import IO, ClassVar
+from typing import IO, ClassVar, TypeVar
 
 from zipfile import ZipFile, ZipExtFile
 
 from lessons.scorm.engine.core import BaseCoreSCORM, CoreSCORM
-from lessons.models import SCORM
 from lessons.scorm.engine.parsers import CONSTRUCTOR_ADAPTER
+
+
+T = TypeVar('T')
 
 
 class SCORMLoader:
@@ -40,7 +42,7 @@ class SCORMLoader:
         class_adapter(self).parse()
         self.zip_file.close()
 
-    def save(self, instance, data: dict) -> SCORM:
+    def save(self, instance: T, data: dict) -> T:
         """
         Распаковка и сохранение zip архива
         """

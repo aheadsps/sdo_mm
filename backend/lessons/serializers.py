@@ -5,7 +5,7 @@ from rest_framework import serializers
 from rest_framework.validators import ValidationError
 from django.db.utils import IntegrityError
 from django.utils import timezone
-from django.conf import settings
+from django.db.transaction import atomic
 from loguru import logger
 
 from lessons import models, validators
@@ -13,6 +13,7 @@ from lessons.d_types import VD
 from lessons.patrials import set_status
 from lessons.scorm import SCORMLoader
 from lessons.utils import parse_exeption_error
+from lessons.scorm.engine.exceptions import SCORMExtractError, ManifestNotSetupError
 from users import serializers as user_serializers
 
 
@@ -324,13 +325,14 @@ class SCORMSerializer(serializers.ModelSerializer):
 class ZIPFileField(serializers.FileField):
 
     def to_internal_value(self, data):
+        self.error_messages.update(non_zip='File need to be zip format')
         try:
             file_name = data.name
             file_size = data.size
         except AttributeError:
             self.fail('invalid')
         if not re.match(r'\S*.zip', file_name):
-            self.fail('non zip')
+            self.fail('non_zip')
 
         if not file_name:
             self.fail('no_name')
@@ -364,17 +366,20 @@ class CreateCourseSerializer(serializers.ModelSerializer):
         )
         validators = (validators.CourseScormValidator('scorm'),)
 
-    def get_fields(self):
-        return super().get_fields()
-
     def create(self, validated_data: dict):
         logger.debug(validated_data)
         zip_scorm = validated_data.pop('scorm', None)
         if zip_scorm:
             try:
-                course = SCORMLoader(zip_archive=zip_scorm).save(self.Meta.model, validated_data)
+                with atomic():
+                    course = SCORMLoader(zip_archive=zip_scorm).save(
+                        self.Meta.model,
+                        validated_data,
+                        )
             except IntegrityError as er:
                 raise ValidationError(dict(scorm=f'This SCORM packpage {parse_exeption_error(er)}'))
+            except (SCORMExtractError, ManifestNotSetupError) as er:
+                raise ValidationError(dict(scorm=er))
         else:
             course = super().create(validated_data)
         return course

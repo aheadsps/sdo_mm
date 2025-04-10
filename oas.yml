@@ -1710,10 +1710,10 @@ components:
           nullable: true
           minimum: 1
         scorm:
-          type: object
+          type: string
           description: SCORM пакет (заменяет собой уроки)
           nullable: true
-          format: zip_file
+          format: byte
         experiences:
           type: array
           description: Список стажевых интервалов для которых подходит данный курс
