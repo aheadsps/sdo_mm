@@ -1,31 +1,59 @@
 import { Typography } from '../typography'
-
 import { AddCard } from './addCard/AddCard'
 import s from './constructorMenu.module.scss'
 import { addTest } from './data'
+import { ConstructorContent } from '@shared/components/constructorContent/ConstructorContent'
+import { ConstructorCard } from '@shared/components/constructorCard/ConstructorCard'
+import { CardActionsBar } from '@shared/components/cardActionsBar/CardActionsBar'
 
-export const CMenu = () => {
+interface Props {
+  setCurrentBlock: (node: React.ReactNode) => void
+}
+
+export const CMenu: React.FC<Props> = ({ setCurrentBlock }) => {
   return (
     <div className={s.container}>
       <div className={s.block}>
-        <Typography variant="caption" children={'Теоретический материал'} className={s.title} />
-        <AddCard children={'Добавить текст'} />
-        <AddCard children={'Добавить видео'} />
-        <AddCard children={'Добавить изображение'} />
+        <Typography variant="caption" className={s.title}>
+          Теоретический материал
+        </Typography>
+
+        <AddCard onClick={() => setCurrentBlock(<ConstructorContent type="text" />)}>
+          Добавить текст
+        </AddCard>
+        <AddCard onClick={() => setCurrentBlock(
+       <ConstructorCard>
+       <CardActionsBar />
+       <ConstructorContent type="video" />
+     </ConstructorCard>
+          )}>
+          Добавить видео
+        </AddCard>
+        <AddCard onClick={() => setCurrentBlock(<ConstructorContent type="image" />)}>
+          Добавить изображение
+        </AddCard>
       </div>
+
       <div className={s.block}>
-        <Typography
-          variant="caption"
-          children={'Интерактивные задания (добавить тест)'}
-          className={s.title}
-        />
-        {addTest.map((test) => {
-          return <AddCard children={test.title} key={test.id} />
-        })}
+        <Typography variant="caption" className={s.title}>
+          Интерактивные задания (добавить тест)
+        </Typography>
+
+        {addTest.map((test) => (
+          <AddCard key={test.id} onClick={() => setCurrentBlock(<ConstructorContent type="text" title={test.title} />)}>
+            {test.title}
+          </AddCard>
+        ))}
       </div>
+
       <div className={s.block}>
-        <Typography variant="caption" children={'Структура курса'} className={s.title} />
-        <AddCard children={'Добавить модуль'} />
+        <Typography variant="caption" className={s.title}>
+          Структура курса
+        </Typography>
+
+        <AddCard onClick={() => setCurrentBlock(<ConstructorContent type="text" title="Новый модуль" />)}>
+          Добавить модуль
+        </AddCard>
       </div>
     </div>
   )
