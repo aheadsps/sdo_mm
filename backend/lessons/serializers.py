@@ -1,5 +1,5 @@
 from rest_framework import serializers
-
+from lessons import exceptions
 from lessons import models, validators
 from users import serializers as user_serializers
 from lessons.taskmanager import TaskManager
@@ -387,6 +387,14 @@ class EventSerializerCreate(serializers.ModelSerializer):
     status = serializers.CharField(read_only=True)
 
     def to_internal_value(self, data):
+        if not data.get('users'):
+            raise exceptions.UnprocessableEntityError(
+                dict(serial="Нет 'users'")
+            )
+        if type(data['users']) is not str:
+            raise exceptions.UnprocessableEntityError(
+                dict(serial="'users' не str")
+            )
         data['users'] = (data['users'].split(',')
                          if data['users']
                          else [])
@@ -402,7 +410,7 @@ class EventSerializerCreate(serializers.ModelSerializer):
             "status",
         )
         validators = (validators.TimeValidator("start_date", "end_date"),
-                      validators.BadDataEventValidator("course", "users"))
+                      validators.BadDataEventValidator("course", "users"),)
 
     def create(self, validated_data):
         task_manager = TaskManager(

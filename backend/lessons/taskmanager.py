@@ -25,7 +25,7 @@ class TaskManager:
         data_start: str = None,
         data_end: str = None,
     ):
-        self.course = course
+        self.course = int(course)
         self.data_start = data_start
         self.data_end = data_end
         self.user_list = [int(user) for user in user_list]

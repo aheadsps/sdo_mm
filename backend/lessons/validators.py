@@ -56,6 +56,7 @@ class TimeValidator:
         Raises:
             exceptions.UnprocessableEntityError: Исключение в случае не соотвествия
         """
+
         time_now = timezone.now()
 
         start_date = datetime.datetime.strptime(start_date, "%Y-%m-%d %H:%M")
@@ -103,38 +104,42 @@ class BadDataEventValidator:
     """
     Валидатор на проверку наличия полей course и users
     """
-
     requires_context = True
-
     def __init__(self, course: str, users: str) -> None:
         self.course = course
         self.users = users
 
-    def __call__(self, attrs, serializer_field):
+    def __call__(self, attrs, serializer):
         """
         Проверка наличия полей course и users
         """
-        need_check = tigger_to_check(attrs, self.serial)
-        if need_check:
-            try:
-                self.course = int(self.course)
-            except:
-                raise exceptions.UnprocessableEntityError(
-                    dict(serial="Нет 'course' или не число")
-                )
-            if int(self.course) < 1:
-                raise exceptions.UnprocessableEntityError(
-                    dict(serial="'course' не может быть меньше 1")
-                )
-        if len(self.users) == 0:
+        course = get_value(self.course, attrs, serializer)
+        users = get_value(self.users, attrs, serializer)
+
+        if not course:
+            raise exceptions.UnprocessableEntityError(
+                dict(serial="Нет 'course'")
+            )
+        if type(course) is not int:
+            raise exceptions.UnprocessableEntityError(
+                dict(serial="'course' не int")
+            )
+
+        if int(course) < 1:
+            raise exceptions.UnprocessableEntityError(
+                dict(serial="'course' не может быть меньше 1")
+            )
+
+        if len(users) == 0:
             raise exceptions.UnprocessableEntityError(
                 dict(serial="Нет 'users'")
             )
-        for user in self.users:
+        for user in users:
+
             try:
                 user = int(user)
             except:
                 raise exceptions.UnprocessableEntityError(
-                    dict(serial="Нет 'user' или не число")
+                    dict(serial="Не число, не правильный формат ")
                 )
 
