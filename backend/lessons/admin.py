@@ -20,6 +20,7 @@ class QuestionAdmin(admin.ModelAdmin):
 
     list_display = ("text", "image")
 
+
 @admin.register(models.Step)
 class StepAdmin(admin.ModelAdmin):
     list_display = (

@@ -1660,11 +1660,14 @@ components:
           description: Для какой профессии предназначен курс
           nullable: false
           $ref: "#/components/schemas/Profession"
-        scorm:
-          type: object
-          description: SCORM пакет
-          nullable: true
-          $ref: "#/components/schemas/SCORM"
+        scorms:
+          type: array
+          description: Список уроков из SCORM пакета
+          minItems: 1
+          items:
+            type: integer
+            minimum: 1
+            $ref: "#/components/schemas/SCORM"
         experiences:
           type: array
           description: Список стажевых интервалов для которых подходит данный курс
@@ -1707,10 +1710,10 @@ components:
           nullable: true
           minimum: 1
         scorm:
-          type: integer
+          type: string
           description: SCORM пакет (заменяет собой уроки)
           nullable: true
-          minimum: 1
+          format: byte
         experiences:
           type: array
           description: Список стажевых интервалов для которых подходит данный курс
@@ -1758,10 +1761,13 @@ components:
           description: Для какой профессии предназначен курс
           nullable: true
           minimum: 1
-        scorm:
-          type: integer
-          nullable: true
-          minimum: 1
+        scorms:
+          type: array
+          description: Список уроков из SCORM пакета
+          minItems: 1
+          items:
+            type: integer
+            minimum: 1
         experiences:
           type: array
           description: Список стажевых интервалов для которых подходит данный курс
@@ -1906,6 +1912,10 @@ components:
           type: string
           maxLength: 256
           nullable: false
+        course:
+          type: integer
+          minimum: 1
+          nullable: true
         version:
           type: string
           maxItems: 50
@@ -1917,7 +1927,7 @@ components:
             - 2004 2nd Edition
             - 2004 3rd Edition
             - 2004 4th Edition
-        index:
+        resource:
           type: string
           format: path
 

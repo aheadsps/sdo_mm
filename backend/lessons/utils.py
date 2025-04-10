@@ -5,6 +5,8 @@ from rest_framework.serializers import ModelSerializer
 from datetime import datetime, timedelta, timezone
 from typing import ClassVar
 
+from pytils.translit import slugify
+
 from loguru import logger
 from pydantic import BaseModel, Field
 
@@ -189,7 +191,7 @@ def path_maker_scorm(instance: "SCORMFile", filename: str) -> str:
     Создает корректный путь для сохранения файлов
     в системе.
     """
-    text_tranc = instance.scorm
+    text_tranc = slugify(instance.course)
     return f"scorm/{text_tranc}/{filename}"
 
 
