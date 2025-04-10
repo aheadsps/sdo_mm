@@ -344,6 +344,11 @@ paths:
         "422":
           $ref: "#/components/responses/UnprocessableEntity"
 
+  /events/{event_id}/users:
+    get:
+      summary: Вывод пользователей исходя из эвента
+
+
   /events/currents:
     get:
       operationId: api_events_get_current
