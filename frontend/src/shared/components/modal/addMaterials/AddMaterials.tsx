@@ -1,12 +1,14 @@
 import { Button } from '@shared/components/button'
 import { Select } from '@shared/components/select'
 import { Input } from '@shared/components/text-field'
+import { Typography } from '@shared/components/typography'
 import clsx from 'clsx'
-import { useRef, ChangeEvent } from 'react'
+import { useRef, ChangeEvent, useState } from 'react'
 
 import s from './addMaterials.module.scss'
 
 export const AddMaterials = () => {
+  const [fileName, setFileName] = useState<string | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   const handleButtonClick = () => {
@@ -17,6 +19,7 @@ export const AddMaterials = () => {
     const file = event.target.files?.[0]
     if (file) {
       console.log('Selected file:', file)
+      setFileName(file.name)
     }
   }
 
@@ -31,11 +34,12 @@ export const AddMaterials = () => {
         ref={fileInputRef}
         style={{ display: 'none' }}
         onChange={handleFileChange}
-        accept=".pdf,.docx,.pptx,.mp4,.mp3,.jpg,.png"
+        accept=".pdf,.docx,.pptx,.mp4,.mp3,.jpg,.png,.zip"
       />
       <Button variant="primary" className={s.btn} onClick={handleButtonClick}>
         Загрузить файл
       </Button>
+      {fileName && <Typography variant="body_2">{fileName}</Typography>}
       <div className={s.content}>
         <p className={s.txt}>При загрузке материалов соблюдайте следующие ограничения:</p>
         <br></br>
