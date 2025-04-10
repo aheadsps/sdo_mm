@@ -15,7 +15,6 @@ from lessons.scorm import SCORMLoader
 from lessons.utils import parse_exeption_error
 from users import serializers as user_serializers
 
-
 PROCESS = "process"
 EXPECTED = "expected"
 DONE = "done"
@@ -105,7 +104,6 @@ class QuestionCreateSerializer(serializers.ModelSerializer):
 
 
 class ContentAttachmentSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = models.ContentAttachment
         fields = ["id", "file", "file_type"]
@@ -327,7 +325,8 @@ class ZIPFileField(serializers.FileField):
         if not self.allow_empty_file and not file_size:
             self.fail('empty')
         if self.max_length and len(file_name) > self.max_length:
-            self.fail('max_length', max_length=self.max_length, length=len(file_name))
+            self.fail('max_length', max_length=self.max_length,
+                      length=len(file_name))
 
         return data
 
@@ -359,7 +358,8 @@ class CreateCourseSerializer(serializers.ModelSerializer):
             try:
                 scorm_packpage = SCORMLoader(zip_archive=zip_scorm).save()
             except IntegrityError as er:
-                raise ValidationError(dict(scorm=f'This SCORM packpage {parse_exeption_error(er)}'))
+                raise ValidationError(dict(
+                    scorm=f'This SCORM packpage {parse_exeption_error(er)}'))
             validated_data.update(scorm=scorm_packpage)
         return super().create(validated_data)
 
@@ -535,6 +535,50 @@ class EventSerializerCreate(serializers.ModelSerializer):
                     validated_data=validated_data,
                     process=is_process,
                 )
+
+    def _create_lesson_stories(self, user, course):
+        """
+        Создает LessonStory для всех free-уроков и урока с serial=1
+        """
+        try:
+            free_lesson_ids = set(
+                models.Lesson.objects.filter(
+                    course=course,
+                    type_lesson="free").values_list('id', flat=True)
+            )
+            logger.debug(
+                f'Нашлось {len(free_lesson_ids)} уроков в курсе {course.id}')
+
+            first_lesson_id = (
+                models.Lesson.objects.filter(
+                    course=course, serial=1).values_list("id", flat=True).first()
+            )
+            if first_lesson_id and first_lesson_id not in free_lesson_ids:
+                free_lesson_ids.add(first_lesson_id)
+                logger.debug(
+                    f'Найден первый урок с типом "linearly" №{free_lesson_ids}'
+                )
+
+            if free_lesson_ids:
+                models.LessonStory.objects.bulk_create([
+                    models.LessonStory(user=user, lesson_id=lesson_id,
+                                       course=course)
+                    for lesson_id in free_lesson_ids
+                ], ignore_conflicts=True)
+                logger.success(f'Создано {len(free_lesson_ids)} free уроков'
+                               f'+ урок с id=1 в LessonStory')
+
+        except Exception as e:
+            logger.error(f"Ошибка создания LessonStory: {str(e)}")
+            raise
+
+    def create(self, validated_data):
+        event = super().create(validated_data)
+        self._create_lesson_stories(
+            user=validated_data["user"],
+            course=validated_data["course"]
+        )
+        return event
 
     def save(self, **kwargs):
         logger.debug(f"before {self.validated_data}")
