@@ -9,13 +9,12 @@ import s from './lesson-content.module.scss'
 
 type Props<T extends LessonType> = {
   lesson?: T
-  optionsDate?: Option[]
-  optionsFormat?: Option[]
+  options?: Option[]
   isExpandableContent?: boolean
 }
 export const LessonContent = <T extends LessonType>({
   lesson,
-  optionsFormat,
+  options,
   isExpandableContent = false,
 }: Props<T>) => {
   const { isOpen, toggle } = useToggle()
@@ -33,7 +32,7 @@ export const LessonContent = <T extends LessonType>({
           <Select
             className={clsx(s.date, s.access)}
             placeholder={'Выберите доступ'}
-            options={optionsFormat}
+            options={options}
           />
           <Button variant="secondary" className={s.constructorBtn}>
             <ArrowRightIcon width={'12px'} height={'12px'} />
@@ -54,7 +53,7 @@ export const LessonContent = <T extends LessonType>({
           <Select
             className={s.format}
             placeholder={lesson?.format ? lesson?.format : 'Формат'}
-            options={optionsFormat}
+            options={options}
           />
         </>
       )}
