@@ -1,6 +1,7 @@
 import { AddItemIcon } from '@assets/icons'
 import { Button, Input, Textarea, ToggleInput } from '@shared/components'
 import { useState } from 'react'
+import { useEffect } from 'react'
 
 import s from './add-test.module.scss'
 import { TestItem } from './TestItem'
@@ -33,6 +34,12 @@ export const AddTest = () => {
       prev.map((item, i) => (i === index ? { ...item, isCorrect: !item.isCorrect } : item))
     )
   }
+
+  useEffect(() => {
+    if (isOneCorrect) {
+      setTestItems((prev) => prev.map((item) => ({ ...item, isCorrect: false })))
+    }
+  }, [isOneCorrect])
 
   console.log(testItems)
 
