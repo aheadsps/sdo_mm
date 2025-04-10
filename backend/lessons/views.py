@@ -1,9 +1,12 @@
 from loguru import logger
+
 from rest_framework import permissions, status, mixins, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.renderers import MultiPartRenderer, JSONRenderer
+from django.db.models import Q
+from django.contrib.auth import get_user_model
 
 from lessons import models, serializers
 from lessons import viewsets as own_viewsets
@@ -67,6 +70,17 @@ class EventViewSet(own_viewsets.GetCreateUpdateDeleteViewSet):
     def update(self, request, *args, **kwargs):
         self.serializer_class = serializers.EventSerializerUpdate
         return super().update(request, *args, **kwargs)
+
+    @action(detail=True)
+    def users(self, request, event_id=None):
+        """
+        Получение пользователей от текущего эвента
+        """
+        event = self.get_object()
+        events = models.Event._default_manager.filter(Q(course=event.course)).select_related('user')
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data)
+
 
     @action(detail=True, url_path="toggle-favorite")
     def toggle_favorite(self, request, event_id=None):
