@@ -77,11 +77,12 @@ class Course(models.Model):
         max_length=256,
         help_text="Название курса",
     )
-    description = models.TextField(
+    description = models.TimeField(
         _("Описание"),
         help_text="Описание курса",
         null=True,
         blank=True,
+        default=None,
     )
     beginer = models.BooleanField(
         _("Начинающий"),

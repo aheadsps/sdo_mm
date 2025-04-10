@@ -1927,7 +1927,7 @@ components:
             - 2004 2nd Edition
             - 2004 3rd Edition
             - 2004 4th Edition
-        index:
+        resource:
           type: string
           format: path
 

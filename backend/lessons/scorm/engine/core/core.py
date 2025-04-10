@@ -1,12 +1,16 @@
 import os
-from typing import TypeVar
+import pathlib
 import zipfile
-
 import xml.etree.ElementTree as ET
+
+from typing import TypeVar
+
+from pytils.translit import slugify
 
 from loguru import logger
 
 from django.core.files.base import ContentFile
+from rest_framework.utils import model_meta
 
 from lessons.scorm.engine.utils import is_dir
 from lessons.models import SCORM, SCORMFile
@@ -78,7 +82,7 @@ class CoreSCORM(BaseCoreSCORM):
     def _get_items(self,
                    organization: DT,
                    ) -> list[DT] | list[None]:
-        items = organization['item']
+        items = [DataSetCore(item, self.prefix) for item in organization.element.findall(f'{self.prefix}item')]
         return items
 
     def _get_root_path(self,
@@ -138,25 +142,30 @@ class CoreSCORM(BaseCoreSCORM):
         logger.debug(f'text title is {sanitize_text}')
         return sanitize_text
 
-    def _get_structures(self, version: str, instance):
+    def _get_structures(self, version: str, instance, base_path: os.PathLike):
         structure_list = []
         root = self._manifest.getroot()
         lesson_data = dict(version=version, course=instance)
+        logger.debug(f'structure data is {lesson_data}')
+        logger.debug(f'list org {self.organizations}')
         for organization in self.organizations:
             structure_list.append(self._process_stucture_data(
                 organization=organization,
                 root=root,
                 data=lesson_data,
+                path=base_path,
             ))
         return structure_list
 
     def _process_stucture_data(self,
                                organization: DT,
                                root: ET.Element,
-                               data: dict | None = None
+                               data: dict | None = None,
+                               path: os.PathLike | None = None,
                                ) -> (list[tuple[str, str],
                                           (list[tuple[str, str]] | None)]):
         sub_titles = list()
+        logger.debug(f'organizat {organization}')
         sub_items = self._get_items(
             organization=organization
         )
@@ -178,7 +187,7 @@ class CoreSCORM(BaseCoreSCORM):
             logger.debug(f'add to structure list item - {title, resource_link}')
             SCORM._default_manager.create(**data,
                                           name=title,
-                                          resource=resource_link,
+                                          resourse='/' + str(path.joinpath(resource_link)),
                                           )
             return [dict(title=title,
                          resourse=resource_link,
@@ -191,6 +200,8 @@ class CoreSCORM(BaseCoreSCORM):
                 sub_titles.extend(self._process_stucture_data(
                     organization=item,
                     root=root,
+                    data=data,
+                    path=path,
                 ))
             return [dict(title=title,
                          resource=resource_link,
@@ -210,6 +221,20 @@ class CoreSCORM(BaseCoreSCORM):
             return
         scorm_packpage.delete()
 
+    def _create_model(self, instance, data: dict, title: str):
+        info = model_meta.get_field_info(instance)
+        many_to_many = {}
+        for field_name, relation_info in info.relations.items():
+            if relation_info.to_many and (field_name in data):
+                many_to_many[field_name] = data.pop(field_name)
+        data['name'] = title
+        course = instance._default_manager.create(**data)
+        if many_to_many:
+            for field_name, value in many_to_many.items():
+                field = getattr(course, field_name)
+                field.set(value)
+        return course
+
     def save(self, instance, data: dict) -> SCORM:
         """
         Сохранение курса в систему
@@ -218,9 +243,18 @@ class CoreSCORM(BaseCoreSCORM):
             zip_infos=self._infos,
         )
         original_title = self._get_item_title(self.organizations[0])
-        course = instance._default_manager.create(name=original_title, **data)
+        slugify_title = slugify(original_title)
+        logger.debug(f'title is {original_title}')
         version = self.get_shema()
-        self._get_structures(version=version, instance=course)
+        path = pathlib.Path('media', 'scorm', slugify_title)
+        course = self._create_model(instance=instance,
+                                    data=data,
+                                    title=original_title,
+                                    )
+        self._get_structures(version=version,
+                             instance=course,
+                             base_path=path,
+                             )
         list_files = []
         for zipinfo in self._infos:
             if zipinfo.filename.startswith(root_path):

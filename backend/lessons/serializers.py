@@ -316,22 +316,9 @@ class SCORMSerializer(serializers.ModelSerializer):
     Сериализатор SCORM пакета
     """
 
-    index = serializers.SerializerMethodField(read_only=True)
-
     class Meta:
         model = models.SCORM
-        fields = ('id', 'name', 'version', 'index')
-
-    def get_index(self, obj):
-        files = obj.files.get_queryset()
-        logger.debug(f'get files {files}')
-        if files.exists():
-            for file in list(files):
-                logger.debug(f'file name is {file.file.name.split("/")[-1]}')
-                if file.file.name.split('/')[-1] == settings.SCORM_INDEX_NAME:
-                    return file.file.url
-        else:
-            return
+        fields = ('id', 'name', 'version', 'resourse')
 
 
 class ZIPFileField(serializers.FileField):
@@ -361,6 +348,7 @@ class CreateCourseSerializer(serializers.ModelSerializer):
     """
 
     scorm = ZIPFileField(required=False)
+    scorms = serializers.PrimaryKeyRelatedField(read_only=True, required=False, many=True)
 
     class Meta:
         model = models.Course
@@ -371,19 +359,24 @@ class CreateCourseSerializer(serializers.ModelSerializer):
             "image",
             "profession",
             "scorm",
+            "scorms",
             "experiences",
         )
         validators = (validators.CourseScormValidator('scorm'),)
 
+    def get_fields(self):
+        return super().get_fields()
+
     def create(self, validated_data: dict):
         logger.debug(validated_data)
         zip_scorm = validated_data.pop('scorm', None)
-        course = super().create(validated_data)
         if zip_scorm:
             try:
                 course = SCORMLoader(zip_archive=zip_scorm).save(self.Meta.model, validated_data)
             except IntegrityError as er:
                 raise ValidationError(dict(scorm=f'This SCORM packpage {parse_exeption_error(er)}'))
+        else:
+            course = super().create(validated_data)
         return course
 
 
@@ -392,7 +385,7 @@ class CourseSerializer(serializers.ModelSerializer):
     Сериализатор Оптимизированого вывода
     """
     lessons = LessonSerializer(many=True)
-    scorms = serializers.PrimaryKeyRelatedField(many=True)
+    scorms = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
 
     class Meta:
         model = models.Course
