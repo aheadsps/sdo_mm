@@ -18,7 +18,6 @@ dist/
 downloads/
 eggs/
 .eggs/
-*.zip
 test_scorm.py
 lib/
 lib64/
@@ -31,7 +30,6 @@ share/python-wheels/
 .installed.cfg
 *.egg
 MANIFEST
-*.zip
 .DS_Store
 
 # PyInstaller
