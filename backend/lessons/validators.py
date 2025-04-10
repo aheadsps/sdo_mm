@@ -97,3 +97,44 @@ class TimeValidator:
                 start_date=start_date,
                 end_date=end_date,
             )
+
+
+class BadDataEventValidator:
+    """
+    Валидатор на проверку наличия полей course и users
+    """
+
+    requires_context = True
+
+    def __init__(self, course: str, users: str) -> None:
+        self.course = course
+        self.users = users
+
+    def __call__(self, attrs, serializer_field):
+        """
+        Проверка наличия полей course и users
+        """
+        need_check = tigger_to_check(attrs, self.serial)
+        if need_check:
+            try:
+                self.course = int(self.course)
+            except:
+                raise exceptions.UnprocessableEntityError(
+                    dict(serial="Нет 'course' или не число")
+                )
+            if int(self.course) < 1:
+                raise exceptions.UnprocessableEntityError(
+                    dict(serial="'course' не может быть меньше 1")
+                )
+        if len(self.users) == 0:
+            raise exceptions.UnprocessableEntityError(
+                dict(serial="Нет 'users'")
+            )
+        for user in self.users:
+            try:
+                user = int(user)
+            except:
+                raise exceptions.UnprocessableEntityError(
+                    dict(serial="Нет 'user' или не число")
+                )
+

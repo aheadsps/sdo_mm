@@ -401,7 +401,8 @@ class EventSerializerCreate(serializers.ModelSerializer):
             "end_date",
             "status",
         )
-        validators = (validators.TimeValidator("start_date", "end_date"),)
+        validators = (validators.TimeValidator("start_date", "end_date"),
+                      validators.BadDataEventValidator("course", "users"))
 
     def create(self, validated_data):
         task_manager = TaskManager(
@@ -413,18 +414,3 @@ class EventSerializerCreate(serializers.ModelSerializer):
         instance = task_manager.create()
         return instance
 
-
-"""   def save(self, **kwargs):
-        validated_data = {**self.validated_data, **kwargs}
-        if self.instance is not None:
-            self.instance = self.update(self.instance, validated_data)
-            assert self.instance is not None, (
-                '`update()` did not return an object instance.'
-            )
-        else:
-            self.instance = self.create(validated_data)
-            assert self.instance is not None, (
-                '`create()` did not return an object instance.'
-            )
-
-        return self.instance"""
