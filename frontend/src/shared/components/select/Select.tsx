@@ -1,8 +1,7 @@
+import { ArrowDownIcon, ArrowUpIcon } from '@assets/icons'
 import { useToggle } from '@shared/hooks/useToggle'
 import clsx from 'clsx'
 import { useState } from 'react'
-
-import { ArrowDownIcon, ArrowUpIcon } from '@assets/icons'
 
 import { Typography } from '../typography'
 
@@ -17,10 +16,11 @@ type Props = {
   options?: Option[]
   placeholder?: string
   className?: string
+  border?: string
   isCalendar?: boolean
 }
 
-export const Select = ({ options, placeholder = 'Выбрать', className }: Props) => {
+export const Select = ({ options, placeholder = 'Выбрать', className, border }: Props) => {
   const { isOpen, toggle, close } = useToggle()
   const [selected, setSelected] = useState<Option | null>(null)
 
@@ -32,7 +32,7 @@ export const Select = ({ options, placeholder = 'Выбрать', className }: P
   return (
     <div className={clsx(styles.selectContainer, className)}>
       <div
-        className={styles.selectBox}
+        className={clsx(styles.selectBox, border)}
         onClick={toggle}
         aria-expanded={isOpen}
         aria-haspopup="listbox"

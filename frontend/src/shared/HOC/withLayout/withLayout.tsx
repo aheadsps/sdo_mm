@@ -1,7 +1,9 @@
-import { Sidebar, Header } from '@shared/components'
-import Loader from '@shared/components/loader/Loader'
+import { useGetUserCurrentEventsQuery } from '@services/api'
+import { setCurrentEvents } from '@services/slices/events'
+import { useAppDispatch } from '@services/store'
+import { Header, Loader, Sidebar } from '@shared/components'
 import { useScreenWidth } from '@shared/hooks'
-import { ComponentType, useEffect, useState } from 'react'
+import { ComponentType, useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 
 import s from './layout.module.scss'
@@ -10,17 +12,15 @@ export const withLayout = <T extends object>(Component: ComponentType<T>) => {
   return (props: T) => {
     const path = useLocation()
     const { isMobile } = useScreenWidth()
-    const [isLoading, setIsLoading] = useState(true)
+
+    const { data: events, isLoading } = useGetUserCurrentEventsQuery()
+    const dispatch = useAppDispatch()
 
     useEffect(() => {
-      const timerId = setTimeout(() => {
-        setIsLoading(false)
-      }, 1000)
-
-      return () => {
-        clearTimeout(timerId)
+      if (events?.results) {
+        dispatch(setCurrentEvents(events?.results))
       }
-    }, [])
+    }, [events?.results, dispatch])
 
     return (
       <>

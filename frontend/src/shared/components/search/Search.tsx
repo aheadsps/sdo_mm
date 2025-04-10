@@ -1,8 +1,7 @@
-import clsx from 'clsx'
-import { ComponentPropsWithRef, useState } from 'react'
-
 import { SearchIcon } from '@assets/icons'
 import { studentType } from '@pages/trainingCenter/studentsList/data'
+import clsx from 'clsx'
+import { ComponentPropsWithRef, useState } from 'react'
 
 import { Input } from '../text-field'
 

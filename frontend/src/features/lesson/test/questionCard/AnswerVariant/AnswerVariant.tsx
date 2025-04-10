@@ -1,4 +1,4 @@
-import { Typography } from '@shared/components'
+import { InputRadio, Typography } from '@shared/components'
 import clsx from 'clsx'
 
 import s from '../../tests.module.scss'
@@ -16,7 +16,7 @@ export const AnswerVariant = ({ answer, isCorrect, descr, checked, onSelect, dis
   return (
     <div className={clsx(s.answers, isCorrect ? s.green : s.red)}>
       <label className={clsx(s.option, disabled && s.disabled)}>
-        <input type="radio" checked={checked} onChange={onSelect} disabled={disabled} />{' '}
+        <InputRadio checked={checked} onChange={onSelect} disabled={disabled} />{' '}
         <Typography variant="body_1">{answer.answer}</Typography>
       </label>
       <div className={s.explanation}>

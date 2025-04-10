@@ -20,11 +20,11 @@
   position: relative;
   transform: translateZ(0);
   animation:
-    mlt-shd-spin 1.7s infinite ease,
+    mltshd-spin 1.7s infinite ease,
     round 1.7s infinite ease;
 }
 
-@keyframes mlt-shd-spin {
+@keyframes mltshd-spin {
   0% {
     box-shadow:
       0 -0.83em 0 -0.4em,

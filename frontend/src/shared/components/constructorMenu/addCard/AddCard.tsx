@@ -1,0 +1,22 @@
+import { ComponentPropsWithRef, ElementType } from 'react'
+
+import { AddItemIcon, ButtonIcon } from '@assets/icons'
+
+import s from './addCard.module.scss'
+
+type Props<T extends ElementType = 'p'> = {
+  children: string
+  onClick?: () => void
+  key?: number
+  as?: T
+} & ComponentPropsWithRef<T>
+
+export const AddCard = <T extends ElementType = 'p'>({ children, onClick }: Props<T>) => {
+  return (
+    <div className={s.card}>
+      <ButtonIcon />
+      <p className={s.title}>{children}</p>
+      <AddItemIcon onClick={onClick} />
+    </div>
+  )
+}

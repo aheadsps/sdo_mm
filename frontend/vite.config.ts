@@ -10,6 +10,8 @@ export default defineConfig({
       '@assets': '/src/assets',
       '@shared': '/src/shared',
       '@features': '/src/features',
+      '@routes': '/src/routes',
+      '@services': '/src/services',
     },
   },
   build: {

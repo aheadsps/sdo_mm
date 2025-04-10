@@ -3,7 +3,7 @@ import { ComponentPropsWithoutRef, ElementType } from 'react'
 
 import s from './typography.module.scss'
 
-type Variant =
+export type Variant =
   | 'body_1'
   | 'header_1'
   | 'header_2'

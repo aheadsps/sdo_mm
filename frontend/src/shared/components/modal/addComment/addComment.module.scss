@@ -1,0 +1,51 @@
+.box {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  font-family: var(--font-family-secondary);
+}
+.textareaBox {
+  width: 100%;
+  height: 40px;
+  border-radius: 2px;
+  display: flex;
+  gap: 8px;
+  padding: 9px 12px;
+  border-bottom: 1px solid #f8d7d9;
+  backdrop-filter: blur(60px);
+}
+.btnBox {
+  width: 100%;
+  height: 40px;
+  display: flex;
+  gap: 24px;
+  @media screen and (max-width: 767px) {
+   height: fit-content;
+   flex-direction: column;
+  }
+  .btn {
+    width: 50%;
+    @media screen and (max-width: 767px) {
+      width: 100%;
+    }
+  }
+}
+.content {
+  width: 100%;
+  height: fit-content;
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  .messageBox {
+    width: 100%;
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    @media screen and (max-width: 767px) {
+      gap: 16px;
+    }
+  }
+ 
+}
