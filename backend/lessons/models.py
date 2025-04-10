@@ -77,7 +77,7 @@ class Course(models.Model):
         max_length=256,
         help_text="Название курса",
     )
-    description = models.TimeField(
+    description = models.TextField(
         _("Описание"),
         help_text="Описание курса",
         null=True,
