@@ -3,6 +3,7 @@ import { NewItem } from '@services/slices/constructor/constructor.types'
 import { DropdownCard } from '@shared/components'
 import { ConstructorContent } from '@shared/components/constructorContent'
 import { AddTest } from '@shared/components/constructorMenu/addTest/AddTest'
+import { ChangeEvent, useState } from 'react'
 
 import s from './block-dropdown.module.scss'
 
@@ -44,6 +45,12 @@ export const BlockDropdown = ({
     })
   }
 
+  const [blockTitle, setBlockTitle] = useState<string>('')
+
+  const onTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setBlockTitle(e.currentTarget.value)
+  }
+
   return (
     <DropdownCard
       title={title || ''}
@@ -52,6 +59,8 @@ export const BlockDropdown = ({
       className={s.dropdownContent}
       isOpen={isActiveBlock}
       toggle={toggleDropdown}
+      value={blockTitle}
+      onChange={onTitleChange}
     >
       {renderItems()}
       <AddItemIcon className={s.icon} onClick={() => setIsSidebarPointed(true)} />

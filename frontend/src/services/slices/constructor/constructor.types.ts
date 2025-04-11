@@ -1,14 +1,7 @@
-export type AddedMaterial = 'text' | 'video' | 'image' | 'test'
-
-/* export type NewItem = {
-  id: number
-  type: AddedMaterial
-  description?: string[]
-  layout: ReactNode
-} */
+export type AddedMaterial = 'text' | 'video' | 'image' | 'test' | 'module'
 
 export type NewItem = {
-  id: number
+  id?: number
   type: AddedMaterial
 }
 

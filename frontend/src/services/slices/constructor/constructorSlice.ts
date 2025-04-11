@@ -19,6 +19,9 @@ export const constructorSlice = createSlice({
     setBlocks: (state, action: PayloadAction<LessonBlock[]>) => {
       state.lessonBlocks = action.payload
     },
+    addNewBlock: (state, action: PayloadAction<LessonBlock>) => {
+      state.lessonBlocks.push(action.payload)
+    },
     addNewBlockItem: (state, action: PayloadAction<{ newItem: NewItem; blockId: number }>) => {
       const block = state.lessonBlocks.find((b) => b.id === action.payload.blockId)
       if (block) {
@@ -34,6 +37,6 @@ export const constructorSlice = createSlice({
   },
 })
 
-export const { setBlocks, addNewBlockItem, deleteBlockItem } = constructorSlice.actions
+export const { setBlocks, addNewBlock, addNewBlockItem, deleteBlockItem } = constructorSlice.actions
 export const { selectBlocks } = constructorSlice.selectors
 export const constructorSliceReducer = constructorSlice.reducer
