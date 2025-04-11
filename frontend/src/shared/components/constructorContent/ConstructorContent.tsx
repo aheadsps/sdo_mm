@@ -64,7 +64,16 @@ export const ConstructorContent: React.FC<Props> = ({
                     </div>
                 )}
                 {type === 'text' && (
-                    <textarea className={s.textarea} placeholder="Введите текст..." />
+                      <div className={s.textBlock}>
+                      <label className={s.label}>Введите текст</label>
+                      <textarea
+                        className={s.textarea}
+                        placeholder="Например: Введение в технику безопасности"
+                      />
+                      <Typography variant="caption" className={s.caption}>
+                        Вы можете использовать Enter, чтобы делать абзацы.
+                      </Typography>
+                    </div>
                 )}
 
                 {type === 'image' && (

@@ -88,3 +88,32 @@
     text-align: left; 
     width: 100%;
 }
+
+.textBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.label {
+  font-size: 14px;
+  color: #58151C;
+  font-weight: 500;
+}
+
+.textarea {
+  min-height: 120px;
+  border: none;
+  width: 100%;
+  padding: 12px 0;
+  font-size: 16px;
+  resize: vertical;
+  outline: none;
+  background: transparent;
+  font-family: inherit;
+  color: #2b2b2b;
+
+  &:focus {
+    border-bottom: 1px solid #58151C;
+  }
+}

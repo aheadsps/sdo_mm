@@ -18,7 +18,12 @@ export const CMenu: React.FC<Props> = ({ setCurrentBlock }) => {
           Теоретический материал
         </Typography>
 
-        <AddCard onClick={() => setCurrentBlock(<ConstructorContent type="text" />)}>
+        <AddCard onClick={() => setCurrentBlock(
+          <ConstructorCard>
+            <CardActionsBar description="Описание (не обязательно)" />
+            <ConstructorContent type="text" />
+          </ConstructorCard>
+        )}>
           Добавить текст
         </AddCard>
         <AddCard onClick={() => setCurrentBlock(
