@@ -201,6 +201,12 @@ class Lesson(models.Model):
                                null=True,
                                blank=True,
                                )
+    type_lesson = models.CharField(verbose_name=_('Тип урока'),
+                                   max_length=10,
+                                   choices=settings.TYPE_LESSON,
+                                   default='linearly',
+                                   help_text='Текущий тип данного урока',
+                                   )
 
     class Meta:
         verbose_name = _("Lesson")

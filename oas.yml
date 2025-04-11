@@ -347,8 +347,35 @@ paths:
   /events/{event_id}/users:
     get:
       summary: Вывод пользователей исходя из эвента
-
-
+      parameters:
+        - in: path
+          name: event_id
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+      tags:
+        - Event
+      security:
+        - Token: []
+      responses:
+        "200":
+          description: Эвент добавлен в избраное или удален
+          content:
+            application/json:
+              schema:
+                type: array
+                minItems: 1
+                items:
+                  $ref: "#/components/schemas/UserStat"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
   /events/currents:
     get:
       operationId: api_events_get_current
@@ -1616,6 +1643,7 @@ components:
           description: Текст ответа
           nullable: false
 
+
     EventCovered:
       description: Сущность статистики курсов на пользователе
       additionalProperties: false
@@ -1649,6 +1677,19 @@ components:
             - done
             - failed
             - process
+
+    UserStat:
+      description: Сущность пользотателей от курса
+      additionalProperties: false
+      type: object
+      properties:
+        user:
+          type: object
+          $ref: "#/components/schemas/User"
+        progress:
+          type: integer
+          format: int32
+
 
     СourseView:
       description: Сущность курса детальный
