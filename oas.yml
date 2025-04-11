@@ -1616,6 +1616,35 @@ components:
           description: Текст ответа
           nullable: false
 
+    EventCovered:
+      description: Сущность статистики курсов на пользователе
+      additionalProperties: false
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+          minimum: 1
+        event:
+          type: object
+          $ref: "#/components/schemas/Event"
+        user:
+          type: integer
+          readOnly: true
+          minimum: 1
+        procent:
+          type: integer
+          readOnly: true
+          format: int32
+          minimum: 0
+          maximum: 100
+        status:
+          type: string
+          enum:
+            - done
+            - failed
+            - process
+
     СourseView:
       description: Сущность курса детальный
       additionalProperties: false
