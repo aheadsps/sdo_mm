@@ -52,11 +52,12 @@ class CustomUserSerializer(UserSerializer):
             "date_commencement",
             "profession",
             "profile",
+            "is_staff",
+            "is_active",
+            "is_superuser",
         ]
         read_only_fields = [
             "id",
-            "is_staff",
-            "is_active",
             "date_joined",
         ]
 

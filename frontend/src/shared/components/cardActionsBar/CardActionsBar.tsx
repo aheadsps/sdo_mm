@@ -1,10 +1,12 @@
-import React from 'react'
-import s from './cardActionsBar.module.scss'
-import PlusIcon from '@assets/icons/PlusIcon'
-import DoubleIcon from '@assets/icons/DoubleIcon'
 import DeleteIcon from '@assets/icons/DeleteIcon'
+import DoubleIcon from '@assets/icons/DoubleIcon'
 import DragIcon from '@assets/icons/DragIcon'
+import PlusIcon from '@assets/icons/PlusIcon'
+import React from 'react'
+
 import { Typography } from '../typography'
+
+import s from './cardActionsBar.module.scss'
 
 interface Props {
   description?: string
@@ -12,15 +14,14 @@ interface Props {
 
 export const CardActionsBar: React.FC<Props> = ({ description }) => {
   return (
-    
     <div className={s.bar}>
-       <div className={s.desc}>
-      {description && (
-        <Typography variant="caption" className={s.label}>
-          {description}
-        </Typography>
-        
-      )}</div>
+      <div className={s.desc}>
+        {description && (
+          <Typography variant="caption" className={s.label}>
+            {description}
+          </Typography>
+        )}
+      </div>
 
       <div className={s.actions}>
         <button className={s.btn} title="Добавить">
@@ -35,9 +36,7 @@ export const CardActionsBar: React.FC<Props> = ({ description }) => {
         <button className={s.btn} title="Перетащить">
           <DragIcon />
         </button>
-        </div>
-
+      </div>
     </div>
-    
   )
 }
