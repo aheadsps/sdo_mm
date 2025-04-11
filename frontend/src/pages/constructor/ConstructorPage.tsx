@@ -6,6 +6,7 @@ import { ReactNode, useState } from 'react'
 import { BlockDropdown } from './block-dropdown/BlockDropdown'
 import s from './constructorPage.module.scss'
 
+
 type AddedMaterial = 'text' | 'video' | 'image' | 'test'
 
 export type NewItem = {

@@ -59,12 +59,14 @@ export const CMenu = ({ setNewItem }: Props) => {
         <AddCard children={'Добавить видео'} onClick={addNewItemVideo} />
         <AddCard children={'Добавить изображение'} onClick={addNewItemImage} />
       </div>
+
       <div className={s.block}>
         <Typography variant="caption" className={s.title}>
           Интерактивные задания (добавить тест)
         </Typography>
         <AddCard children={'Добавить тест'} onClick={addNewItemITest} />
       </div>
+
       <div className={s.block}>
         <Typography variant="caption" className={s.title}>
           Структура курса
