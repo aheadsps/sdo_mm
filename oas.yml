@@ -1659,6 +1659,10 @@ components:
           type: integer
           readOnly: true
           minimum: 1
+        user:
+          description: Методист создавший курс
+          type: integer
+          minimum: 1
         name:
           type: string
           maxLength: 256
@@ -1726,12 +1730,22 @@ components:
             - end
             - archive
             - edit
+          default:
+            - archive
 
     CourseCreate:
       description: Сущность курса упрощеная
       additionalProperties: false
       type: object
       properties:
+        id:
+          type: integer
+          minimum: 1
+          readOnly: true
+        user:
+          description: Методист создавший курс
+          type: integer
+          minimum: 1
         name:
           type: string
           maxLength: 256
@@ -1767,6 +1781,13 @@ components:
           items:
             type: integer
             minimum: 1
+        status:
+          type: string
+          enum:
+            - archive
+            - edit
+          default:
+            - archive
       required:
         - id
         - name
@@ -1778,6 +1799,14 @@ components:
       additionalProperties: false
       type: object
       properties:
+        id:
+          type: integer
+          minimum: 1
+          readOnly: true
+        user:
+          description: Методист создавший курс
+          type: integer
+          minimum: 1
         name:
           type: string
           maxLength: 256
