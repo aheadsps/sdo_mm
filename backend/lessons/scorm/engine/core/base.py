@@ -49,9 +49,10 @@ class BaseCoreSCORM(AbstractCore):
             )
 
     def __enter__(self):
-        manifest_info = self._file.getinfo(self.root_name)
-        logger.debug(f'seaching manifest {manifest_info}')
-        if not manifest_info:
+        try:
+            manifest_info = self._file.getinfo(self.root_name)
+        except KeyError:
+            self._file.close()
             raise SCORMExtractError(
                 f"Не возможно найти {self.root_name} в zip архиве"
             )
@@ -139,3 +140,6 @@ class BaseCoreSCORM(AbstractCore):
 
     def save(self):
         return super().save()
+
+    def delete(self):
+        return super().delete()

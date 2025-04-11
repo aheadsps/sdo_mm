@@ -1,7 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
-
-import { ProfileResponse } from '../api/user.types'
+import { ProfileResponse } from '@services/api'
 
 type InitialState = {
   isAuth: boolean
