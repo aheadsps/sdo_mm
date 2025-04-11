@@ -2752,13 +2752,5 @@
             "profession": 2,
             "students": []
         }
-    },
-    {
-        "model": "authtoken.token",
-        "pk": "5f71133c35edda819d2fc4bf045eb64f2dce7634",
-        "fields": {
-            "user": 1,
-            "created": "2025-04-10T17:08:31.454Z"
-        }
     }
 ]
