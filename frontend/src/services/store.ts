@@ -3,12 +3,14 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import { userApi } from './api/user.api'
 import { authReducer } from './slices'
+import { constructorSliceReducer } from './slices/constructor/constructorSlice'
 import { eventsSliceReducer } from './slices/events/eventsSlice'
 
 export const store = configureStore({
   reducer: {
     auth: authReducer,
     events: eventsSliceReducer,
+    add: constructorSliceReducer,
     [userApi.reducerPath]: userApi.reducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(userApi.middleware),

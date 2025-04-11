@@ -1,62 +1,61 @@
 import SettingsIcon from '@assets/icons/SettingsIcon'
+import { NewItem } from '@services/slices/constructor/constructor.types'
+import { LessonBlock } from '@services/slices/constructor/constructor.types'
+import {
+  addNewBlockItem,
+  deleteBlockItem,
+  selectBlocks,
+  setBlocks,
+} from '@services/slices/constructor/constructorSlice'
+import { useAppDispatch, useAppSelector } from '@services/store'
 import { CMenu, Title } from '@shared/components'
 import { Header } from '@shared/components'
-import { ReactNode, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { BlockDropdown } from './block-dropdown/BlockDropdown'
 import s from './constructorPage.module.scss'
 
-type AddedMaterial = 'text' | 'video' | 'image' | 'test'
-
-export type NewItem = {
-  type: AddedMaterial
-  description?: string[]
-  layout: ReactNode
-}
-
-const dropdowns = [
+const lessonBlocks: LessonBlock[] = [
   {
     id: 1,
     title: 'Зачем нужны СИЗ? Психология безопасности',
+    blockItems: [],
   },
   {
     id: 2,
     title: 'Основные виды СИЗ и их роль',
+    blockItems: [],
   },
   {
     id: 3,
     title: 'Как выбрать СИЗ? Комфорт vs безопасность',
+    blockItems: [],
   },
 ]
 
 export const ConstructorPage: React.FC = () => {
   const [activeBlockId, setActiveBlockId] = useState<number | null>(null)
-  const [blocks, setBlocks] = useState(dropdowns)
+  const dispatch = useAppDispatch()
 
-  const [blocksItems, setBlocksItems] = useState<{ [key: number]: NewItem[] }>({
-    1: [],
-    2: [],
-    3: [],
-  })
+  console.log(lessonBlocks)
+
+  useEffect(() => {
+    dispatch(setBlocks(lessonBlocks))
+  }, [dispatch])
+
+  const blocks = useAppSelector(selectBlocks)
+  console.log(blocks, 'blocks')
 
   const onBlockActive = (id: number) => {
     setActiveBlockId((prevId) => (prevId === id ? null : id))
   }
 
   const onAddNewItem = (newItem: NewItem) => {
-    if (activeBlockId === null) return
-    setBlocksItems((prevBlocksItems) => {
-      const updatedItems = [...(prevBlocksItems[activeBlockId] || []), newItem]
-      return {
-        ...prevBlocksItems,
-        [activeBlockId]: updatedItems,
-      }
-    })
+    dispatch(addNewBlockItem({ newItem, blockId: activeBlockId as number }))
   }
 
-  const deleteBlock = (blockId: number) => {
-    const filteredBlocks = blocks.filter((block) => block.id !== blockId)
-    setBlocks(filteredBlocks)
+  const onDeleteBlock = (blockId: number) => {
+    dispatch(deleteBlockItem({ blockId }))
   }
 
   return (
@@ -72,16 +71,16 @@ export const ConstructorPage: React.FC = () => {
             className={s.visible}
           />
           <div className={s.container}>
-            <CMenu setNewItem={onAddNewItem} />
+            <CMenu setNewItem={onAddNewItem} activeBlockId={activeBlockId as number} />
             <main className={s.main}>
               {blocks.map((item) => (
                 <BlockDropdown
                   key={item.id}
                   isActiveBlock={activeBlockId === item.id}
                   title={item.title}
-                  newItems={blocksItems[item.id] || []}
+                  newItems={item.blockItems || []}
                   onActive={() => onBlockActive(item.id)}
-                  deleteBlock={() => deleteBlock(item.id)}
+                  deleteBlock={() => onDeleteBlock(item.id)}
                 />
               ))}
             </main>
