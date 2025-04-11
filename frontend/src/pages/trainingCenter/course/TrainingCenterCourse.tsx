@@ -4,9 +4,10 @@ import { withLayout } from '@shared/HOC'
 import { useScreenWidth } from '@shared/hooks'
 import { useState } from 'react'
 
-import { AboutCourse } from '../aboutCourse'
-import { StudentsList } from '../studentsList'
+import { StudentsList } from '../course/studentsList'
 
+import { AboutCourse } from './aboutCourse'
+import { AssignmentsGrades } from './assignments-grades'
 import { Program } from './program/Program'
 import s from './training-course.module.scss'
 
@@ -25,7 +26,7 @@ const tabsData: Tab[] = [
   },
   {
     label: 'Оценки и задания',
-    content: <div>Оценки и задания</div>,
+    content: <AssignmentsGrades />,
   },
 ]
 

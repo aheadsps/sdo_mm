@@ -24,3 +24,6 @@ class AbstractCore(ABC):
 
     @abstractmethod
     def save(self): ...
+
+    @abstractmethod
+    def delete(self): ...

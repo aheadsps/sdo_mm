@@ -298,6 +298,7 @@ class AnswerViewSet(viewsets.ModelViewSet):
     """
     queryset = models.Answer._default_manager.get_queryset()
     permission_classes = [IsAdminOrIsStaff]
+    serializer_class = serializers.AnswerSerializer
     lookup_field = 'pk'
     lookup_url_kwarg = 'answer_id'
 
