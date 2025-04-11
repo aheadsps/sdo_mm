@@ -76,6 +76,7 @@ class EventViewSet(own_viewsets.GetCreateUpdateDeleteViewSet):
         """
         Получение пользователей от текущего эвента
         """
+        self.serializer_class = serializers.UserStatSerializer
         event = self.get_object()
         events = models.Event._default_manager.filter(Q(course=event.course)).select_related('user')
         serializer = self.get_serializer(instance)

@@ -51,6 +51,14 @@ class LessonStorySerializer(serializers.ModelSerializer):
         return data
 
 
+class UserStatSerializer(serializers.Serializer):
+    user = user_serializers.UserSerializer()
+    result = serializers.IntegerField(min_value=0, max_value=100)
+
+    class Meta:
+        fields = ('user', 'result')
+
+
 class AnswerSerializer(serializers.ModelSerializer):
     """
     Сериализатор Answer
