@@ -1,12 +1,15 @@
-import { ReactNode } from 'react'
-
 export type AddedMaterial = 'text' | 'video' | 'image' | 'test'
 
-export type NewItem = {
+/* export type NewItem = {
   id: number
   type: AddedMaterial
   description?: string[]
   layout: ReactNode
+} */
+
+export type NewItem = {
+  id: number
+  type: AddedMaterial
 }
 
 export type LessonBlock = {

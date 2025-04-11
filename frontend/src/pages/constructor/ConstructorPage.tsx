@@ -37,14 +37,11 @@ export const ConstructorPage: React.FC = () => {
   const [activeBlockId, setActiveBlockId] = useState<number | null>(null)
   const dispatch = useAppDispatch()
 
-  console.log(lessonBlocks)
-
   useEffect(() => {
     dispatch(setBlocks(lessonBlocks))
   }, [dispatch])
 
   const blocks = useAppSelector(selectBlocks)
-  console.log(blocks, 'blocks')
 
   const onBlockActive = (id: number) => {
     setActiveBlockId((prevId) => (prevId === id ? null : id))

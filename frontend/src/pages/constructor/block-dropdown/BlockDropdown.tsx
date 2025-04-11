@@ -1,8 +1,8 @@
 import { AddItemIcon, EditIcon, BasketIcon } from '@assets/icons'
+import { NewItem } from '@services/slices/constructor/constructor.types'
 import { DropdownCard } from '@shared/components'
-import { Fragment } from 'react'
-
-import { NewItem } from '../ConstructorPage'
+import { ConstructorContent } from '@shared/components/constructorContent'
+import { AddTest } from '@shared/components/constructorMenu/addTest/AddTest'
 
 import s from './block-dropdown.module.scss'
 
@@ -19,6 +19,23 @@ export const BlockDropdown = ({ newItems, isActiveBlock, title, onActive, delete
     onActive()
   }
 
+  const renderItems = () => {
+    return newItems.map((item) => {
+      switch (item.type) {
+        case 'text':
+          return <ConstructorContent key={item.id} type="text" />
+        case 'video':
+          return <ConstructorContent key={item.id} type="video" />
+        case 'image':
+          return <ConstructorContent key={item.id} type="image" />
+        case 'test':
+          return <AddTest key={item.id} />
+        default:
+          return null
+      }
+    })
+  }
+
   return (
     <DropdownCard
       title={title || ''}
@@ -28,9 +45,7 @@ export const BlockDropdown = ({ newItems, isActiveBlock, title, onActive, delete
       isOpen={isActiveBlock}
       toggle={toggleDropdown}
     >
-      {newItems.map((item, index) => (
-        <Fragment key={`${index}${item.type}`}>{item.layout}</Fragment>
-      ))}
+      {renderItems()}
       <AddItemIcon className={s.icon} />
     </DropdownCard>
   )

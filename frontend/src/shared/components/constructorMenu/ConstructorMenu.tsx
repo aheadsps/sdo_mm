@@ -1,10 +1,7 @@
 import { NewItem } from '@services/slices/constructor/constructor.types'
 import { Typography } from '@shared/components'
 
-import { ConstructorContent } from '../constructorContent'
-
 import { AddCard } from './addCard/AddCard'
-import { AddTest } from './addTest/AddTest'
 import s from './constructorMenu.module.scss'
 
 type Props = {
@@ -16,7 +13,6 @@ export const CMenu = ({ setNewItem, activeBlockId }: Props) => {
   const addNewItemText = () => {
     const newItem: NewItem = {
       type: 'text',
-      layout: <ConstructorContent type="text" />,
       id: activeBlockId,
     }
     setNewItem(newItem)
@@ -25,7 +21,6 @@ export const CMenu = ({ setNewItem, activeBlockId }: Props) => {
   const addNewItemVideo = () => {
     const newItem: NewItem = {
       type: 'video',
-      layout: <ConstructorContent type="video" />,
       id: activeBlockId,
     }
     setNewItem(newItem)
@@ -34,7 +29,6 @@ export const CMenu = ({ setNewItem, activeBlockId }: Props) => {
   const addNewItemImage = () => {
     const newItem: NewItem = {
       type: 'image',
-      layout: <ConstructorContent type="image" />,
       id: activeBlockId,
     }
     setNewItem(newItem)
@@ -43,7 +37,6 @@ export const CMenu = ({ setNewItem, activeBlockId }: Props) => {
   const addNewItemITest = () => {
     const newItem: NewItem = {
       type: 'test',
-      layout: <AddTest />,
       id: activeBlockId,
     }
     setNewItem(newItem)
