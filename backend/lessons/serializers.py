@@ -1,6 +1,7 @@
 import datetime
 import re
 
+from django.db.models import Q
 from rest_framework import serializers
 from rest_framework.validators import ValidationError
 from django.db.utils import IntegrityError
@@ -541,32 +542,25 @@ class EventSerializerCreate(serializers.ModelSerializer):
         Создает LessonStory для всех free-уроков и урока с serial=1
         """
         try:
-            free_lesson_ids = set(
+            lesson_ids = set(
                 models.Lesson.objects.filter(
-                    course=course,
-                    type_lesson="free").values_list('id', flat=True)
+                    Q(course=course) & (Q(type_lesson="free") | Q(serial=1))
+                ).values_list('id', flat=True)
             )
+
             logger.debug(
-                f'Нашлось {len(free_lesson_ids)} уроков в курсе {course.id}')
+                f'Нашлось {len(lesson_ids)} открытых на данный момент'
+                f' уроков в курсе {course.id}')
 
-            first_lesson_id = (
-                models.Lesson.objects.filter(
-                    course=course, serial=1).values_list("id", flat=True).first()
-            )
-            if first_lesson_id and first_lesson_id not in free_lesson_ids:
-                free_lesson_ids.add(first_lesson_id)
-                logger.debug(
-                    f'Найден первый урок с типом "linearly" №{free_lesson_ids}'
-                )
-
-            if free_lesson_ids:
+            if lesson_ids:
                 models.LessonStory.objects.bulk_create([
                     models.LessonStory(user=user, lesson_id=lesson_id,
                                        course=course)
-                    for lesson_id in free_lesson_ids
+                    for lesson_id in lesson_ids
                 ], ignore_conflicts=True)
-                logger.success(f'Создано {len(free_lesson_ids)} free уроков'
-                               f'+ урок с id=1 в LessonStory')
+
+                logger.success(
+                    f'Создано {len(lesson_ids)} открытых уроков  в LessonStory')
 
         except Exception as e:
             logger.error(f"Ошибка создания LessonStory: {str(e)}")
