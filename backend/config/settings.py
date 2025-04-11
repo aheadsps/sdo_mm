@@ -216,20 +216,31 @@ SPECTACULAR_SETTINGS = {
 
 STATUS_EVENTS = [
     (
-        "done",
-        "Успешно",
+        "finished",
+        "Заканчивает",
     ),
     (
-        "process",
-        "В процессе",
-    ),
-    (
-        "failed",
-        "Провалено",
+        "started",
+        "Начано",
     ),
     (
         "expected",
         "Ожидает начало",
+    ),
+]
+
+STATUS_COVERED = [
+    (
+        "done",
+        "Успешно",
+    ),
+    (
+        "failed",
+        "Проваленно",
+    ),
+    (
+        "process",
+        "В процессе",
     ),
 ]
 

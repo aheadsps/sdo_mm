@@ -1,4 +1,4 @@
-from django.core.validators import MinValueValidator
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth import get_user_model
@@ -18,13 +18,6 @@ class Event(models.Model):
     """
     Модель представления Ивента
     """
-    user = models.ForeignKey(get_user_model(),
-                             verbose_name=_("пользователь"),
-                             on_delete=models.CASCADE,
-                             help_text='Пользователь которому '
-                                       'будет назначен ивент',
-                             related_name='events',
-                             )
     course = models.ForeignKey('lessons.Course',
                                verbose_name='курс',
                                on_delete=models.CASCADE,
@@ -32,9 +25,6 @@ class Event(models.Model):
                                          'ивент',
                                related_name='events',
                                )
-    done_lessons = models.SmallIntegerField(_("Количество выполненых уроков"),
-                                            default=0,
-                                            )
     start_date = models.DateTimeField(verbose_name='дата начала ивента',
                                       null=True,
                                       help_text='Дата начала ивента, '
@@ -48,10 +38,7 @@ class Event(models.Model):
                                               'дедлайна нет тогда бессрочно',
                                     default=None,
                                     )
-    favorite = models.BooleanField(_("Избранный ивент"),
-                                   default=False,
-                                   help_text='Указатель является ли данный'
-                                             'ивент избранным')
+
     status = models.CharField(choices=settings.STATUS_EVENTS,
                               null=True,
                               default='expected',
@@ -65,6 +52,43 @@ class Event(models.Model):
 
     def __str__(self):
         return f"event_for_user_{self.user.pk}_{self.pk}"
+
+
+class EventCovered(models.Model):
+    """
+    Покрытие эвентами
+    """
+    user = models.ForeignKey(get_user_model(),
+                             verbose_name=_("пользователь"),
+                             on_delete=models.CASCADE,
+                             related_name='events',
+                             )
+    event = models.ForeignKey(Event,
+                              verbose_name=_("эвент"),
+                              on_delete=models.CASCADE,
+                              )
+    favorite = models.BooleanField(_("Избранный ивент"),
+                                   default=False,
+                                   help_text='Указатель является ли данный'
+                                             'ивент избранным')
+    procent = models.SmallIntegerField(_("Процент прохождения"),
+                                       default=0,
+                                       validators=[MinValueValidator(0), MaxValueValidator(100)],
+                                       )
+    status = models.CharField(_("статус"),
+                              max_length=50,
+                              choices=settings.STATUS_COVERED,
+                              null=True,
+                              blank=True,
+                              default=None,
+                              )
+
+    class Meta:
+        verbose_name = _("EventCovered")
+        verbose_name_plural = _("EventCovereds")
+
+    def __str__(self):
+        return self.name
 
 
 class Course(models.Model):
