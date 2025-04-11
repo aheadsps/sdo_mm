@@ -12,9 +12,17 @@ type Props = {
   title?: string
   onActive: () => void
   deleteBlock: () => void
+  setIsSidebarPointed: (value: boolean) => void
 }
 
-export const BlockDropdown = ({ newItems, isActiveBlock, title, onActive, deleteBlock }: Props) => {
+export const BlockDropdown = ({
+  newItems,
+  isActiveBlock,
+  title,
+  onActive,
+  deleteBlock,
+  setIsSidebarPointed,
+}: Props) => {
   const toggleDropdown = () => {
     onActive()
   }
@@ -46,7 +54,7 @@ export const BlockDropdown = ({ newItems, isActiveBlock, title, onActive, delete
       toggle={toggleDropdown}
     >
       {renderItems()}
-      <AddItemIcon className={s.icon} />
+      <AddItemIcon className={s.icon} onClick={() => setIsSidebarPointed(true)} />
     </DropdownCard>
   )
 }

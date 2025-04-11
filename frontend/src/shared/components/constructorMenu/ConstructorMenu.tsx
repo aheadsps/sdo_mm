@@ -1,5 +1,6 @@
 import { NewItem } from '@services/slices/constructor/constructor.types'
 import { Typography } from '@shared/components'
+import clsx from 'clsx'
 
 import { AddCard } from './addCard/AddCard'
 import s from './constructorMenu.module.scss'
@@ -7,9 +8,10 @@ import s from './constructorMenu.module.scss'
 type Props = {
   setNewItem: (newItem: NewItem) => void
   activeBlockId: number
+  isSidebarPointed: boolean
 }
 
-export const CMenu = ({ setNewItem, activeBlockId }: Props) => {
+export const CMenu = ({ setNewItem, activeBlockId, isSidebarPointed }: Props) => {
   const addNewItemText = () => {
     const newItem: NewItem = {
       type: 'text',
@@ -43,7 +45,7 @@ export const CMenu = ({ setNewItem, activeBlockId }: Props) => {
   }
 
   return (
-    <aside className={s.container}>
+    <aside className={clsx(s.container, isSidebarPointed && s.pointed)}>
       <div className={s.block}>
         <Typography variant="caption" className={s.title}>
           Теоретический материал

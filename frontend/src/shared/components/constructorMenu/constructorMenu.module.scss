@@ -10,6 +10,11 @@
   }
 }
 
+.pointed {
+  border: 2px solid var(--color-accent-red500);
+  transition: border 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
 .block {
   width: 100%;
   height: fit-content;

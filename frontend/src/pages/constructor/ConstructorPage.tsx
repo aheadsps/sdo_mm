@@ -35,6 +35,8 @@ const lessonBlocks: LessonBlock[] = [
 
 export const ConstructorPage: React.FC = () => {
   const [activeBlockId, setActiveBlockId] = useState<number | null>(null)
+  const [isSidebarPointed, setIsSidebarPointed] = useState(false)
+
   const dispatch = useAppDispatch()
 
   useEffect(() => {
@@ -49,6 +51,9 @@ export const ConstructorPage: React.FC = () => {
 
   const onAddNewItem = (newItem: NewItem) => {
     dispatch(addNewBlockItem({ newItem, blockId: activeBlockId as number }))
+    if (isSidebarPointed) {
+      setIsSidebarPointed(false)
+    }
   }
 
   const onDeleteBlock = (blockId: number) => {
@@ -68,7 +73,11 @@ export const ConstructorPage: React.FC = () => {
             className={s.visible}
           />
           <div className={s.container}>
-            <CMenu setNewItem={onAddNewItem} activeBlockId={activeBlockId as number} />
+            <CMenu
+              setNewItem={onAddNewItem}
+              activeBlockId={activeBlockId as number}
+              isSidebarPointed={isSidebarPointed}
+            />
             <main className={s.main}>
               {blocks.map((item) => (
                 <BlockDropdown
@@ -78,6 +87,7 @@ export const ConstructorPage: React.FC = () => {
                   newItems={item.blockItems || []}
                   onActive={() => onBlockActive(item.id)}
                   deleteBlock={() => onDeleteBlock(item.id)}
+                  setIsSidebarPointed={setIsSidebarPointed}
                 />
               ))}
             </main>
