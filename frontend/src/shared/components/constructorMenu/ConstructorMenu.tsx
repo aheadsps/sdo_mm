@@ -1,7 +1,7 @@
 import { NewItem } from '@pages/constructor'
-import { Input, Textarea } from '@shared/components'
 import { Typography } from '@shared/components'
-import { ImageComponent } from '@shared/components'
+
+import { ConstructorContent } from '../constructorContent'
 
 import { AddCard } from './addCard/AddCard'
 import { AddTest } from './addTest/AddTest'
@@ -15,12 +15,7 @@ export const CMenu = ({ setNewItem }: Props) => {
   const addNewItemText = () => {
     const newItem: NewItem = {
       type: 'text',
-      layout: (
-        <div className={s.newTextFields}>
-          <Input placeholder="Enter title" />
-          <Textarea placeholder="Enter description" />
-        </div>
-      ),
+      layout: <ConstructorContent type="text" />,
     }
     setNewItem(newItem)
   }
@@ -28,7 +23,7 @@ export const CMenu = ({ setNewItem }: Props) => {
   const addNewItemVideo = () => {
     const newItem: NewItem = {
       type: 'video',
-      layout: <div className={s.newTextFields}>Hello Video</div>,
+      layout: <ConstructorContent type="video" />,
     }
     setNewItem(newItem)
   }
@@ -36,7 +31,7 @@ export const CMenu = ({ setNewItem }: Props) => {
   const addNewItemImage = () => {
     const newItem: NewItem = {
       type: 'image',
-      layout: <ImageComponent src="/img/car.png" />,
+      layout: <ConstructorContent type="image" />,
     }
     setNewItem(newItem)
   }
