@@ -1,6 +1,9 @@
 import datetime
 import math
 
+from django.core.exceptions import ValidationError
+from django.utils import timezone
+
 from loguru import logger
 
 from django.utils import timezone
@@ -617,3 +620,22 @@ def process_error(error_detail: dict[str, str]) -> None:
         raise exceptions.UnprocessableEntityError(
             error_detail,
         )
+
+
+class QuestionTypeValidator:
+    """
+    Проверяет, что ответы можно добавлять только к вопросам типа "test"
+    """
+    requires_context = True
+
+    def __init__(self, field):
+        self.field = field
+
+    def __call__(self, attrs, serializer):
+        question = attrs.get(self.field)
+
+        if question and question.type_question != "test":
+            raise exceptions.UnprocessableEntityError({
+                self.field: "Ответы можно прикреплять только к"
+                            " вопросам типа 'test'"
+            })
