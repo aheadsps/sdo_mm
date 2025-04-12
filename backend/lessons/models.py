@@ -198,6 +198,11 @@ class Lesson(models.Model):
     """
     Модель преставления урока
     """
+    teacher = models.ForeignKey(get_user_model(),
+                                verbose_name=_("учитель"),
+                                on_delete=models.SET_NULL,
+                                null=True,
+                                )
     name = models.CharField(_("Название"),
                             max_length=256,
                             null=False,
@@ -218,6 +223,7 @@ class Lesson(models.Model):
                                null=True,
                                blank=True,
                                )
+    start_date = models.DateTimeField(_("время начала"), null=True)
     type_lesson = models.CharField(verbose_name=_('Тип урока'),
                                    max_length=10,
                                    choices=settings.TYPE_LESSON,
@@ -237,7 +243,11 @@ class Step(models.Model):
     """
     Шаги урока
     """
-
+    teacher = models.ForeignKey(get_user_model(),
+                                verbose_name=_("учитель"),
+                                on_delete=models.SET_NULL,
+                                null=True,
+                                )
     title = models.CharField(
         max_length=256, null=False, blank=False, verbose_name="Шаг урока"
     )
@@ -295,7 +305,8 @@ class TestBlock(models.Model):
     """
     Модель тестового блока
     """
-
+    end_date = models.DateTimeField(_("время окончания"))
+    max_score = models.FloatField(_("максимальный балл"))
     lesson = models.OneToOneField(Lesson,
                                   on_delete=models.CASCADE,
                                   related_name="test_block",
@@ -315,6 +326,11 @@ class Question(models.Model):
     """
     Модель представления Вопроса
     """
+    teacher = models.ForeignKey(get_user_model(),
+                                verbose_name=_("учитель"),
+                                on_delete=models.SET_NULL,
+                                null=True,
+                                )
     text = models.TextField(verbose_name='текст вопроса',
                             help_text='Текст вопроса',
                             )
@@ -432,11 +448,11 @@ class LessonStory(models.Model):
                                related_name='lesson_story',
                                help_text='Курс'
                                )
-    lesson = models.ForeignKey(Lesson,
-                               verbose_name=_('Урок'),
-                               on_delete=models.CASCADE,
-                               related_name='lesson_story'
-                               )
+    step = models.ForeignKey(Step,
+                             verbose_name=_('Урок'),
+                             on_delete=models.CASCADE,
+                             related_name='lesson_story'
+                             )
     user = models.ForeignKey(get_user_model(),
                              verbose_name=_('Пользователь'),
                              on_delete=models.CASCADE,
