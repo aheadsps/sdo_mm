@@ -6,6 +6,7 @@ import { MainPage } from '@pages/main'
 import { MyLearning } from '@pages/my-learning/MyLearning'
 import { TrainingCenterCourse } from '@pages/trainingCenter/course/TrainingCenterCourse'
 import { TrainingCenter } from '@pages/trainingCenter/TrainingCenter'
+import { Role } from '@shared/components/sidebar/sidebar.types'
 import { createBrowserRouter } from 'react-router-dom'
 
 import { ProtectedRoute } from './protected-route/ProtectedRoute'
@@ -23,30 +24,15 @@ export const router = createBrowserRouter([
     element: <ProtectedRoute />,
     children: [
       {
-        path: routes.auth,
-        element: <AuthPage />,
-      },
-
-      {
         path: routes.main,
         element: <MainPage />,
       },
-      {
-        path: routes.learning,
-        element: <MyLearning />,
-      },
-      {
-        path: routes.course,
-        element: <CoursePage />,
-      },
-      {
-        path: routes.library,
-        element: <MyLearning />,
-      },
-      {
-        path: routes.news,
-        element: <MainPage />,
-      },
+    ],
+  },
+
+  {
+    element: <ProtectedRoute allowedRoles={Role.methodologist} />,
+    children: [
       {
         path: routes.trainingCenter,
         element: <TrainingCenter />,
@@ -56,12 +42,26 @@ export const router = createBrowserRouter([
         element: <TrainingCenterCourse />,
       },
       {
-        path: routes.lesson,
-        element: <Lesson />,
-      },
-      {
         path: routes.constructor,
         element: <ConstructorPage />,
+      },
+    ],
+  },
+
+  {
+    element: <ProtectedRoute allowedRoles={Role.student} />,
+    children: [
+      {
+        path: routes.learning,
+        element: <MyLearning />,
+      },
+      {
+        path: routes.course,
+        element: <CoursePage />,
+      },
+      {
+        path: routes.lesson,
+        element: <Lesson />,
       },
     ],
   },

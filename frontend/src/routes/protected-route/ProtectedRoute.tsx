@@ -2,8 +2,21 @@ import { routes } from '@routes/routes'
 import { getToken } from '@services/api'
 import { Navigate, Outlet } from 'react-router-dom'
 
-export const ProtectedRoute = () => {
-  const isAuth = !!getToken()
+type ProtectedRouteProps = {
+  allowedRoles?: number
+}
 
-  return isAuth ? <Outlet /> : <Navigate to={routes.auth} replace />
+export const ProtectedRoute = ({ allowedRoles }: ProtectedRouteProps) => {
+  const isAuth = !!getToken()
+  const userRole = localStorage.getItem('role')
+
+  if (!isAuth) {
+    return <Navigate to={routes.auth} replace />
+  }
+
+  if (allowedRoles !== undefined && Number(userRole) !== allowedRoles) {
+    return <Navigate to={routes.main} replace />
+  }
+
+  return <Outlet />
 }
