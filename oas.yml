@@ -276,6 +276,26 @@ paths:
         "422":
           $ref: "#/components/responses/UnprocessableEntity"
 
+  /covers/{cover_id}:
+    delete:
+      operationId: api_covers_delete
+      summary: Удаление пользователя из эвента
+      tags:
+        - Cover
+      security:
+        - Token: []
+      responses:
+        '204':
+          description: Ответ об удалении
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+
   /covers/currents:
     get:
       operationId: api_covers_list_currents
@@ -1772,6 +1792,7 @@ components:
         user:
           type: integer
           minimum: 1
+          readOnly: true
         procent:
           type: integer
           readOnly: true
@@ -1791,6 +1812,7 @@ components:
             - failed
             - process
             - expected
+          readOnly: true
           default:
             expected
 
@@ -1940,6 +1962,7 @@ components:
           description: Методист создавший курс
           type: integer
           minimum: 1
+          readOnly: true
         name:
           type: string
           maxLength: 256
@@ -2393,12 +2416,40 @@ components:
           description: Изображения для тестового вопроса
           readOnly: false
           nullable: true
+        type_question:
+          type: string
+          enum:
+            - test
+            - task
+            - essay
         test_block:
           type: integer
           minimum: 1
       required:
         - text
         - test_block
+        - type_question
+
+    Submission:
+      description: Сущность сдачи работы
+      type: object
+      additionalProperties: false
+      properties:
+        teacher:
+          type: integer
+          minimum: 1
+        user:
+          type: integer
+          minimum: 1
+          readOnly: true
+        content:
+          type: string
+          format: text
+        files:
+          type: array
+          minItems: 0
+          items:
+            $ref: "#/components/schemas/ContentAttachment"
 
     Answer:
       description: Сущность ответов на тесты
@@ -2416,6 +2467,11 @@ components:
         correct:
           type: boolean
           readOnly: false
+        weight:
+          type: integer
+          format: int32
+          minimum: -2
+          maximum: 5
         question:
           type: integer
           minimum: 1
