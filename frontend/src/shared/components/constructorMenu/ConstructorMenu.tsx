@@ -12,9 +12,18 @@ type Props = {
   activeBlockId: number
   isSidebarPointed: boolean
   setActiveBlockId: (activeBlockId: number | null) => void
+  lastBlockId: number | null
+  setLastBlockId: (value: number) => void
 }
 
-export const CMenu = ({ setNewItem, activeBlockId, isSidebarPointed, setActiveBlockId }: Props) => {
+export const CMenu = ({
+  setNewItem,
+  activeBlockId,
+  isSidebarPointed,
+  setActiveBlockId,
+  lastBlockId,
+  setLastBlockId,
+}: Props) => {
   const dispatch = useAppDispatch()
 
   const onAddNewItem = (type: AddedMaterial) => {
@@ -26,11 +35,13 @@ export const CMenu = ({ setNewItem, activeBlockId, isSidebarPointed, setActiveBl
   }
 
   const addNewItemModule = () => {
+    const newBlockId = lastBlockId ? ++lastBlockId : 1
     const newItem: LessonBlock = {
-      id: 4,
+      id: newBlockId,
       title: '',
       blockItems: [],
     }
+    setLastBlockId(newBlockId)
     setActiveBlockId(newItem.id)
     dispatch(addNewBlock(newItem))
   }

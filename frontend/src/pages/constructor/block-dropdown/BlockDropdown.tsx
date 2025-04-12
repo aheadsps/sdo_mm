@@ -1,4 +1,4 @@
-import { AddItemIcon, EditIcon, BasketIcon } from '@assets/icons'
+import { AddItemIcon, BasketIcon, CopyIcon } from '@assets/icons'
 import { NewItem } from '@services/slices/constructor/constructor.types'
 import { DropdownCard } from '@shared/components'
 import { ConstructorContent } from '@shared/components/constructorContent'
@@ -54,7 +54,7 @@ export const BlockDropdown = ({
   return (
     <DropdownCard
       title={title || ''}
-      icons={[<EditIcon height={'12px'} width={'12px'} />, <BasketIcon onClick={deleteBlock} />]}
+      icons={[<CopyIcon height={'12px'} width={'12px'} />, <BasketIcon onClick={deleteBlock} />]}
       wrapperClassName={s.dropdownHeader}
       className={s.dropdownContent}
       isOpen={isActiveBlock}
@@ -63,7 +63,9 @@ export const BlockDropdown = ({
       onChange={onTitleChange}
     >
       {renderItems()}
-      <AddItemIcon className={s.icon} onClick={() => setIsSidebarPointed(true)} />
+      {!newItems.length && (
+        <AddItemIcon className={s.icon} onClick={() => setIsSidebarPointed(true)} />
+      )}
     </DropdownCard>
   )
 }

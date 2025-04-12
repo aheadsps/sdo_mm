@@ -44,6 +44,9 @@ export const ConstructorPage: React.FC = () => {
   }, [dispatch])
 
   const blocks = useAppSelector(selectBlocks)
+  const [lastBlockId, setLastBlockId] = useState<number | null>(
+    lessonBlocks[lessonBlocks.length - 1].id
+  )
 
   const onBlockActive = (id: number) => {
     setActiveBlockId((prevId) => (prevId === id ? null : id))
@@ -80,6 +83,8 @@ export const ConstructorPage: React.FC = () => {
               activeBlockId={activeBlockId as number}
               isSidebarPointed={isSidebarPointed}
               setActiveBlockId={setActiveBlockId}
+              lastBlockId={lastBlockId}
+              setLastBlockId={setLastBlockId}
             />
             <main className={s.main}>
               {blocks.map((item) => (
