@@ -1,4 +1,4 @@
-import { Lesson } from '@features/lesson/LessonComponent'
+import { Lesson } from '@features/lesson'
 import { AuthPage } from '@pages/auth'
 import { ConstructorPage } from '@pages/constructor'
 import { CoursePage } from '@pages/course/CoursePage'
@@ -8,47 +8,65 @@ import { TrainingCenterCourse } from '@pages/trainingCenter/course/TrainingCente
 import { TrainingCenter } from '@pages/trainingCenter/TrainingCenter'
 import { createBrowserRouter } from 'react-router-dom'
 
+import { ProtectedRoute } from './protected-route/ProtectedRoute'
 import { routes } from './routes'
 
 export const router = createBrowserRouter([
-  {
-    path: routes.main,
-    element: <MainPage />,
-  },
-  {
-    path: routes.learning,
-    element: <MyLearning />,
-  },
-  {
-    path: routes.course,
-    element: <CoursePage />,
-  },
-  {
-    path: routes.library,
-    element: <MyLearning />,
-  },
-  {
-    path: routes.news,
-    element: <MainPage />,
-  },
+  /* public routes */
   {
     path: routes.auth,
     element: <AuthPage />,
   },
   {
-    path: routes.trainingCenter,
-    element: <TrainingCenter />,
+    path: '/',
+    element: <div>Hello App</div>,
   },
+
+  /* private routes */
   {
-    path: routes.trainingCenterCourse,
-    element: <TrainingCenterCourse />,
-  },
-  {
-    path: routes.lesson,
-    element: <Lesson />,
-  },
-  {
-    path: routes.constructor,
-    element: <ConstructorPage />,
+    element: <ProtectedRoute />,
+    children: [
+      {
+        path: routes.auth,
+        element: <AuthPage />,
+      },
+
+      {
+        path: routes.main,
+        element: <MainPage />,
+      },
+      {
+        path: routes.learning,
+        element: <MyLearning />,
+      },
+      {
+        path: routes.course,
+        element: <CoursePage />,
+      },
+      {
+        path: routes.library,
+        element: <MyLearning />,
+      },
+      {
+        path: routes.news,
+        element: <MainPage />,
+      },
+      {
+        path: '/trainingCenter',
+        element: <TrainingCenter />,
+      },
+      {
+        path: '/trainingCenter/course',
+        element: <TrainingCenterCourse />,
+      },
+      {
+        path: '/lesson',
+        element: <Lesson />,
+      },
+      {
+        path: '/constructor',
+        element: <ConstructorPage />,
+      },
+    ],
   },
 ])
