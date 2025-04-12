@@ -379,6 +379,12 @@ class Question(models.Model):
     weight = models.SmallIntegerField(_("вес вопроса"),
                                       validators=[MinValueValidator(1)],
                                       )
+    type_question = models.CharField(verbose_name=_('Тип вопроса'),
+                                     max_length=8,
+                                     choices=settings.TYPE_QUESTION,
+                                     default='test',
+                                     help_text='Текущий тип данного вопроса',
+                                     )
     test_block = models.ForeignKey(TestBlock,
                                    verbose_name=_("тестовый блок"),
                                    on_delete=models.CASCADE,
