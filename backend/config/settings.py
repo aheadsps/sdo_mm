@@ -324,6 +324,16 @@ TYPE_LESSON = [
         "линейный",
     )
 ]
+TYPE_OF_ASSESSMENT = [
+    (
+        "answer",
+        "ответ"
+    ),
+    (
+        "question",
+        "вопрос"
+    )
+]
 
 
 
