@@ -1,4 +1,9 @@
+import datetime
 from loguru import logger
+
+from django.utils import timezone
+from django.db.models import Q
+from django.contrib.auth import get_user_model
 from rest_framework import permissions, status, mixins, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -115,15 +120,53 @@ class EventViewSet(mixins.ListModelMixin,
         self.queryset = self.queryset.select_related('course')
         return super().list(request, *args, **kwargs)
 
+    def _change_status(self, instance):
+        """
+        Изменение статуса
+        """
+        course = instance.course
+        course.status = 'run'
+        course.save(update_fields=('status',))
+        return instance
+
+    def _set_event_users(self, instance):
+        """
+        Установка пользователям данный эвент при
+        условии что он beginner
+        """
+        if instance.course.beginner:
+            profession = instance.course.profession
+            experiences = instance.course.experiences.get_queryset()
+            time_now = timezone.now()
+            years_experience: list[datetime.datetime] = list()
+
+            for exp in experiences:
+                years_experience.append(time_now() - datetime.timedelta(days=365 * exp.year))
+
+            qfilter = Q(*[Q(date_commencement__lt=year, profession=profession)
+                          for year
+                          in years_experience],
+                        _connector=Q.OR,
+                        )
+
+            users = get_user_model()._default_manager.filter(qfilter).get_queryset()
+            models.EventCovered._default_manager.bulk_create(
+                [models.EventCovered(
+                    user=user,
+                    event=instance,
+                    status='process',
+                    ) for user in users]
+            )
+            return instance
+
     def create(self, request, *args, **kwargs):
         self.check_object_permissions(request, None)
         self.serializer_class = serializers.EventSerializerCreate
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         instance = serializer.save()
-        course = instance.course
-        course.status = 'run'
-        course.save(update_fields=('status',))
+        self._change_status(instance)
+        self._set_event_users(instance)
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 

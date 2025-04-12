@@ -281,7 +281,9 @@ class TestEndpoints(APITestCase):
             data=data,
             format="json",
         )
+        course = lessons_models.Course._default_manager.get(pk=self.course.pk)
         self.assertEqual(response.status_code, 201)
+        self.assertEqual(course.status, 'run')
         self.assertEqual(
             response.json(),
             {
