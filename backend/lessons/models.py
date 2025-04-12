@@ -402,11 +402,6 @@ class Question(models.Model):
                                    null=True,
                                    blank=True,
                                    )
-    type_question = models.CharField(verbose_name=_('Тип вопроса'),
-                                     max_length=8,
-                                     choices=settings.TYPE_QUESTION,
-                                     help_text='Текущий тип данного вопроса',
-                                     )
     check_automaty = models.BooleanField(_("Автоматическая проверка"),
                                          default=False,
                                          help_text="Автоматическая проверка"
