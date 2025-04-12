@@ -355,6 +355,8 @@ SEND_MAIL_TASK = 'lessons.tasks.send_mail_users'
 
 SUBJECT_PATH = 'lessons/subject.txt'
 
+
+
 EMAIL_FROM = os.getenv("DEFAULT_EMAIL_FROM")
 EMAIL_BCC = os.getenv("DEFAULT_EMAIL_BCC")
 
