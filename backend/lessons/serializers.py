@@ -57,7 +57,7 @@ class LessonStorySerializer(serializers.ModelSerializer):
 
 class AnswerSerializer(serializers.ModelSerializer):
     """
-    Сериализатор Answer
+    Сериализатор создания и обновления Answer
     """
 
     correct = serializers.BooleanField(write_only=True)
@@ -70,6 +70,7 @@ class AnswerSerializer(serializers.ModelSerializer):
             "correct",
             "question",
         )
+        validators = (validators.QuestionTypeValidator('question'),)
 
 
 class QuestionSerializer(serializers.ModelSerializer):
