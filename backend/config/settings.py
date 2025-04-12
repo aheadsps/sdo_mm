@@ -300,6 +300,21 @@ VERSIONS_SCORM = [
     ),
 ]
 
+TYPE_QUESTION = [
+    (
+        "test",
+        "тест",
+    ),
+    (
+        "task",
+        "задание",
+    ),
+    [
+        "essay",
+        "эссе"
+    ]
+]
+
 TYPE_LESSON = [
     (
         "free",
@@ -310,6 +325,8 @@ TYPE_LESSON = [
         "линейный",
     )
 ]
+
+
 
 EVENT_SWITCH_STATUS = 'lessons.tasks.event_switch_status'
 LESSON_SWITCH_STATUS = 'lessons.tasks.lesson_switch_status'
