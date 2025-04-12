@@ -1892,18 +1892,6 @@ components:
           default:
             expected
 
-    UserStat:
-      description: Сущность пользотателей от курса
-      additionalProperties: false
-      type: object
-      properties:
-        user:
-          type: object
-          $ref: "#/components/schemas/User"
-        progress:
-          type: integer
-          format: int32
-
     СourseView:
       description: Сущность курса детальный
       additionalProperties: false
@@ -2386,6 +2374,11 @@ components:
           type: integer
           minimum: 1
           readOnly: true
+        max_score:
+          description: Максимальный балл который может получить студент с данного тествого блока
+          type: number
+          format: float
+          readOnly: true
         questions:
           type: array
           description: Вопросы для данного шага. (Только в логике сериализатора, в модели не реализуем!)
@@ -2423,6 +2416,11 @@ components:
           type: integer
           minimum: 1
           readOnly: true
+        max_score:
+          description: Максимальный балл который может получить студент с данного тествого блока
+          type: number
+          format: float
+          readOnly: true
         questions:
           type: array
           description: Вопросы для данного шага. (Только в логике сериализатора, в модели не реализуем!)
@@ -2459,6 +2457,10 @@ components:
             - test
             - task
             - essay
+        check_automaty:
+          description: Автоматическая проверка (веб сокет)
+          type: boolean
+          default: false
         answers:
           type: array
           description: Ответы на данный вопрос. (Только в логике сериализатора, в модели не реализуем!)
@@ -2548,7 +2550,7 @@ components:
         student:
           type: integer
           minimum: 1
-        task:
+        test_block:
           type: integer
           minimum: 1
         score:
@@ -2563,7 +2565,8 @@ components:
           minimum: 0
           maximum: 100
         result:
-          type: integer
+          type: number
+          format: float
 
     Answer:
       description: Сущность ответов на тесты
@@ -2708,7 +2711,7 @@ components:
           minimum: 1
           readOnly: true
           nullable: false
-        lesson:
+        step:
           type: integer
           minimum: 1
           readOnly: true
