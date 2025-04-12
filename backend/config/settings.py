@@ -242,6 +242,10 @@ STATUS_COVERED = [
         "process",
         "В процессе",
     ),
+    (
+        "expected",
+        "Ожидает",
+    )
 ]
 
 VERSIONS_SCORM = [

@@ -3,6 +3,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth import get_user_model
 from django.conf import settings
+from django.contrib.postgres.fields import ranges
 from lessons.utils import (
     path_maker_question,
     path_maker_course,
@@ -25,22 +26,9 @@ class Event(models.Model):
                                          'ивент',
                                related_name='events',
                                )
-    start_date = models.DateTimeField(verbose_name='дата начала ивента',
-                                      null=True,
-                                      help_text='Дата начала ивента, '
-                                      'нужно для Celery что бы в рассписании '
-                                      'поставить дату выдачи ивента',
-                                      default=None,
-                                      )
-    end_date = models.DateTimeField(verbose_name='дедлайн',
-                                    null=True,
-                                    help_text='Дедлайн ивента, если'
-                                              'дедлайна нет тогда бессрочно',
-                                    default=None,
-                                    )
-
+    start_date = models.DateTimeField(verbose_name='дата начала ивента')
+    end_date = models.DateTimeField(verbose_name='дедлайн')
     status = models.CharField(choices=settings.STATUS_EVENTS,
-                              null=True,
                               default='expected',
                               verbose_name='статус ивента',
                               help_text='Текущий статус данного ивента',
@@ -95,7 +83,11 @@ class Course(models.Model):
     """
     Модель представления курса
     """
-
+    teacher = models.ForeignKey(get_user_model(),
+                                verbose_name=_("учитель"),
+                                on_delete=models.SET_NULL,
+                                null=True,
+                                )
     name = models.CharField(
         _("Название"),
         max_length=256,
@@ -108,6 +100,7 @@ class Course(models.Model):
         blank=True,
         default=None,
     )
+    interval = ranges.DateRangeField()
     beginer = models.BooleanField(
         _("Начинающий"),
         help_text="Курс для начинающих",
