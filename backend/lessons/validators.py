@@ -77,6 +77,46 @@ class TimeValidator:
             )
 
 
+class PassRegistationsValidator:
+    """
+    Валидатор на пропуск регистрации
+    """
+
+    requires_context = True
+
+    def __init__(self, event: str) -> None:
+        self.event = str(event)
+        self.error_detail = dict()
+
+    def _check(
+        self,
+        event,
+    ) -> None:
+        """
+        Проверка исключения временных рамок с статусом 'начинающий'
+        """
+        if not event.beginner and event.status in ['started', 'finished']:
+            self.error_detail.update(
+                dict(status='Регистрация не возможна если курс уже начался или закончен'),
+                )
+        self._process_error(error_detail=self.error_detail)
+
+    def _process_error(self, error_detail: dict[str, str]) -> None:
+        if error_detail:
+            raise exceptions.UnprocessableEntityError(
+                error_detail,
+            )
+
+    def __call__(self, attrs, serializer):
+        self.error_detail = dict()
+        need_check = tigger_to_check(attrs, self.event)
+        if need_check:
+            event = get_value(self.event, attrs, serializer)
+            self._check(
+                event=event,
+            )
+
+
 class BeginnerValidator:
     """
     Валидатор на проверку начального курса

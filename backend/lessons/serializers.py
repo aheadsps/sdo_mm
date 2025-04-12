@@ -494,12 +494,14 @@ class EventSerializerCreate(serializers.ModelSerializer):
             "course",
             "start_date",
             "end_date",
+            "beginner",
             "status",
         )
         validators = (validators.SingleEventValidator('course'),
                       validators.BeginnerValidator('course', 'start_date', 'end_date'),
                       validators.TimeValidator("start_date", "end_date"),
                       )
+        read_only_fields = ('beginner', 'status')
 
     def _is_process(self, start_date: datetime.datetime) -> bool:
         """
@@ -537,42 +539,10 @@ class EventSerializerCreate(serializers.ModelSerializer):
                     process=is_process,
                 )
 
-    def _create_lesson_stories(self, user, course):
-        """
-        Создает LessonStory для всех free-уроков и урока с serial=1
-        """
-        try:
-            lesson_ids = set(
-                models.Lesson.objects.filter(
-                    Q(course=course) & (Q(type_lesson="free") | Q(serial=1))
-                ).values_list('id', flat=True)
-            )
-
-            logger.debug(
-                f'Нашлось {len(lesson_ids)} открытых на данный момент'
-                f' уроков в курсе {course.id}')
-
-            if lesson_ids:
-                models.LessonStory.objects.bulk_create([
-                    models.LessonStory(user=user, lesson_id=lesson_id,
-                                       course=course)
-                    for lesson_id in lesson_ids
-                ], ignore_conflicts=True)
-
-                logger.success(
-                    f'Создано {len(lesson_ids)} открытых уроков  в LessonStory')
-
-        except Exception as e:
-            logger.error(f"Ошибка создания LessonStory: {str(e)}")
-            raise
-
     def create(self, validated_data):
-        event = super().create(validated_data)
-        self._create_lesson_stories(
-            user=validated_data["user"],
-            course=validated_data["course"]
-        )
-        return event
+        if validated_data['beginner']:
+            validated_data['status'] = 'process'
+        return super().create(validated_data)
 
     def save(self, **kwargs):
         logger.debug(f"before {self.validated_data}")
@@ -632,4 +602,6 @@ class EventCoveredCreateSerializer(serializers.ModelSerializer):
             'status',
         )
         read_only_fields = ('user', 'procent', 'status')
-        validators = (validators.RegistrationValidator('user', 'event'),)
+        validators = (validators.RegistrationValidator('user', 'event'),
+                      validators.PassRegistationsValidator('event'),
+                      )
