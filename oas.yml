@@ -1926,6 +1926,10 @@ components:
           type: string
           readOnly: false
           nullable: true
+        interval:
+          type: string
+          format: date
+          description: Интервал времени по которому будут открывать уроки
         lessons:
           type: array
           description: Уроки привязанные к данному курсу (для бэков - это поле только из сериализатора)
@@ -2075,6 +2079,10 @@ components:
           type: string
           readOnly: false
           nullable: true
+        interval:
+          type: string
+          format: date
+          description: Интервал времени по которому будут открывать уроки
         lessons:
           type: array
           description: Уроки привязанные к данному курсу (для бэков - это поле только из сериализатора)
@@ -2405,6 +2413,11 @@ components:
           type: string
           format: date-time
           readOnly: true
+        status:
+          type: string
+          enum:
+            - failed
+            - done
         lesson:
           description: В модели делаем полноценную связь, в сериализаторе только id
           type: integer
@@ -2440,6 +2453,12 @@ components:
         test_block:
           type: integer
           minimum: 1
+        type_question:
+          type: string
+          enum:
+            - test
+            - task
+            - essay
         answers:
           type: array
           description: Ответы на данный вопрос. (Только в логике сериализатора, в модели не реализуем!)
@@ -2502,6 +2521,11 @@ components:
           type: string
           format: text
           nullable: true
+        type_of:
+          type: string
+          enum:
+            - answer
+            - question
         files:
           type: array
           minItems: 0
