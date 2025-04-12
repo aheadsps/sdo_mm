@@ -1,6 +1,7 @@
 import datetime
 import re
 
+from django.db.models import Q
 from rest_framework import serializers
 from rest_framework.validators import ValidationError
 from django.db.utils import IntegrityError
@@ -15,7 +16,6 @@ from lessons.scorm import SCORMLoader
 from lessons.utils import parse_exeption_error
 from lessons.scorm.engine.exceptions import SCORMExtractError, ManifestNotSetupError
 from users import serializers as user_serializers
-
 
 PROCESS = "process"
 EXPECTED = "expected"
@@ -106,7 +106,6 @@ class QuestionCreateSerializer(serializers.ModelSerializer):
 
 
 class ContentAttachmentSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = models.ContentAttachment
         fields = ["id", "file", "file_type"]
@@ -339,7 +338,8 @@ class ZIPFileField(serializers.FileField):
         if not self.allow_empty_file and not file_size:
             self.fail('empty')
         if self.max_length and len(file_name) > self.max_length:
-            self.fail('max_length', max_length=self.max_length, length=len(file_name))
+            self.fail('max_length', max_length=self.max_length,
+                      length=len(file_name))
 
         return data
 
@@ -534,6 +534,43 @@ class EventSerializerCreate(serializers.ModelSerializer):
                     validated_data=validated_data,
                     process=is_process,
                 )
+
+    def _create_lesson_stories(self, user, course):
+        """
+        Создает LessonStory для всех free-уроков и урока с serial=1
+        """
+        try:
+            lesson_ids = set(
+                models.Lesson.objects.filter(
+                    Q(course=course) & (Q(type_lesson="free") | Q(serial=1))
+                ).values_list('id', flat=True)
+            )
+
+            logger.debug(
+                f'Нашлось {len(lesson_ids)} открытых на данный момент'
+                f' уроков в курсе {course.id}')
+
+            if lesson_ids:
+                models.LessonStory.objects.bulk_create([
+                    models.LessonStory(user=user, lesson_id=lesson_id,
+                                       course=course)
+                    for lesson_id in lesson_ids
+                ], ignore_conflicts=True)
+
+                logger.success(
+                    f'Создано {len(lesson_ids)} открытых уроков  в LessonStory')
+
+        except Exception as e:
+            logger.error(f"Ошибка создания LessonStory: {str(e)}")
+            raise
+
+    def create(self, validated_data):
+        event = super().create(validated_data)
+        self._create_lesson_stories(
+            user=validated_data["user"],
+            course=validated_data["course"]
+        )
+        return event
 
     def save(self, **kwargs):
         logger.debug(f"before {self.validated_data}")

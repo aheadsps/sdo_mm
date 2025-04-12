@@ -1643,6 +1643,41 @@ components:
           description: Текст ответа
           nullable: false
 
+
+    EventCovered:
+      description: Сущность статистики курсов на пользователе
+      additionalProperties: false
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+          minimum: 1
+        event:
+          type: object
+          $ref: "#/components/schemas/Event"
+        user:
+          type: integer
+          readOnly: true
+          minimum: 1
+        procent:
+          type: integer
+          readOnly: true
+          format: int32
+          minimum: 0
+          maximum: 100
+        favorite:
+          type: boolean
+          description: Флаг избранного
+          default: false
+          readOnly: false
+        status:
+          type: string
+          enum:
+            - done
+            - failed
+            - process
+
     UserStat:
       description: Сущность пользотателей от курса
       additionalProperties: false
@@ -1655,6 +1690,7 @@ components:
           type: integer
           format: int32
 
+
     СourseView:
       description: Сущность курса детальный
       additionalProperties: false
@@ -1663,6 +1699,10 @@ components:
         id:
           type: integer
           readOnly: true
+          minimum: 1
+        user:
+          description: Методист создавший курс
+          type: integer
           minimum: 1
         name:
           type: string
@@ -1724,12 +1764,29 @@ components:
           minItems: 0
           items:
             $ref: "#/components/schemas/LessonStory"
+        status:
+          type: string
+          enum:
+            - run
+            - end
+            - archive
+            - edit
+          default:
+            - archive
 
     CourseCreate:
       description: Сущность курса упрощеная
       additionalProperties: false
       type: object
       properties:
+        id:
+          type: integer
+          minimum: 1
+          readOnly: true
+        user:
+          description: Методист создавший курс
+          type: integer
+          minimum: 1
         name:
           type: string
           maxLength: 256
@@ -1765,6 +1822,13 @@ components:
           items:
             type: integer
             minimum: 1
+        status:
+          type: string
+          enum:
+            - archive
+            - edit
+          default:
+            - archive
       required:
         - id
         - name
@@ -1776,6 +1840,14 @@ components:
       additionalProperties: false
       type: object
       properties:
+        id:
+          type: integer
+          minimum: 1
+          readOnly: true
+        user:
+          description: Методист создавший курс
+          type: integer
+          minimum: 1
         name:
           type: string
           maxLength: 256
@@ -1819,6 +1891,15 @@ components:
           items:
             type: integer
             minimum: 1
+        status:
+          type: string
+          enum:
+            - run
+            - end
+            - archive
+            - edit
+          default:
+            - archive
       required:
         - id
         - name
@@ -2325,15 +2406,9 @@ components:
       additionalProperties: false
       type: object
       properties:
-        user:
-          type: integer
-          minimum: 1
         course:
           type: integer
           minimum: 1
-        done_lessons:
-          type: integer
-          default: 0
         start_date:
           type: string
           format: date-time
@@ -2344,18 +2419,12 @@ components:
           format: date-time
           readOnly: false
           nullable: true
-        favorite:
-          type: boolean
-          description: Флаг избранного
-          default: false
-          readOnly: false
         status:
           description: Статус прохождения курса
           enum:
-            - done
             - process
-            - failed
             - expected
+            - finished
           readOnly: true
           default: expected
 
@@ -2364,17 +2433,10 @@ components:
       additionalProperties: false
       type: object
       properties:
-        user:
-          type: integer
-          minimum: 1
-          readOnly: true
         course:
           type: integer
           minimum: 1
           readOnly: true
-        done_lessons:
-          type: integer
-          default: 0
         start_date:
           type: string
           format: date-time
@@ -2385,18 +2447,12 @@ components:
           format: date-time
           readOnly: false
           nullable: true
-        favorite:
-          type: boolean
-          description: Флаг избранного
-          default: false
-          readOnly: false
         status:
           description: Статус прохождения курса
           enum:
-            - done
             - process
-            - failed
             - expected
+            - finished
           readOnly: true
           default: expected
 
@@ -2405,18 +2461,11 @@ components:
       additionalProperties: false
       type: object
       properties:
-        user:
-          type: integer
-          minimum: 1
         course:
           type: object
           readOnly: false
           minimum: 1
           $ref: "#/components/schemas/СourseView"
-        done_lessons:
-          type: integer
-          readOnly: true
-          default: 0
         start_date:
           type: string
           format: date-time
@@ -2427,18 +2476,12 @@ components:
           format: date-time
           readOnly: false
           nullable: true
-        favorite:
-          type: boolean
-          description: Флаг избранного
-          default: false
-          readOnly: false
         status:
           description: Статус прохождения курса
           enum:
-            - done
             - process
-            - failed
             - expected
+            - finished
           readOnly: true
           default: expected
 
@@ -2447,18 +2490,11 @@ components:
       additionalProperties: false
       type: object
       properties:
-        user:
-          type: integer
-          minimum: 1
         course:
           type: object
           readOnly: false
           minimum: 1
           $ref: "#/components/schemas/Сourse"
-        done_lessons:
-          type: integer
-          readOnly: true
-          default: 0
         start_date:
           type: string
           format: date-time
@@ -2469,18 +2505,12 @@ components:
           format: date-time
           readOnly: false
           nullable: true
-        favorite:
-          type: boolean
-          description: Флаг избранного
-          default: false
-          readOnly: false
         status:
           description: Статус прохождения курса
           enum:
-            - done
             - process
-            - failed
             - expected
+            - finished
           readOnly: true
           default: expected
 
