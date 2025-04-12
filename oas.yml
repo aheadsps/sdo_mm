@@ -1102,9 +1102,9 @@ paths:
         "422":
           $ref: "#/components/responses/UnprocessableEntity"
 
-  /test-block/{block_id}/reset:
-    delete:
-      summary: Сброс ответов под данный урок
+  /test-block/{block_id}/submission:
+    post:
+      summary: Ответ на задание из тестового блока
       parameters:
         - in: path
           name: block_id
@@ -1112,13 +1112,51 @@ paths:
           schema:
             type: integer
             minimum: 1
+      operationId: api_test-block_submission
       tags:
         - TestBlock
       security:
         - Token: []
       responses:
-        "204":
-          description: Успешно обнулен
+        "200":
+          description: JSON ответ с шагом
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/AssessmentSubmission"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+
+  /test-block/{block_id}/assessment:
+    post:
+      summary: Оценка задания из тестового блока
+      parameters:
+        - in: path
+          name: block_id
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+      operationId: api_test-block_assessment
+      tags:
+        - TestBlock
+      security:
+        - Token: []
+      responses:
+        "200":
+          description: JSON ответ с шагом
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/AssessmentSubmission"
         "401":
           $ref: "#/components/responses/Unauthorized"
         "403":
@@ -1972,6 +2010,10 @@ components:
           type: string
           readOnly: false
           nullable: true
+        interval:
+          type: string
+          format: date
+          description: Интервал времени по которому будут открывать уроки
         beginer:
           type: boolean
           default: false
@@ -2327,6 +2369,10 @@ components:
           type: integer
           minimum: 1
           readOnly: true
+        end_date:
+          type: string
+          format: date-time
+          readOnly: true
         lesson:
           description: В модели делаем полноценную связь, в сериализаторе только id
           type: integer
@@ -2354,6 +2400,10 @@ components:
         id:
           type: integer
           minimum: 1
+          readOnly: true
+        end_date:
+          type: string
+          format: date-time
           readOnly: true
         lesson:
           description: В модели делаем полноценную связь, в сериализаторе только id
@@ -2430,26 +2480,66 @@ components:
         - test_block
         - type_question
 
-    Submission:
-      description: Сущность сдачи работы
+    AssessmentSubmission:
+      description: Оценка преподавателя
       type: object
       additionalProperties: false
       properties:
         teacher:
           type: integer
           minimum: 1
-        user:
+        test_block:
           type: integer
           minimum: 1
-          readOnly: true
-        content:
+        student:
+          type: integer
+          minimum: 1
+        score:
+          type: number
+          format: float
+          nullable: true
+        comment:
           type: string
           format: text
+          nullable: true
         files:
           type: array
           minItems: 0
           items:
             $ref: "#/components/schemas/ContentAttachment"
+        date_assessment:
+          type: string
+          format: date-time
+          readOnly: true
+
+    CourseProgress:
+      description: Прогресс студента в определенной точке курса
+      additionalProperties: false
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+          minimum: 1
+        student:
+          type: integer
+          minimum: 1
+        task:
+          type: integer
+          minimum: 1
+        score:
+          type: number
+          format: float
+        data_assessment:
+          type: string
+          format: date-time
+        procent_compelete:
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 100
+        result:
+          type: integer
 
     Answer:
       description: Сущность ответов на тесты
