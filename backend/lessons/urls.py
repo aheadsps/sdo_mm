@@ -17,6 +17,7 @@ router.register(prefix=r'test-block', viewset=views.TestBlockViewSet)
 router.register(prefix=r'questions', viewset=views.QuestionViewSet)
 router.register(prefix=r'answers', viewset=views.AnswerViewSet)
 router.register(prefix=r'scorms', viewset=views.SCROMViewSet)
+router.register(prefix=r'covers', viewset=views.EventCoveredViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
