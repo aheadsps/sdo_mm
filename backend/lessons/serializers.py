@@ -78,7 +78,7 @@ class QuestionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Question
-        fields = ("id", "text", "image", "answers")
+        fields = ("id", "teacher", "text", "image", "answers")
 
     # def create(self, validated_data: dict[str, str]):
     #     """
@@ -223,6 +223,7 @@ class StepViewSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Step
         fields = ("serial",
+                  "teacher",
                   "title",
                   "content_text",
                   "lesson",
@@ -284,6 +285,7 @@ class LessonSerializer(serializers.ModelSerializer):
         model = models.Lesson
         fields = (
             "id",
+            "teacher",
             "name",
             "serial",
             "course",
@@ -303,6 +305,7 @@ class LessonViewSerializer(serializers.ModelSerializer):
         model = models.Lesson
         fields = (
             "id",
+            "teacher",
             "name",
             "serial",
             "course",
@@ -357,6 +360,7 @@ class CreateCourseSerializer(serializers.ModelSerializer):
         fields = (
             "name",
             "description",
+            'interval',
             "beginer",
             "image",
             "profession",
@@ -396,8 +400,10 @@ class CourseSerializer(serializers.ModelSerializer):
         model = models.Course
         fields = (
             "id",
+            "teacher",
             "name",
             "description",
+            'interval',
             "beginer",
             "create_date",
             "update_date",
@@ -418,14 +424,15 @@ class ViewCourseSerializer(serializers.ModelSerializer):
     profession = user_serializers.ProfessionSerializer()
     lessons = LessonViewSerializer(many=True)
     scorms = SCORMSerializer(many=True)
-    lesson_story = LessonStorySerializer(many=True)
 
     class Meta:
         model = models.Course
         fields = (
             "id",
+            "teacher",
             "name",
             "description",
+            'interval',
             "beginer",
             "create_date",
             "update_date",
@@ -434,7 +441,6 @@ class ViewCourseSerializer(serializers.ModelSerializer):
             "experiences",
             "scorms",
             "lessons",
-            "lesson_story",
         )
 
 
@@ -449,12 +455,9 @@ class EventViewSerializer(serializers.ModelSerializer):
         model = models.Event
         fields = (
             "id",
-            "user",
             "course",
-            "done_lessons",
             "start_date",
             "end_date",
-            "favorite",
             "status",
         )
 
@@ -470,12 +473,9 @@ class EventSerializer(serializers.ModelSerializer):
         model = models.Event
         fields = (
             "id",
-            "user",
             "course",
-            "done_lessons",
             "start_date",
             "end_date",
-            "favorite",
             "status",
         )
 
@@ -490,11 +490,9 @@ class EventSerializerCreate(serializers.ModelSerializer):
     class Meta:
         model = models.Event
         fields = (
-            "user",
             "course",
             "start_date",
             "end_date",
-            "favorite",
             "status",
         )
         validators = (validators.TimeValidator("start_date", "end_date"),)
@@ -589,12 +587,44 @@ class EventSerializerUpdate(serializers.ModelSerializer):
     class Meta:
         model = models.Event
         fields = (
-            "user",
             "course",
             "start_date",
             "end_date",
-            "favorite",
             "status",
         )
         validators = (validators.TimeValidator("start_date", "end_date"),)
         read_only_fields = ("id", "start_date", "course", "user")
+
+
+class EventCoveredSerializer(serializers.ModelSerializer):
+    """
+    Сериализатор покрытия эвентами
+    """
+
+    event = EventSerializer(read_only=True)
+
+    class Meta:
+        model = models.EventCovered
+        fields = (
+            'user',
+            'event',
+            'favorite',
+            'procent',
+            'status',
+        )
+
+
+class EventCoveredCreateSerializer(serializers.ModelSerializer):
+    """
+    Сериализатор создания покрытия эвентами
+    """
+    class Meta:
+        model = models.EventCovered
+        fields = (
+            'user',
+            'event',
+            'favorite',
+            'procent',
+            'status',
+        )
+        read_only_fields = ('user', 'procent', 'status')
