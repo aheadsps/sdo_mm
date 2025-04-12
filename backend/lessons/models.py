@@ -38,8 +38,8 @@ class Event(models.Model):
     start_date = models.DateTimeField(verbose_name='дата начала ивента',
                                       null=True,
                                       help_text='Дата начала ивента, '
-                                      'нужно для Celery что бы в рассписании '
-                                      'поставить дату выдачи ивента',
+                                                'нужно для Celery что бы в рассписании '
+                                                'поставить дату выдачи ивента',
                                       default=None,
                                       )
     end_date = models.DateTimeField(verbose_name='дедлайн',
@@ -307,6 +307,12 @@ class Question(models.Model):
                               null=True,
                               blank=True,
                               )
+    type_question = models.CharField(verbose_name=_('Тип вопроса'),
+                                     max_length=8,
+                                     choices=settings.TYPE_QUESTION,
+                                     default='test',
+                                     help_text='Текущий тип данного вопроса',
+                                     )
     test_block = models.ForeignKey(TestBlock,
                                    verbose_name=_("тестовый блок"),
                                    on_delete=models.CASCADE,
