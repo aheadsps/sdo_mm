@@ -92,14 +92,7 @@ class BeginnerValidator:
         end_date: datetime.datetime,
     ) -> None:
         """
-        Проверка корректности временых рамок
-
-        Args:
-            start_date (datetime.datetime): Дата начала
-            end_date (datetime.datetime): Дата конечная
-
-        Raises:
-            exceptions.UnprocessableEntityError: Исключение в случае не соотвествия
+        Проверка исключения временных рамок с статусом 'начинающий'
         """
         beginner = course.beginner
         if start_date and beginner:
@@ -120,7 +113,7 @@ class BeginnerValidator:
 
     def __call__(self, attrs, serializer):
         self.error_detail = dict()
-        need_check = tigger_to_check(attrs, self.start_date, self.end_date)
+        need_check = tigger_to_check(attrs, self.start_date, self.end_date, self.course)
         if need_check:
             course = get_value(self.course, attrs, serializer)
             start_date = get_value(self.start_date, attrs, serializer)
@@ -129,6 +122,48 @@ class BeginnerValidator:
                 course=course,
                 start_date=start_date,
                 end_date=end_date,
+            )
+
+
+class IntervalValidator:
+    """
+    Валидатор на проверку интервала
+    """
+
+    requires_context = True
+
+    def __init__(self, beginner: str, interval: str) -> None:
+        self.beginner = str(beginner)
+        self.interval = str(interval)
+
+    def _check(
+        self,
+        beginner: bool,
+        interval: datetime.timedelta,
+    ) -> None:
+        """
+        Проверка исключения интервала при начинающем курсе
+        """
+        if interval and beginner:
+            self.error_detail.update(dict(interval='Курс для начинающих не может иметь интервал'),
+                                     )
+        self._process_error(error_detail=self.error_detail)
+
+    def _process_error(self, error_detail: dict[str, str]) -> None:
+        if error_detail:
+            raise exceptions.UnprocessableEntityError(
+                error_detail,
+            )
+
+    def __call__(self, attrs, serializer):
+        self.error_detail = dict()
+        need_check = tigger_to_check(attrs, self.beginner, self.interval)
+        if need_check:
+            beginner = get_value(self.beginner, attrs, serializer)
+            interval = get_value(self.interval, attrs, serializer)
+            self._check(
+                beginner=beginner,
+                interval=interval,
             )
 
 

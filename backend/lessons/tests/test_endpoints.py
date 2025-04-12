@@ -59,6 +59,13 @@ class TestEndpoints(APITestCase):
             interval=datetime.timedelta(days=7),
             profession=self.profession,
         )
+        self.course_b = lessons_models.Course._default_manager.create(
+            teacher=self.user,
+            name="course_b",
+            description="some_b",
+            beginner=True,
+            profession=self.profession,
+        )
         self.course.experiences.add(
             self.experience,
         )

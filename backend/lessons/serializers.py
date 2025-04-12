@@ -367,7 +367,9 @@ class CreateCourseSerializer(serializers.ModelSerializer):
             "scorms",
             "experiences",
         )
-        validators = (validators.CourseScormValidator('scorm'),)
+        validators = (validators.CourseScormValidator('scorm'),
+                      validators.IntervalValidator('beginner', 'interval'),
+                      )
 
     def create(self, validated_data: dict):
         logger.debug(validated_data)
