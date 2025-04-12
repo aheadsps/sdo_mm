@@ -1963,12 +1963,6 @@ components:
           minItems: 1
           items:
             $ref: "#/components/schemas/WorkExperience"
-        lesson_story:
-          type: array
-          description: Уроки которые открыл пользователь
-          minItems: 0
-          items:
-            $ref: "#/components/schemas/LessonStory"
         status:
           type: string
           enum:
@@ -2223,6 +2217,10 @@ components:
           minimum: 1
           readOnly: false
           nullable: false
+        start_date:
+          type: string
+          format: date-time
+          description: Дата начала урока
         course:
           type: integer
           minimum: 1
