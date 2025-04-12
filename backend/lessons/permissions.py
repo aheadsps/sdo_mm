@@ -35,6 +35,23 @@ class OwnerEventPermission(permissions.BasePermission):
         return request.user == obj.user
 
 
+class InCover(permissions.BasePermission):
+    """
+    Права доступа на покрытие
+    """
+    message = {
+        "forbidden": "Данное действие не доступно",
+    }
+    code = status.HTTP_403_FORBIDDEN
+
+    def has_object_permission(self, request, view, cover):
+        if not cover:
+            return
+        user = request.user
+        event = models.EventCovered.objects.filter(Q(user=user) & Q(pk=cover.pk))
+        return event.exists()
+
+
 class CanReadCourse(permissions.BasePermission):
     """
     Права доступа на чтение курса

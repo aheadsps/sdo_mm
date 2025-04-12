@@ -22,7 +22,6 @@ EXPECTED = "expected"
 DONE = "done"
 FAILED = "failed"
 
-
 class UserStorySerializer(serializers.ModelSerializer):
     class Meta:
         model = models.UserStory
@@ -628,3 +627,6 @@ class EventCoveredCreateSerializer(serializers.ModelSerializer):
             'status',
         )
         read_only_fields = ('user', 'procent', 'status')
+
+    def create(self, validated_data):
+        return super().create(validated_data)

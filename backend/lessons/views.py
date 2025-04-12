@@ -16,6 +16,7 @@ from lessons.permissions import (
     CanReadUserStory,
     CanReadLessonStory,
     CanReadSCORM,
+    InCover,
     )
 
 
@@ -32,7 +33,19 @@ class EventCoveredViewSet(mixins.ListModelMixin,
     serializer_class = serializers.EventCoveredSerializer
     lookup_field = "pk"
     lookup_url_kwarg = "cover_id"
-    permission_classes = [permissions.IsAuthenticated]
+
+    def get_permissions(self):
+        logger.debug(f"action is {self.action}")
+        if self.action == "toggle_favorite":
+            permission_classes = [permissions.IsAuthenticated &
+                                  (InCover | IsAdminOrIsStaff)]
+        elif self.action == 'currents':
+            permission_classes = [permissions.IsAuthenticated]
+        else:
+            permission_classes = [permissions.IsAuthenticated &
+                                  IsAdminOrIsStaff]
+        logger.debug(f"permisson class now {permission_classes}")
+        return [permission() for permission in permission_classes]
 
     def create(self, request, *args, **kwargs):
         self.check_object_permissions(request, None)
@@ -157,6 +170,22 @@ class CourseViewSet(mixins.ListModelMixin,
     def list(self, request, *args, **kwargs):
         self.check_object_permissions(request=request, obj=None)
         return super().list(request, *args, **kwargs)
+
+    def custom_create(self, request, course):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save(course=course)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+    @action(detail=True, methods=['POST'])
+    def run(self, request, course_id=None):
+        self.serializer_class = serializers.EventSerializerCreate
+        # Monkey Patch
+        # Спартанское латание
+        self.create = self.custom_create
+        course = self.get_object()
+        return self.create(request=request, course=course)
 
 
 class LessonViewSet(viewsets.ModelViewSet):
