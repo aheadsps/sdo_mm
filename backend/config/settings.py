@@ -264,6 +264,21 @@ VERSIONS_SCORM = [
     ),
 ]
 
+TYPE_QUESTION = [
+    (
+        "test",
+        "тест",
+    ),
+    (
+        "task",
+        "задание",
+    ),
+    [
+        "essay",
+        "эссе"
+    ]
+]
+
 TYPE_LESSON = [
     (
         "free",
@@ -274,6 +289,8 @@ TYPE_LESSON = [
         "линейный",
     )
 ]
+
+
 
 EMAIL_FROM = os.getenv("DEFAULT_EMAIL_FROM")
 EMAIL_BCC = os.getenv("DEFAULT_EMAIL_BCC")
