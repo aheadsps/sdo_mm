@@ -25,8 +25,16 @@ class Event(models.Model):
                                          'ивент',
                                related_name='events',
                                )
-    start_date = models.DateTimeField(verbose_name='дата начала ивента')
-    end_date = models.DateTimeField(verbose_name='дедлайн')
+    start_date = models.DateTimeField(verbose_name='дата начала ивента',
+                                      null=True,
+                                      blank=True,
+                                      default=None,
+                                      )
+    end_date = models.DateTimeField(verbose_name='дедлайн',
+                                    null=True,
+                                    blank=True,
+                                    default=None,
+                                    )
     status = models.CharField(choices=settings.STATUS_EVENTS,
                               default='expected',
                               verbose_name='статус ивента',
@@ -135,6 +143,11 @@ class Course(models.Model):
         verbose_name=_("Стаж"),
         help_text="На какие стажи расчитан " "курс",
     )
+    status = models.CharField(_("статус"),
+                              max_length=50,
+                              choices=settings.STATUS_COURSE,
+                              default='archive',
+                              )
 
     class Meta:
         verbose_name = _("Course")

@@ -95,7 +95,7 @@ class PassRegistationsValidator:
         """
         Проверка исключения временных рамок с статусом 'начинающий'
         """
-        if not event.beginner and event.status in ['started', 'finished']:
+        if not event.course.beginner and event.status in ['started', 'finished']:
             self.error_detail.update(
                 dict(status='Регистрация не возможна если курс уже начался или закончен'),
                 )

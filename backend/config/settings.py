@@ -213,6 +213,24 @@ SPECTACULAR_SETTINGS = {
     "SERVE_INCLUDE_SCHEMA": False,
 }
 
+STATUS_COURSE = [
+    (
+        'run',
+        'Запущен',
+    ),
+    (
+        'end',
+        'Окончен',
+    ),
+    (
+        'archive',
+        'Архив',
+    ),
+    (
+        'edit',
+        'Черновик',
+    ),
+]
 
 STATUS_EVENTS = [
     (
