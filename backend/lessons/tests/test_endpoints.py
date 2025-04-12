@@ -72,8 +72,12 @@ class TestEndpoints(APITestCase):
         self.course_1.experiences.add(
             self.experience,
         )
+        self.course_b.experiences.add(
+            self.experience,
+        )
         self.course.save()
         self.course_1.save()
+        self.course_b.save()
         self.event = lessons_models.Event._default_manager.create(
             course=self.course,
             start_date=datetime.datetime(year=2026, month=1, day=1),

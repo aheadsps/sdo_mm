@@ -1,12 +1,13 @@
 import datetime
 
 from django.utils import timezone
+from django.db.models import Q
 
 from loguru import logger
 
 from lessons import exceptions
 from lessons.utils import get_value, tigger_to_check
-from lessons.models import SCORM, Lesson, Event
+from lessons.models import SCORM, Lesson, Event, EventCovered
 
 
 class TimeValidator:
@@ -164,6 +165,48 @@ class IntervalValidator:
             self._check(
                 beginner=beginner,
                 interval=interval,
+            )
+
+
+class RegistrationValidator:
+    """
+    Валидатор на регистрацию
+    """
+
+    requires_context = True
+
+    def __init__(self, user: str, event: str) -> None:
+        self.user = str(user)
+        self.event = str(event)
+
+    def _check(
+        self,
+        user,
+        event: Event,
+    ) -> None:
+        """
+        Проверка исключения интервала при начинающем курсе
+        """
+        if EventCovered._default_manager.filter(Q(user=user) & Q(event=event)).exists():
+            self.error_detail.update(dict(interval='Не возможно повторно зарегистрироваться'),
+                                     )
+        self._process_error(error_detail=self.error_detail)
+
+    def _process_error(self, error_detail: dict[str, str]) -> None:
+        if error_detail:
+            raise exceptions.UnprocessableEntityError(
+                error_detail,
+            )
+
+    def __call__(self, attrs, serializer):
+        self.error_detail = dict()
+        need_check = tigger_to_check(attrs, self.user, self.event)
+        if need_check:
+            user = get_value(self.user, attrs, serializer)
+            event = get_value(self.event, attrs, serializer)
+            self._check(
+                user=user,
+                event=event,
             )
 
 

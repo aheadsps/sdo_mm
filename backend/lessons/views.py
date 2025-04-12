@@ -98,7 +98,7 @@ class EventViewSet(mixins.ListModelMixin,
 
     def get_permissions(self):
         logger.debug(f"action is {self.action}")
-        if self.action in ["retrieve", "list"]:
+        if self.action in ["list"]:
             permission_classes = [permissions.IsAuthenticated]
         else:
             permission_classes = [permissions.IsAuthenticated &
