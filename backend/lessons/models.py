@@ -65,9 +65,7 @@ class EventCovered(models.Model):
     status = models.CharField(_("статус"),
                               max_length=50,
                               choices=settings.STATUS_COVERED,
-                              null=True,
-                              blank=True,
-                              default=None,
+                              default='expected',
                               )
 
     class Meta:

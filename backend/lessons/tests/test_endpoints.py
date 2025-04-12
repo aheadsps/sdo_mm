@@ -103,6 +103,20 @@ class TestEndpoints(APITestCase):
         self.assertEqual(response.status_code, 201)
         self.assertEqual(lessons_models.EventCovered._default_manager.count(), 1)
 
+    def register_user_twise_fail(self):
+        """
+        Тест регистрации пользователя на курс дважды
+        """
+        self.client.logout()
+        self.client.force_authenticate(self.user_1)
+        path = '/api/v1/covers'
+        data = dict(event=self.event)
+        response_1 = self.client.post(path=path, data=data, content_type='json')
+        response_2 = self.client.post(path=path, data=data, content_type='json')
+        self.assertEqual(response_1.status_code, 201)
+        self.assertEqual(response_2.status_code, 422)
+        self.assertEqual(lessons_models.EventCovered._default_manager.count(), 1)
+
     def test_get_event(self):
         """
         Тест получение Эвента по ID
@@ -151,7 +165,7 @@ class TestEndpoints(APITestCase):
         Тест создания эвента
         """
         url = "/api/v1/events"
-        data = dict(
+        data_1 = dict(
             course=self.course.pk,
             favorite=True,
             start_date=datetime.datetime(
@@ -162,20 +176,72 @@ class TestEndpoints(APITestCase):
                 minute=1,
                 second=1,
             ),
+            end_date=datetime.datetime(
+                year=2026,
+                month=1,
+                day=1,
+                hour=23,
+                minute=1,
+                second=1,
+            ),
         )
-        response = self.client.post(
+        response_1 = self.client.post(
             path=url,
-            data=data,
+            data=data_1,
             format="json",
         )
-        self.assertEqual(response.status_code, 422)
+        data_2 = dict(
+            course=self.course.pk,
+            favorite=True,
+            start_date=datetime.datetime(
+                year=2027,
+                month=1,
+                day=1,
+                hour=23,
+                minute=1,
+                second=1,
+            ),
+        )
+        response_2 = self.client.post(
+            path=url,
+            data=data_2,
+            format="json",
+        )
+        self.assertEqual(response_1.status_code, 422)
+        self.assertEqual(response_2.status_code, 422)
 
     def test_create_event_end_date_fail(self):
         """
         Тест создания эвента
         """
         url = "/api/v1/events"
-        data = dict(
+        data_1 = dict(
+            user=self.user.pk,
+            course=self.course.pk,
+            favorite=True,
+            start_date=datetime.datetime(
+                year=2027,
+                month=1,
+                day=1,
+                hour=23,
+                minute=1,
+                second=1,
+            ),
+            end_date=datetime.datetime(
+                year=2023,
+                month=1,
+                day=1,
+                hour=23,
+                minute=1,
+                second=1,
+            ),
+        )
+        response_1 = self.client.post(
+            path=url,
+            data=data_1,
+            format="json",
+        )
+        data_2 = dict(
             user=self.user.pk,
             course=self.course.pk,
             favorite=True,
@@ -188,12 +254,13 @@ class TestEndpoints(APITestCase):
                 second=1,
             ),
         )
-        response = self.client.post(
+        response_2 = self.client.post(
             path=url,
-            data=data,
+            data=data_2,
             format="json",
         )
-        self.assertEqual(response.status_code, 422)
+        self.assertEqual(response_1.status_code, 422)
+        self.assertEqual(response_2.status_code, 422)
 
     def test_create_event_reverse_dates(self):
         """
@@ -234,8 +301,7 @@ class TestEndpoints(APITestCase):
         """
         url = "/api/v1/events"
         data = dict(
-            user=self.user.pk,
-            course=self.course.pk,
+            course=self.course_1.pk,
             favorite=True,
             start_date=datetime.datetime(
                 year=2026,
@@ -263,7 +329,6 @@ class TestEndpoints(APITestCase):
         self.assertEqual(
             response.json(),
             {
-                "user": self.user.pk,
                 "course": self.course.pk,
                 "start_date": "2026-01-01T23:01:01+03:00",
                 "end_date": "2027-01-01T23:01:01+03:00",
@@ -311,20 +376,33 @@ class TestEndpoints(APITestCase):
         """
         Тест получения актуальных эвентов на пользователе
         """
-        url = "/api/v1/events/currents"
+        self.client.logout()
+        self.client.force_authenticate(self.user_1)
+        path = '/api/v1/covers'
+        data = dict(event=self.event)
+        response = self.client.post(path=path, data=data, content_type='json')
+        url = "/api/v1/covers/currents"
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.json())
 
     def test_change_favorite(self):
         """
         Тест изменения избраного
         """
-        url = f"/api/v1/events/{self.event.pk}/toggle-favorite"
-        self.assertFalse(self.event.favorite)
+        self.client.logout()
+        self.client.force_authenticate(self.user_1)
+        cover = lessons_models.EventCovered._default_manager.create(
+            user=self.user_1,
+            event=self.event,
+        )
+        url = f"/api/v1/covers/{cover.pk}/toggle-favorite"
+        cover = lessons_models.EventCovered._default_manager.get(pk=cover.pk)
+        self.assertTrue(cover.favorite)
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
-        event = lessons_models.Event.objects.get(pk=self.event.pk)
-        self.assertTrue(event.favorite)
+        cover = lessons_models.EventCovered._default_manager.get(pk=cover.pk)
+        self.assertTrue(cover.favorite)
 
     def test_get_course(self):
         """

@@ -39,17 +39,21 @@ class TimeValidator:
         """
         time_now = timezone.now()
         logger.debug(f'dates in validator \nstart_date:{start_date} \nend_date: {end_date} \ntime_now: {time_now}')
-        if start_date and (time_now > start_date):
+        if not start_date or end_date:
+            self.error_detail.update(
+                dict(dates='start_date и end_date обязаны присутствовать'),
+            )
+        if time_now > start_date:
             logger.debug(f'enter to error start_date {start_date and (time_now > start_date)}')
             self.error_detail.update(
                 dict(start_date="Не может быть указано задним числом")
             )
-        if end_date and (time_now > end_date):
+        if time_now > end_date:
             logger.debug(f'enter to error end_date {end_date and (time_now > end_date)}')
             self.error_detail.update(
                 dict(end_date="Не может быть указано задним числом")
             )
-        if (start_date and end_date) and (start_date >= end_date):
+        if start_date >= end_date:
             self.error_detail.update(
                 dict(date="start_date не может быть позже чем end_date")
             )

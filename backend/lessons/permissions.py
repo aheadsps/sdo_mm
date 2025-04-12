@@ -85,9 +85,9 @@ class CanReadLesson(permissions.BasePermission):
 
         user = request.user
 
-        event_exists = models.Event.objects.filter(
+        event_exists = models.EventCovered.objects.filter(
             Q(user=user) &
-            Q(course=lesson.course)
+            Q(event__course=lesson.course)
         )
 
         return event_exists.exists()
@@ -108,9 +108,9 @@ class CanReadSCORM(permissions.BasePermission):
 
         user = request.user
 
-        event_exists = models.Event.objects.filter(
+        event_exists = models.EventCovered.objects.filter(
             Q(user=user) &
-            Q(course__scorm=scorm)
+            Q(Event__course__scorm=scorm)
         )
 
         return event_exists.exists()
@@ -132,9 +132,9 @@ class CanReadStep(permissions.BasePermission):
 
         user = request.user
 
-        event_exists = models.Event.objects.filter(
+        event_exists = models.EventCovered.objects.filter(
             Q(user=user) &
-            Q(course=step.lesson.course)
+            Q(event__course=step.lesson.course)
         )
 
         return event_exists.exists()
@@ -156,9 +156,9 @@ class CanReadBlock(permissions.BasePermission):
 
         user = request.user
 
-        event_exists = models.Event.objects.filter(
+        event_exists = models.EventCovered.objects.filter(
             Q(user=user) &
-            Q(course=test_block.lesson.course)
+            Q(event__course=test_block.lesson.course)
         )
 
         return event_exists.exists()
