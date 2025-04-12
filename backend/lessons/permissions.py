@@ -49,7 +49,7 @@ class CanReadCourse(permissions.BasePermission):
         if not course:
             return
         user = request.user
-        event = models.Event.objects.filter(Q(user=user) & Q(course=course))
+        event = models.EventCovered.objects.filter(Q(user=user) & Q(event__course=course))
         return event.exists()
 
 

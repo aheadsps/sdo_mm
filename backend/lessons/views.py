@@ -9,7 +9,6 @@ from lessons import models, serializers
 from lessons import viewsets as own_viewsets
 from lessons.permissions import (
     IsAdminOrIsStaff,
-    OwnerEventPermission,
     CanReadCourse,
     CanReadLesson,
     CanReadStep,
@@ -20,56 +19,28 @@ from lessons.permissions import (
     )
 
 
-class EventViewSet(own_viewsets.GetCreateUpdateDeleteViewSet):
+class EventCoveredViewSet(mixins.ListModelMixin,
+                          mixins.CreateModelMixin,
+                          mixins.DestroyModelMixin,
+                          viewsets.GenericViewSet):
     """
-    Виювсет эвента
+    Виюв сет покрытия эвента
     """
-    queryset = (models.Event
+    queryset = (models.EventCovered
                 ._default_manager
-                .get_queryset().select_related('course'))
-    serializer_class = serializers.EventSerializer
+                .get_queryset())
+    serializer_class = serializers.EventCoveredSerializer
     lookup_field = "pk"
-    lookup_url_kwarg = "event_id"
+    lookup_url_kwarg = "cover_id"
     permission_classes = [permissions.IsAuthenticated]
-
-    def get_permissions(self):
-        logger.debug(f"action is {self.action}")
-        if self.action in ["retrieve", "toggle-favorite"]:
-            permission_classes = [
-                permissions.IsAuthenticated &
-                (OwnerEventPermission | IsAdminOrIsStaff)
-            ]
-            self.serializer_class = serializers.EventViewSerializer
-        elif self.action == "currents":
-            permission_classes = [permissions.IsAuthenticated]
-        else:
-            permission_classes = [permissions.IsAuthenticated &
-                                  IsAdminOrIsStaff]
-        logger.debug(f"permisson class now {permission_classes}")
-        return [permission() for permission in permission_classes]
-
-    def retrieve(self, request, *args, **kwargs):
-        self.queryset = self.queryset.select_related('course')
-        return super().retrieve(request, *args, **kwargs)
 
     def create(self, request, *args, **kwargs):
         self.check_object_permissions(request, None)
-        self.serializer_class = serializers.EventSerializerCreate
+        self.serializer_class = serializers.EventCoveredCreateSerializer
         return super().create(request, *args, **kwargs)
 
-    def perform_create(self, serializer):
-        instance = serializer.save()
-        self._create_first_lesson(
-            user=instance.user,
-            course=instance.course,
-        )
-
-    def update(self, request, *args, **kwargs):
-        self.serializer_class = serializers.EventSerializerUpdate
-        return super().update(request, *args, **kwargs)
-
     @action(detail=True, url_path="toggle-favorite")
-    def toggle_favorite(self, request, event_id=None):
+    def toggle_favorite(self, request, cover_id=None):
         """
         Изменение статуса избранного
         """
@@ -90,25 +61,55 @@ class EventViewSet(own_viewsets.GetCreateUpdateDeleteViewSet):
         """
         user = request.user
         queryset = self.filter_queryset(self.get_queryset())
-        events = queryset.filter(user=user)
-        page = self.paginate_queryset(events)
+        covers = queryset.filter(user=user)
+        page = self.paginate_queryset(covers)
         if page is not None:
             serializer = self.get_serializer(page, many=True)
             return self.get_paginated_response(serializer.data)
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
 
-    def _create_first_lesson(self, user, course):
-        """
-        Создает запись о первом уроке курса
-        """
-        first_lesson = course.lessons.order_by('serial').first()
-        if first_lesson:
-            models.LessonStory.objects.create(
-                user=user,
-                course=course,
-                lesson=first_lesson
-            )
+
+class EventViewSet(mixins.ListModelMixin,
+                   own_viewsets.GetCreateUpdateDeleteViewSet):
+    """
+    Виювсет эвента
+    """
+    queryset = (models.Event
+                ._default_manager
+                .get_queryset().select_related('course'))
+    serializer_class = serializers.EventSerializer
+    lookup_field = "pk"
+    lookup_url_kwarg = "event_id"
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_permissions(self):
+        logger.debug(f"action is {self.action}")
+        if self.action in ["retrieve", "list"]:
+            permission_classes = [permissions.IsAuthenticated]
+        else:
+            permission_classes = [permissions.IsAuthenticated &
+                                  IsAdminOrIsStaff]
+        logger.debug(f"permisson class now {permission_classes}")
+        return [permission() for permission in permission_classes]
+
+    def retrieve(self, request, *args, **kwargs):
+        self.serializer_class = serializers.EventViewSerializer
+        self.queryset = self.queryset.select_related('course')
+        return super().retrieve(request, *args, **kwargs)
+
+    def list(self, request, *args, **kwargs):
+        self.queryset = self.queryset.select_related('course')
+        return super().list(request, *args, **kwargs)
+
+    def create(self, request, *args, **kwargs):
+        self.check_object_permissions(request, None)
+        self.serializer_class = serializers.EventSerializerCreate
+        return super().create(request, *args, **kwargs)
+
+    def update(self, request, *args, **kwargs):
+        self.serializer_class = serializers.EventSerializerUpdate
+        return super().update(request, *args, **kwargs)
 
 
 class CourseViewSet(mixins.ListModelMixin,
