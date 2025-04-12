@@ -6,7 +6,7 @@ from loguru import logger
 
 from lessons import exceptions
 from lessons.utils import get_value, tigger_to_check
-from lessons.models import SCORM, Lesson
+from lessons.models import SCORM, Lesson, Event
 
 
 class TimeValidator:
@@ -72,6 +72,66 @@ class TimeValidator:
             )
 
 
+class BeginnerValidator:
+    """
+    Валидатор на проверку начального курса
+    """
+
+    requires_context = True
+
+    def __init__(self, course: str, start_date: str, end_date: str) -> None:
+        self.course = str(course)
+        self.start_date = str(start_date)
+        self.end_date = str(end_date)
+        self.error_detail = dict()
+
+    def _check(
+        self,
+        course: bool,
+        start_date: datetime.datetime,
+        end_date: datetime.datetime,
+    ) -> None:
+        """
+        Проверка корректности временых рамок
+
+        Args:
+            start_date (datetime.datetime): Дата начала
+            end_date (datetime.datetime): Дата конечная
+
+        Raises:
+            exceptions.UnprocessableEntityError: Исключение в случае не соотвествия
+        """
+        beginner = course.beginner
+        if start_date and beginner:
+            self.error_detail.update(dict(start_date='У курса для '
+                                          'начинающих не может быть start_date'),
+                                     )
+        if end_date and beginner:
+            self.error_detail.update(dict(start_date='У курса для '
+                                          'начинающих не может быть end_date'),
+                                     )
+        self._process_error(error_detail=self.error_detail)
+
+    def _process_error(self, error_detail: dict[str, str]) -> None:
+        if error_detail:
+            raise exceptions.UnprocessableEntityError(
+                error_detail,
+            )
+
+    def __call__(self, attrs, serializer):
+        self.error_detail = dict()
+        need_check = tigger_to_check(attrs, self.start_date, self.end_date)
+        if need_check:
+            course = get_value(self.course, attrs, serializer)
+            start_date = get_value(self.start_date, attrs, serializer)
+            end_date = get_value(self.end_date, attrs, serializer)
+            self._check(
+                course=course,
+                start_date=start_date,
+                end_date=end_date,
+            )
+
+
 class CourseScormValidator:
     """
     Валидатор на проверку возможности сохранения SCORM
@@ -109,6 +169,41 @@ class CourseScormValidator:
             scorm = get_value(self.scorm, attrs, serializer)
             if scorm and serializer.instance:
                 self._check_scorm_pass(serializer.instance)
+
+
+class SingleEventValidator:
+    """
+    Валидатор на проверку единного эвента
+    """
+
+    requires_context = True
+
+    def __init__(self, course: str) -> None:
+        self.course = str(course)
+        self.error_detail = dict()
+
+    def _check(
+        self,
+        course,
+    ) -> None:
+        if Event._default_manager.filter(course=course).exists():
+            self.error_detail.update(
+                course='Не возможно запустить один и тот же курс дважды'
+            )
+        self._process_error(error_detail=self.error_detail)
+
+    def _process_error(self, error_detail: dict[str, str]) -> None:
+        if error_detail:
+            raise exceptions.UnprocessableEntityError(
+                error_detail,
+            )
+
+    def __call__(self, attrs, serializer):
+        self.error_detail = dict()
+        need_check = tigger_to_check(attrs, self.course)
+        if need_check:
+            course = get_value(self.course, attrs, serializer)
+            self._check(course)
 
 
 class SCORMUniqueValidator:

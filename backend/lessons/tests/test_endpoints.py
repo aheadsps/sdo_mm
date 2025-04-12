@@ -46,19 +46,31 @@ class TestEndpoints(APITestCase):
         group_profession.students.add(self.user)
         group_profession.save()
         self.course = lessons_models.Course._default_manager.create(
+            teacher=self.user,
             name="course",
             description="some",
+            interval=datetime.timedelta(days=7),
+            profession=self.profession,
+        )
+        self.course_1 = lessons_models.Course._default_manager.create(
+            teacher=self.user,
+            name="course_1",
+            description="some_1",
+            interval=datetime.timedelta(days=7),
             profession=self.profession,
         )
         self.course.experiences.add(
             self.experience,
         )
+        self.course_1.experiences.add(
+            self.experience,
+        )
         self.course.save()
+        self.course_1.save()
         self.event = lessons_models.Event._default_manager.create(
-            user=self.user,
             course=self.course,
             start_date=datetime.datetime(year=2026, month=1, day=1),
-            end_date=None,
+            end_date=datetime.datetime(year=2027, month=1, day=1),
         )
         self.curr_time_event = str(
             UTCTimeCast(
@@ -67,6 +79,18 @@ class TestEndpoints(APITestCase):
             ).get_UTC_set_time()
         ).replace(" ", "T")
         self.client.force_authenticate(self.user)
+
+    def register_user(self):
+        """
+        Тест регистрации пользователя на курс
+        """
+        self.client.logout()
+        self.client.force_authenticate(self.user_1)
+        path = '/api/v1/covers'
+        data = dict(event=self.event)
+        response = self.client.post(path=path, data=data, content_type='json')
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(lessons_models.EventCovered._default_manager.count(), 1)
 
     def test_get_event(self):
         """
@@ -79,13 +103,44 @@ class TestEndpoints(APITestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
 
+    def test_create_event_duplicate(self):
+        """
+        Тест создания курса дубликата
+        """
+        url = "/api/v1/events"
+        data = dict(
+            course=self.course.pk,
+            favorite=True,
+            start_date=datetime.datetime(
+                year=2025,
+                month=1,
+                day=1,
+                hour=23,
+                minute=1,
+                second=1,
+            ),
+            end_date=datetime.datetime(
+                year=2026,
+                month=1,
+                day=1,
+                hour=23,
+                minute=1,
+                second=1,
+            )
+        )
+        response = self.client.post(
+            path=url,
+            data=data,
+            format="json",
+        )
+        self.assertEqual(response.status_code, 422)
+
     def test_create_event_start_date_fail(self):
         """
         Тест создания эвента
         """
         url = "/api/v1/events"
         data = dict(
-            user=self.user.pk,
             course=self.course.pk,
             favorite=True,
             start_date=datetime.datetime(

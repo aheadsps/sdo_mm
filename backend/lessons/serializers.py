@@ -494,7 +494,9 @@ class EventSerializerCreate(serializers.ModelSerializer):
             "end_date",
             "status",
         )
-        validators = (validators.TimeValidator("start_date", "end_date"),)
+        validators = (validators.TimeValidator("start_date", "end_date"),
+                      validators.BeginnerValidator('course', 'start_date', 'end_date',),
+                      )
 
     def _is_process(self, start_date: datetime.datetime) -> bool:
         """
@@ -627,6 +629,4 @@ class EventCoveredCreateSerializer(serializers.ModelSerializer):
             'status',
         )
         read_only_fields = ('user', 'procent', 'status')
-
-    def create(self, validated_data):
-        return super().create(validated_data)
+        validators = (validators.SingleEventValidator('event'),)

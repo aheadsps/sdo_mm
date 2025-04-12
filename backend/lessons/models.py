@@ -3,7 +3,6 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth import get_user_model
 from django.conf import settings
-from django.contrib.postgres.fields import ranges
 from lessons.utils import (
     path_maker_question,
     path_maker_course,
@@ -100,8 +99,11 @@ class Course(models.Model):
         blank=True,
         default=None,
     )
-    interval = ranges.DateRangeField()
-    beginer = models.BooleanField(
+    interval = models.DurationField(verbose_name=_('интервал'),
+                                    null=True,
+                                    blank=True,
+                                    )
+    beginner = models.BooleanField(
         _("Начинающий"),
         help_text="Курс для начинающих",
         default=False,
