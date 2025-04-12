@@ -17,10 +17,6 @@ export const router = createBrowserRouter([
     path: routes.auth,
     element: <AuthPage />,
   },
-  {
-    path: '/',
-    element: <div>Hello App</div>,
-  },
 
   /* private routes */
   {
@@ -52,19 +48,19 @@ export const router = createBrowserRouter([
         element: <MainPage />,
       },
       {
-        path: '/trainingCenter',
+        path: routes.trainingCenter,
         element: <TrainingCenter />,
       },
       {
-        path: '/trainingCenter/course',
+        path: routes.trainingCenterCourse,
         element: <TrainingCenterCourse />,
       },
       {
-        path: '/lesson',
+        path: routes.lesson,
         element: <Lesson />,
       },
       {
-        path: '/constructor',
+        path: routes.constructor,
         element: <ConstructorPage />,
       },
     ],

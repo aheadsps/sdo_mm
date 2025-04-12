@@ -1,6 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { SerializedError } from '@reduxjs/toolkit'
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query'
+import { routes } from '@routes/routes'
 import { useLoginMutation } from '@services/api'
 import { handleError } from '@shared/utils'
 import { useCallback, useState } from 'react'
@@ -42,7 +43,7 @@ export const useAuthForm = () => {
         localStorage.setItem('token', res.token)
 
         reset()
-        await navigate('/main', { replace: true })
+        await navigate(routes.main, { replace: true })
       }
     } catch (err) {
       setAuthError(handleError(err as FetchBaseQueryError | SerializedError))

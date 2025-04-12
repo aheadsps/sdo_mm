@@ -1,7 +1,9 @@
 import { ArrowRightIcon, CalendarIcon } from '@assets/icons'
+import { routes } from '@routes/routes'
 import { Button, InputWithIcon, Input, type Option, Select, Typography } from '@shared/components'
 import { useToggle } from '@shared/hooks'
 import clsx from 'clsx'
+import { NavLink } from 'react-router-dom'
 
 import { LessonType } from '../data'
 
@@ -34,7 +36,12 @@ export const LessonContent = <T extends LessonType>({
             placeholder={'Выберите доступ'}
             options={options}
           />
-          <Button variant="secondary" className={s.constructorBtn}>
+          <Button
+            variant="secondary"
+            className={s.constructorBtn}
+            as={NavLink}
+            to={routes.constructor}
+          >
             <ArrowRightIcon width={'12px'} height={'12px'} />
           </Button>
         </>

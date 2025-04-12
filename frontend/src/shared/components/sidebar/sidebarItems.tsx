@@ -81,7 +81,6 @@ export const sidebarItemsMethodologist: SidebarItem[] = [
     icon: <StudyIcon width={24} height={24} />,
     text: 'Центр обучения',
     path: routes.trainingCenter,
-    disabled: true,
   },
   {
     id: 'analytics',
