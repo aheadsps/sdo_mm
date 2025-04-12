@@ -118,7 +118,14 @@ class EventViewSet(mixins.ListModelMixin,
     def create(self, request, *args, **kwargs):
         self.check_object_permissions(request, None)
         self.serializer_class = serializers.EventSerializerCreate
-        return super().create(request, *args, **kwargs)
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        instance = serializer.save()
+        course = instance.course
+        course.status = 'run'
+        course.save(update_fields=('status',))
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
     def update(self, request, *args, **kwargs):
         self.serializer_class = serializers.EventSerializerUpdate
