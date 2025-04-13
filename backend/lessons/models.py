@@ -343,12 +343,23 @@ class TestBlock(models.Model):
                                   null=True,
                                   blank=True,
                                   )
+    status = models.CharField(_("Статус"),
+                              max_length=10,
+                              choices=settings.TYPE_TEST_BLOCK,
+                              help_text="Статус"
+                              )
     lesson = models.OneToOneField(Lesson,
                                   on_delete=models.CASCADE,
                                   related_name="test_block",
                                   null=True,
                                   blank=True,
                                   )
+    max_score = models.DateTimeField(_("Максимальный балл"),
+                                     max_digits=5,
+                                     decimal_places=2,
+                                     default=0.00,
+                                     help_text="Максимальный балл"
+                                     )
 
     class Meta:
         verbose_name = "тестовый блок"
@@ -592,11 +603,11 @@ class CourseProgress(models.Model):
                                    related_name="course_progress",
                                    help_text="Тест блок"
                                    )
-    score = models.DecimalField(_("Оценка"),
+    score = models.DecimalField(_("Балл"),
                                 max_digits=5,
                                 decimal_places=2,
                                 default=0.00,
-                                help_text="Оценка"
+                                help_text="Балл"
                                 )
     data_assessment = models.DecimalField(_("Успеваемость на момент даты"),
                                           auto_now_add=True,
