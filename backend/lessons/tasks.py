@@ -85,25 +85,25 @@ def send_mail_users(course_id: int | None = None,
 @app.task
 def update_events(course_id: int,
                   users: list[int],
-                  start_date: str | None,
-                  end_date: str | None,
+                  status: str,
+                  date_upload: str | None,
                   ) -> None:
     """
     Обновление ивентов
     Атрибуты должны пройти всю валидацию прежде чем прийти сюда
+    {"course_id": 3, "users": [1, 2], "status": "end", "date_upload": "2025-04-13 11:10"}
     """
-    if start_date:
-        start_date = datetime.strftime(str(start_date), "%Y-%m-%d %H:%M")
-    if end_date:
-        end_date = datetime.strftime(str(end_date), "%Y-%m-%d %H:%M")
-    events = list(Event._default_manager
-                  .filter(Q(course_id=course_id) & Q(user_id__in=users)))
-    update_events = list()
-    for event in events:
-        event.start_date = start_date
-        event.end_date = end_date
-        update_events.append(event)
-    events.bulk_update(update_events, ('start_date', 'end_date'))
+    if status == 'process':
+        events = list(Event._default_manager
+                      .filter(Q(course_id=course_id) & Q(user_id__in=users)))
+        update_events = list()
+        for event in events:
+            event.status = status
+            update_events.append(event)
+        Event.objects.bulk_update(events, ["status"])
+
+    if status == 'end':
+        pass
 
 
 @app.task
