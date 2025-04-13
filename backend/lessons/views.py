@@ -235,6 +235,9 @@ class CourseViewSet(mixins.ListModelMixin,
         self.check_object_permissions(request=request, obj=None)
         return super().create(request, *args, **kwargs)
 
+    def perform_create(self, serializer):
+        serializer.save(teacher=self.request.user)
+
     def list(self, request, *args, **kwargs):
         self.check_object_permissions(request=request, obj=None)
         return super().list(request, *args, **kwargs)
@@ -290,6 +293,9 @@ class LessonViewSet(viewsets.ModelViewSet):
         self.check_object_permissions(request=request, obj=None)
         return super().create(request, *args, **kwargs)
 
+    def perform_create(self, serializer):
+        serializer.save(teacher=self.request.user)
+
     def list(self, request, *args, **kwargs):
         self.check_object_permissions(request=request, obj=None)
         return super().list(request, *args, **kwargs)
@@ -324,6 +330,9 @@ class StepViewSet(ModelViewSet):
             permission_classes = [permissions.IsAuthenticated &
                                   IsAdminOrIsStaff]
         return [permission() for permission in permission_classes]
+
+    def perform_create(self, serializer):
+        serializer.save(teacher=self.request.user)
 
     def get_serializer_class(self):
         if self.action == 'retrieve':
@@ -388,6 +397,9 @@ class QuestionViewSet(viewsets.ModelViewSet):
         else:
             serializer_class = serializers.QuestionSerializer
         return serializer_class
+
+    def perform_create(self, serializer):
+        serializer.save(teacher=self.request.user)
 
 
 class AnswerViewSet(viewsets.ModelViewSet):

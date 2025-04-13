@@ -105,10 +105,7 @@ class Course(models.Model):
         blank=True,
         default=None,
     )
-    interval = models.DurationField(verbose_name=_('интервал'),
-                                    null=True,
-                                    blank=True,
-                                    )
+    interval = models.DurationField(verbose_name=_('интервал'),)
     beginner = models.BooleanField(
         _("Начинающий"),
         help_text="Курс для начинающих",
@@ -161,6 +158,11 @@ class SCORM(models.Model):
     """
     Модель представления SCORM
     """
+    teacher = models.ForeignKey(get_user_model(),
+                                verbose_name=_("учитель"),
+                                on_delete=models.SET_NULL,
+                                null=True,
+                                )
     name = models.CharField(_("название"),
                             max_length=256,
                             unique=True,
@@ -476,7 +478,7 @@ class LessonStory(models.Model):
                                        )
 
     def clean(self):
-        LessonStoryValidator(course=self.course, lesson=self.lesson)()
+        LessonStoryValidator(course=self.course, step=self.step)()
 
     def save(self, *args, **kwargs):
         self.full_clean()
@@ -485,7 +487,7 @@ class LessonStory(models.Model):
     class Meta:
         verbose_name = _("Lesson story")
         verbose_name_plural = _('Lesson stories')
-        unique_together = ('user', 'lesson')
+        unique_together = ('user', 'step')
 
     def __str__(self):
         return (f"{self.user.email} открыл {self.course.title}"
