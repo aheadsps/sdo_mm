@@ -434,32 +434,33 @@ class LessonStory(models.Model):
                                related_name='lesson_story',
                                help_text='Курс'
                                )
-    lesson = models.ForeignKey(Lesson,
-                               verbose_name=_('Урок'),
-                               on_delete=models.CASCADE,
-                               related_name='lesson_story'
-                               )
+    step = models.ForeignKey(Step,
+                             verbose_name=_('Шаг'),
+                             on_delete=models.CASCADE,
+                             related_name='lesson_story',
+                             help_text="Шаг"
+                             )
     user = models.ForeignKey(get_user_model(),
                              verbose_name=_('Пользователь'),
                              on_delete=models.CASCADE,
                              related_name='lesson_story',
                              help_text='Пользователь'
                              )
-    date_opened = models.DateTimeField(auto_now_add=True,
-                                       verbose_name=_('Дата открытия')
+    date_opened = models.DateTimeField(_("Дата открытия"),
+                                       auto_now_add=True,
+                                       help_text="Дата открытия"
                                        )
 
-    def clean(self):
-        LessonStoryValidator(course=self.course, lesson=self.lesson)()
-
-    def save(self, *args, **kwargs):
-        self.full_clean()
-        super().save(*args, **kwargs)
+    # def clean(self):
+    #     LessonStoryValidator(course=self.course, lesson=self.lesson)()
+    #
+    # def save(self, *args, **kwargs):
+    #     self.full_clean()
+    #     super().save(*args, **kwargs)
 
     class Meta:
         verbose_name = _("Lesson story")
         verbose_name_plural = _('Lesson stories')
-        unique_together = ('user', 'lesson')
 
     def __str__(self):
         return (f"{self.user.email} открыл {self.course.title}"
