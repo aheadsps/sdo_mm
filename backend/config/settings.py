@@ -334,6 +334,16 @@ TYPE_OF_ASSESSMENT = [
         "вопрос"
     )
 ]
+TYPE_TEST_BLOCK = [
+    (
+        "failed",
+        "Провалено"
+    ),
+    (
+        "done",
+        "Завершено"
+    )
+]
 
 
 
