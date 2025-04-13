@@ -2758,7 +2758,8 @@ components:
         end_date:
           type: string
           format: date-time
-          readOnly: false
+          description: Расчитывается исходя из интервала в курсе
+          readOnly: true
           nullable: true
         status:
           description: Статус прохождения курса
@@ -2768,6 +2769,9 @@ components:
             - finished
           readOnly: true
           default: expected
+      required:
+        - course
+        - start_date
 
     EventUpdate:
       description: Сущность обновления события
@@ -2781,12 +2785,13 @@ components:
         start_date:
           type: string
           format: date-time
-          readOnly: true
+          readOnly: false
           nullable: true
         end_date:
           type: string
           format: date-time
-          readOnly: false
+          description: Расчитывается исходя из интервала в курсе
+          readOnly: true
           nullable: true
         status:
           description: Статус прохождения курса
@@ -2804,18 +2809,15 @@ components:
       properties:
         course:
           type: object
-          readOnly: false
           minimum: 1
           $ref: "#/components/schemas/СourseView"
         start_date:
           type: string
           format: date-time
-          readOnly: false
           nullable: true
         end_date:
           type: string
           format: date-time
-          readOnly: false
           nullable: true
         status:
           description: Статус прохождения курса
@@ -2833,18 +2835,15 @@ components:
       properties:
         course:
           type: object
-          readOnly: false
           minimum: 1
           $ref: "#/components/schemas/Сourse"
         start_date:
           type: string
           format: date-time
-          readOnly: false
           nullable: true
         end_date:
           type: string
           format: date-time
-          readOnly: false
           nullable: true
         status:
           description: Статус прохождения курса
