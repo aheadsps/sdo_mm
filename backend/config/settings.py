@@ -232,6 +232,10 @@ STATUS_EVENTS = [
         "expected",
         "Ожидает начало",
     ),
+    (
+        "finished",
+        "Закончено",
+    )
 ]
 
 VERSIONS_SCORM = [

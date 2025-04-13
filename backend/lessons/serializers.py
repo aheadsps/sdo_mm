@@ -449,12 +449,9 @@ class EventViewSerializer(serializers.ModelSerializer):
         model = models.Event
         fields = (
             "id",
-            "user",
             "course",
-            "done_lessons",
             "start_date",
             "end_date",
-            "favorite",
             "status",
         )
 
@@ -470,12 +467,9 @@ class EventSerializer(serializers.ModelSerializer):
         model = models.Event
         fields = (
             "id",
-            "user",
             "course",
-            "done_lessons",
             "start_date",
             "end_date",
-            "favorite",
             "status",
         )
 
@@ -490,11 +484,9 @@ class EventSerializerCreate(serializers.ModelSerializer):
     class Meta:
         model = models.Event
         fields = (
-            "user",
             "course",
             "start_date",
             "end_date",
-            "favorite",
             "status",
         )
         validators = (validators.TimeValidator("start_date", "end_date"),)
@@ -566,10 +558,10 @@ class EventSerializerCreate(serializers.ModelSerializer):
 
     def create(self, validated_data):
         event = super().create(validated_data)
-        self._create_lesson_stories(
-            user=validated_data["user"],
-            course=validated_data["course"]
-        )
+        #self._create_lesson_stories(
+        #    user=validated_data["user"],
+        #   course=validated_data["course"]
+        #)
         return event
 
     def save(self, **kwargs):
