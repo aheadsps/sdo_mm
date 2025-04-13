@@ -1,11 +1,43 @@
-from authemail.models import EmailUserManager
+import math
+from datetime import date
+
 from django.utils import timezone
+from django.db.models import Q
+
+from lessons.models import EventCovered, Course, Event
+from users.models import WorkExperience
+from authemail.models import EmailUserManager
 
 
 class EmailUserManagerAddProf(EmailUserManager):
     """
     Менеджер для корректной работый специфицеских частей программы
     """
+
+    def _set_events(self, user):
+        """
+        Нахождение всех эвентов которые являются начальными
+        и подходят для данного пользователя
+        """
+        profession = user.profession
+        time_now = timezone.now()
+        date_now = date(year=time_now.year, month=time_now.month, day=time_now.date)
+        experience_years = math.floor((date_now - user.date_commencement).days / 365)
+        experience = WorkExperience._default_manager.get_or_create(years=experience_years)
+        courses = Course._default_manager.filter(Q(profession=profession) &
+                                                 Q(experiences=experience) &
+                                                 Q(beginner=True))
+        qfilter = Q(*[Q(course=course) for course in courses], _connector=Q.OR)
+        events = Event._default_manager.filter(qfilter).get_queryset()
+        EventCovered._default_manager.bulk_create(
+            [EventCovered(user=user,
+                          event=event,
+                          status='process',
+                          )
+             for event
+             in events]
+        )
+        return user
 
     def _create_user(
         self,
@@ -70,5 +102,5 @@ class EmailUserManagerAddProf(EmailUserManager):
         # Это после сохранения юзера
         profession_group.students.add(user_new)
         profession_group.save()
-
+        self._set_events(user=user)
         return user

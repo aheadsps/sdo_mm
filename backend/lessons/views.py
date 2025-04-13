@@ -2,7 +2,7 @@ import datetime
 from loguru import logger
 
 from django.utils import timezone
-from django.db.models import Q
+from django.db.models import Q, QuerySet
 from django.contrib.auth import get_user_model
 from rest_framework import permissions, status, mixins, viewsets
 from rest_framework.decorators import action
@@ -23,6 +23,7 @@ from lessons.permissions import (
     CanReadSCORM,
     InCover,
     )
+from users.models import WorkExperience
 
 
 class EventCoveredViewSet(mixins.ListModelMixin,
@@ -129,6 +130,28 @@ class EventViewSet(mixins.ListModelMixin,
         course.save(update_fields=('status',))
         return instance
 
+    def _get_interval_experiences(self,
+                                  experiences: QuerySet[WorkExperience],
+                                  ) -> list[tuple[datetime.datetime,
+                                                  datetime.datetime]]:
+        """
+        Получение интервала времени стажа
+        """
+        time_now = timezone.now()
+        years_experience = list()
+        if experiences:
+            for exp in experiences:
+                left_limit = time_now - datetime.timedelta(days=(365 * exp.years + 1))
+                rigth_limit = time_now - datetime.timedelta(days=(365 * exp.years))
+                interval = (left_limit, rigth_limit)
+                years_experience.append(interval)
+        else:
+            left_limit = time_now - datetime.timedelta(days=(365 * 60))
+            rigth_limit = time_now
+            interval = (left_limit, rigth_limit)
+            years_experience.append(interval)
+        return years_experience
+
     def _set_event_users(self, instance):
         """
         Установка пользователям данный эвент при
@@ -137,19 +160,15 @@ class EventViewSet(mixins.ListModelMixin,
         if instance.course.beginner:
             profession = instance.course.profession
             experiences = instance.course.experiences.get_queryset()
-            time_now = timezone.now()
-            years_experience: list[datetime.datetime] = list()
-
-            for exp in experiences:
-                years_experience.append(time_now() - datetime.timedelta(days=365 * exp.year))
-
-            qfilter = Q(*[Q(date_commencement__lt=year, profession=profession)
+            years_experience = self._get_interval_experiences(experiences=experiences)
+            qfilter = Q(*[Q(date_commencement__gt=year[0], date__commencent__lt=year[-1])
                           for year
                           in years_experience],
                         _connector=Q.OR,
                         )
-
             users = get_user_model()._default_manager.filter(qfilter).get_queryset()
+            if profession:
+                users = users.filter(Q(profession=profession))
             models.EventCovered._default_manager.bulk_create(
                 [models.EventCovered(
                     user=user,

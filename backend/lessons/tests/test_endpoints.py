@@ -300,6 +300,12 @@ class TestEndpoints(APITestCase):
         data = dict(
             course=self.course_b.pk,
         )
+        response = self.client.post(
+            path=url,
+            data=data,
+            format='json',
+        )
+        self.assertEqual(response.status_code, 201)
 
     def test_update_event(self):
         """
