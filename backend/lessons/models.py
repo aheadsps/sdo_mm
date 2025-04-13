@@ -142,8 +142,6 @@ class Course(models.Model):
         "users.WorkExperience",
         verbose_name=_("Стаж"),
         help_text="На какие стажи расчитан " "курс",
-        null=True,
-        blank=True,
     )
     status = models.CharField(_("статус"),
                               max_length=50,

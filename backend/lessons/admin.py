@@ -53,7 +53,7 @@ class CourseAdmin(admin.ModelAdmin):
         "name",
         "description",
         'interval',
-        "beginer",
+        "beginner",
         "create_date",
         "update_date",
         "image",
@@ -149,3 +149,29 @@ class AttachmentsAdmin(admin.ModelAdmin):
     Админ для вложеностей
     """
     list_display = ('file', 'file_type', 'step')
+
+
+@admin.register(models.UserStory)
+class UserStoryAdmin(admin.ModelAdmin):
+    """
+    Админ панель истории пользователя
+    """
+    list_display = (
+        'user',
+        'answer',
+        'test_block',
+        'date_opened',
+    )
+
+
+@admin.register(models.LessonStory)
+class LessonStoryAdmin(admin.ModelAdmin):
+    """
+    Админ панель истории уроков
+    """
+    list_display = (
+        'course',
+        'step',
+        'user',
+        'date_opened',
+    )
