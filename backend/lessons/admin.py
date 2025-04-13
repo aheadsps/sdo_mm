@@ -55,12 +55,9 @@ class EventAdmin(admin.ModelAdmin):
     """
 
     list_display = (
-        'user',
         'course',
-        'done_lessons',
         'start_date',
         'end_date',
-        'favorite',
         'status',
         )
 

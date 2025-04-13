@@ -18,13 +18,6 @@ class Event(models.Model):
     """
     Модель представления Ивента
     """
-    user = models.ForeignKey(get_user_model(),
-                             verbose_name=_("пользователь"),
-                             on_delete=models.CASCADE,
-                             help_text='Пользователь которому '
-                                       'будет назначен ивент',
-                             related_name='events',
-                             )
     course = models.ForeignKey('lessons.Course',
                                verbose_name='курс',
                                on_delete=models.CASCADE,
@@ -32,9 +25,6 @@ class Event(models.Model):
                                          'ивент',
                                related_name='events',
                                )
-    done_lessons = models.SmallIntegerField(_("Количество выполненых уроков"),
-                                            default=0,
-                                            )
     start_date = models.DateTimeField(verbose_name='дата начала ивента',
                                       null=True,
                                       help_text='Дата начала ивента, '
@@ -48,10 +38,6 @@ class Event(models.Model):
                                               'дедлайна нет тогда бессрочно',
                                     default=None,
                                     )
-    favorite = models.BooleanField(_("Избранный ивент"),
-                                   default=False,
-                                   help_text='Указатель является ли данный'
-                                             'ивент избранным')
     status = models.CharField(choices=settings.STATUS_EVENTS,
                               null=True,
                               default='expected',
@@ -64,7 +50,7 @@ class Event(models.Model):
         verbose_name_plural = _("Events")
 
     def __str__(self):
-        return f"event_for_user_{self.user.pk}_{self.pk}"
+        return f"event_{self.pk}"
 
 
 class Course(models.Model):

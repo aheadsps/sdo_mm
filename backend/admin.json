@@ -11,12 +11,9 @@
         "model": "lessons.event",
         "pk": 1,
         "fields": {
-            "user": 2,
             "course": 1,
-            "done_lessons": 1,
             "start_date": "2025-04-03T09:38:12Z",
             "end_date": "2025-04-14T09:37:45Z",
-            "favorite": false,
             "status": "process"
         }
     },
@@ -24,12 +21,9 @@
         "model": "lessons.event",
         "pk": 2,
         "fields": {
-            "user": 2,
             "course": 2,
-            "done_lessons": 2,
             "start_date": "2025-04-02T14:07:47Z",
             "end_date": "2025-04-03T14:08:04Z",
-            "favorite": true,
             "status": "failed"
         }
     },
@@ -37,12 +31,9 @@
         "model": "lessons.event",
         "pk": 3,
         "fields": {
-            "user": 2,
             "course": 3,
-            "done_lessons": 0,
             "start_date": "2025-02-10T17:11:50Z",
             "end_date": "2025-03-10T17:11:53Z",
-            "favorite": true,
             "status": "failed"
         }
     },
@@ -50,12 +41,9 @@
         "model": "lessons.event",
         "pk": 4,
         "fields": {
-            "user": 2,
             "course": 4,
-            "done_lessons": 4,
             "start_date": "2025-04-10T17:13:01Z",
             "end_date": "2026-04-10T17:13:03Z",
-            "favorite": true,
             "status": "process"
         }
     },
