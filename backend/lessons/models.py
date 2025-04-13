@@ -514,8 +514,9 @@ class LessonStory(models.Model):
                              related_name='lesson_story',
                              help_text='Пользователь'
                              )
-    date_opened = models.DateTimeField(auto_now_add=True,
-                                       verbose_name=_('Дата открытия')
+    date_opened = models.DateTimeField(_("Дата открытия"),
+                                       auto_now_add=True,
+                                       help_text="Дата открытия"
                                        )
 
     def clean(self):
