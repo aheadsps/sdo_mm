@@ -558,10 +558,6 @@ class EventSerializerCreate(serializers.ModelSerializer):
 
     def create(self, validated_data):
         event = super().create(validated_data)
-        #self._create_lesson_stories(
-        #    user=validated_data["user"],
-        #   course=validated_data["course"]
-        #)
         return event
 
     def save(self, **kwargs):
@@ -575,18 +571,15 @@ class EventSerializerUpdate(serializers.ModelSerializer):
     """
     Сериализатор Создания в Изменения Эвента
     """
-
     status = serializers.CharField(read_only=True)
 
     class Meta:
         model = models.Event
         fields = (
-            "user",
             "course",
             "start_date",
             "end_date",
-            "favorite",
             "status",
         )
-        validators = (validators.TimeValidator("start_date", "end_date"),)
-        read_only_fields = ("id", "start_date", "course", "user")
+        validators = (validators.TimeValidator("start_date", "end_date", False),)
+        read_only_fields = ("id", "course")

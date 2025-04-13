@@ -16,15 +16,16 @@ class TimeValidator:
 
     requires_context = True
 
-    def __init__(self, start_date: str, end_date: str) -> None:
+    def __init__(self, start_date: str, end_date: str, valid_start: bool = True) -> None:
         self.start_date = str(start_date)
         self.end_date = str(end_date)
         self.error_detail = dict()
-
+        self.valid_start = valid_start
     def _check_up_time(
         self,
         start_date: datetime.datetime,
         end_date: datetime.datetime,
+        valid_start
     ) -> None:
         """
         Проверка корректности временых рамок
@@ -38,7 +39,7 @@ class TimeValidator:
         """
         time_now = timezone.now()
         logger.debug(f'dates in validator \nstart_date:{start_date} \nend_date: {end_date} \ntime_now: {time_now}')
-        if start_date and (time_now > start_date):
+        if start_date and self.valid_start and(time_now > start_date):
             logger.debug(f'enter to error start_date {start_date and (time_now > start_date)}')
             self.error_detail.update(
                 dict(start_date="Не может быть указано задним числом")
@@ -69,6 +70,7 @@ class TimeValidator:
             self._check_up_time(
                 start_date=start_date,
                 end_date=end_date,
+                valid_start=self.valid_start
             )
 
 

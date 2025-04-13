@@ -66,14 +66,21 @@ class EventViewSet(own_viewsets.GetCreateUpdateDeleteViewSet):
                     instance.start_date,
                     instance.end_date
                     ).create()
-        #self._create_first_lesson(
-        #    user=instance.user,
-        #    course=instance.course,
-        #)
+
 
     def update(self, request, *args, **kwargs):
         self.serializer_class = serializers.EventSerializerUpdate
-        return super().update(request, *args, **kwargs)
+        update = super().update(request, *args, **kwargs)
+        return update
+
+    def perform_update(self, serializer):
+        # Обновление задач селери
+        instance = serializer.save()
+        TaskManager(instance.pk,
+                    instance.course,
+                    instance.start_date,
+                    instance.end_date
+                    ).update()
 
     @action(detail=True, url_path="toggle-favorite")
     def toggle_favorite(self, request, event_id=None):

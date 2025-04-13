@@ -93,13 +93,15 @@ class TaskManager:
                 kwargs=json.dumps(kwargs),
             )
         else:
-            # Если таск есть - Плюсуем пользователей в user_list
-            # kwargs: dict = json.loads(task_event.kwargs)
+            # Если таск есть
+            kwargs_old: dict = json.loads(task_event.kwargs)
             # users = set(kwargs.get('users')).union(set(self.user_list))
-            # kwargs["users"] = list(users)
-            # task_event.kwargs = json.dumps(kwargs)
-            # task_event.save()
-            pass
+            kwargs_old["start_date"] = kwargs["start_date"]
+            kwargs_old["end_date"] = kwargs["end_date"]
+            task_event.kwargs = json.dumps(kwargs_old)
+            task_event.clocked = clocked
+            print("************", kwargs_old)
+            task_event.save()
 
 
     def _task_update_status_event(self, kwargs):
@@ -172,3 +174,13 @@ class TaskManager:
         if not self.schedule_start:
             # ставим задачу на отправку писем
             tasks.send_mail_users.delay(**kwargs)
+
+    def update(self):
+        print("*********", self.event_pk)
+        kwargs = {
+            "course_id": self.course,
+            "end_date": TaskManager.date_str(self.data_end),
+            "start_date": TaskManager.date_str(self.data_start),
+            "pk": self.event_pk,
+        }
+        self._task_update_status_event(kwargs)
