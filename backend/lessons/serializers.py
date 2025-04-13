@@ -49,8 +49,6 @@ class CourseProgressSerializer(serializers.ModelSerializer):
 class UserStorySerializer(serializers.ModelSerializer):
     class Meta:
         model = models.UserStory
-        fields = ["id", "user", "answer", "test_block", "date_opened"]
-        read_only_fields = ["id", "user", "date_opened"]
         fields = ('id', 'user', 'answer', 'test_block', 'date_opened')
         read_only_fields = ('id', 'user', 'date_opened')
 
@@ -200,6 +198,25 @@ class AssessmentSubmissionSerializer(serializers.ModelSerializer):
             validators.NoAnswerForTaskEssayValidator('answer'),
             validators.AssessmentScoreValidator('score'),
         )
+
+
+class AssessmentSubmissionSerializer(serializers.ModelSerializer):
+    """
+    Сериализатор представления оценок
+    """
+    files = ContentAttachmentSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = models.AssessmentSubmission
+        fields = ("teacher",
+                  "test_block",
+                  "student",
+                  "score",
+                  "comment",
+                  "type_of",
+                  "files",
+                  "date_assessment",
+                  )
 
 
 class StepSerializer(serializers.ModelSerializer):
