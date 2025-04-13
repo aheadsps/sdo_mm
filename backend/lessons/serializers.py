@@ -508,14 +508,47 @@ class EventSerializerCreate(serializers.ModelSerializer):
             "course",
             "start_date",
             "end_date",
-            "beginner",
             "status",
         )
         validators = (validators.SingleEventValidator('course'),
                       validators.BeginnerValidator('course', 'start_date'),
-                      validators.TimeValidator("start_date", "end_date"),
+                      validators.TimeValidator("start_date"),
                       )
         read_only_fields = ('id', 'status', 'end_date')
+
+    def create(self, validated_data):
+        if validated_data['beginner']:
+            validated_data['status'] = 'process'
+        return super().create(validated_data)
+
+    def save(self, **kwargs):
+        instance = super().save(**kwargs)
+        if not instance.course.beginner:
+            set_lessons_time(instance, update=False)
+        return instance
+
+
+class EventSerializerUpdate(serializers.ModelSerializer):
+    """
+    Сериализатор Создания в Изменения Эвента
+    """
+
+    status = serializers.CharField(read_only=True)
+
+    class Meta:
+        model = models.Event
+        fields = (
+            "id",
+            "course",
+            "start_date",
+            "end_date",
+            "status",
+        )
+        validators = (validators.SingleEventValidator('course'),
+                      validators.BeginnerValidator('course', 'start_date'),
+                      validators.TimeValidator("start_date"),
+                      )
+        read_only_fields = ("id", "status", "end_date",)
 
     def _is_process(self, start_date: datetime.datetime) -> bool:
         """
@@ -553,47 +586,15 @@ class EventSerializerCreate(serializers.ModelSerializer):
                     process=is_process,
                 )
 
-    def create(self, validated_data):
-        if validated_data['beginner']:
-            validated_data['status'] = 'process'
-        return super().create(validated_data)
-
-    def save(self, **kwargs):
-        logger.debug(f"before {self.validated_data}")
-        self._correct_status(self.validated_data)
-        logger.debug(f"after {self.validated_data}")
-        instance = super().save(**kwargs)
-        if not instance.course.beginner:
-            set_lessons_time(instance)
-        return instance
-
-
-class EventSerializerUpdate(serializers.ModelSerializer):
-    """
-    Сериализатор Создания в Изменения Эвента
-    """
-
-    status = serializers.CharField(read_only=True)
-
-    class Meta:
-        model = models.Event
-        fields = (
-            "id",
-            "course",
-            "start_date",
-            "end_date",
-            "status",
-        )
-        validators = (validators.SingleEventValidator('course'),
-                      validators.BeginnerValidator('course', 'start_date'),
-                      validators.TimeValidator("start_date", "end_date"),
-                      )
-        read_only_fields = ("id", "status", "end_date",)
-
     def update(self, instance, validated_data):
         instance = super().update(instance, validated_data)
-        set_lessons_time(instance)
+        if not instance.course.beginner:
+            set_lessons_time(instance, update=True)
         return instance
+
+    def save(self, **kwargs):
+        self._correct_status(self.validated_data)
+        return super().save(**kwargs)
 
 
 class EventCoveredSerializer(serializers.ModelSerializer):
@@ -633,7 +634,7 @@ class EventCoveredCreateSerializer(serializers.ModelSerializer):
                       )
 
 
-def set_lessons_time(instance: T) -> T:
+def set_lessons_time(instance: T, update: bool) -> T:
     """
     Выставление временных интервалов для текущего эвента
     """
@@ -642,10 +643,13 @@ def set_lessons_time(instance: T) -> T:
     lessons = instance.course.lessons.order_by('serial').get_queryset()
     update_lessons = []
     for lesson in lessons:
+        # Собираем шедулеры по открытия урока
         lesson.start_date = start_date
         update_lessons.append(lesson)
         start_date = start_date + interval
     models.Lesson._default_manager.bulk_update(update_lessons, fields=('interval',))
+    # Здесь дополнить еще одним шедулером на окончание курса
     instance.end_date = start_date
+    # Множественное сохранение шедулеров
     instance = instance.save()
     return instance
