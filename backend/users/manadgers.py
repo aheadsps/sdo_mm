@@ -29,14 +29,15 @@ class EmailUserManagerAddProf(EmailUserManager):
                                                  Q(beginner=True))
         qfilter = Q(*[Q(course=course) for course in courses], _connector=Q.OR)
         events = Event._default_manager.filter(qfilter).get_queryset()
-        EventCovered._default_manager.bulk_create(
-            [EventCovered(user=user,
-                          event=event,
-                          status='process',
-                          )
-             for event
-             in events]
-        )
+        if events:
+            EventCovered._default_manager.bulk_create(
+                [EventCovered(user=user,
+                              event=event,
+                              status='process',
+                              )
+                 for event
+                 in events]
+            )
         return user
 
     def _create_user(

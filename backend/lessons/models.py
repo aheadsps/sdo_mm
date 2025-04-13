@@ -238,13 +238,12 @@ class Lesson(models.Model):
                                null=True,
                                blank=True,
                                )
-    start_date = models.DateTimeField(_("время начала"), null=True)
-    type_lesson = models.CharField(verbose_name=_('Тип урока'),
-                                   max_length=10,
-                                   choices=settings.TYPE_LESSON,
-                                   default='linearly',
-                                   help_text='Текущий тип данного урока',
-                                   )
+    started = models.BooleanField(_("флаг начатого"),
+                                  default=False,
+                                  )
+    start_date = models.DateTimeField(_("время начала"),
+                                      null=True,
+                                      )
 
     class Meta:
         verbose_name = _("Lesson")
