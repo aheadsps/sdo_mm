@@ -29,11 +29,30 @@ DONE = "done"
 FAILED = "failed"
 
 
+class CourseProgressSerializer(serializers.ModelSerializer):
+    """
+    Сериализатор прогресса студента в определенной точке курса
+    """
+    class Meta:
+        model = models.CourseProgress
+        fields = ("id",
+                  "student",
+                  "test_block",
+                  "score",
+                  "data_assessment",
+                  "procent_compelete",
+                  "result",
+                  )
+        readline = ("id",)
+
+
 class UserStorySerializer(serializers.ModelSerializer):
     class Meta:
         model = models.UserStory
         fields = ["id", "user", "answer", "test_block", "date_opened"]
         read_only_fields = ["id", "user", "date_opened"]
+        fields = ('id', 'user', 'answer', 'test_block', 'date_opened')
+        read_only_fields = ('id', 'user', 'date_opened')
 
     def validate(self, data):
         validators.UserStoryValidator(
@@ -83,7 +102,15 @@ class QuestionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Question
-        fields = ("id", "teacher", "text", "image", "weight", "answers")
+        fields = ("id",
+                  "teacher",
+                  "text",
+                  "image",
+                  "test_block",
+                  "type_question",
+                  "weight",
+                  "answers"
+                  )
 
     def to_representation(self, instance):
         response = super().to_representation(instance)
@@ -112,7 +139,14 @@ class QuestionCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Question
-        fields = ("id", "teacher", "text", "image", "weight", "test_block")
+        fields = ("id",
+                  "teacher",
+                  "text",
+                  "image",
+                  "weight",
+                  "type_question",
+                  "test_block"
+                  )
         read_only_fields = ("id", 'teacher',)
 
 
@@ -136,6 +170,25 @@ class MaterialsSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Materials
         fields = ("id", 'files',)
+
+
+class AssessmentSubmissionSerializer(serializers.ModelSerializer):
+    """
+    Сериализатор представления оценок
+    """
+    files = ContentAttachmentSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = models.AssessmentSubmission
+        fields = ("teacher",
+                  "test_block",
+                  "student",
+                  "score",
+                  "comment",
+                  "type_of",
+                  "files",
+                  "date_assessment",
+                  )
 
 
 class StepSerializer(serializers.ModelSerializer):
