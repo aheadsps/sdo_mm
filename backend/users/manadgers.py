@@ -4,8 +4,6 @@ from datetime import date
 from django.utils import timezone
 from django.db.models import Q
 
-from lessons.models import EventCovered, Course, Event
-from users.models import WorkExperience
 from authemail.models import EmailUserManager
 
 
@@ -58,7 +56,8 @@ class EmailUserManagerAddProf(EmailUserManager):
         и попасть в группу по этой профессии.
         """
 
-        from users.models import Profession, ProfessionGroup, User
+        from users.models import Profession, ProfessionGroup, User, WorkExperience
+        from lessons.models import EventCovered, Course, Event
 
         now = timezone.now()
         if not email:

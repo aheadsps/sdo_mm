@@ -132,8 +132,7 @@ class EventViewSet(mixins.ListModelMixin,
 
     def _get_interval_experiences(self,
                                   experiences: QuerySet[WorkExperience],
-                                  ) -> list[tuple[datetime.datetime,
-                                                  datetime.datetime]]:
+                                  ) -> list:
         """
         Получение интервала времени стажа
         """
