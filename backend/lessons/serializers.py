@@ -57,15 +57,15 @@ class UserStorySerializer(serializers.ModelSerializer):
 class LessonStorySerializer(serializers.ModelSerializer):
     class Meta:
         model = models.LessonStory
-        fields = ('course', 'lesson', 'user', 'date_opened')
-        read_only_fields = ('user', 'date_opened')
+        fields = ('course', 'step', 'user', 'date_opened')
+        read_only_fields = ('course', 'step', 'user', 'date_opened')
 
-    def validate(self, data):
-        validators.LessonStoryValidator(
-            course=data.get('course'),
-            lesson=data.get('lesson')
-        )()
-        return data
+    # def validate(self, data):
+    #     validators.LessonStoryValidator(
+    #         course=data.get('course'),
+    #         lesson=data.get('lesson')
+    #     )()
+    #     return data
 
 
 class AnswerSerializer(serializers.ModelSerializer):
@@ -461,7 +461,6 @@ class ViewCourseSerializer(serializers.ModelSerializer):
     profession = user_serializers.ProfessionSerializer()
     lessons = LessonViewSerializer(many=True)
     scorms = SCORMSerializer(many=True)
-    lesson_story = LessonStorySerializer(many=True)
 
     class Meta:
         model = models.Course
@@ -477,7 +476,6 @@ class ViewCourseSerializer(serializers.ModelSerializer):
             "experiences",
             "scorms",
             "lessons",
-            "lesson_story",
         )
 
 
@@ -578,42 +576,42 @@ class EventSerializerCreate(serializers.ModelSerializer):
                     process=is_process,
                 )
 
-    def _create_lesson_stories(self, user, course):
-        """
-        Создает LessonStory для всех free-уроков и урока с serial=1
-        """
-        try:
-            lesson_ids = set(
-                models.Lesson.objects.filter(
-                    Q(course=course) & (Q(type_lesson="free") | Q(serial=1))
-                ).values_list('id', flat=True)
-            )
-
-            logger.debug(
-                f'Нашлось {len(lesson_ids)} открытых на данный момент'
-                f' уроков в курсе {course.id}')
-
-            if lesson_ids:
-                models.LessonStory.objects.bulk_create([
-                    models.LessonStory(user=user, lesson_id=lesson_id,
-                                       course=course)
-                    for lesson_id in lesson_ids
-                ], ignore_conflicts=True)
-
-                logger.success(
-                    f'Создано {len(lesson_ids)} открытых уроков  в LessonStory')
-
-        except Exception as e:
-            logger.error(f"Ошибка создания LessonStory: {str(e)}")
-            raise
-
-    def create(self, validated_data):
-        event = super().create(validated_data)
-        self._create_lesson_stories(
-            user=validated_data["user"],
-            course=validated_data["course"]
-        )
-        return event
+    # def _create_lesson_stories(self, user, course):
+    #     """
+    #     Создает LessonStory для всех free-уроков и урока с serial=1
+    #     """
+    #     try:
+    #         lesson_ids = set(
+    #             models.Lesson.objects.filter(
+    #                 Q(course=course) & (Q(type_lesson="free") | Q(serial=1))
+    #             ).values_list('id', flat=True)
+    #         )
+    #
+    #         logger.debug(
+    #             f'Нашлось {len(lesson_ids)} открытых на данный момент'
+    #             f' уроков в курсе {course.id}')
+    #
+    #         if lesson_ids:
+    #             models.LessonStory.objects.bulk_create([
+    #                 models.LessonStory(user=user, lesson_id=lesson_id,
+    #                                    course=course)
+    #                 for lesson_id in lesson_ids
+    #             ], ignore_conflicts=True)
+    #
+    #             logger.success(
+    #                 f'Создано {len(lesson_ids)} открытых уроков  в LessonStory')
+    #
+    #     except Exception as e:
+    #         logger.error(f"Ошибка создания LessonStory: {str(e)}")
+    #         raise
+    #
+    # def create(self, validated_data):
+    #     event = super().create(validated_data)
+    #     self._create_lesson_stories(
+    #         user=validated_data["user"],
+    #         course=validated_data["course"]
+    #     )
+    #     return event
 
     def save(self, **kwargs):
         logger.debug(f"before {self.validated_data}")
