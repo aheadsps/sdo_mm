@@ -1,7 +1,8 @@
 import datetime
 import re
 
-from django.db.models import Q
+from typing import TypeVar
+
 from rest_framework import serializers
 from rest_framework.validators import ValidationError
 from django.db.utils import IntegrityError
@@ -17,10 +18,15 @@ from lessons.utils import parse_exeption_error
 from lessons.scorm.engine.exceptions import SCORMExtractError, ManifestNotSetupError
 from users import serializers as user_serializers
 
+
+T = TypeVar('T')
+
+
 PROCESS = "process"
 EXPECTED = "expected"
 DONE = "done"
 FAILED = "failed"
+
 
 class UserStorySerializer(serializers.ModelSerializer):
     class Meta:
@@ -268,8 +274,10 @@ class LessonCreateSerializer(serializers.ModelSerializer):
             "name",
             "serial",
             "course",
+            'started',
+            'start_date',
         )
-        read_only_fields = ("id",)
+        read_only_fields = ("id", 'started', 'start_date')
         validators = (validators.LessonScormValidator('course'),)
 
 
@@ -287,6 +295,8 @@ class LessonSerializer(serializers.ModelSerializer):
             "teacher",
             "name",
             "serial",
+            'started',
+            'start_date',
             "course",
             "steps",
             "test_block",
@@ -307,6 +317,8 @@ class LessonViewSerializer(serializers.ModelSerializer):
             "teacher",
             "name",
             "serial",
+            'started',
+            'start_date',
             "course",
             "steps",
             "test_block",
@@ -370,6 +382,7 @@ class CreateCourseSerializer(serializers.ModelSerializer):
         validators = (validators.CourseScormValidator('scorm'),
                       validators.IntervalValidator('beginner', 'interval'),
                       )
+        read_only_fields = ('scorms',)
 
     def create(self, validated_data: dict):
         logger.debug(validated_data)
@@ -491,6 +504,7 @@ class EventSerializerCreate(serializers.ModelSerializer):
     class Meta:
         model = models.Event
         fields = (
+            "id",
             "course",
             "start_date",
             "end_date",
@@ -498,10 +512,10 @@ class EventSerializerCreate(serializers.ModelSerializer):
             "status",
         )
         validators = (validators.SingleEventValidator('course'),
-                      validators.BeginnerValidator('course', 'start_date', 'end_date'),
+                      validators.BeginnerValidator('course', 'start_date'),
                       validators.TimeValidator("start_date", "end_date"),
                       )
-        read_only_fields = ('beginner', 'status')
+        read_only_fields = ('id', 'status', 'end_date')
 
     def _is_process(self, start_date: datetime.datetime) -> bool:
         """
@@ -548,7 +562,10 @@ class EventSerializerCreate(serializers.ModelSerializer):
         logger.debug(f"before {self.validated_data}")
         self._correct_status(self.validated_data)
         logger.debug(f"after {self.validated_data}")
-        return super().save(**kwargs)
+        instance = super().save(**kwargs)
+        if not instance.course.beginner:
+            set_lessons_time(instance)
+        return instance
 
 
 class EventSerializerUpdate(serializers.ModelSerializer):
@@ -561,13 +578,22 @@ class EventSerializerUpdate(serializers.ModelSerializer):
     class Meta:
         model = models.Event
         fields = (
+            "id",
             "course",
             "start_date",
             "end_date",
             "status",
         )
-        validators = (validators.TimeValidator("start_date", "end_date"),)
-        read_only_fields = ("id", "start_date", "course", "user")
+        validators = (validators.SingleEventValidator('course'),
+                      validators.BeginnerValidator('course', 'start_date'),
+                      validators.TimeValidator("start_date", "end_date"),
+                      )
+        read_only_fields = ("id", "status", "end_date",)
+
+    def update(self, instance, validated_data):
+        instance = super().update(instance, validated_data)
+        set_lessons_time(instance)
+        return instance
 
 
 class EventCoveredSerializer(serializers.ModelSerializer):
@@ -605,3 +631,21 @@ class EventCoveredCreateSerializer(serializers.ModelSerializer):
         validators = (validators.RegistrationValidator('user', 'event'),
                       validators.PassRegistationsValidator('event'),
                       )
+
+
+def set_lessons_time(instance: T) -> T:
+    """
+    Выставление временных интервалов для текущего эвента
+    """
+    interval = instance.course.interval
+    start_date = instance.start_date
+    lessons = instance.course.lessons.order_by('serial').get_queryset()
+    update_lessons = []
+    for lesson in lessons:
+        lesson.start_date = start_date
+        update_lessons.append(lesson)
+        start_date = start_date + interval
+    models.Lesson._default_manager.bulk_update(update_lessons, fields=('interval',))
+    instance.end_date = start_date
+    instance = instance.save()
+    return instance

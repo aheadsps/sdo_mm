@@ -3,8 +3,6 @@ import datetime
 from django.utils import timezone
 from django.db.models import Q
 
-from loguru import logger
-
 from lessons import exceptions
 from lessons.utils import get_value, tigger_to_check
 from lessons.models import SCORM, Lesson, Event, EventCovered
@@ -17,15 +15,13 @@ class TimeValidator:
 
     requires_context = True
 
-    def __init__(self, start_date: str, end_date: str) -> None:
+    def __init__(self, start_date: str) -> None:
         self.start_date = str(start_date)
-        self.end_date = str(end_date)
         self.error_detail = dict()
 
     def _check_up_time(
         self,
         start_date: datetime.datetime,
-        end_date: datetime.datetime,
     ) -> None:
         """
         Проверка корректности временых рамок
@@ -38,42 +34,19 @@ class TimeValidator:
             exceptions.UnprocessableEntityError: Исключение в случае не соотвествия
         """
         time_now = timezone.now()
-        logger.debug(f'dates in validator \nstart_date:{start_date} \nend_date: {end_date} \ntime_now: {time_now}')
-        if not start_date or end_date:
-            self.error_detail.update(
-                dict(dates='start_date и end_date обязаны присутствовать'),
-            )
         if time_now > start_date:
-            logger.debug(f'enter to error start_date {start_date and (time_now > start_date)}')
             self.error_detail.update(
                 dict(start_date="Не может быть указано задним числом")
             )
-        if time_now > end_date:
-            logger.debug(f'enter to error end_date {end_date and (time_now > end_date)}')
-            self.error_detail.update(
-                dict(end_date="Не может быть указано задним числом")
-            )
-        if start_date >= end_date:
-            self.error_detail.update(
-                dict(date="start_date не может быть позже чем end_date")
-            )
-        self._process_error(error_detail=self.error_detail)
-
-    def _process_error(self, error_detail: dict[str, str]) -> None:
-        if error_detail:
-            raise exceptions.UnprocessableEntityError(
-                error_detail,
-            )
+        process_error(error_detail=self.error_detail)
 
     def __call__(self, attrs, serializer):
         self.error_detail = dict()
-        need_check = tigger_to_check(attrs, self.start_date, self.end_date)
+        need_check = tigger_to_check(attrs, self.start_date)
         if need_check:
             start_date = get_value(self.start_date, attrs, serializer)
-            end_date = get_value(self.end_date, attrs, serializer)
             self._check_up_time(
                 start_date=start_date,
-                end_date=end_date,
             )
 
 
@@ -99,13 +72,7 @@ class PassRegistationsValidator:
             self.error_detail.update(
                 dict(status='Регистрация не возможна если курс уже начался или закончен'),
                 )
-        self._process_error(error_detail=self.error_detail)
-
-    def _process_error(self, error_detail: dict[str, str]) -> None:
-        if error_detail:
-            raise exceptions.UnprocessableEntityError(
-                error_detail,
-            )
+        process_error(error_detail=self.error_detail)
 
     def __call__(self, attrs, serializer):
         self.error_detail = dict()
@@ -117,6 +84,61 @@ class PassRegistationsValidator:
             )
 
 
+class StatusPassValidator:
+    """
+    Валидатор на пропуск при определенном статусе
+    """
+
+    requires_context = True
+
+    def __init__(self,
+                 course: str,
+                 start_date: str,
+                 status: str,
+                 ) -> None:
+        self.course = str(course)
+        self.start_date = str(start_date)
+        self.status = str(status)
+        self.error_detail = dict()
+
+    def _check(
+        self,
+        instance,
+        course,
+        start_date,
+        status,
+    ) -> None:
+        """
+        Проверка комбинации различных условий
+        """
+        if status == 'finished':
+            self.error_detail.update(dict(status='Завершенный эвент нельзя изменять'))
+        if instance.course != course:
+            self.error_detail.update(dict(course='В установленном эвенте менять курс нельзя'))
+        if status == 'started' and start_date != instance.start_date:
+            self.error_detail.update(dict(course='Дата начала курса не может быть изменена при запущеном курсе'))
+        process_error(error_detail=self.error_detail)
+
+    def __call__(self, attrs, serializer):
+        self.error_detail = dict()
+        need_check = tigger_to_check(attrs,
+                                     self.course,
+                                     self.start_date,
+                                     self.end_date,
+                                     self.status,
+                                     )
+        if need_check:
+            course = get_value(self.course, attrs, serializer)
+            start_date = get_value(self.start_date, attrs, serializer)
+            status = get_value(self.status, attrs, serializer)
+            self._check(
+                instance=serializer.instance,
+                course=course,
+                start_date=start_date,
+                status=status,
+            )
+
+
 class BeginnerValidator:
     """
     Валидатор на проверку начального курса
@@ -124,17 +146,15 @@ class BeginnerValidator:
 
     requires_context = True
 
-    def __init__(self, course: str, start_date: str, end_date: str) -> None:
+    def __init__(self, course: str, start_date: str) -> None:
         self.course = str(course)
         self.start_date = str(start_date)
-        self.end_date = str(end_date)
         self.error_detail = dict()
 
     def _check(
         self,
         course: bool,
         start_date: datetime.datetime,
-        end_date: datetime.datetime,
     ) -> None:
         """
         Проверка исключения временных рамок с статусом 'начинающий'
@@ -144,29 +164,17 @@ class BeginnerValidator:
             self.error_detail.update(dict(start_date='У курса для '
                                           'начинающих не может быть start_date'),
                                      )
-        if end_date and beginner:
-            self.error_detail.update(dict(start_date='У курса для '
-                                          'начинающих не может быть end_date'),
-                                     )
-        self._process_error(error_detail=self.error_detail)
-
-    def _process_error(self, error_detail: dict[str, str]) -> None:
-        if error_detail:
-            raise exceptions.UnprocessableEntityError(
-                error_detail,
-            )
+        process_error(error_detail=self.error_detail)
 
     def __call__(self, attrs, serializer):
         self.error_detail = dict()
-        need_check = tigger_to_check(attrs, self.start_date, self.end_date, self.course)
+        need_check = tigger_to_check(attrs, self.start_date, self.course)
         if need_check:
             course = get_value(self.course, attrs, serializer)
             start_date = get_value(self.start_date, attrs, serializer)
-            end_date = get_value(self.end_date, attrs, serializer)
             self._check(
                 course=course,
                 start_date=start_date,
-                end_date=end_date,
             )
 
 
@@ -192,13 +200,7 @@ class IntervalValidator:
         if interval and beginner:
             self.error_detail.update(dict(interval='Курс для начинающих не может иметь интервал'),
                                      )
-        self._process_error(error_detail=self.error_detail)
-
-    def _process_error(self, error_detail: dict[str, str]) -> None:
-        if error_detail:
-            raise exceptions.UnprocessableEntityError(
-                error_detail,
-            )
+        process_error(error_detail=self.error_detail)
 
     def __call__(self, attrs, serializer):
         self.error_detail = dict()
@@ -234,13 +236,7 @@ class RegistrationValidator:
         if EventCovered._default_manager.filter(Q(user=user) & Q(event=event)).exists():
             self.error_detail.update(dict(interval='Не возможно повторно зарегистрироваться'),
                                      )
-        self._process_error(error_detail=self.error_detail)
-
-    def _process_error(self, error_detail: dict[str, str]) -> None:
-        if error_detail:
-            raise exceptions.UnprocessableEntityError(
-                error_detail,
-            )
+        process_error(error_detail=self.error_detail)
 
     def __call__(self, attrs, serializer):
         self.error_detail = dict()
@@ -276,13 +272,7 @@ class CourseScormValidator:
             self.error_detail.update(
                 scorm='Не возможно присвоить SCORM пакет к курсу, который имеет уроки'
             )
-        self._process_error(error_detail=self.error_detail)
-
-    def _process_error(self, error_detail: dict[str, str]) -> None:
-        if error_detail:
-            raise exceptions.UnprocessableEntityError(
-                error_detail,
-            )
+        process_error(error_detail=self.error_detail)
 
     def __call__(self, attrs, serializer):
         self.error_detail = dict()
@@ -312,13 +302,7 @@ class SingleEventValidator:
             self.error_detail.update(
                 course='Не возможно запустить один и тот же курс дважды'
             )
-        self._process_error(error_detail=self.error_detail)
-
-    def _process_error(self, error_detail: dict[str, str]) -> None:
-        if error_detail:
-            raise exceptions.UnprocessableEntityError(
-                error_detail,
-            )
+        process_error(error_detail=self.error_detail)
 
     def __call__(self, attrs, serializer):
         self.error_detail = dict()
@@ -350,13 +334,7 @@ class SCORMUniqueValidator:
             self.error_detail.update(
                 scorm='SCORM пакет с таким именем уже существует'
             )
-        self._process_error(error_detail=self.error_detail)
-
-    def _process_error(self, error_detail: dict[str, str]) -> None:
-        if error_detail:
-            raise exceptions.UnprocessableEntityError(
-                error_detail,
-            )
+        process_error(error_detail=self.error_detail)
 
     def __call__(self, attrs, serializer):
         self.error_detail = dict()
@@ -388,13 +366,7 @@ class LessonScormValidator:
             self.error_detail.update(
                 course='Не возможно присвоить урок курсу, который имеет SCORM пакет'
             )
-        self._process_error(error_detail=self.error_detail)
-
-    def _process_error(self, error_detail: dict[str, str]) -> None:
-        if error_detail:
-            raise exceptions.UnprocessableEntityError(
-                error_detail,
-            )
+        process_error(error_detail=self.error_detail)
 
     def __call__(self, attrs, serializer):
         self.error_detail = dict()
@@ -424,3 +396,10 @@ class MoreThanZeroValidator:
                 raise exceptions.UnprocessableEntityError(
                     dict(serial="Не может быть меньше 1")
                 )
+
+
+def process_error(error_detail: dict[str, str]) -> None:
+    if error_detail:
+        raise exceptions.UnprocessableEntityError(
+            error_detail,
+        )
