@@ -1,5 +1,5 @@
 from config.celery import app
-from lessons.models import Event, Course, Lesson
+from lessons import models
 from django.db.models import Q
 from users.models import User
 from datetime import datetime
@@ -16,10 +16,28 @@ def update_status_events(course_id: int | None = None,
                   pk: int | None = None,
                   status: str | None = 'expected',
                   ) -> None:
-    event = Event._default_manager.get(pk=pk)
+    event = models.Event._default_manager.get(pk=pk)
     event.status = status
     event.save()
 
+    # Меняем статусы в EventCovered
+    if status == 'process':
+        events_covered = (models.EventCovered._default_manager.
+                          filter(event=event.pk, status='expected')
+                          )
+        events_covered.status = 'process'
+    if status == 'finished':
+        events_covered = (models.EventCovered._default_manager.
+                          filter(event=event.pk).
+                          exclude(status='done')
+                          )
+        events_covered.status = 'failed'
+
+    if events_covered:
+        models.EventCovered._default_manager.bulk_update(
+                events_covered,
+                ["status"]
+            )
 
 
 @app.task
