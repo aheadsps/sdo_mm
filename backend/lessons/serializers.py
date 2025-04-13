@@ -72,6 +72,12 @@ class LessonStorySerializer(serializers.ModelSerializer):
             course=data.get("course"), lesson=data.get("lesson")
         )()
         return data
+    # def validate(self, data):
+    #     validators.LessonStoryValidator(
+    #         course=data.get('course'),
+    #         lesson=data.get('lesson')
+    #     )()
+    #     return data
 
 
 class AnswerSerializer(serializers.ModelSerializer):
@@ -763,6 +769,42 @@ class EventSerializerUpdate(serializers.ModelSerializer):
         SetEventServise(instance=event, update=True).set_event_settings()
         instance.refresh_from_db()
         return instance
+    # def _create_lesson_stories(self, user, course):
+    #     """
+    #     Создает LessonStory для всех free-уроков и урока с serial=1
+    #     """
+    #     try:
+    #         lesson_ids = set(
+    #             models.Lesson.objects.filter(
+    #                 Q(course=course) & (Q(type_lesson="free") | Q(serial=1))
+    #             ).values_list('id', flat=True)
+    #         )
+    #
+    #         logger.debug(
+    #             f'Нашлось {len(lesson_ids)} открытых на данный момент'
+    #             f' уроков в курсе {course.id}')
+    #
+    #         if lesson_ids:
+    #             models.LessonStory.objects.bulk_create([
+    #                 models.LessonStory(user=user, lesson_id=lesson_id,
+    #                                    course=course)
+    #                 for lesson_id in lesson_ids
+    #             ], ignore_conflicts=True)
+    #
+    #             logger.success(
+    #                 f'Создано {len(lesson_ids)} открытых уроков  в LessonStory')
+    #
+    #     except Exception as e:
+    #         logger.error(f"Ошибка создания LessonStory: {str(e)}")
+    #         raise
+    #
+    # def create(self, validated_data):
+    #     event = super().create(validated_data)
+    #     self._create_lesson_stories(
+    #         user=validated_data["user"],
+    #         course=validated_data["course"]
+    #     )
+    #     return event
 
 
 class EventCoveredSerializer(serializers.ModelSerializer):
