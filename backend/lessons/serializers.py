@@ -23,11 +23,28 @@ DONE = "done"
 FAILED = "failed"
 
 
+class CourseProgressSerializer(serializers.ModelSerializer):
+    """
+    Сериализатор прогресса студента в определенной точке курса
+    """
+    class Meta:
+        model = models.CourseProgress
+        fields = ("id",
+                  "student",
+                  "test_block",
+                  "score",
+                  "data_assessment",
+                  "procent_compelete",
+                  "result",
+                  )
+        readline = ("id",)
+
+
 class UserStorySerializer(serializers.ModelSerializer):
     class Meta:
         model = models.UserStory
-        fields = ['id', 'user', 'answer', 'test_block', 'date_opened']
-        read_only_fields = ['id', 'user', 'date_opened']
+        fields = ('id', 'user', 'answer', 'test_block', 'date_opened')
+        read_only_fields = ('id', 'user', 'date_opened')
 
     def validate(self, data):
         validators.UserStoryValidator(
@@ -40,8 +57,8 @@ class UserStorySerializer(serializers.ModelSerializer):
 class LessonStorySerializer(serializers.ModelSerializer):
     class Meta:
         model = models.LessonStory
-        fields = ['course', 'lesson', 'user', 'date_opened']
-        read_only_fields = ['user', 'date_opened']
+        fields = ('course', 'lesson', 'user', 'date_opened')
+        read_only_fields = ('user', 'date_opened')
 
     def validate(self, data):
         validators.LessonStoryValidator(
@@ -79,7 +96,13 @@ class QuestionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Question
-        fields = ("id", "text", "image", "answers")
+        fields = ("id",
+                  "text",
+                  "image",
+                  "test_block",
+                  "type_question",
+                  "answers"
+                  )
 
     # def create(self, validated_data: dict[str, str]):
     #     """
@@ -102,7 +125,7 @@ class QuestionCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Question
-        fields = ("id", "text", "image", "test_block")
+        fields = ("id", "text", "image", "type_question", "test_block")
         read_only_fields = ("id",)
 
 
@@ -110,6 +133,25 @@ class ContentAttachmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.ContentAttachment
         fields = ["id", "file", "file_type"]
+
+
+class AssessmentSubmissionSerializer(serializers.ModelSerializer):
+    """
+    Сериализатор представления оценок
+    """
+    files = ContentAttachmentSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = models.AssessmentSubmission
+        fields = ("teacher",
+                  "test_block",
+                  "student",
+                  "score",
+                  "comment",
+                  "type_of",
+                  "files",
+                  "date_assessment",
+                  )
 
 
 class StepSerializer(serializers.ModelSerializer):
