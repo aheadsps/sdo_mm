@@ -2064,7 +2064,7 @@ components:
         interval:
           type: string
           format: date
-          description: Интервал времени по которому будут открывать уроки
+          description: Интервал времени по которому будут открывать уроки (пример ввода [DD] [HH:[MM:]] 07 00:00 - 7 дней)
         lessons:
           type: array
           description: Уроки привязанные к данному курсу (для бэков - это поле только из сериализатора)
@@ -2160,6 +2160,12 @@ components:
         course:
           type: integer
           minimum: 1
+        start_date:
+          type: string
+          format: date-time
+        started:
+          type: boolean
+          default: false
         steps:
           type: array
           description: Шаги урока
@@ -2191,6 +2197,14 @@ components:
           minimum: 1
           readOnly: false
           nullable: false
+        start_date:
+          type: string
+          format: date-time
+          readOnly: true
+        started:
+          type: boolean
+          default: false
+          readOnly: true
         course:
           type: integer
           minimum: 1
@@ -2221,6 +2235,9 @@ components:
           type: string
           format: date-time
           description: Дата начала урока
+        started:
+          type: boolean
+          default: false
         course:
           type: integer
           minimum: 1
@@ -2741,16 +2758,20 @@ components:
         end_date:
           type: string
           format: date-time
-          readOnly: false
+          description: Расчитывается исходя из интервала в курсе
+          readOnly: true
           nullable: true
         status:
           description: Статус прохождения курса
           enum:
-            - process
+            - started
             - expected
             - finished
           readOnly: true
           default: expected
+      required:
+        - course
+        - start_date
 
     EventUpdate:
       description: Сущность обновления события
@@ -2764,17 +2785,18 @@ components:
         start_date:
           type: string
           format: date-time
-          readOnly: true
+          readOnly: false
           nullable: true
         end_date:
           type: string
           format: date-time
-          readOnly: false
+          description: Расчитывается исходя из интервала в курсе
+          readOnly: true
           nullable: true
         status:
           description: Статус прохождения курса
           enum:
-            - process
+            - started
             - expected
             - finished
           readOnly: true
@@ -2787,23 +2809,20 @@ components:
       properties:
         course:
           type: object
-          readOnly: false
           minimum: 1
           $ref: "#/components/schemas/СourseView"
         start_date:
           type: string
           format: date-time
-          readOnly: false
           nullable: true
         end_date:
           type: string
           format: date-time
-          readOnly: false
           nullable: true
         status:
           description: Статус прохождения курса
           enum:
-            - process
+            - started
             - expected
             - finished
           readOnly: true
@@ -2816,23 +2835,20 @@ components:
       properties:
         course:
           type: object
-          readOnly: false
           minimum: 1
           $ref: "#/components/schemas/Сourse"
         start_date:
           type: string
           format: date-time
-          readOnly: false
           nullable: true
         end_date:
           type: string
           format: date-time
-          readOnly: false
           nullable: true
         status:
           description: Статус прохождения курса
           enum:
-            - process
+            - started
             - expected
             - finished
           readOnly: true
