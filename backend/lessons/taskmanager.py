@@ -17,8 +17,9 @@ class TaskManager:
     по переводу евента в статус "в процессе"
     и обратному переводу в статусы завершения
     Получает данные:
-    id-course: int, список пользователей :str "1,2,3",
-    дата-тайм начала, дата-тайм финиша (может null)
+    id-course: int,
+    дата-тайм начала (может null),
+    дата-тайм финиша (может null)
     """
     def __init__(
         self,
@@ -34,15 +35,11 @@ class TaskManager:
 
         # Если есть даты делаем шедулеры
         if self.data_start:
-            #self.data_start = datetime.strptime(self.data_start, "%Y-%m-%d %H:%M")
-            #self.data_start = timezone.make_aware(self.data_start)
             self.schedule_start = self._clocked_schedule(self.data_start)
         else:
             self.schedule_start = None
             self.data_start = timezone.now()
         if self.data_end:
-            #self.data_end = datetime.strptime(self.data_end, "%Y-%m-%d %H:%M")
-            #self.data_end = timezone.make_aware(self.data_end)
             self.schedule_end = self._clocked_schedule(self.data_end)
         else:
             self.schedule_end = None
@@ -95,12 +92,10 @@ class TaskManager:
         else:
             # Если таск есть
             kwargs_old: dict = json.loads(task_event.kwargs)
-            # users = set(kwargs.get('users')).union(set(self.user_list))
             kwargs_old["start_date"] = kwargs["start_date"]
             kwargs_old["end_date"] = kwargs["end_date"]
             task_event.kwargs = json.dumps(kwargs_old)
             task_event.clocked = clocked
-            print("************", kwargs_old)
             task_event.save()
 
 
@@ -119,37 +114,6 @@ class TaskManager:
             kwargs['status'] = 'finished'
             name = f"EndEvent_{kwargs['pk']}"
             self._add_task_update(clocked, name, task, kwargs)
-
-
-    def _create_events(self):
-        """
-        Создаем евент
-        """
-        # В kwargs передаем данные для вызова функции
-        if self.schedule_start:
-            status = 'expected'
-        else:
-            status = 'process'
-
-        if self.data_start:
-            #start_date = datetime.strptime(self.data_start, "%Y-%m-%d %H:%M")
-            pass
-        else:
-            raise ValueError
-        if self.data_end:
-            #end_date = datetime.strptime(self.data_end, "%Y-%m-%d %H:%M")
-            pass
-        else:
-            end_date = None
-        # Получаем курс
-        #course = models.Course._default_manager.get(pk=self.course)
-
-        return models.Event._default_manager.create(
-            course=self.course,
-            start_date=self.data_start,
-            end_date=self.data_end,
-            status=status
-        )
 
 
     def create(self):
@@ -176,9 +140,7 @@ class TaskManager:
             tasks.send_mail_users.delay(**kwargs)
 
     def update(self):
-        print("*********", self.event_pk)
         kwargs = {
-            "course_id": self.course,
             "end_date": TaskManager.date_str(self.data_end),
             "start_date": TaskManager.date_str(self.data_start),
             "pk": self.event_pk,
