@@ -530,6 +530,17 @@ class LessonViewSetTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(lessons_models.Lesson.objects.count(), 2)
 
+    def test_create_lesson_fail_serial(self):
+        """Тест создания урока с не верным порядковым номером."""
+        url = reverse('lessons:lesson-list')
+        data = {
+            "name": "Новый урок 2",
+            "serial": 1,
+            "course": self.course.id
+        }
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code, 422)
+
     def test_update_lesson(self):
         """Тест обновления урока."""
         url = reverse('lessons:lesson-detail', args=[self.lesson.id])
