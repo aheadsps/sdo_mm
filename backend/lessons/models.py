@@ -365,7 +365,9 @@ class Question(models.Model):
                               null=True,
                               blank=True,
                               )
-    weight = models.SmallIntegerField(_("вес вопроса"), validators=[MinValueValidator(0)])
+    weight = models.SmallIntegerField(_("вес вопроса"),
+                                      validators=[MinValueValidator(1)],
+                                      )
     test_block = models.ForeignKey(TestBlock,
                                    verbose_name=_("тестовый блок"),
                                    on_delete=models.CASCADE,

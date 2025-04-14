@@ -468,6 +468,148 @@ class TestEndpoints(APITestCase):
         self.client.force_authenticate(self.user)
 
 
+class TestChainEndpoint(APITestCase):
+    """
+    Полная цепочка
+    """
+
+    def setUp(self):
+        self.profession = users_models.Profession._default_manager.create(
+            en_name="builder",
+            ru_name="строитель",
+        )
+        self.experience = users_models.WorkExperience._default_manager.create(
+            years=0,
+        )
+        date_commencement = datetime.date(
+            year=2023,
+            month=1,
+            day=1,
+        )
+        self.user = get_user_model()._default_manager.create(
+            email="user@gmail.com",
+            profession=self.profession,
+            password="password",
+            date_commencement=date_commencement,
+            is_staff=True,
+        )
+        self.client.force_authenticate(user=self.user)
+
+    def test_chain(self):
+        """
+        Тесты цепочки
+        """
+        url = '/api/v1/courser'
+        data = dict(
+            name='Course',
+            interval=datetime.timedelta(days=7),
+            profession=self.profession.pk,
+            experiences=[self.experience.pk,],
+        )
+        response_course = self.client.post(
+            path=url,
+            data=data,
+            format='json',
+        )
+        self.assertEqual(response_course.status_code, 201)
+        self.assertEqual(response_course.json()['status'], 'archive')
+        course = lessons_models.Course._default_manager.get(name=data['name'])
+
+        data['name'] = 'Course_beginner'
+        data.pop('interval')
+        data['beginner'] = True
+        response_beginner = self.client.post(
+            path=url,
+            data=data,
+            format='json',
+        )
+        self.assertEqual(response_beginner.status_code, 201)
+        self.assertEqual(response_beginner.json()['status'], 'archive')
+        self.assertTrue(response_beginner.json()['beginner'])
+        course_beginner = lessons_models.Course._default_manager.get(name=data['name'])
+
+        url = '/api/v1/lessons'
+        data = dict(
+            name='Lesson',
+            serial=1,
+            course=course.pk,
+        )
+        self.client.post(
+            path=url,
+            data=data,
+            format='json',
+        )
+        self.assertEqual(response_beginner.status_code, 201)
+        self.assertFalse(response_beginner.json()['started'])
+        lesson = lessons_models.Lesson._default_manager.get(name=data['name'])
+
+        data['name'] = 'Lesson_beginner'
+        data['course'] = course_beginner.pk
+        self.client.post(
+            path=url,
+            data=data,
+            format='json',
+        )
+        self.assertEqual(response_beginner.status_code, 201)
+        self.assertFalse(response_beginner.json()['started'])
+        lesson_beginner = lessons_models.Lesson._default_manager.get(name=data['name'])
+
+        url = '/api/v1/step'
+        data = dict(
+            title='Step',
+            content_text='Step_one',
+            serial=1,
+            lesson=lesson.pk,
+        )
+        self.client.post(
+            path=url,
+            data=data,
+            format='json',
+        )
+        self.assertEqual(response_beginner.status_code, 201)
+        step = lessons_models.Step._default_manager.get(
+            title=data['title'],
+        )
+
+        data['title'] = 'Step_beginner'
+        data['lesson'] = lesson_beginner.pk
+        self.client.post(
+            path=url,
+            data=data,
+            format='json',
+        )
+        self.assertEqual(response_beginner.status_code, 201)
+        step_beginner = lessons_models.Step._default_manager.get(
+            title=data['title'],
+        )
+
+        url = '/api/v1/events'
+        data = dict(
+            course=course.pk,
+            start_date=datetime.datetime(year=2025, month=5, day=14),
+        )
+        self.client.post(
+            path=url,
+            data=data,
+            format='json',
+        )
+        self.assertEqual(response_beginner.status_code, 201)
+        event = lessons_models.Event._default_manager.get(course_id=data['course'])
+        self.assertEqual(event.course.status, 'run')
+        self.assertEqual(event.status, 'expected')
+
+        data = dict(
+            course=course_beginner.pk,
+        )
+        self.client.post(
+            path=url,
+            data=data,
+            format='json',
+        )
+        self.assertEqual(response_beginner.status_code, 201)
+        event = lessons_models.Event._default_manager.get(course_id=data['course'])
+
+
 class LessonViewSetTest(APITestCase):
     def setUp(self):
         """Настройка данных для тестов."""

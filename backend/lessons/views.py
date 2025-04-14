@@ -1,4 +1,5 @@
 import datetime
+import math
 from loguru import logger
 
 from django.utils import timezone
@@ -118,7 +119,18 @@ class EventViewSet(mixins.ListModelMixin,
         return super().retrieve(request, *args, **kwargs)
 
     def list(self, request, *args, **kwargs):
-        self.queryset = self.queryset.select_related('course')
+        if self.request.user.is_staff or self.request.user.is_superuser:
+            self.queryset = self.queryset.select_related('course')
+        else:
+            user = self.request.user
+            profession = user.profession
+            time_now = timezone.now()
+            date_now = datetime.date(year=time_now.year, month=time_now.month, day=time_now.day)
+            experience_years = math.floor((date_now - user.date_commencement).days / 365)
+            experience = WorkExperience._default_manager.get_or_create(years=experience_years)
+            self.queryset = self.queryset.filter(Q(course__experiences=experience) &
+                                                 Q(course__profession=profession) &
+                                                 ~Q(course__beginner=True))
         return super().list(request, *args, **kwargs)
 
     def _change_status(self, instance):
