@@ -37,11 +37,16 @@ class TestBlockAPITestCase(APITestCase):
             "name": "Lesson 1",
             "serial": 1,
             "course": Course.objects.create(
-                name="Course 1"
+                teacher=self.user,
+                name="Course 1",
+                interval=datetime.timedelta(days=7),
             )
         }
         self.lesson = Lesson.objects.create(**self.lesson_data)
-        self.test_block_data = {"lesson": self.lesson}
+        self.test_block_data = {"lesson": self.lesson,
+                                "end_date": datetime.datetime(year=2027, month=1, day=1),
+                                "max_score": 5.0,
+                                }
         self.test_block = TestBlock.objects.create(**self.test_block_data)
         self.client.force_authenticate(self.user)
 

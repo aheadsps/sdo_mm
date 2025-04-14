@@ -4,6 +4,8 @@ from datetime import date
 from django.utils import timezone
 from django.db.models import Q
 
+from loguru import logger
+
 from authemail.models import EmailUserManager
 
 
@@ -17,16 +19,25 @@ class EmailUserManagerAddProf(EmailUserManager):
         Нахождение всех эвентов которые являются начальными
         и подходят для данного пользователя
         """
+        from lessons.models import EventCovered, Course, Event
+        from users.models import WorkExperience
+
         profession = user.profession
         time_now = timezone.now()
-        date_now = date(year=time_now.year, month=time_now.month, day=time_now.date)
+        date_now = date(year=time_now.year, month=time_now.month, day=time_now.day)
+        logger.debug(f'date_tooday {date_now}')
         experience_years = math.floor((date_now - user.date_commencement).days / 365)
+        logger.debug(f'experience work is {experience_years}')
         experience = WorkExperience._default_manager.get_or_create(years=experience_years)
+        logger.debug(f'get expetience {experience}')
         courses = Course._default_manager.filter(Q(profession=profession) &
-                                                 Q(experiences=experience) &
-                                                 Q(beginner=True))
+                                                 Q(experiences=experience[0]) &
+                                                 Q(beginner=True) &
+                                                 Q(status='run'))
+        logger.debug(f'Find courses for new worker {courses}')
         qfilter = Q(*[Q(course=course) for course in courses], _connector=Q.OR)
-        events = Event._default_manager.filter(qfilter).get_queryset()
+        events = Event._default_manager.filter(qfilter)
+        logger.debug(f'Find events for new worker {events}')
         if events:
             EventCovered._default_manager.bulk_create(
                 [EventCovered(user=user,
@@ -56,8 +67,7 @@ class EmailUserManagerAddProf(EmailUserManager):
         и попасть в группу по этой профессии.
         """
 
-        from users.models import Profession, ProfessionGroup, User, WorkExperience
-        from lessons.models import EventCovered, Course, Event
+        from users.models import Profession, ProfessionGroup, User
 
         now = timezone.now()
         if not email:

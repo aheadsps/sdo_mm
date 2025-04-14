@@ -160,14 +160,16 @@ class EventViewSet(mixins.ListModelMixin,
             profession = instance.course.profession
             experiences = instance.course.experiences.get_queryset()
             years_experience = self._get_interval_experiences(experiences=experiences)
-            qfilter = Q(*[Q(date_commencement__gt=year[0], date__commencent__lt=year[-1])
+            logger.debug(f'intervals experience for search users is {years_experience}')
+            qfilter = Q(*[Q(date_commencement__gt=year[0], date_commencement__lt=year[-1])
                           for year
                           in years_experience],
                         _connector=Q.OR,
                         )
-            users = get_user_model()._default_manager.filter(qfilter).get_queryset()
+            users = get_user_model()._default_manager.filter(qfilter)
             if profession:
                 users = users.filter(Q(profession=profession))
+            logger.debug(f'find users depends on experience {users}')
             models.EventCovered._default_manager.bulk_create(
                 [models.EventCovered(
                     user=user,
@@ -183,6 +185,7 @@ class EventViewSet(mixins.ListModelMixin,
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         instance = serializer.save()
+        logger.debug(f'create event is {instance}')
         self._change_status(instance)
         self._set_event_users(instance)
         headers = self.get_success_headers(serializer.data)

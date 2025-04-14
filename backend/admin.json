@@ -8,6 +8,128 @@
         }
     },
     {
+        "model": "lessons.course",
+        "pk": 4,
+        "fields": {
+            "teacher": 1,
+            "name": "Работа с оборудованием",
+            "description": "Правила работы с оборудованием",
+            "interval": "7 00:00:00",
+            "beginner": false,
+            "create_date": "2025-04-14T09:21:00.577Z",
+            "update_date": "2025-04-14T09:21:00.577Z",
+            "image": "",
+            "profession": 2,
+            "status": "archive",
+            "experiences": [
+                2,
+                3
+            ]
+        }
+    },
+    {
+        "model": "lessons.lesson",
+        "pk": 1,
+        "fields": {
+            "teacher": 1,
+            "name": "Работа с оборудованием (1 часть)",
+            "serial": 1,
+            "course": 4,
+            "started": false,
+            "start_date": null
+        }
+    },
+    {
+        "model": "lessons.lesson",
+        "pk": 2,
+        "fields": {
+            "teacher": 1,
+            "name": "Работа с оборудованием (2 часть)",
+            "serial": 2,
+            "course": 4,
+            "started": false,
+            "start_date": null
+        }
+    },
+    {
+        "model": "lessons.lesson",
+        "pk": 3,
+        "fields": {
+            "teacher": 1,
+            "name": "Работа с оборудованием (3 часть)",
+            "serial": 3,
+            "course": 4,
+            "started": false,
+            "start_date": null
+        }
+    },
+    {
+        "model": "lessons.step",
+        "pk": 1,
+        "fields": {
+            "teacher": 1,
+            "title": "Дрель",
+            "content_text": "Как пользоваться дрелью",
+            "serial": 1,
+            "lesson": 1
+        }
+    },
+    {
+        "model": "lessons.step",
+        "pk": 2,
+        "fields": {
+            "teacher": 1,
+            "title": "Пила",
+            "content_text": "Как пользоваться пилой",
+            "serial": 2,
+            "lesson": 1
+        }
+    },
+    {
+        "model": "lessons.step",
+        "pk": 3,
+        "fields": {
+            "teacher": 1,
+            "title": "Бетономешалка",
+            "content_text": "Как пользоваться бетономешалкой",
+            "serial": 1,
+            "lesson": 2
+        }
+    },
+    {
+        "model": "lessons.step",
+        "pk": 4,
+        "fields": {
+            "teacher": 1,
+            "title": "Лопата",
+            "content_text": "Как пользоваться лопатой",
+            "serial": 2,
+            "lesson": 2
+        }
+    },
+    {
+        "model": "lessons.step",
+        "pk": 5,
+        "fields": {
+            "teacher": 1,
+            "title": "Тележка",
+            "content_text": "Как пользоваться тележкой",
+            "serial": 1,
+            "lesson": 3
+        }
+    },
+    {
+        "model": "lessons.step",
+        "pk": 6,
+        "fields": {
+            "teacher": 1,
+            "title": "Уровень",
+            "content_text": "Как пользоваться уровнем",
+            "serial": 2,
+            "lesson": 3
+        }
+    },
+    {
         "model": "users.profession",
         "pk": 1,
         "fields": {
@@ -36,7 +158,7 @@
             "first_name": "Vasia",
             "last_name": "Petechkin",
             "date_joined": "2025-03-17T06:12:30.791Z",
-            "last_login": "2025-04-10T17:10:50.083Z",
+            "last_login": "2025-04-14T09:12:42.650Z",
             "date_commencement": "2024-01-01",
             "profession": 1,
             "groups": [],

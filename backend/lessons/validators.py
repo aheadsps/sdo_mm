@@ -1,11 +1,20 @@
 import datetime
 
+from loguru import logger
+
 from django.utils import timezone
 from django.db.models import Q
 
 from lessons import exceptions
 from lessons.utils import get_value, tigger_to_check
-from lessons.models import SCORM, Lesson, Event, EventCovered
+from lessons.models import (
+    SCORM,
+    Lesson,
+    Event,
+    EventCovered,
+    Course,
+    Step,
+    )
 
 
 class TimeValidator:
@@ -153,12 +162,15 @@ class BeginnerValidator:
 
     def _check(
         self,
-        course: bool,
+        course: int,
         start_date: datetime.datetime,
     ) -> None:
         """
         Проверка исключения временных рамок с статусом 'начинающий'
         """
+        logger.debug(f'I dont know what is this {course}')
+        if isinstance(course, int):
+            course = Course._default_manager.get(pk=course)
         beginner = course.beginner
         if start_date and beginner:
             self.error_detail.update(dict(start_date='У курса для '
@@ -298,7 +310,7 @@ class SingleEventValidator:
         self,
         course,
     ) -> None:
-        if Event._default_manager.filter(course=course).exists():
+        if Event._default_manager.filter(course_id=course).exists():
             self.error_detail.update(
                 course='Не возможно запустить один и тот же курс дважды'
             )
@@ -362,7 +374,7 @@ class LessonScormValidator:
         """
         Проверка возможности присвоения SCORM пакета
         """
-        if course.scorm:
+        if course.scorms.exists():
             self.error_detail.update(
                 course='Не возможно присвоить урок курсу, который имеет SCORM пакет'
             )
@@ -374,6 +386,111 @@ class LessonScormValidator:
         if need_check:
             course = get_value(self.course, attrs, serializer)
             self._check_scorm_pass(course)
+
+
+class StepSerialValidator:
+    """
+    Валидатор номера шага
+    """
+
+    requires_context = True
+
+    def __init__(self, serial: str, lesson) -> None:
+        self.serial = str(serial)
+        self.lesson = str(lesson)
+        self.error_detail = dict()
+
+    def _check(
+        self,
+        serial,
+        lesson,
+    ) -> None:
+        """
+        Проверка возможности присвоения SCORM пакета
+        """
+        if isinstance(lesson, int):
+            lesson = Lesson._default_manager.get(pk=lesson)
+        if Step._default_manager.filter(Q(serial=serial) & Q(lesson=lesson)).exists():
+            self.error_detail.update(dict(serial='Данный номер уже присутствует в уроке'))
+        process_error(error_detail=self.error_detail)
+
+    def __call__(self, attrs, serializer):
+        self.error_detail = dict()
+        need_check = tigger_to_check(attrs, self.serial, self.lesson)
+        if need_check:
+            serial = get_value(self.serial, attrs, serializer)
+            lesson = get_value(self.lesson, attrs, serializer)
+            if lesson:
+                self._check(serial, lesson)
+
+
+class LessonSerialValidator:
+    """
+    Валидатор номера шага
+    """
+
+    requires_context = True
+
+    def __init__(self, serial: str, course) -> None:
+        self.serial = str(serial)
+        self.course = str(course)
+        self.error_detail = dict()
+
+    def _check(
+        self,
+        serial,
+        course,
+    ) -> None:
+        """
+        Проверка возможности присвоения SCORM пакета
+        """
+        if isinstance(course, int):
+            course = Course._default_manager.get(pk=course)
+        if Lesson._default_manager.filter(Q(serial=serial) & Q(course=course)).exists():
+            self.error_detail.update(dict(serial='Данный номер уже присутствует в курсе'))
+        process_error(error_detail=self.error_detail)
+
+    def __call__(self, attrs, serializer):
+        self.error_detail = dict()
+        need_check = tigger_to_check(attrs, self.serial, self.course)
+        if need_check:
+            serial = get_value(self.serial, attrs, serializer)
+            course = get_value(self.course, attrs, serializer)
+            if course:
+                self._check(serial, course)
+
+
+class EmptyLessonsValidator:
+    """
+    Валидатор курса без уроков
+    """
+
+    requires_context = True
+
+    def __init__(self, course: str) -> None:
+        self.course = str(course)
+        self.error_detail = dict()
+
+    def _check(
+        self,
+        course,
+    ) -> None:
+        """
+        Проверка возможности присвоения SCORM пакета
+        """
+        if isinstance(course, int):
+            course = Course._default_manager.get(pk=course)
+        if not course.lessons.exists():
+            self.error_detail.update(dict(serial='Нельзя запустить курс без уроков'))
+        process_error(error_detail=self.error_detail)
+
+    def __call__(self, attrs, serializer):
+        self.error_detail = dict()
+        need_check = tigger_to_check(attrs, self.course)
+        if need_check:
+            course = get_value(self.course, attrs, serializer)
+            if course:
+                self._check(course)
 
 
 class MoreThanZeroValidator:

@@ -42,11 +42,14 @@ class SCORMLoader:
         class_adapter(self).parse()
         self.zip_file.close()
 
-    def save(self, instance: T, data: dict) -> T:
+    def save(self, instance: T | None = None, data: dict | None = None) -> T:
         """
         Распаковка и сохранение zip архива
         """
-        data = dict(**data)
+        if not data:
+            data = dict()
+        else:
+            data = dict(**data)
         scorm = self.core.save(instance, data)
         self.zip_file.close()
         return scorm

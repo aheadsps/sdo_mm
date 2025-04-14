@@ -46,7 +46,7 @@ class Event(models.Model):
         verbose_name_plural = _("Events")
 
     def __str__(self):
-        return f"event_for_user_{self.user.pk}_{self.pk}"
+        return f"event_with_course_{self.course.pk}"
 
 
 class EventCovered(models.Model):
@@ -81,7 +81,7 @@ class EventCovered(models.Model):
         verbose_name_plural = _("EventCovereds")
 
     def __str__(self):
-        return self.name
+        return f'user_{self.user.pk}_event_{self.event.pk}'
 
 
 class Course(models.Model):
@@ -105,7 +105,10 @@ class Course(models.Model):
         blank=True,
         default=None,
     )
-    interval = models.DurationField(verbose_name=_('интервал'),)
+    interval = models.DurationField(verbose_name=_('интервал'),
+                                    null=True,
+                                    blank=True,
+                                    )
     beginner = models.BooleanField(
         _("Начинающий"),
         help_text="Курс для начинающих",
@@ -196,6 +199,8 @@ class SCORMFile(models.Model):
                                verbose_name=_("SCORM"),
                                related_name='files',
                                on_delete=models.CASCADE,
+                               null=True,
+                               blank=True,
                                )
     file = models.FileField(_("файл scorm"),
                             upload_to=path_maker_scorm,
@@ -319,8 +324,14 @@ class TestBlock(models.Model):
     """
     Модель тестового блока
     """
-    end_date = models.DateTimeField(_("время окончания"))
-    max_score = models.FloatField(_("максимальный балл"))
+    end_date = models.DateTimeField(_("время окончания"),
+                                    null=True,
+                                    blank=True,
+                                    )
+    max_score = models.FloatField(_("максимальный балл"),
+                                  null=True,
+                                  blank=True,
+                                  )
     lesson = models.OneToOneField(Lesson,
                                   on_delete=models.CASCADE,
                                   related_name="test_block",
@@ -354,6 +365,7 @@ class Question(models.Model):
                               null=True,
                               blank=True,
                               )
+    weight = models.SmallIntegerField(_("вес вопроса"), validators=[MinValueValidator(0)])
     test_block = models.ForeignKey(TestBlock,
                                    verbose_name=_("тестовый блок"),
                                    on_delete=models.CASCADE,

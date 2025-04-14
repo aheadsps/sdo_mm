@@ -145,7 +145,10 @@ class CoreSCORM(BaseCoreSCORM):
     def _get_structures(self, version: str, instance, base_path: os.PathLike):
         structure_list = []
         root = self._manifest.getroot()
-        lesson_data = dict(version=version, course=instance)
+        if instance:
+            lesson_data = dict(version=version, course=instance)
+        else:
+            lesson_data = dict()
         logger.debug(f'structure data is {lesson_data}')
         logger.debug(f'list org {self.organizations}')
         for organization in self.organizations:
@@ -235,7 +238,7 @@ class CoreSCORM(BaseCoreSCORM):
                 field.set(value)
         return course
 
-    def save(self, instance, data: dict) -> SCORM:
+    def save(self, instance=None, data: dict | None = None) -> SCORM:
         """
         Сохранение курса в систему
         """
@@ -247,10 +250,13 @@ class CoreSCORM(BaseCoreSCORM):
         logger.debug(f'title is {original_title}')
         version = self.get_shema()
         path = pathlib.Path('media', 'scorm', slugify_title)
-        course = self._create_model(instance=instance,
-                                    data=data,
-                                    title=original_title,
-                                    )
+        if instance:
+            course = self._create_model(instance=instance,
+                                        data=data,
+                                        title=original_title,
+                                        )
+        else:
+            course = None
         self._get_structures(version=version,
                              instance=course,
                              base_path=path,

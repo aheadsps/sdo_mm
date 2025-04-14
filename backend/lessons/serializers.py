@@ -19,7 +19,7 @@ from lessons.scorm.engine.exceptions import SCORMExtractError, ManifestNotSetupE
 from users import serializers as user_serializers
 
 
-T = TypeVar('T')
+T = TypeVar("T")
 
 
 PROCESS = "process"
@@ -31,13 +31,12 @@ FAILED = "failed"
 class UserStorySerializer(serializers.ModelSerializer):
     class Meta:
         model = models.UserStory
-        fields = ['id', 'user', 'answer', 'test_block', 'date_opened']
-        read_only_fields = ['id', 'user', 'date_opened']
+        fields = ["id", "user", "answer", "test_block", "date_opened"]
+        read_only_fields = ["id", "user", "date_opened"]
 
     def validate(self, data):
         validators.UserStoryValidator(
-            answer=data.get('answer'),
-            test_block=data.get('test_block')
+            answer=data.get("answer"), test_block=data.get("test_block")
         )()
         return data
 
@@ -45,13 +44,12 @@ class UserStorySerializer(serializers.ModelSerializer):
 class LessonStorySerializer(serializers.ModelSerializer):
     class Meta:
         model = models.LessonStory
-        fields = ['course', 'lesson', 'user', 'date_opened']
-        read_only_fields = ['user', 'date_opened']
+        fields = ["course", "lesson", "user", "date_opened"]
+        read_only_fields = ["user", "date_opened"]
 
     def validate(self, data):
         validators.LessonStoryValidator(
-            course=data.get('course'),
-            lesson=data.get('lesson')
+            course=data.get("course"), lesson=data.get("lesson")
         )()
         return data
 
@@ -106,8 +104,8 @@ class QuestionCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Question
-        fields = ("id", "text", "image", "test_block")
-        read_only_fields = ("id",)
+        fields = ("id", "teacher", "text", "image", "test_block")
+        read_only_fields = ("id", 'teacher',)
 
 
 class ContentAttachmentSerializer(serializers.ModelSerializer):
@@ -125,12 +123,15 @@ class StepSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Step
-        fields = ("serial",
-                  "title",
-                  "content_text",
-                  "attachments",
-                  "lesson",
-                  )
+        fields = (
+            "id",
+            "teacher",
+            "serial",
+            "title",
+            "content_text",
+            "attachments",
+            "lesson",
+        )
 
 
 class StepCreateSerializer(serializers.ModelSerializer):
@@ -140,12 +141,18 @@ class StepCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Step
-        fields = ("serial",
-                  "title",
-                  "content_text",
-                  "lesson",
-                  )
-        validators = (validators.MoreThanZeroValidator("serial"),)
+        fields = (
+            "id",
+            "teacher",
+            "serial",
+            "title",
+            "content_text",
+            "lesson",
+        )
+        validators = (validators.MoreThanZeroValidator("serial"),
+                      validators.StepSerialValidator('serial', 'lesson'),
+                      )
+        read_only_fields = ('id', 'teacher',)
 
     # def create(self, validated_data: dict[int, str, str, dict]):
     #     """
@@ -227,13 +234,15 @@ class StepViewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Step
-        fields = ("serial",
-                  "teacher",
-                  "title",
-                  "content_text",
-                  "lesson",
-                  "attachments",
-                  )
+        fields = (
+            "id",
+            "serial",
+            "teacher",
+            "title",
+            "content_text",
+            "lesson",
+            "attachments",
+        )
 
 
 class TestBlockSerializersOptimize(serializers.ModelSerializer):
@@ -271,20 +280,24 @@ class LessonCreateSerializer(serializers.ModelSerializer):
         model = models.Lesson
         fields = (
             "id",
+            "teacher",
             "name",
             "serial",
             "course",
-            'started',
-            'start_date',
+            "started",
+            "start_date",
         )
-        read_only_fields = ("id", 'started', 'start_date')
-        validators = (validators.LessonScormValidator('course'),)
+        read_only_fields = ("id", "teacher", "started", "start_date")
+        validators = (validators.LessonScormValidator("course"),
+                      validators.LessonSerialValidator('serial', 'course',),
+                      )
 
 
 class LessonSerializer(serializers.ModelSerializer):
     """
     Сериализатор оптимизированного вывода
     """
+
     steps = StepSerializer(many=True)
     test_block = serializers.PrimaryKeyRelatedField(read_only=True)
 
@@ -295,8 +308,8 @@ class LessonSerializer(serializers.ModelSerializer):
             "teacher",
             "name",
             "serial",
-            'started',
-            'start_date',
+            "started",
+            "start_date",
             "course",
             "steps",
             "test_block",
@@ -307,6 +320,7 @@ class LessonViewSerializer(serializers.ModelSerializer):
     """
     Сериализатор детального представления урока
     """
+
     steps = StepViewSerializer(many=True)
     test_block = TestBlockSerializersDetail()
 
@@ -317,8 +331,8 @@ class LessonViewSerializer(serializers.ModelSerializer):
             "teacher",
             "name",
             "serial",
-            'started',
-            'start_date',
+            "started",
+            "start_date",
             "course",
             "steps",
             "test_block",
@@ -332,28 +346,27 @@ class SCORMSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.SCORM
-        fields = ('id', 'name', 'version', 'resourse')
+        fields = ("id", "teacher", "name", "version", "resourse")
 
 
 class ZIPFileField(serializers.FileField):
 
     def to_internal_value(self, data):
-        self.error_messages.update(non_zip='File need to be zip format')
+        self.error_messages.update(non_zip="File need to be zip format")
         try:
             file_name = data.name
             file_size = data.size
         except AttributeError:
-            self.fail('invalid')
-        if not re.match(r'\S*.zip', file_name):
-            self.fail('non_zip')
+            self.fail("invalid")
+        if not re.match(r"\S*.zip", file_name):
+            self.fail("non_zip")
 
         if not file_name:
-            self.fail('no_name')
+            self.fail("no_name")
         if not self.allow_empty_file and not file_size:
-            self.fail('empty')
+            self.fail("empty")
         if self.max_length and len(file_name) > self.max_length:
-            self.fail('max_length', max_length=self.max_length,
-                      length=len(file_name))
+            self.fail("max_length", max_length=self.max_length, length=len(file_name))
 
         return data
 
@@ -364,38 +377,45 @@ class CreateCourseSerializer(serializers.ModelSerializer):
     """
 
     scorm = ZIPFileField(required=False)
-    scorms = serializers.PrimaryKeyRelatedField(read_only=True, required=False, many=True)
+    scorms = serializers.PrimaryKeyRelatedField(
+        read_only=True, required=False, many=True
+    )
 
     class Meta:
         model = models.Course
         fields = (
+            "teacher",
             "name",
             "description",
-            'interval',
-            "beginer",
+            "interval",
+            "beginner",
             "image",
             "profession",
             "scorm",
             "scorms",
             "experiences",
+            "status",
         )
-        validators = (validators.CourseScormValidator('scorm'),
-                      validators.IntervalValidator('beginner', 'interval'),
-                      )
-        read_only_fields = ('scorms',)
+        validators = (
+            validators.CourseScormValidator("scorm"),
+            validators.IntervalValidator("beginner", "interval"),
+        )
+        read_only_fields = ("scorms", "teacher", "status")
 
     def create(self, validated_data: dict):
         logger.debug(validated_data)
-        zip_scorm = validated_data.pop('scorm', None)
+        zip_scorm = validated_data.pop("scorm", None)
         if zip_scorm:
             try:
                 with atomic():
                     course = SCORMLoader(zip_archive=zip_scorm).save(
                         self.Meta.model,
                         validated_data,
-                        )
+                    )
             except IntegrityError as er:
-                raise ValidationError(dict(scorm=f'This SCORM packpage {parse_exeption_error(er)}'))
+                raise ValidationError(
+                    dict(scorm=f"This SCORM packpage {parse_exeption_error(er)}")
+                )
             except (SCORMExtractError, ManifestNotSetupError) as er:
                 raise ValidationError(dict(scorm=er))
         else:
@@ -407,6 +427,7 @@ class CourseSerializer(serializers.ModelSerializer):
     """
     Сериализатор Оптимизированого вывода
     """
+
     lessons = LessonSerializer(many=True)
     scorms = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
 
@@ -417,8 +438,8 @@ class CourseSerializer(serializers.ModelSerializer):
             "teacher",
             "name",
             "description",
-            'interval',
-            "beginer",
+            "interval",
+            "beginner",
             "create_date",
             "update_date",
             "image",
@@ -426,6 +447,7 @@ class CourseSerializer(serializers.ModelSerializer):
             "scorms",
             "experiences",
             "lessons",
+            "status",
         )
 
 
@@ -446,11 +468,12 @@ class ViewCourseSerializer(serializers.ModelSerializer):
             "teacher",
             "name",
             "description",
-            'interval',
-            "beginer",
+            "interval",
+            "beginner",
             "create_date",
             "update_date",
             "image",
+            "status",
             "profession",
             "experiences",
             "scorms",
@@ -510,22 +533,25 @@ class EventSerializerCreate(serializers.ModelSerializer):
             "end_date",
             "status",
         )
-        validators = (validators.SingleEventValidator('course'),
-                      validators.BeginnerValidator('course', 'start_date'),
-                      validators.TimeValidator("start_date"),
-                      )
-        read_only_fields = ('id', 'status', 'end_date')
-
-    def create(self, validated_data):
-        if validated_data['beginner']:
-            validated_data['status'] = 'process'
-        return super().create(validated_data)
+        validators = (
+            validators.SingleEventValidator("course"),
+            validators.BeginnerValidator("course", "start_date"),
+            validators.TimeValidator("start_date"),
+            validators.EmptyLessonsValidator('course'),
+        )
+        read_only_fields = ("id", "status", "end_date")
 
     def save(self, **kwargs):
-        instance = super().save(**kwargs)
-        if not instance.course.beginner:
-            set_lessons_time(instance, update=False)
-        return instance
+        event = super().save(**kwargs)
+        logger.debug(f'after save event {event}')
+        if event.course.beginner:
+            event.status = "process"
+            event.save()
+            event.refresh_from_db()
+        else:
+            set_lessons_time(event, update=False)
+        logger.debug(f'before return save event {event}')
+        return event
 
 
 class EventSerializerUpdate(serializers.ModelSerializer):
@@ -544,11 +570,16 @@ class EventSerializerUpdate(serializers.ModelSerializer):
             "end_date",
             "status",
         )
-        validators = (validators.SingleEventValidator('course'),
-                      validators.BeginnerValidator('course', 'start_date'),
-                      validators.TimeValidator("start_date"),
-                      )
-        read_only_fields = ("id", "status", "end_date",)
+        validators = (
+            validators.SingleEventValidator("course"),
+            validators.BeginnerValidator("course", "start_date"),
+            validators.TimeValidator("start_date"),
+        )
+        read_only_fields = (
+            "id",
+            "status",
+            "end_date",
+        )
 
     def _is_process(self, start_date: datetime.datetime) -> bool:
         """
@@ -607,11 +638,11 @@ class EventCoveredSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.EventCovered
         fields = (
-            'user',
-            'event',
-            'favorite',
-            'procent',
-            'status',
+            "user",
+            "event",
+            "favorite",
+            "procent",
+            "status",
         )
 
 
@@ -619,19 +650,21 @@ class EventCoveredCreateSerializer(serializers.ModelSerializer):
     """
     Сериализатор создания покрытия эвентами
     """
+
     class Meta:
         model = models.EventCovered
         fields = (
-            'user',
-            'event',
-            'favorite',
-            'procent',
-            'status',
+            "user",
+            "event",
+            "favorite",
+            "procent",
+            "status",
         )
-        read_only_fields = ('user', 'procent', 'status')
-        validators = (validators.RegistrationValidator('user', 'event'),
-                      validators.PassRegistationsValidator('event'),
-                      )
+        read_only_fields = ("user", "procent", "status")
+        validators = (
+            validators.RegistrationValidator("user", "event"),
+            validators.PassRegistationsValidator("event"),
+        )
 
 
 def set_lessons_time(instance: T, update: bool) -> T:
@@ -640,14 +673,14 @@ def set_lessons_time(instance: T, update: bool) -> T:
     """
     interval = instance.course.interval
     start_date = instance.start_date
-    lessons = instance.course.lessons.order_by('serial').get_queryset()
+    lessons = instance.course.lessons.order_by("serial")
     update_lessons = []
     for lesson in lessons:
         # Собираем шедулеры по открытия урока
         lesson.start_date = start_date
         update_lessons.append(lesson)
         start_date = start_date + interval
-    models.Lesson._default_manager.bulk_update(update_lessons, fields=('interval',))
+    models.Lesson._default_manager.bulk_update(update_lessons, fields=("start_date",))
     # Здесь дополнить еще одним шедулером на окончание курса
     instance.end_date = start_date
     # Множественное сохранение шедулеров

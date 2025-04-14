@@ -25,4 +25,4 @@ class TestSCORMCore(TestCase):
             scorm.save()
 
         self.assertEqual(SCORM._default_manager.count(), 1)
-        self.assertEqual(SCORM._default_manager.get().name, 'Введение в Python')
+        self.assertEqual(SCORM._default_manager.get().name, 'Первая помощь (часть 1)')
