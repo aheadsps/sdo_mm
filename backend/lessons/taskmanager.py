@@ -104,16 +104,19 @@ class TaskManager:
         Запросы на установку задач по изменению статуса евента
         """
         task = "lessons.tasks.update_status_events"
+        kwargs_for_task: dict = {
+            "pk": kwargs['pk']
+        }
         if self.schedule_start:
             clocked = self.schedule_start
             name = f"StartEvent_{kwargs['pk']}"
-            kwargs['status'] = 'process'
-            self._add_task_update(clocked, name, task, kwargs)
+            kwargs_for_task['status'] = 'process'
+            self._add_task_update(clocked, name, task, kwargs_for_task)
         if self.schedule_end:
             clocked = self.schedule_end
-            kwargs['status'] = 'finished'
+            kwargs_for_task['status'] = 'finished'
             name = f"EndEvent_{kwargs['pk']}"
-            self._add_task_update(clocked, name, task, kwargs)
+            self._add_task_update(clocked, name, task, kwargs_for_task)
 
 
     def create(self):

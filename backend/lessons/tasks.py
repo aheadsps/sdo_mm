@@ -1,11 +1,7 @@
 from config.celery import app
 from lessons import models
-from django.db.models import Q
+
 from users.models import User
-from datetime import datetime
-from django_celery_beat.models import PeriodicTask
-import json
-from django.utils import timezone
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 
