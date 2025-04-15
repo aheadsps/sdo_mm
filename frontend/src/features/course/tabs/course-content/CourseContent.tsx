@@ -12,7 +12,7 @@ export const CourseContent = () => {
           <Typography variant="body_2">
             Цель урока: проверить словарный запас и научиться избегать ложных друзей переводчика.
           </Typography>
-          <NavLink to={'/lesson'}>
+          <NavLink to={'/learning/course/lesson'}>
             <Button className={s.lessonButton}>Открыть урок</Button>
           </NavLink>
         </div>
@@ -24,7 +24,7 @@ export const CourseContent = () => {
           <Typography variant="body_2">
             Цель урока: проверить словарный запас и научиться избегать ложных друзей переводчика.
           </Typography>
-          <NavLink to={'/lesson'}>
+          <NavLink to={'/learning/course/lesson'}>
             <Button className={s.lessonButton}>Открыть урок</Button>
           </NavLink>
         </div>
@@ -36,7 +36,7 @@ export const CourseContent = () => {
           <Typography variant="body_2">
             Цель урока: проверить словарный запас и научиться избегать ложных друзей переводчика.
           </Typography>
-          <NavLink to={'/lesson'}>
+          <NavLink to={'/learning/course/lesson'}>
             <Button className={s.lessonButton}>Открыть урок</Button>
           </NavLink>
         </div>

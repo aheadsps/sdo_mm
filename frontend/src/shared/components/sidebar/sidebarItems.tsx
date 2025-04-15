@@ -9,8 +9,17 @@ import {
   SupportIcon,
 } from '@assets/icons'
 import { routes } from '@routes/routes'
+import { ReactNode } from 'react'
 
-export const sidebarItemsStudent = [
+type SidebarItem = {
+  id: string
+  icon: ReactNode
+  text: string
+  path: string
+  disabled?: boolean
+}
+
+export const sidebarItemsStudent: SidebarItem[] = [
   {
     id: 'main',
     icon: <MainIcon width={24} height={24} />,
@@ -20,82 +29,92 @@ export const sidebarItemsStudent = [
   {
     id: 'my-learning',
     icon: <StudyIcon width={24} height={24} />,
-    text: 'Мое обучение',
+    text: 'Курсы',
     path: routes.learning,
   },
   {
     id: 'knowledge-library',
     icon: <LibraryIcon width={24} height={24} />,
-    text: 'Библиотека знаний',
-    path: routes.library,
+    text: 'Библиотека',
+    path: routes.tbd,
+    disabled: true,
   },
   {
     id: 'news',
     icon: <NewsIcon width={24} height={24} />,
     text: 'Новости',
-    path: '/news',
+    path: routes.tbd,
+    disabled: true,
   },
   {
     id: 'webinars',
     icon: <WebinarIcon width={24} height={24} />,
     text: 'Вебинары',
-    path: '/',
+    path: routes.tbd,
+    disabled: true,
   },
   {
     id: 'consultations',
     icon: <WebinarAndSupportIcon width={24} height={24} />,
     text: 'Поддержка',
-    path: '/',
+    path: routes.tbd,
+    disabled: true,
   },
   {
     id: 'settings',
     icon: <SettingsEyeIcon width={24} height={24} />,
     text: 'Настройки',
-    path: '/',
+    path: routes.tbd,
+    disabled: true,
   },
 ]
 
-export const sidebarItemsMethodologist = [
+export const sidebarItemsMethodologist: SidebarItem[] = [
   {
     id: 'main',
     icon: <MainIcon width={24} height={24} />,
     text: 'Главная',
-    path: '/main',
+    path: routes.main,
   },
   {
     id: 'trainingCenter',
     icon: <StudyIcon width={24} height={24} />,
     text: 'Центр обучения',
-    path: '/trainingCenter',
+    path: routes.trainingCenter,
   },
   {
     id: 'analytics',
     icon: <LibraryIcon width={24} height={24} />,
     text: 'Аналитика',
-    path: '/',
+    path: routes.tbd,
+    disabled: true,
   },
   {
     id: 'webinars',
     icon: <WebinarIcon width={24} height={24} />,
     text: 'Вебинары',
-    path: '/',
+    path: routes.tbd,
+    disabled: true,
   },
   {
     id: 'consultations',
     icon: <WebinarAndSupportIcon width={24} height={24} />,
     text: 'Консультации',
-    path: '/',
+    path: routes.tbd,
+    disabled: true,
   },
   {
     id: 'settings',
     icon: <SettingsEyeIcon width={24} height={24} />,
     text: 'Настройки',
-    path: '/',
+    path: routes.tbd,
+    disabled: true,
   },
   {
     id: 'support',
     icon: <SupportIcon width={24} height={24} />,
     text: 'Поддержка',
-    path: '/',
+    path: routes.tbd,
+    disabled: true,
   },
 ]

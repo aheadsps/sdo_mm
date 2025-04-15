@@ -3,7 +3,7 @@ import { Button } from '@shared/components'
 import React, { useState } from 'react'
 
 import { BlockHeader } from './block-header/BlockHeader'
-import { lessonsData, options } from './data'
+import { lessonsData, optionsFormat } from './data'
 import { ExpandedContent } from './expanded-content/ExpandedContent'
 import { LessonContent } from './lesson-content/LessonContent'
 import styles from './program.module.scss'
@@ -37,7 +37,7 @@ export const Program: React.FC = () => {
       <div className={styles.list}>
         {lessons.map((lesson) => (
           <div key={lesson.id} className={styles.lessonItem}>
-            <LessonContent optionsDate={options} optionsFormat={options} lesson={lesson} />
+            <LessonContent options={optionsFormat} lesson={lesson} />
             <Button
               variant="primary"
               className={styles.toggleButton}
@@ -51,7 +51,7 @@ export const Program: React.FC = () => {
                 <ExpandedContent />
                 {newTopicCount.map((topic) => (
                   <div key={topic} className={styles.lessonItem}>
-                    <LessonContent isExpandableContent optionsFormat={options} />
+                    <LessonContent isExpandableContent options={optionsFormat} />
                   </div>
                 ))}
                 <button className={styles.addButton}>
@@ -63,7 +63,7 @@ export const Program: React.FC = () => {
         ))}
         {newLessonCount.map((item) => (
           <div key={item} className={styles.lessonItem}>
-            <LessonContent optionsFormat={options} />
+            <LessonContent options={optionsFormat} />
           </div>
         ))}
       </div>

@@ -20,3 +20,23 @@
   background-color: var(--color-accent-red500);
   color: var(--color-bg-main);
 }
+
+.disabledItem {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.disabledClass {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  color: var(--color-text-secondary);
+
+  &:hover {
+    background-color: var(--color-bg-gray100);
+    color: var(--color-text-secondary);
+    transform: none;
+  }
+}

@@ -6,18 +6,25 @@ export type LessonType = {
   expanded: boolean
 }
 
-export const options = [
+export const optionsFormat = [
   {
     id: 1,
-    value: 'Cat',
+    value: 'Онлайн',
   },
   {
     id: 2,
-    value: 'Dog',
+    value: 'Оффлайн',
+  },
+]
+
+export const optionsAccess = [
+  {
+    id: 1,
+    value: 'Свободный доступ',
   },
   {
-    id: 3,
-    value: 'Apple',
+    id: 2,
+    value: 'Линейное открытие',
   },
 ]
 

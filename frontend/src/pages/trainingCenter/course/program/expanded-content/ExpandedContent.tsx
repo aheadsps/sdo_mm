@@ -1,7 +1,7 @@
 import { Card } from '@shared/components'
 
 import { BlockHeader } from '../block-header/BlockHeader'
-import { lessonsData, options } from '../data'
+import { lessonsData, optionsAccess } from '../data'
 import { LessonContent } from '../lesson-content/LessonContent'
 
 import s from './expanded-content.module.scss'
@@ -17,8 +17,7 @@ export const ExpandedContent = () => {
           <LessonContent
             key={lesson.id}
             lesson={lesson}
-            optionsDate={options}
-            optionsFormat={options}
+            options={optionsAccess}
             isExpandableContent
           />
         ))}
