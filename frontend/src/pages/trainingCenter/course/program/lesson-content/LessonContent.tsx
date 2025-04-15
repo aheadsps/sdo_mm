@@ -1,7 +1,9 @@
 import { ArrowRightIcon, CalendarIcon } from '@assets/icons'
+import { routes } from '@routes/routes'
 import { Button, InputWithIcon, Input, type Option, Select, Typography } from '@shared/components'
 import { useToggle } from '@shared/hooks'
 import clsx from 'clsx'
+import { NavLink } from 'react-router-dom'
 
 import { LessonType } from '../data'
 
@@ -9,13 +11,12 @@ import s from './lesson-content.module.scss'
 
 type Props<T extends LessonType> = {
   lesson?: T
-  optionsDate?: Option[]
-  optionsFormat?: Option[]
+  options?: Option[]
   isExpandableContent?: boolean
 }
 export const LessonContent = <T extends LessonType>({
   lesson,
-  optionsFormat,
+  options,
   isExpandableContent = false,
 }: Props<T>) => {
   const { isOpen, toggle } = useToggle()
@@ -33,9 +34,14 @@ export const LessonContent = <T extends LessonType>({
           <Select
             className={clsx(s.date, s.access)}
             placeholder={'Выберите доступ'}
-            options={optionsFormat}
+            options={options}
           />
-          <Button variant="secondary" className={s.constructorBtn}>
+          <Button
+            variant="secondary"
+            className={s.constructorBtn}
+            as={NavLink}
+            to={routes.constructor}
+          >
             <ArrowRightIcon width={'12px'} height={'12px'} />
           </Button>
         </>
@@ -54,7 +60,7 @@ export const LessonContent = <T extends LessonType>({
           <Select
             className={s.format}
             placeholder={lesson?.format ? lesson?.format : 'Формат'}
-            options={optionsFormat}
+            options={options}
           />
         </>
       )}

@@ -1,5 +1,4 @@
-import { Lesson } from '@features/lesson/LessonComponent'
-import { LessonTest } from '@features/lesson/test/Tests'
+import { Lesson } from '@features/lesson'
 import { AuthPage } from '@pages/auth'
 import { ConstructorPage } from '@pages/constructor'
 import { CoursePage } from '@pages/course/CoursePage'
@@ -7,59 +6,63 @@ import { MainPage } from '@pages/main'
 import { MyLearning } from '@pages/my-learning/MyLearning'
 import { TrainingCenterCourse } from '@pages/trainingCenter/course/TrainingCenterCourse'
 import { TrainingCenter } from '@pages/trainingCenter/TrainingCenter'
+import { Role } from '@shared/components/sidebar/sidebar.types'
 import { createBrowserRouter } from 'react-router-dom'
 
+import { ProtectedRoute } from './protected-route/ProtectedRoute'
 import { routes } from './routes'
 
 export const router = createBrowserRouter([
-  {
-    path: routes.main,
-    element: <MainPage />,
-  },
-  {
-    path: routes.learning,
-    element: <MyLearning />,
-  },
-  {
-    path: routes.course,
-    element: <CoursePage />,
-  },
-  {
-    path: routes.library,
-    element: <MyLearning />,
-  },
-  {
-    path: routes.news,
-    element: <MainPage />,
-  },
+  /* public routes */
   {
     path: routes.auth,
     element: <AuthPage />,
   },
+
+  /* private routes */
   {
-    path: '/',
-    element: <div>Hello App</div>,
-  },
-  {
-    path: '/trainingCenter',
-    element: <TrainingCenter />,
-  },
-  {
-    path: '/trainingCenter/course',
-    element: <TrainingCenterCourse />,
-  },
-  {
-    path: '/lesson',
-    element: <Lesson />,
-  },
-  {
-    path: '/constructor',
-    element: <ConstructorPage />,
+    element: <ProtectedRoute />,
+    children: [
+      {
+        path: routes.main,
+        element: <MainPage />,
+      },
+    ],
   },
 
-  /* routes for testing components */
   {
-    path: '/tests',
-    element: <LessonTest />,
+    element: <ProtectedRoute allowedRoles={Role.methodologist} />,
+    children: [
+      {
+        path: routes.trainingCenter,
+        element: <TrainingCenter />,
+      },
+      {
+        path: routes.trainingCenterCourse,
+        element: <TrainingCenterCourse />,
+      },
+      {
+        path: routes.constructor,
+        element: <ConstructorPage />,
+      },
+    ],
+  },
+
+  {
+    element: <ProtectedRoute allowedRoles={Role.student} />,
+    children: [
+      {
+        path: routes.learning,
+        element: <MyLearning />,
+      },
+      {
+        path: routes.course,
+        element: <CoursePage />,
+      },
+      {
+        path: routes.lesson,
+        element: <Lesson />,
+      },
+    ],
   },
 ])

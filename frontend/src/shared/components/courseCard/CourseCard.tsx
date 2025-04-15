@@ -1,4 +1,5 @@
 import Basket from '@assets/icons/BasketIcon'
+import { routes } from '@routes/routes'
 import { Link } from 'react-router-dom'
 
 import { Button } from '../button'
@@ -21,7 +22,7 @@ export const CourseCard = () => {
       </div>
       <div className={s.buttonBox}>
         <Basket />
-        <Link to={'/trainingCenter/course'}>
+        <Link to={routes.trainingCenterCourse}>
           <Button variant="secondary" children={'Смотреть/ редактировать курс'} className={s.btn} />
         </Link>
       </div>
