@@ -58,7 +58,7 @@ export const LessonCard: React.FC<Props> = ({ event }: Props) => {
                     style={{ backgroundColor: `${deadlineColor}` }}
                   ></div>
                   <Typography variant="body_2" className={s.container__paramTxt}>
-                    {event.status === 'process' ? `${daysLeft} дней` : 'Просрочен'}
+                    {event.status === 'process' && daysLeft > 0 ? `${daysLeft} дней` : 'Просрочен'}
                   </Typography>
                 </div>
                 <div className={s.container__param}>

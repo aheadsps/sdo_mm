@@ -1,5 +1,17 @@
 import { EditIcon } from '@assets/icons'
-import { Typography, Button, Input, Tabs, Textarea, type Tab, Modal } from '@shared/components'
+import { useGetCourseQuery } from '@services/api'
+import { selectCourse, selectCurrentCourseId, setCourseById } from '@services/slices'
+import { useAppDispatch, useAppSelector } from '@services/store'
+import {
+  Typography,
+  Button,
+  Input,
+  Tabs,
+  Textarea,
+  type Tab,
+  Modal,
+  Loader,
+} from '@shared/components'
 import { AddMaterials } from '@shared/components'
 import { withLayout } from '@shared/HOC'
 import { useScreenWidth, useToggle } from '@shared/hooks'
@@ -32,6 +44,16 @@ const tabsData: Tab[] = [
 ]
 
 const Course = () => {
+  const dispatch = useAppDispatch()
+  const currentId = useAppSelector(selectCurrentCourseId)
+  // console.log(currentId)
+  const { data: course, isLoading } = useGetCourseQuery(currentId)
+  if (course) {
+    dispatch(setCourseById(course))
+  }
+
+  const currentCourse = useAppSelector(selectCourse)
+
   const [isEditMode, setIsEditMode] = useState(false)
   const initialValue = 'Безопасность при работе с электроинструментом'
   const [title, setTitle] = useState(initialValue)
@@ -44,33 +66,37 @@ const Course = () => {
 
   return (
     <>
-      <div className={s.titleBlock}>
-        <div className={s.title}>
-          <EditIcon width={'15px'} height={'15px'} onClick={toggleEditClick} />
-          {isEditMode ? (
-            isTablet ? (
-              <Textarea value={title} onChange={(e) => setTitle(e.currentTarget.value)} />
-            ) : (
-              <Input value={title} onChange={(e) => setTitle(e.currentTarget.value)} />
-            )
-          ) : (
-            <Typography variant="header_2">
-              Безопасность при работе с электроинструментом
-            </Typography>
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <>
+          <div className={s.titleBlock}>
+            <div className={s.title}>
+              <EditIcon width={'15px'} height={'15px'} onClick={toggleEditClick} />
+              {isEditMode ? (
+                isTablet ? (
+                  <Textarea value={title} onChange={(e) => setTitle(e.currentTarget.value)} />
+                ) : (
+                  <Input value={title} onChange={(e) => setTitle(e.currentTarget.value)} />
+                )
+              ) : (
+                <Typography variant="header_2">{currentCourse.name}</Typography>
+              )}
+            </div>
+            <Button onClick={openModal}>Добавить материал</Button>
+          </div>
+          <div className={s.container}>
+            <Tabs tabs={tabsData} variant="secondary" className={s.tabs} />
+          </div>
+          {isModalOpen && (
+            <Modal
+              close={closeModal}
+              title="Добавить материалы"
+              children={<AddMaterials />}
+              titleStyle="header_2"
+            />
           )}
-        </div>
-        <Button onClick={openModal}>Добавить материал</Button>
-      </div>
-      <div className={s.container}>
-        <Tabs tabs={tabsData} variant="secondary" className={s.tabs} />
-      </div>
-      {isModalOpen && (
-        <Modal
-          close={closeModal}
-          title="Добавить материалы"
-          children={<AddMaterials />}
-          titleStyle="header_2"
-        />
+        </>
       )}
     </>
   )
