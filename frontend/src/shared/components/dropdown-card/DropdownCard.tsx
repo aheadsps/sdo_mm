@@ -12,8 +12,8 @@ type Props = {
   blocks?: string
   icons?: ReactNode[]
   wrapperClassName?: string
-  isOpen: boolean
-  toggle: () => void
+  isOpen?: boolean
+  toggle?: () => void
   value?: string
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void
 } & ComponentPropsWithoutRef<'div'>

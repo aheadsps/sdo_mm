@@ -14,19 +14,11 @@ interface Props {
   description?: string
 }
 
-export const ConstructorContent: React.FC<Props> = ({
-  type,
-  media,
-  title = 'Добавить новый блок',
-  description = 'Вы можете загрузить медиа или ввести текст вручную',
-}) => {
+export const ConstructorContent: React.FC<Props> = ({ type }) => {
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   return (
     <div className={s.wrapper}>
-      {/*           <Typography variant="header_4">{title}</Typography>
-            <Typography variant="body_1">{description}</Typography> */}
-
       <div className={s.block}>
         {type === 'video' && (
           <ConstructorCard>
