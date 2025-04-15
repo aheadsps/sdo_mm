@@ -1,17 +1,19 @@
 import os
-from typing import TYPE_CHECKING, Any
 
-from rest_framework.serializers import ModelSerializer
+from typing import TYPE_CHECKING, Any, ClassVar
 from datetime import datetime, timedelta, timezone
-from typing import ClassVar
-
 from pytils.translit import slugify
 
 from loguru import logger
 from pydantic import BaseModel, Field
 
+from django.db.models import QuerySet
+from django.utils import timezone as dj_timezone
+from rest_framework.serializers import ModelSerializer
+
 if TYPE_CHECKING:
     from lessons.models import Question, Course, ContentAttachment, SCORMFile
+    from users.models import WorkExperience
 
 
 def parse_exeption_error(er) -> str:
@@ -252,3 +254,23 @@ def set_value(
     value: str,
 ) -> None:
     dict_data[key] = value
+
+
+def get_intervals(experiences: QuerySet[WorkExperience]) -> list[tuple]:
+    """
+    Получение списка из интервалов времени по шагу 1 год
+    """
+    time_now = dj_timezone.now()
+    years_experience = list()
+    if experiences:
+        for exp in experiences:
+            left_limit = time_now - datetime.timedelta(days=(365 * exp.years + 1))
+            rigth_limit = time_now - datetime.timedelta(days=(365 * exp.years))
+            interval = (left_limit, rigth_limit)
+            years_experience.append(interval)
+    else:
+        left_limit = time_now - datetime.timedelta(days=(365 * 60))
+        rigth_limit = time_now
+        interval = (left_limit, rigth_limit)
+        years_experience.append(interval)
+    return years_experience

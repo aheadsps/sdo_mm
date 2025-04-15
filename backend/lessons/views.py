@@ -13,6 +13,7 @@ from rest_framework.renderers import MultiPartRenderer, JSONRenderer
 
 from lessons import models, serializers
 from lessons import viewsets as own_viewsets
+from lessons.servises import SetEventServise
 from lessons.permissions import (
     IsAdminOrIsStaff,
     CanReadCourse,
@@ -197,8 +198,14 @@ class EventViewSet(mixins.ListModelMixin,
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         instance = serializer.save()
+        event = (models.Event.
+                 _default_manager.
+                 filter(pk=instance.pk).
+                 select_related('course').
+                 prefetch_related('lessons')
+                 )
+        SetEventServise(instance=event).set_event_settings()
         logger.debug(f'create event is {instance}')
-        self._change_status(instance)
         self._set_event_users(instance)
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
@@ -306,7 +313,11 @@ class LessonViewSet(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         self.check_object_permissions(request=request, obj=None)
-        return super().create(request, *args, **kwargs)
+        instance = super().create(request, *args, **kwargs)
+        models.TestBlock._default_manager.create(
+            lesson=instance,
+        )
+        return instance
 
     def perform_create(self, serializer):
         serializer.save(teacher=self.request.user)
