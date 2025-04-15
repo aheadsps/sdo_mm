@@ -1,2 +1,6 @@
 export * from './auth'
+export * from './covers'
 export * from './events'
+export * from './courses'
+export * from './auxiliarySlice'
+// export * from './lessons'

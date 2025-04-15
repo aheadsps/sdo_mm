@@ -1,17 +1,35 @@
 import { configureStore } from '@reduxjs/toolkit'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { userApi } from './api/user.api'
-import { authReducer } from './slices'
+import { authApi, coursesApi, coversApi, eventsApi } from './api'
+import { authReducer, coursesSliceReducer, coversSliceReducer } from './slices'
+import { auxiliarySliceReducer } from './slices/auxiliarySlice'
 import { eventsSliceReducer } from './slices/events/eventsSlice'
 
 export const store = configureStore({
   reducer: {
     auth: authReducer,
+    covers: coversSliceReducer,
+    courses: coursesSliceReducer,
     events: eventsSliceReducer,
-    [userApi.reducerPath]: userApi.reducer,
+    auxiliary: auxiliarySliceReducer,
+    [authApi.reducerPath]: authApi.reducer,
+    [coversApi.reducerPath]: coversApi.reducer,
+    [eventsApi.reducerPath]: eventsApi.reducer,
+    [coursesApi.reducerPath]: coursesApi.reducer,
+    // [authApi.reducerPath]: authApi.reducer,
+    // [authApi.reducerPath]: authApi.reducer,
   },
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(userApi.middleware),
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(
+      authApi.middleware,
+      coversApi.middleware,
+      eventsApi.middleware,
+      coursesApi.middleware
+      // authApi.middleware,
+      // authApi.middleware,
+      // authApi.middleware,
+    ),
 })
 
 export type RootState = ReturnType<typeof store.getState>
