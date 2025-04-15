@@ -15,6 +15,7 @@ from lessons.d_types import VD
 from lessons.patrials import set_status
 from lessons.scorm import SCORMLoader
 from lessons.utils import parse_exeption_error
+from lessons.servises import SetEventServise
 from lessons.scorm.engine.exceptions import SCORMExtractError, ManifestNotSetupError
 from users import serializers as user_serializers
 
@@ -541,6 +542,18 @@ class EventSerializerCreate(serializers.ModelSerializer):
         )
         read_only_fields = ("id", "status", "end_date")
 
+    def create(self, validated_data):
+        instance = super().create(validated_data)
+        event = (models.Event.
+                 _default_manager.
+                 filter(pk=instance.pk).
+                 select_related('course').
+                 prefetch_related('lessons')
+                 )
+        SetEventServise(instance=event).set_event_settings()
+        instance.refresh_from_db()
+        return instance
+
 
 class EventSerializerUpdate(serializers.ModelSerializer):
     """
@@ -605,9 +618,18 @@ class EventSerializerUpdate(serializers.ModelSerializer):
                     process=is_process,
                 )
 
-    def save(self, **kwargs):
-        self._correct_status(self.validated_data)
-        return super().save(**kwargs)
+    def update(self, instance, validated_data):
+        instance = super().update(instance, validated_data)
+        event = (models.Event.
+                 _default_manager.
+                 filter(pk=instance.pk).
+                 select_related('course').
+                 prefetch_related('lessons')
+                 )
+        self._correct_status(validated_data)
+        SetEventServise(instance=event).set_event_settings()
+        instance.refresh_from_db()
+        return instance
 
 
 class EventCoveredSerializer(serializers.ModelSerializer):

@@ -91,6 +91,7 @@ class SetEventServise:
             # Собираем шедулеры по открытия урока
             lesson.start_date = start_date
             update_lessons.append(lesson)
+            # Собираем шедулеры на окончиние тестовых блоков
             start_date = start_date + interval
             update_test_block.append(self._set_test_block(
                 lesson=lesson,
