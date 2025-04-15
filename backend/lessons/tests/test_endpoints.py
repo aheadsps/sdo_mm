@@ -90,6 +90,15 @@ class TestEndpoints(APITestCase):
         self.course_b.experiences.add(
             self.experience,
         )
+        self.test_block = lessons_models.TestBlock._default_manager.create(
+            lesson=self.lesson
+        )
+        self.test_block_1 = lessons_models.TestBlock._default_manager.create(
+            lesson=self.lesson_1
+        )
+        self.test_block_b = lessons_models.TestBlock._default_manager.create(
+            lesson=self.lesson_b
+        )
         self.course.save()
         self.course_1.save()
         self.course_b.save()
@@ -300,6 +309,7 @@ class TestEndpoints(APITestCase):
         url = f"/api/v1/covers/{cover.pk}/toggle-favorite"
         response = self.client.get(url)
         cover = lessons_models.EventCovered._default_manager.get(pk=cover.pk)
+        self.assertEqual(response.status_code, 200)
         self.assertTrue(cover.favorite)
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
@@ -364,6 +374,7 @@ class TestEndpoints(APITestCase):
                 "interval": None,
                 "name": "some_course",
                 "profession": self.profession.pk,
+                "status": 'archive',
                 "scorms": [],
             },
         )
@@ -499,7 +510,7 @@ class TestChainEndpoint(APITestCase):
         """
         Тесты цепочки
         """
-        url = '/api/v1/courser'
+        url = '/api/v1/courses'
         data = dict(
             name='Course',
             interval=datetime.timedelta(days=7),
@@ -542,6 +553,7 @@ class TestChainEndpoint(APITestCase):
         self.assertEqual(response.status_code, 201)
         self.assertFalse(response.json()['started'])
         lesson = lessons_models.Lesson._default_manager.get(name=data['name'])
+        self.assertEqual(lesson.test_block.lesson.pk, lesson.pk)
 
         data['name'] = 'Lesson_beginner'
         data['course'] = course_beginner.pk
@@ -553,6 +565,46 @@ class TestChainEndpoint(APITestCase):
         self.assertEqual(response.status_code, 201)
         self.assertFalse(response.json()['started'])
         lesson_beginner = lessons_models.Lesson._default_manager.get(name=data['name'])
+
+        url = '/api/v1/questions'
+        data = dict(
+            text='question',
+            weight=4,
+            test_block=lesson.test_block.pk,
+        )
+        response = self.client.post(
+            path=url,
+            data=data,
+            format='json',
+        )
+        self.assertEqual(response.status_code, 201)
+        data['text'] = 'question_1'
+        data['weight'] = 5
+        response = self.client.post(
+            path=url,
+            data=data,
+            format='json',
+        )
+        self.assertEqual(response.status_code, 201)
+        data = dict(
+            text='question_b',
+            weight=10,
+            test_block=lesson_beginner.test_block.pk,
+        )
+        response = self.client.post(
+            path=url,
+            data=data,
+            format='json',
+        )
+        self.assertEqual(response.status_code, 201)
+        data['text'] = 'question_b_1'
+        data['weight'] = 5
+        response = self.client.post(
+            path=url,
+            data=data,
+            format='json',
+        )
+        self.assertEqual(response.status_code, 201)
 
         url = '/api/v1/step'
         data = dict(
@@ -609,11 +661,16 @@ class TestChainEndpoint(APITestCase):
         self.assertEqual(response.status_code, 201)
         event = lessons_models.Event._default_manager.get(course_id=data['course'])
 
+        self.assertEqual(event.course.status, 'run')
+        self.assertEqual(event.status, 'started')
+        self.assertEqual(event.end_date, None)
+        self.assertEqual(event.start_date, None)
+
         response = self.client.get(
             path=url,
         )
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json(), '')
+
 
 
 class LessonViewSetTest(APITestCase):
@@ -664,7 +721,7 @@ class LessonViewSetTest(APITestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['name'], "Урок 1")
-        self.assertEqual(response.data['course'], 3)
+        self.assertEqual(response.data['course'], self.course.pk)
 
     def test_create_lesson(self):
         """Тест создания урока."""

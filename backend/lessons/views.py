@@ -3,8 +3,7 @@ import math
 from loguru import logger
 
 from django.utils import timezone
-from django.db.models import Q, QuerySet
-from django.contrib.auth import get_user_model
+from django.db.models import Q
 from rest_framework import permissions, status, mixins, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -13,7 +12,6 @@ from rest_framework.renderers import MultiPartRenderer, JSONRenderer
 
 from lessons import models, serializers
 from lessons import viewsets as own_viewsets
-from lessons.servises import SetEventServise
 from lessons.permissions import (
     IsAdminOrIsStaff,
     CanReadCourse,
@@ -242,14 +240,13 @@ class LessonViewSet(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         self.check_object_permissions(request=request, obj=None)
-        instance = super().create(request, *args, **kwargs)
+        return super().create(request, *args, **kwargs)
+
+    def perform_create(self, serializer):
+        instance = serializer.save(teacher=self.request.user)
         models.TestBlock._default_manager.create(
             lesson=instance,
         )
-        return instance
-
-    def perform_create(self, serializer):
-        serializer.save(teacher=self.request.user)
 
     def list(self, request, *args, **kwargs):
         self.check_object_permissions(request=request, obj=None)

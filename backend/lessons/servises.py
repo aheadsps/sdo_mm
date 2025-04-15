@@ -63,7 +63,7 @@ class SetEventServise:
     def _set_event_status(self,
                           event: models.Event,
                           ) -> None:
-        event.status = "process"
+        event.status = "started"
         event.save()
 
     def _set_test_block(self,
@@ -72,8 +72,8 @@ class SetEventServise:
                         ) -> models.TestBlock:
         test_block = lesson.test_block
         max_score = 0
-        for answer in test_block.answers:
-            max_score += answer.weight
+        for question in test_block.questions.get_queryset():
+            max_score += question.weight
         test_block.max_score = max_score
         test_block.end_date = end_date
         return test_block
@@ -93,12 +93,14 @@ class SetEventServise:
             update_lessons.append(lesson)
             # Собираем шедулеры на окончиние тестовых блоков
             start_date = start_date + interval
-            update_test_block.append(self._set_test_block(
-                lesson=lesson,
-                end_date=start_date,
-            ))
+            if not update:
+                update_test_block.append(self._set_test_block(
+                    lesson=lesson,
+                    end_date=start_date,
+                ))
         models.Lesson._default_manager.bulk_update(update_lessons, fields=("start_date",))
-        models.TestBlock._default_manager.bulk_update(update_test_block, fields=('max_score', 'end_date'))
+        if not update:
+            models.TestBlock._default_manager.bulk_update(update_test_block, fields=('max_score', 'end_date'))
         # Здесь дополнить еще одним шедулером на окончание курса
         instance.end_date = start_date
         # Множественное сохранение шедулеров
@@ -110,7 +112,7 @@ class SetEventServise:
         """
         course = self.event.course
         start_date = self.event.start_date
-        lessons = self.event.lessons.prefetch_related('test_block__questions').order_by("serial")
+        lessons = self.event.course.lessons.prefetch_related('test_block__questions').order_by("serial")
         interval = self.event.course.interval
         with atomic():
             if not course.beginner:
@@ -122,7 +124,10 @@ class SetEventServise:
                     update=self.update,
                 )
             else:
-                self._set_users()
-                self._set_event_status(event=self.event)
+                if not self.update:
+                    self._set_users(
+                        event=self.event,
+                        course=course,
+                    )
+                    self._set_event_status(event=self.event)
             self._change_status(course=course)
-            self.test_block_core([lesson.test_block for lesson in lessons]).set_test_block_settings()

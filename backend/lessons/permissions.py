@@ -48,7 +48,8 @@ class InCover(permissions.BasePermission):
         if not cover:
             return
         user = request.user
-        event = models.EventCovered.objects.filter(Q(user=user) & Q(pk=cover.pk))
+        event = models.EventCovered.objects.filter(Q(user=user) &
+                                                   Q(pk=cover.pk))
         return event.exists()
 
 
@@ -66,7 +67,9 @@ class CanReadCourse(permissions.BasePermission):
         if not course:
             return
         user = request.user
-        event = models.EventCovered.objects.filter(Q(user=user) & Q(event__course=course))
+        event = models.EventCovered.objects.filter(Q(user=user) &
+                                                   Q(event__course=course) &
+                                                   Q(status='started'))
         return event.exists()
 
 
@@ -87,7 +90,8 @@ class CanReadLesson(permissions.BasePermission):
 
         event_exists = models.EventCovered.objects.filter(
             Q(user=user) &
-            Q(event__course=lesson.course)
+            Q(event__course=lesson.course) &
+            Q(status='started')
         )
 
         return event_exists.exists()
@@ -110,7 +114,8 @@ class CanReadSCORM(permissions.BasePermission):
 
         event_exists = models.EventCovered.objects.filter(
             Q(user=user) &
-            Q(Event__course__scorm=scorm)
+            Q(event__course__scorm=scorm) &
+            Q(status='started')
         )
 
         return event_exists.exists()
@@ -134,7 +139,8 @@ class CanReadStep(permissions.BasePermission):
 
         event_exists = models.EventCovered.objects.filter(
             Q(user=user) &
-            Q(event__course=step.lesson.course)
+            Q(event__course=step.lesson.course) &
+            Q(status='started')
         )
 
         return event_exists.exists()
@@ -158,7 +164,8 @@ class CanReadBlock(permissions.BasePermission):
 
         event_exists = models.EventCovered.objects.filter(
             Q(user=user) &
-            Q(event__course=test_block.lesson.course)
+            Q(event__course=test_block.lesson.course) &
+            Q(status='started')
         )
 
         return event_exists.exists()

@@ -11,9 +11,10 @@ from django.db.models import QuerySet
 from django.utils import timezone as dj_timezone
 from rest_framework.serializers import ModelSerializer
 
+from users.models import WorkExperience
+
 if TYPE_CHECKING:
     from lessons.models import Question, Course, ContentAttachment, SCORMFile
-    from users.models import WorkExperience
 
 
 def parse_exeption_error(er) -> str:
@@ -264,12 +265,12 @@ def get_intervals(experiences: QuerySet[WorkExperience]) -> list[tuple]:
     years_experience = list()
     if experiences:
         for exp in experiences:
-            left_limit = time_now - datetime.timedelta(days=(365 * exp.years + 1))
-            rigth_limit = time_now - datetime.timedelta(days=(365 * exp.years))
+            left_limit = time_now - timedelta(days=(365 * exp.years + 1))
+            rigth_limit = time_now - timedelta(days=(365 * exp.years))
             interval = (left_limit, rigth_limit)
             years_experience.append(interval)
     else:
-        left_limit = time_now - datetime.timedelta(days=(365 * 60))
+        left_limit = time_now - timedelta(days=(365 * 60))
         rigth_limit = time_now
         interval = (left_limit, rigth_limit)
         years_experience.append(interval)

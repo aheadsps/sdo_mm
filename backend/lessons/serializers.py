@@ -82,7 +82,7 @@ class QuestionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Question
-        fields = ("id", "teacher", "text", "image", "answers")
+        fields = ("id", "teacher", "text", "image", "weight", "answers")
 
     # def create(self, validated_data: dict[str, str]):
     #     """
@@ -105,7 +105,7 @@ class QuestionCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Question
-        fields = ("id", "teacher", "text", "image", "test_block")
+        fields = ("id", "teacher", "text", "image", "weight", "test_block")
         read_only_fields = ("id", 'teacher',)
 
 
@@ -548,8 +548,8 @@ class EventSerializerCreate(serializers.ModelSerializer):
                  _default_manager.
                  filter(pk=instance.pk).
                  select_related('course').
-                 prefetch_related('lessons')
-                 )
+                 prefetch_related('course__lessons')
+                 ).get()
         SetEventServise(instance=event).set_event_settings()
         instance.refresh_from_db()
         return instance
@@ -624,10 +624,10 @@ class EventSerializerUpdate(serializers.ModelSerializer):
                  _default_manager.
                  filter(pk=instance.pk).
                  select_related('course').
-                 prefetch_related('lessons')
-                 )
+                 prefetch_related('course__lessons')
+                 ).get()
         self._correct_status(validated_data)
-        SetEventServise(instance=event).set_event_settings()
+        SetEventServise(instance=event, update=True).set_event_settings()
         instance.refresh_from_db()
         return instance
 
