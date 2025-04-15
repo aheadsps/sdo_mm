@@ -28,7 +28,7 @@ class LessonModelTest(TestCase):
         """Тест проверки максимальной длины названия"""
         with self.assertRaises(ValidationError):
             Lesson.objects.create(
-                name="a" * 257,  # Превышаем максимально допустимую длину
+                name="a" * 257,
                 serial=1,
                 course=self.course
             )
