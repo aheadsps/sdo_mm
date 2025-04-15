@@ -3,6 +3,7 @@ from datetime import timedelta, datetime
 from loguru import logger
 
 from django.db.models import QuerySet, Q
+from django.db.transaction import atomic
 from django.contrib.auth import get_user_model
 
 from lessons import models
@@ -16,8 +17,10 @@ class SetEventServise:
 
     def __init__(self,
                  instance: models.Event,
+                 update: bool = False,
                  ):
         self._event = instance
+        self.update = update
 
     @property
     def event(self):
@@ -57,6 +60,12 @@ class SetEventServise:
             course.status = 'run'
             course.save(update_fields=('status',))
 
+    def _set_event_status(self,
+                          event: models.Event,
+                          ) -> None:
+        event.status = "process"
+        event.save()
+
     def _set_test_block(self,
                         lesson: models.Lesson,
                         end_date: datetime,
@@ -74,6 +83,7 @@ class SetEventServise:
                         lessons: QuerySet[models.Lesson],
                         interval: timedelta,
                         start_date: datetime,
+                        update: bool,
                         ) -> None:
         update_lessons = []
         update_test_block = []
@@ -101,13 +111,17 @@ class SetEventServise:
         start_date = self.event.start_date
         lessons = self.event.lessons.prefetch_related('test_block__questions').order_by("serial")
         interval = self.event.course.interval
-        self._count_end_date(
-            instance=self.event,
-            lessons=lessons,
-            start_date=start_date,
-            interval=interval,
-        )
-        self._change_status(course=course)
-        if course.beginner:
-            self._set_users()
-        self.test_block_core([lesson.test_block for lesson in lessons]).set_test_block_settings()
+        with atomic():
+            if not course.beginner:
+                self._count_end_date(
+                    instance=self.event,
+                    lessons=lessons,
+                    start_date=start_date,
+                    interval=interval,
+                    update=self.update,
+                )
+            else:
+                self._set_users()
+                self._set_event_status(event=self.event)
+            self._change_status(course=course)
+            self.test_block_core([lesson.test_block for lesson in lessons]).set_test_block_settings()

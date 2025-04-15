@@ -541,18 +541,6 @@ class EventSerializerCreate(serializers.ModelSerializer):
         )
         read_only_fields = ("id", "status", "end_date")
 
-    def save(self, **kwargs):
-        event = super().save(**kwargs)
-        logger.debug(f'after save event {event}')
-        if event.course.beginner:
-            event.status = "process"
-            event.save()
-            event.refresh_from_db()
-        else:
-            set_lessons_time(event, update=False)
-        logger.debug(f'before return save event {event}')
-        return event
-
 
 class EventSerializerUpdate(serializers.ModelSerializer):
     """
@@ -571,12 +559,12 @@ class EventSerializerUpdate(serializers.ModelSerializer):
             "status",
         )
         validators = (
-            validators.SingleEventValidator("course"),
             validators.BeginnerValidator("course", "start_date"),
             validators.TimeValidator("start_date"),
         )
         read_only_fields = (
             "id",
+            "course",
             "status",
             "end_date",
         )
@@ -616,12 +604,6 @@ class EventSerializerUpdate(serializers.ModelSerializer):
                     validated_data=validated_data,
                     process=is_process,
                 )
-
-    def update(self, instance, validated_data):
-        instance = super().update(instance, validated_data)
-        if not instance.course.beginner:
-            set_lessons_time(instance, update=True)
-        return instance
 
     def save(self, **kwargs):
         self._correct_status(self.validated_data)
@@ -665,24 +647,3 @@ class EventCoveredCreateSerializer(serializers.ModelSerializer):
             validators.RegistrationValidator("user", "event"),
             validators.PassRegistationsValidator("event"),
         )
-
-
-def set_lessons_time(instance: T, update: bool) -> T:
-    """
-    Выставление временных интервалов для текущего эвента
-    """
-    interval = instance.course.interval
-    start_date = instance.start_date
-    lessons = instance.course.lessons.order_by("serial")
-    update_lessons = []
-    for lesson in lessons:
-        # Собираем шедулеры по открытия урока
-        lesson.start_date = start_date
-        update_lessons.append(lesson)
-        start_date = start_date + interval
-    models.Lesson._default_manager.bulk_update(update_lessons, fields=("start_date",))
-    # Здесь дополнить еще одним шедулером на окончание курса
-    instance.end_date = start_date
-    # Множественное сохранение шедулеров
-    instance = instance.save()
-    return instance

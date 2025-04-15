@@ -134,64 +134,6 @@ class EventViewSet(mixins.ListModelMixin,
                                                  ~Q(course__beginner=True))
         return super().list(request, *args, **kwargs)
 
-    def _change_status(self, instance):
-        """
-        Изменение статуса
-        """
-        course = instance.course
-        course.status = 'run'
-        course.save(update_fields=('status',))
-        return instance
-
-    def _get_interval_experiences(self,
-                                  experiences: QuerySet[WorkExperience],
-                                  ) -> list:
-        """
-        Получение интервала времени стажа
-        """
-        time_now = timezone.now()
-        years_experience = list()
-        if experiences:
-            for exp in experiences:
-                left_limit = time_now - datetime.timedelta(days=(365 * exp.years + 1))
-                rigth_limit = time_now - datetime.timedelta(days=(365 * exp.years))
-                interval = (left_limit, rigth_limit)
-                years_experience.append(interval)
-        else:
-            left_limit = time_now - datetime.timedelta(days=(365 * 60))
-            rigth_limit = time_now
-            interval = (left_limit, rigth_limit)
-            years_experience.append(interval)
-        return years_experience
-
-    def _set_event_users(self, instance):
-        """
-        Установка пользователям данный эвент при
-        условии что он beginner
-        """
-        if instance.course.beginner:
-            profession = instance.course.profession
-            experiences = instance.course.experiences.get_queryset()
-            years_experience = self._get_interval_experiences(experiences=experiences)
-            logger.debug(f'intervals experience for search users is {years_experience}')
-            qfilter = Q(*[Q(date_commencement__gt=year[0], date_commencement__lt=year[-1])
-                          for year
-                          in years_experience],
-                        _connector=Q.OR,
-                        )
-            users = get_user_model()._default_manager.filter(qfilter)
-            if profession:
-                users = users.filter(Q(profession=profession))
-            logger.debug(f'find users depends on experience {users}')
-            models.EventCovered._default_manager.bulk_create(
-                [models.EventCovered(
-                    user=user,
-                    event=instance,
-                    status='process',
-                    ) for user in users]
-            )
-            return instance
-
     def create(self, request, *args, **kwargs):
         self.check_object_permissions(request, None)
         self.serializer_class = serializers.EventSerializerCreate
@@ -212,7 +154,17 @@ class EventViewSet(mixins.ListModelMixin,
 
     def update(self, request, *args, **kwargs):
         self.serializer_class = serializers.EventSerializerUpdate
-        return super().update(request, *args, **kwargs)
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        instance = serializer.save()
+
+        if getattr(instance, '_prefetched_objects_cache', None):
+            # If 'prefetch_related' has been applied to a queryset, we need to
+            # forcibly invalidate the prefetch cache on the instance.
+            instance._prefetched_objects_cache = {}
+        return Response(serializer.data)
 
 
 class CourseViewSet(mixins.ListModelMixin,
