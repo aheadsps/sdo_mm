@@ -714,7 +714,6 @@ class TestChainEndpoint(APITestCase):
 
         url = f'/api/v1/covers/{event.pk}/registration'
         data = dict(
-            user=
         )
 
 

@@ -728,49 +728,6 @@ paths:
         "422":
           $ref: "#/components/responses/UnprocessableEntity"
 
-  /courses/{course_id}/run:
-    post:
-      operationId: api_courses_run
-      summary: Запуск новых курсов (для администрации и методиста)
-      tags:
-        - Course
-      security:
-        - Token: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              $ref: "#/components/schemas/RunCourse"
-      responses:
-        "201":
-          description: JSON ответ с новыми данными
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  id:
-                    type: integer
-                    minimum: 1
-                  course:
-                    type: integer
-                    minimum: 1
-                  start_date:
-                    type: string
-                    format: date-time
-                  end_date:
-                    type: string
-                    format: date-time
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        "422":
-          $ref: "#/components/responses/UnprocessableEntity"
-
   /scorms/{scorm_id}:
     get:
       operationId: api_scorms_retrieve
@@ -1834,18 +1791,6 @@ components:
           description: Текст ответа
           nullable: false
 
-    RunCourse:
-      description: Запуск курса
-      additionalProperties: false
-      type: object
-      properties:
-        start_date:
-          type: string
-          format: date-time
-        end_date:
-          type: string
-          format: date-time
-
     EventCoveredCreate:
       description: Сущность статистики курсов на пользователе создание
       additionalProperties: false
@@ -1932,10 +1877,10 @@ components:
           type: integer
           readOnly: true
           minimum: 1
-        user:
-          description: Методист создавший курс
+        teacher:
           type: integer
           minimum: 1
+          readOnly: true
         name:
           type: string
           maxLength: 256
@@ -2013,8 +1958,7 @@ components:
           type: integer
           minimum: 1
           readOnly: true
-        user:
-          description: Методист создавший курс
+        teacher:
           type: integer
           minimum: 1
           readOnly: true
@@ -2079,10 +2023,10 @@ components:
           type: integer
           minimum: 1
           readOnly: true
-        user:
-          description: Методист создавший курс
+        teacher:
           type: integer
           minimum: 1
+          readOnly: true
         name:
           type: string
           maxLength: 256
@@ -2177,6 +2121,10 @@ components:
           type: integer
           minimum: 1
           readOnly: true
+        teacher:
+          type: integer
+          minimum: 1
+          readOnly: true
         name:
           type: string
           maxLength: 256
@@ -2217,6 +2165,10 @@ components:
           type: integer
           readOnly: true
           minimum: 1
+        teacher:
+          type: integer
+          minimum: 1
+          readOnly: true
         name:
           type: string
           maxLength: 256
@@ -2251,6 +2203,10 @@ components:
           type: integer
           readOnly: true
           minimum: 1
+        teacher:
+          type: integer
+          minimum: 1
+          readOnly: true
         name:
           type: string
           maxLength: 256
@@ -2293,6 +2249,10 @@ components:
         id:
           type: integer
           minimum: 1
+        teacher:
+          type: integer
+          minimum: 1
+          readOnly: true
         name:
           type: string
           maxLength: 256
@@ -2323,6 +2283,10 @@ components:
           type: integer
           readOnly: true
           minimum: 1
+        teacher:
+          type: integer
+          minimum: 1
+          readOnly: true
         title:
           type: string
           maxLength: 256
@@ -2348,6 +2312,10 @@ components:
           type: integer
           readOnly: true
           minimum: 1
+        teacher:
+          type: integer
+          minimum: 1
+          readOnly: true
         title:
           type: string
           maxLength: 256
@@ -2382,6 +2350,10 @@ components:
           maxLength: 256
           readOnly: false
           nullable: false
+        teacher:
+          type: integer
+          minimum: 1
+          readOnly: true
         content_text:
           type: string
           readOnly: false
@@ -2484,6 +2456,10 @@ components:
           type: integer
           readOnly: true
           minimum: 1
+        teacher:
+          type: integer
+          minimum: 1
+          readOnly: true
         text:
           type: string
           readOnly: false
@@ -2523,6 +2499,10 @@ components:
           type: integer
           readOnly: true
           minimum: 1
+        teacher:
+          type: integer
+          minimum: 1
+          readOnly: true
         text:
           type: string
           readOnly: false
@@ -2789,7 +2769,6 @@ components:
         end_date:
           type: string
           format: date-time
-          description: Расчитывается исходя из интервала в курсе
           readOnly: true
           nullable: true
         status:
@@ -2849,6 +2828,7 @@ components:
         end_date:
           type: string
           format: date-time
+          readOnly: true
           nullable: true
         status:
           description: Статус прохождения курса
@@ -2875,6 +2855,7 @@ components:
         end_date:
           type: string
           format: date-time
+          readOnly: true
           nullable: true
         status:
           description: Статус прохождения курса
