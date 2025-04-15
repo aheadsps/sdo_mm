@@ -1,3 +1,6 @@
+import { boolean } from 'zod'
+
+//auth
 export type LoginData = {
   email: string
   password: string
@@ -23,7 +26,7 @@ export type ProfileResponse = {
   profile: UserProfile
 }
 
-//todo: change the types
+//user
 export type EventsResponse = {
   count: number
   next: null
@@ -51,13 +54,15 @@ export type Lesson = {
 }
 
 export type Step = {
-  attachments: number[]
+  id: number
+  title: string
   content_text: string
   lesson: number
   serial: number
-  title: string
+  attachments: number[]
 }
 
+//admin
 export type CoursesResponse = {
   count: number
   next: null
@@ -119,8 +124,58 @@ export type CoversResponse = {
   previous: null
   results: Course[]
 }
+//export type  Event: {
+//    course: CourseVeiw
+//    start_date: string
+//    end_date: string
+//    status: string
+//  }
+//export type Course: {
+// id: number
+// user: number
+// name: string
+// description: string
+// interval: string
+//lessons: lesson[]
+// beginer: boolean
+// image: string
+// profession: number
+// scorms: number[],
+// experiences: number[]
+// status: ['archive']
 
-export type Covers = {
+//  }
+
+//export type Lesson: {
+//   id: number
+//   name: string
+//   serial: number
+//   start_date: string
+//   started: boolean
+//   course: number
+//   steps: step[]
+//   test_block: number
+// }
+
+//export type Step: {
+//  id: number
+//  title: string
+//  content_text: string
+//  lesson: number
+//  serial: number
+//  attachments: number[]
+//         }
+
+export type Cover = {
   id: number
-  //...
+  event: {
+    course: CourseVeiw
+    start_date: string
+    end_date: string
+    status: string
+  }
+  user: number
+  procent: number
+  favorite: boolean
+  status: ''
 }
