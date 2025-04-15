@@ -1,6 +1,5 @@
-import math
 from datetime import date
-
+import math
 from django.utils import timezone
 from django.db.models import Q
 
@@ -25,9 +24,7 @@ class EmailUserManagerAddProf(EmailUserManager):
         profession = user.profession
         time_now = timezone.now()
         date_now = date(year=time_now.year, month=time_now.month, day=time_now.day)
-        logger.debug(f'date_tooday {date_now}')
         experience_years = math.floor((date_now - user.date_commencement).days / 365)
-        logger.debug(f'experience work is {experience_years}')
         experience = WorkExperience._default_manager.get_or_create(years=experience_years)
         logger.debug(f'get expetience {experience}')
         courses = Course._default_manager.filter(Q(profession=profession) &

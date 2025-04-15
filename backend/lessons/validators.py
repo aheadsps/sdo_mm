@@ -1,4 +1,5 @@
 import datetime
+import math
 
 from loguru import logger
 
@@ -15,6 +16,7 @@ from lessons.models import (
     Course,
     Step,
     )
+from users.models import WorkExperience
 
 
 class TimeValidator:
@@ -77,6 +79,23 @@ class PassRegistationsValidator:
         """
         Проверка исключения временных рамок с статусом 'начинающий'
         """
+        user = self.context['request'].user
+        course_profession = event.course.profession
+        experiences = event.course.experiences.get_queryset()
+        if course_profession:
+            if not user.profession == course_profession:
+                self.error_detail.update(dict(
+                    profession='Возможно зарегистрироваться только на курс подходящей профессии'
+                ))
+        if experiences:
+            time_now = timezone.now()
+            date_now = datetime.date(year=time_now.year, month=time_now.month, day=time_now.day)
+            experience_years = math.floor((date_now - user.date_commencement).days / 365)
+            experience = WorkExperience._default_manager.get_or_create(years=experience_years)
+            if experience not in experiences:
+                self.error_detail.update(
+                    dict(status='Возможно зарегистрироваться только на курс подходящего стажа'),
+                    )
         if not event.course.beginner and event.status in ['started', 'finished']:
             self.error_detail.update(
                 dict(status='Регистрация не возможна если курс уже начался или закончен'),

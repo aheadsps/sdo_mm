@@ -3,12 +3,14 @@ import math
 from loguru import logger
 
 from django.utils import timezone
+from django.utils.decorators import method_decorator
 from django.db.models import Q
 from rest_framework import permissions, status, mixins, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.renderers import MultiPartRenderer, JSONRenderer
+from query_counter.decorators import queries_counter
 
 from lessons import models, serializers
 from lessons import viewsets as own_viewsets
@@ -26,6 +28,7 @@ from lessons.permissions import (
 from users.models import WorkExperience
 
 
+@method_decorator(queries_counter, name='dispatch')
 class EventCoveredViewSet(mixins.ListModelMixin,
                           mixins.CreateModelMixin,
                           mixins.DestroyModelMixin,
@@ -89,6 +92,7 @@ class EventCoveredViewSet(mixins.ListModelMixin,
         return Response(serializer.data)
 
 
+@method_decorator(queries_counter, name='dispatch')
 class EventViewSet(mixins.ListModelMixin,
                    own_viewsets.GetCreateUpdateDeleteViewSet):
     """
@@ -142,6 +146,7 @@ class EventViewSet(mixins.ListModelMixin,
         return super().update(request)
 
 
+@method_decorator(queries_counter, name='dispatch')
 class CourseViewSet(mixins.ListModelMixin,
                     own_viewsets.GetCreateUpdateDeleteViewSet,
                     ):
@@ -208,6 +213,7 @@ class CourseViewSet(mixins.ListModelMixin,
         return self.create(request=request, course=course)
 
 
+@method_decorator(queries_counter, name='dispatch')
 class LessonViewSet(viewsets.ModelViewSet):
     """
     Вьюсет уроков с выбором сериализатора для CRUD-операций
@@ -253,6 +259,7 @@ class LessonViewSet(viewsets.ModelViewSet):
         return super().list(request, *args, **kwargs)
 
 
+@method_decorator(queries_counter, name='dispatch')
 class SCROMViewSet(mixins.RetrieveModelMixin,
                    viewsets.GenericViewSet):
     queryset = models.SCORM._default_manager.get_queryset()
@@ -263,6 +270,7 @@ class SCROMViewSet(mixins.RetrieveModelMixin,
                           (CanReadSCORM | IsAdminOrIsStaff)]
 
 
+@method_decorator(queries_counter, name='dispatch')
 class StepViewSet(ModelViewSet):
     """
     Просмотр всех шагов уроков list
@@ -298,6 +306,7 @@ class StepViewSet(ModelViewSet):
         return serializer_class
 
 
+@method_decorator(queries_counter, name='dispatch')
 class TestBlockViewSet(mixins.RetrieveModelMixin,
                        viewsets.GenericViewSet):
     """
@@ -334,6 +343,7 @@ class TestBlockViewSet(mixins.RetrieveModelMixin,
     #     Здесь логика с UserStory
 
 
+@method_decorator(queries_counter, name='dispatch')
 class QuestionViewSet(viewsets.ModelViewSet):
     """
     Виювсет вопроса
@@ -354,6 +364,7 @@ class QuestionViewSet(viewsets.ModelViewSet):
         serializer.save(teacher=self.request.user)
 
 
+@method_decorator(queries_counter, name='dispatch')
 class AnswerViewSet(viewsets.ModelViewSet):
     """
     Виювсет ответов
@@ -365,6 +376,7 @@ class AnswerViewSet(viewsets.ModelViewSet):
     lookup_url_kwarg = 'answer_id'
 
 
+@method_decorator(queries_counter, name='dispatch')
 class UserStoryViewSet(viewsets.ModelViewSet):
     queryset = models.UserStory.objects.all()
     permission_classes = [IsAdminOrIsStaff]
@@ -381,6 +393,7 @@ class UserStoryViewSet(viewsets.ModelViewSet):
         return [permission() for permission in permission_classes]
 
 
+@method_decorator(queries_counter, name='dispatch')
 class LessonStoryViewSet(viewsets.ModelViewSet):
     queryset = models.LessonStory.objects.all()
     permission_classes = [IsAdminOrIsStaff]
