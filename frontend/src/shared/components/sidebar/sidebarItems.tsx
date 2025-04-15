@@ -29,7 +29,7 @@ export const sidebarItemsStudent: SidebarItem[] = [
   {
     id: 'my-learning',
     icon: <StudyIcon width={24} height={24} />,
-    text: 'Мое обучение',
+    text: 'Курсы',
     path: routes.learning,
   },
   {
