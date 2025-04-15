@@ -357,6 +357,37 @@ paths:
         "422":
           $ref: "#/components/responses/UnprocessableEntity"
 
+  /covers/{cover_id}/registration:
+    get:
+      operationId: api_covers_registration
+      summary: Регистрация пользователя на курс
+      parameters:
+        - in: path
+          name: cover_id
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+      tags:
+        - Cover
+      security:
+        - Token: []
+      responses:
+        "200":
+          description: Эвент добавлен в список (регистрация)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EventCoveredCreate"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+
   /events/{event_id}:
     get:
       operationId: api_events_retrieve

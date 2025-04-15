@@ -96,7 +96,7 @@ class PassRegistationsValidator:
                 self.error_detail.update(
                     dict(status='Возможно зарегистрироваться только на курс подходящего стажа'),
                     )
-        if not event.course.beginner and event.status in ['started', 'finished']:
+        if event.status in ['started', 'finished']:
             self.error_detail.update(
                 dict(status='Регистрация не возможна если курс уже начался или закончен'),
                 )

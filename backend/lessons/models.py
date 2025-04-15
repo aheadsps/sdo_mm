@@ -61,6 +61,7 @@ class EventCovered(models.Model):
     event = models.ForeignKey(Event,
                               verbose_name=_("эвент"),
                               on_delete=models.CASCADE,
+                              related_name='covers',
                               )
     favorite = models.BooleanField(_("Избранный ивент"),
                                    default=False,
@@ -142,6 +143,8 @@ class Course(models.Model):
         "users.WorkExperience",
         verbose_name=_("Стаж"),
         help_text="На какие стажи расчитан " "курс",
+        null=True,
+        blank=True
     )
     status = models.CharField(_("статус"),
                               max_length=50,

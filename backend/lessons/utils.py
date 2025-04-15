@@ -265,9 +265,13 @@ def get_intervals(experiences: QuerySet[WorkExperience]) -> list[tuple]:
     years_experience = list()
     if experiences:
         for exp in experiences:
-            left_limit = time_now - timedelta(days=(365 * exp.years + 1))
+            logger.debug(f'set intervals for {exp}')
+            left_limit = time_now - timedelta(days=365 * (exp.years + 1))
+            logger.debug(f'left limit intervals {left_limit}')
             rigth_limit = time_now - timedelta(days=(365 * exp.years))
+            logger.debug(f'rigth limit intervals {rigth_limit}')
             interval = (left_limit, rigth_limit)
+            logger.debug(f'summary intervals {interval}')
             years_experience.append(interval)
     else:
         left_limit = time_now - timedelta(days=(365 * 60))

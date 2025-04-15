@@ -21,19 +21,19 @@ class EmailUserManagerAddProf(EmailUserManager):
         from lessons.models import EventCovered, Course, Event
         from users.models import WorkExperience
 
+        logger.debug(f'New user is {user}')
+        logger.debug(f'New user have {user.date_commencement} start work')
+        logger.debug(f'New user have {user.profession} profession')
         profession = user.profession
         time_now = timezone.now()
         date_now = date(year=time_now.year, month=time_now.month, day=time_now.day)
         experience_years = math.floor((date_now - user.date_commencement).days / 365)
         experience = WorkExperience._default_manager.get_or_create(years=experience_years)
-        logger.debug(f'get expetience {experience}')
-        courses = Course._default_manager.filter(Q(profession=profession) &
-                                                 Q(experiences=experience[0]) &
-                                                 Q(beginner=True) &
-                                                 Q(status='run'))
-        logger.debug(f'Find courses for new worker {courses}')
-        qfilter = Q(*[Q(course=course) for course in courses], _connector=Q.OR)
-        events = Event._default_manager.filter(qfilter)
+        logger.debug(f'get experience {experience}')
+        events = Event._default_manager.filter((Q(course__profession=profession) | Q(course__profession__isnull=True)) &
+                                                 (Q(course__experiences=experience[0]) | Q(course__experiences__isnull=True)) &
+                                                 Q(course__beginner=True) &
+                                                 Q(course__status='run'))
         logger.debug(f'Find events for new worker {events}')
         if events:
             EventCovered._default_manager.bulk_create(
@@ -53,6 +53,7 @@ class EmailUserManagerAddProf(EmailUserManager):
         is_staff: bool,
         is_superuser: bool,
         is_verified: bool,
+        profession=None,
         **extra_fields
     ):
         """
@@ -72,7 +73,8 @@ class EmailUserManagerAddProf(EmailUserManager):
         email = self.normalize_email(email)
 
         try:
-            profession = Profession.objects.get(en_name="admin")
+            if not profession:
+                profession = Profession.objects.get(en_name="admin")
         except Profession.DoesNotExist:
             # если не создаем группу админ и профессию админ
             profession = Profession.objects.create(
@@ -84,11 +86,7 @@ class EmailUserManagerAddProf(EmailUserManager):
             )
         else:
             # Ищем группу для этой профессии
-            profession_group = (
-                ProfessionGroup.objects.order_by("-id")
-                .filter(profession=profession.pk)
-                .first()
-            )
+            profession_group = ProfessionGroup.objects.get_or_create(profession=profession)[0]
 
         # Юзеру назначаем профессию
         user = self.model(

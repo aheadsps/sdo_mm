@@ -48,7 +48,7 @@ class EventCoveredViewSet(mixins.ListModelMixin,
         if self.action == "toggle_favorite":
             permission_classes = [permissions.IsAuthenticated &
                                   (InCover | IsAdminOrIsStaff)]
-        elif self.action == 'currents':
+        elif self.action in ['currents', 'register']:
             permission_classes = [permissions.IsAuthenticated]
         else:
             permission_classes = [permissions.IsAuthenticated &
@@ -90,6 +90,17 @@ class EventCoveredViewSet(mixins.ListModelMixin,
             return self.get_paginated_response(serializer.data)
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
+
+    @action(detail=True, methods=['POST'])
+    def registration(self, request, cover_id=None):
+        self.serializer_class = serializers.EventCoveredCreateSerializer
+        self.serializer_class.Meta.read_only_fields.append('user')
+        user = request.user
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save(user=user)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 
 @method_decorator(queries_counter, name='dispatch')
@@ -146,7 +157,7 @@ class EventViewSet(mixins.ListModelMixin,
         return super().update(request)
 
 
-@method_decorator(queries_counter, name='dispatch')
+# @method_decorator(queries_counter, name='dispatch')
 class CourseViewSet(mixins.ListModelMixin,
                     own_viewsets.GetCreateUpdateDeleteViewSet,
                     ):
@@ -213,7 +224,7 @@ class CourseViewSet(mixins.ListModelMixin,
         return self.create(request=request, course=course)
 
 
-@method_decorator(queries_counter, name='dispatch')
+# @method_decorator(queries_counter, name='dispatch')
 class LessonViewSet(viewsets.ModelViewSet):
     """
     Вьюсет уроков с выбором сериализатора для CRUD-операций
@@ -259,7 +270,7 @@ class LessonViewSet(viewsets.ModelViewSet):
         return super().list(request, *args, **kwargs)
 
 
-@method_decorator(queries_counter, name='dispatch')
+# @method_decorator(queries_counter, name='dispatch')
 class SCROMViewSet(mixins.RetrieveModelMixin,
                    viewsets.GenericViewSet):
     queryset = models.SCORM._default_manager.get_queryset()
@@ -306,7 +317,7 @@ class StepViewSet(ModelViewSet):
         return serializer_class
 
 
-@method_decorator(queries_counter, name='dispatch')
+# @method_decorator(queries_counter, name='dispatch')
 class TestBlockViewSet(mixins.RetrieveModelMixin,
                        viewsets.GenericViewSet):
     """
@@ -343,7 +354,7 @@ class TestBlockViewSet(mixins.RetrieveModelMixin,
     #     Здесь логика с UserStory
 
 
-@method_decorator(queries_counter, name='dispatch')
+# @method_decorator(queries_counter, name='dispatch')
 class QuestionViewSet(viewsets.ModelViewSet):
     """
     Виювсет вопроса
@@ -364,7 +375,7 @@ class QuestionViewSet(viewsets.ModelViewSet):
         serializer.save(teacher=self.request.user)
 
 
-@method_decorator(queries_counter, name='dispatch')
+# @method_decorator(queries_counter, name='dispatch')
 class AnswerViewSet(viewsets.ModelViewSet):
     """
     Виювсет ответов
@@ -376,7 +387,7 @@ class AnswerViewSet(viewsets.ModelViewSet):
     lookup_url_kwarg = 'answer_id'
 
 
-@method_decorator(queries_counter, name='dispatch')
+# @method_decorator(queries_counter, name='dispatch')
 class UserStoryViewSet(viewsets.ModelViewSet):
     queryset = models.UserStory.objects.all()
     permission_classes = [IsAdminOrIsStaff]
@@ -393,7 +404,7 @@ class UserStoryViewSet(viewsets.ModelViewSet):
         return [permission() for permission in permission_classes]
 
 
-@method_decorator(queries_counter, name='dispatch')
+# @method_decorator(queries_counter, name='dispatch')
 class LessonStoryViewSet(viewsets.ModelViewSet):
     queryset = models.LessonStory.objects.all()
     permission_classes = [IsAdminOrIsStaff]

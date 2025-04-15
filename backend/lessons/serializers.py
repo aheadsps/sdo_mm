@@ -664,7 +664,7 @@ class EventCoveredCreateSerializer(serializers.ModelSerializer):
             "procent",
             "status",
         )
-        read_only_fields = ("user", "procent", "status")
+        read_only_fields = ["procent", "status"]
         validators = (
             validators.RegistrationValidator("user", "event"),
             validators.PassRegistationsValidator("event"),

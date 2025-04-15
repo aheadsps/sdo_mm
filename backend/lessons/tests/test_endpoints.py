@@ -489,8 +489,11 @@ class TestChainEndpoint(APITestCase):
             en_name="builder",
             ru_name="строитель",
         )
-        self.experience = users_models.WorkExperience._default_manager.create(
-            years=0,
+        self.experience_4 = users_models.WorkExperience._default_manager.create(
+            years=4,
+        )
+        self.experience_2 = users_models.WorkExperience._default_manager.create(
+            years=2,
         )
         date_commencement = datetime.date(
             year=2023,
@@ -510,12 +513,14 @@ class TestChainEndpoint(APITestCase):
         """
         Тесты цепочки
         """
+
+        # ========================= courses =========================
         url = '/api/v1/courses'
         data = dict(
             name='Course',
             interval=datetime.timedelta(days=7),
             profession=self.profession.pk,
-            experiences=[self.experience.pk,],
+            experiences=[self.experience_4.pk],
         )
         response_course = self.client.post(
             path=url,
@@ -529,6 +534,7 @@ class TestChainEndpoint(APITestCase):
         data['name'] = 'Course_beginner'
         data.pop('interval')
         data['beginner'] = True
+        data['experiences'].append(self.experience_2.pk)
         response_beginner = self.client.post(
             path=url,
             data=data,
@@ -539,6 +545,7 @@ class TestChainEndpoint(APITestCase):
         self.assertTrue(response_beginner.json()['beginner'])
         course_beginner = lessons_models.Course._default_manager.get(name=data['name'])
 
+        # ========================= lessons =========================
         url = '/api/v1/lessons'
         data = dict(
             name='Lesson',
@@ -566,6 +573,7 @@ class TestChainEndpoint(APITestCase):
         self.assertFalse(response.json()['started'])
         lesson_beginner = lessons_models.Lesson._default_manager.get(name=data['name'])
 
+        # ========================= questions =========================
         url = '/api/v1/questions'
         data = dict(
             text='question',
@@ -578,6 +586,7 @@ class TestChainEndpoint(APITestCase):
             format='json',
         )
         self.assertEqual(response.status_code, 201)
+
         data['text'] = 'question_1'
         data['weight'] = 5
         response = self.client.post(
@@ -586,6 +595,7 @@ class TestChainEndpoint(APITestCase):
             format='json',
         )
         self.assertEqual(response.status_code, 201)
+
         data = dict(
             text='question_b',
             weight=10,
@@ -597,6 +607,7 @@ class TestChainEndpoint(APITestCase):
             format='json',
         )
         self.assertEqual(response.status_code, 201)
+
         data['text'] = 'question_b_1'
         data['weight'] = 5
         response = self.client.post(
@@ -606,6 +617,7 @@ class TestChainEndpoint(APITestCase):
         )
         self.assertEqual(response.status_code, 201)
 
+        # ========================= steps =========================
         url = '/api/v1/step'
         data = dict(
             title='Step',
@@ -635,6 +647,7 @@ class TestChainEndpoint(APITestCase):
             title=data['title'],
         )
 
+        # ========================= events =========================
         url = '/api/v1/events'
         data = dict(
             course=course.pk,
@@ -659,18 +672,50 @@ class TestChainEndpoint(APITestCase):
             format='json',
         )
         self.assertEqual(response.status_code, 201)
-        event = lessons_models.Event._default_manager.get(course_id=data['course'])
+        event_beginner = lessons_models.Event._default_manager.get(course_id=data['course'])
 
-        self.assertEqual(event.course.status, 'run')
-        self.assertEqual(event.status, 'started')
-        self.assertEqual(event.end_date, None)
-        self.assertEqual(event.start_date, None)
+        self.assertEqual(event_beginner.course.status, 'run')
+        self.assertEqual(event_beginner.status, 'started')
+        self.assertEqual(event_beginner.end_date, None)
+        self.assertEqual(event_beginner.start_date, None)
 
         response = self.client.get(
             path=url,
         )
         self.assertEqual(response.status_code, 200)
 
+        lesson.refresh_from_db()
+        lesson_beginner.refresh_from_db()
+
+        # ========================= test_block functions =========================
+
+        self.assertEqual(lesson.test_block.max_score, 9)
+        # Запрос был на 2025 05 21 00:00:00 по +3. На беке это 2025 05 20 21:00:00 +0
+        self.assertEqual(str(lesson.test_block.end_date), str(datetime.datetime(year=2025, month=5, day=20, hour=21)) + '+00:00')
+        self.assertEqual(lesson_beginner.test_block.max_score, 15)
+        self.assertEqual(lesson_beginner.test_block.end_date, None)
+
+        # ========================= event set functions =========================
+
+        self.assertEqual(self.user.events.count(), 1)
+        user_1 = get_user_model()._default_manager.create_user(
+            email='user1@gmail.com',
+            password='usersuseruser',
+            profession=self.profession,
+            date_commencement=datetime.date(
+                year=2020,
+                month=8,
+                day=1,
+                ),
+        )
+        self.assertEqual(user_1.events.count(), 1)
+
+        # ========================= event registration =========================
+
+        url = f'/api/v1/covers/{event.pk}/registration'
+        data = dict(
+            user=
+        )
 
 
 class LessonViewSetTest(APITestCase):
