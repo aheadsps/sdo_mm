@@ -1,8 +1,9 @@
 import { ClockIcon, LikeIcon, DislikeIcon, StickersIcon, HourglassIcon } from '@assets/icons'
 import { routes } from '@routes/routes'
 import { Event } from '@services/api'
+import { setCurrentEventId, setCurrentScorms, setEvent, setIsScorms } from '@services/slices'
+import { useAppDispatch } from '@services/store'
 import { getBackgroundColor, getDaysLeft } from '@shared/utils'
-import { useState } from 'react'
 import { NavLink } from 'react-router-dom'
 
 import { Button } from '../button'
@@ -16,10 +17,18 @@ interface Props {
 }
 
 export const LessonCard: React.FC<Props> = ({ event }: Props) => {
-  const [isFav, setIsFav] = useState(false)
   const daysLeft = getDaysLeft(event.end_date)
   const deadlineColor = getBackgroundColor(daysLeft)
-
+  const dispatch = useAppDispatch()
+  console.log(event)
+  const scorms = event.course.scorms
+  const isScorm = Boolean(scorms.length > 0)
+  const hendleClick = () => {
+    dispatch(setIsScorms(isScorm))
+    if (isScorm) dispatch(setCurrentScorms(scorms))
+    else dispatch(setCurrentEventId(event.id))
+    dispatch(setEvent(event))
+  }
   return (
     <div className={s.container}>
       <div className={s.container__top}>
@@ -29,8 +38,8 @@ export const LessonCard: React.FC<Props> = ({ event }: Props) => {
               Курс
             </Typography>
           </div>
-          <button className={s.container__like} onClick={() => setIsFav(!isFav)}>
-            {isFav ? <LikeIcon /> : <DislikeIcon />}
+          <button className={s.container__like}>
+            {event.favorite ? <LikeIcon /> : <DislikeIcon />}
           </button>
         </div>
         <ImageComponent src={event.course.image} alt="course" className={s.img} />
@@ -55,7 +64,7 @@ export const LessonCard: React.FC<Props> = ({ event }: Props) => {
                 <div className={s.container__param}>
                   <StickersIcon />
                   <Typography variant="body_2" className={s.container__paramTxt}>
-                    {event.course.lessons.length}
+                    {event.done_lessons}
                   </Typography>
                 </div>
                 <div className={s.container__param}>
@@ -82,6 +91,7 @@ export const LessonCard: React.FC<Props> = ({ event }: Props) => {
           children="Перейти к обучению"
           as={NavLink}
           to={routes.course}
+          onClick={() => hendleClick()}
         />
       </div>
     </div>
