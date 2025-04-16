@@ -216,6 +216,33 @@ paths:
         "422":
           $ref: "#/components/responses/UnprocessableEntity"
 
+  /files/{file_id}:
+    delete:
+      operationId: api_files_delete
+      summary: Удаление файла и системы
+      parameters:
+        - in: path
+          name: file_id
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+      tags:
+        - File
+      security:
+        - Token: []
+      responses:
+        '204':
+          description: Ответ об удалении
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+
   /covers:
     get:
       operationId: api_covers_list
@@ -314,6 +341,37 @@ paths:
                 minItems: 1
                 items:
                   $ref: "#/components/schemas/EventCovered"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+
+  /covers/calendar:
+    get:
+      operationId: api_covers_calendar
+      summary: Получение календаря предстоящих событий
+      tags:
+        - Cover
+      security:
+        - Token: []
+      responses:
+        "200":
+          description: JSON ответ с деталями данного эвента
+          content:
+            application/json:
+              schema:
+                type: array
+                minItems: 1
+                items:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    start_date:
+                      type: string
+                      format: date-time
         "401":
           $ref: "#/components/responses/Unauthorized"
         "403":
@@ -689,6 +747,37 @@ paths:
       responses:
         "204":
           description: Курс удален успешно
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+
+  /courses/{course_id}/upload-materials:
+    post:
+      operationId: api_course_upload
+      summary: Загрузка материалов
+      tags:
+        - Course
+      security:
+        - Token: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: "#/components/schemas/ContentAttachment"
+      responses:
+        "200":
+          description: JSON ответ с курсом
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/Materials"
         "401":
           $ref: "#/components/responses/Unauthorized"
         "403":
@@ -1800,6 +1889,21 @@ components:
           default:
             expected
 
+    Materials:
+      description: Сущность материалов
+      additionalProperties: false
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+          minimum: 1
+        files:
+          type: array
+          items:
+            minItems: 0
+            $ref: "#/components/schemas/ContentAttachment"
+
     EventCovered:
       description: Сущность статистики курсов на пользователе
       additionalProperties: false
@@ -1909,6 +2013,9 @@ components:
           minItems: 1
           items:
             $ref: "#/components/schemas/WorkExperience"
+        materials:
+          type: object
+          $ref: "#/components/schemas/Materials"
         status:
           type: string
           enum:
@@ -1971,6 +2078,10 @@ components:
           items:
             type: integer
             minimum: 1
+        materials:
+          type: object
+          readOnly: true
+          $ref: "#/components/schemas/Materials"
         status:
           type: string
           enum:
@@ -2044,6 +2155,9 @@ components:
           items:
             type: integer
             minimum: 1
+        materials:
+          type: object
+          $ref: "#/components/schemas/Materials"
         status:
           type: string
           enum:

@@ -18,6 +18,7 @@ router.register(prefix=r'questions', viewset=views.QuestionViewSet)
 router.register(prefix=r'answers', viewset=views.AnswerViewSet)
 router.register(prefix=r'scorms', viewset=views.SCROMViewSet)
 router.register(prefix=r'covers', viewset=views.EventCoveredViewSet)
+router.register(prefix=r'files', viewset=views.FileViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),

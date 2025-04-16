@@ -10,6 +10,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.renderers import MultiPartRenderer, JSONRenderer
+from rest_framework.validators import ValidationError
 from query_counter.decorators import queries_counter
 
 from lessons import models, serializers
@@ -97,38 +98,39 @@ class EventCoveredViewSet(mixins.ListModelMixin,
         Получение календаря событий по датам
         """
         self.serializer_class = serializers.CalendarSerializer
+        time_now = timezone.now()
         user = request.user
         queryset = (self.queryset.
                     filter(Q(user=user)).prefetch_related('event__course'))
         logger.debug(f'calendar queryset is {queryset}')
         qfilter = Q(*[Q(course=cover.event.course, course__beginner=False) for cover in queryset], _connector=Q.OR)
-        lessons = models.Lesson._default_manager.filter(qfilter)
-        scorms = models.SCORM._default_manager.filter(qfilter)
+        lessons = models.Lesson._default_manager.filter(qfilter, Q(start_date__gte=time_now)).values('name', 'start_date')
+        scorms = models.SCORM._default_manager.filter(qfilter, Q(start_date__gte=time_now)).values('name', 'start_date')
         logger.debug(f'calendar lessons is {lessons}')
         logger.debug(f'scorms lessons is {scorms}')
-        time_now = timezone.now()
         course_story = []
         for cover in queryset:
             if cover.status == 'expected':
-                course_story.append(dict(name='Курс' + cover.event.course.name,
+                course_story.append(dict(name='Курс ' + cover.event.course.name,
                                          start_date=cover.event.start_date,
                                          ))
+        logger.debug(f'after courses {course_story}')
         for lesson in lessons:
-            if lesson.start_date > time_now:
-                course_story.append(dict(name='Урок' + lesson.name,
-                                         start_date=lesson.start_date,
-                                         ))
+            course_story.append(dict(name='Урок ' + lesson['name'],
+                                     start_date=lesson['start_date'],
+                                     ))
+        logger.debug(f'after lessons {course_story}')
         for scorm in scorms:
-            if scorm.start_date > time_now:
-                course_story.append(dict(name='Урок' + scorm.name,
-                                         start_date=scorm.start_date,
-                                         ))
+            course_story.append(dict(name='Урок ' + scorm['name'],
+                                     start_date=scorm['start_date'],
+                                     ))
+        logger.debug(f'after scorms {course_story}')
         if queryset:
             calendar = sorted(course_story,
-                              key=lambda x: x['start_date'],
-                              reverse=True)
+                              key=lambda x: x['start_date'])
         else:
             calendar = []
+        logger.debug(f'after sorting {calendar}')
         serializer = self.get_serializer(calendar, many=True)
         return Response(serializer.data)
 
@@ -237,21 +239,21 @@ class CourseViewSet(mixins.ListModelMixin,
         self.check_object_permissions(request=request, obj=None)
         return super().list(request, *args, **kwargs)
 
-    def custom_create(self, request, course):
-        serializer = self.get_serializer(data=request.data)
+    @action(detail=True, methods=['POST'], url_path='upload-materials')
+    def upload_materials(self, request, course_id=None):
+        serializer = serializers.ContentAttachmentSerializer
+        self.kwargs.setdefault('context', self.get_serializer_context())
+        course = self.get_object()
+        if course.teacher != request.user:
+            raise ValidationError(detail=dict(user='Нет прав довтупа'), code=403)
+        materials = models.Materials._default_manager.get(course=course)
+        request.data.update(materials=materials.pk)
+        logger.debug(f'request data to save materials {request.data}')
+        serializer = serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        serializer.save(course=course)
+        serializer.save()
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
-
-    @action(detail=True, methods=['POST'])
-    def run(self, request, course_id=None):
-        self.serializer_class = serializers.EventSerializerCreate
-        # Monkey Patch
-        # Спартанское латание
-        self.create = self.custom_create
-        course = self.get_object()
-        return self.create(request=request, course=course)
 
 
 # @method_decorator(queries_counter, name='dispatch')
@@ -449,3 +451,28 @@ class LessonStoryViewSet(viewsets.ModelViewSet):
             permission_classes = [permissions.IsAuthenticated &
                                   IsAdminOrIsStaff]
         return [permission() for permission in permission_classes]
+
+
+class FileViewSet(mixins.DestroyModelMixin, viewsets.GenericViewSet):
+    """
+    Виюв сет файлов
+    """
+    queryset = models.ContentAttachment._default_manager.get_queryset()
+    permission_classes = [permissions.IsAuthenticated & IsAdminOrIsStaff]
+    lookup_field = 'pk'
+    lookup_url_kwarg = 'file_id'
+
+    def destroy(self, request, *args, **kwargs):
+        user = request.user
+        instance = self.get_object()
+        if instance.step:
+            teacher = instance.step.teacher
+        elif instance.materials:
+            teacher = instance.materials.course.teacher
+        else:
+            teacher = None
+        if not teacher and not user.is_superuser:
+            raise ValidationError(detail=dict(user='Нет прав доступа'),)
+        if teacher and not user.is_superuser and teacher != user:
+            raise ValidationError(detail=dict(user='Нет прав доступа'),)
+        return super().destroy(request, *args, **kwargs)

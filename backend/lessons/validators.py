@@ -474,8 +474,7 @@ class StepSerialValidator:
         if need_check:
             serial = get_value(self.serial, attrs, serializer)
             lesson = get_value(self.lesson, attrs, serializer)
-            if lesson:
-                self._check(serial, lesson)
+            self._check(serial, lesson)
 
 
 class LessonSerialValidator:
@@ -510,8 +509,7 @@ class LessonSerialValidator:
         if need_check:
             serial = get_value(self.serial, attrs, serializer)
             course = get_value(self.course, attrs, serializer)
-            if course:
-                self._check(serial, course)
+            self._check(serial, course)
 
 
 class EmptyLessonsValidator:
@@ -543,8 +541,76 @@ class EmptyLessonsValidator:
         need_check = tigger_to_check(attrs, self.course)
         if need_check:
             course = get_value(self.course, attrs, serializer)
-            if course:
-                self._check(course)
+            self._check(course)
+
+
+class DateRequiredValidator:
+    """
+    Валидатор курса без start date
+    """
+
+    requires_context = True
+
+    def __init__(self, course: str, start_date: str) -> None:
+        self.course = str(course)
+        self.start_date = str(start_date)
+        self.error_detail = dict()
+
+    def _check(
+        self,
+        course,
+        start_date,
+    ) -> None:
+        """
+        Проверка возможности присвоения SCORM пакета
+        """
+        if isinstance(course, int):
+            course = Course._default_manager.get(pk=course)
+        if not course.beginner and not start_date:
+            self.error_detail.update(dict(start_date='Необходимо указать дату начала курса'))
+        process_error(error_detail=self.error_detail)
+
+    def __call__(self, attrs, serializer):
+        self.error_detail = dict()
+        need_check = tigger_to_check(attrs, self.course, self.start_date)
+        if need_check:
+            course = get_value(self.course, attrs, serializer)
+            start_date = get_value(self.start_date, attrs, serializer)
+            self._check(course, start_date)
+
+
+class AttachmentValidator:
+    """
+    Валидатор вложений
+    """
+
+    requires_context = True
+
+    def __init__(self, materials: str, step: str) -> None:
+        self.materials = str(materials)
+        self.step = str(step)
+        self.error_detail = dict()
+
+    def _check(
+        self,
+        materials,
+        step,
+    ) -> None:
+        """
+        Проверка возможности присвоения SCORM пакета
+        """
+        if materials and step:
+            self.error_detail.update(dict(materials='Необходимо выбрать или step или course'))
+            self.error_detail.update(dict(step='Необходимо выбрать или step или course'))
+        process_error(error_detail=self.error_detail)
+
+    def __call__(self, attrs, serializer):
+        self.error_detail = dict()
+        need_check = tigger_to_check(attrs, self.materials, self.step)
+        if need_check:
+            materials = get_value(self.materials, attrs, serializer)
+            step = get_value(self.step, attrs, serializer)
+            self._check(materials, step)
 
 
 class MoreThanZeroValidator:

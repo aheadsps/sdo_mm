@@ -177,7 +177,7 @@ def path_maker_question(instance: "Question", filename: str) -> str:
     в системе.
     """
     text_tranc = instance.text[0:10]
-    return f"question/{text_tranc}/{filename}"
+    return f"questions/{text_tranc}/{filename}"
 
 
 def path_maker_course(instance: "Course", filename: str) -> str:
@@ -186,7 +186,7 @@ def path_maker_course(instance: "Course", filename: str) -> str:
     в системе.
     """
     text_tranc = instance.name
-    return f"course/{text_tranc}/{filename}"
+    return f"courses/{text_tranc}/{filename}"
 
 
 def path_maker_scorm(instance: "SCORMFile", filename: str) -> str:
@@ -195,7 +195,7 @@ def path_maker_scorm(instance: "SCORMFile", filename: str) -> str:
     в системе.
     """
     text_tranc = slugify(instance.course)
-    return f"scorm/{text_tranc}/{filename}"
+    return f"scorms/{text_tranc}/{filename}"
 
 
 def path_maker_content_attachment(instance: 'ContentAttachment', filename: str) -> str:
@@ -203,10 +203,15 @@ def path_maker_content_attachment(instance: 'ContentAttachment', filename: str) 
     Создает корректный путь для сохранения медиа файлов
     в системе.
     """
-    text_tranc = instance.step.title
+    if instance.step:
+        text_tranc = instance.step.title
+        root = 'steps'
+    else:
+        text_tranc = instance.materials.course.name
+        root = 'courses'
     filename = os.path.basename(filename)
     # Когда будут уроки вставить папку "lesson №..."
-    return f'content_attachment/{latinizator(text_tranc)}/{latinizator(filename)}'
+    return f'{root}/{latinizator(text_tranc)}/{latinizator(filename)}'
 
 
 def get_value(field: str,

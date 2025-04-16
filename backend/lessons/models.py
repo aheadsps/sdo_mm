@@ -314,6 +314,17 @@ class Step(models.Model):
         return f"Шаг: {self.title}"
 
 
+class Materials(models.Model):
+    """
+    Материалы к курсу
+    """
+    course = models.ForeignKey(Course,
+                               verbose_name=_("курс"),
+                               related_name='materials',
+                               on_delete=models.CASCADE,
+                               )
+
+
 class ContentAttachment(models.Model):
     file = models.FileField(
         upload_to=path_maker_content_attachment, null=True, blank=True
@@ -322,6 +333,13 @@ class ContentAttachment(models.Model):
         max_length=10, choices=settings.TYPE_CONTENTS,
         default="Image", verbose_name="Тип файла"
     )
+    materials = models.ForeignKey(Materials,
+                                  verbose_name=_('материалы'),
+                                  null=True,
+                                  blank=True,
+                                  on_delete=models.CASCADE,
+                                  related_name='files',
+                                  )
     step = models.ForeignKey(
         Step, unique=False,
         on_delete=models.CASCADE,

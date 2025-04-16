@@ -112,7 +112,17 @@ class QuestionCreateSerializer(serializers.ModelSerializer):
 class ContentAttachmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.ContentAttachment
-        fields = ["id", "file", "file_type"]
+        fields = ["id", "file", "file_type", "step", 'materials']
+        validators = (validators.AttachmentValidator('step', 'materials'),)
+
+
+class MaterialsSerializer(serializers.ModelSerializer):
+
+    files = ContentAttachmentSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = models.Materials
+        fields = ('files',)
 
 
 class StepSerializer(serializers.ModelSerializer):
@@ -389,6 +399,7 @@ class CreateCourseSerializer(serializers.ModelSerializer):
     scorms = serializers.PrimaryKeyRelatedField(
         read_only=True, required=False, many=True
     )
+    materials = MaterialsSerializer(read_only=True)
 
     class Meta:
         model = models.Course
@@ -404,12 +415,13 @@ class CreateCourseSerializer(serializers.ModelSerializer):
             "scorms",
             "experiences",
             "status",
+            'materials',
         )
         validators = (
             validators.CourseScormValidator("scorm"),
             validators.IntervalValidator("beginner", "interval"),
         )
-        read_only_fields = ("scorms", "teacher", "status")
+        read_only_fields = ("scorms", "teacher", "status",)
 
     def create(self, validated_data: dict):
         logger.debug(validated_data)
@@ -430,6 +442,7 @@ class CreateCourseSerializer(serializers.ModelSerializer):
                 raise ValidationError(dict(scorm=er))
         else:
             course = super().create(validated_data)
+        models.Materials._default_manager.create(course=course)
         return course
 
     def update(self, instance, validated_data):
@@ -444,6 +457,7 @@ class CourseSerializer(serializers.ModelSerializer):
 
     lessons = LessonSerializer(many=True)
     scorms = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+    materials = MaterialsSerializer(read_only=True)
 
     class Meta:
         model = models.Course
@@ -462,6 +476,7 @@ class CourseSerializer(serializers.ModelSerializer):
             "experiences",
             "lessons",
             "status",
+            "materials",
         )
 
 
@@ -474,6 +489,7 @@ class ViewCourseSerializer(serializers.ModelSerializer):
     profession = user_serializers.ProfessionSerializer()
     lessons = LessonViewSerializer(many=True)
     scorms = SCORMSerializer(many=True)
+    materials = MaterialsSerializer(read_only=True)
 
     class Meta:
         model = models.Course
@@ -492,6 +508,7 @@ class ViewCourseSerializer(serializers.ModelSerializer):
             "experiences",
             "scorms",
             "lessons",
+            "materials",
         )
 
 
