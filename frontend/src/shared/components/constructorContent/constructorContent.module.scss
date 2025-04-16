@@ -112,12 +112,24 @@
 }
 
 .icons {
-  color: var(--color-text-primary);
+  background: transparent;
+  border: none;
+  padding: 4px;
+  cursor: pointer;
   display: flex;
+  gap: 20px;
   align-items: center;
-  gap: 30px;
+  justify-content: center;
+  transition: opacity 0.2s ease;
+
+  &:hover {
+    opacity: 0.7;
+  }
+
   svg path{
-    fill: var(--color-text-primary);
+    width: 16px;
+    height: 16px;
+    fill: var(--color-additional-red800);
   }
 }
 
@@ -131,8 +143,4 @@
   background: transparent;
   font-family: inherit;
   color: #2b2b2b;
-
-  &:focus {
-    border-bottom: 1px solid #58151C;
-  }
 }
