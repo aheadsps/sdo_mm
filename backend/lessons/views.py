@@ -480,26 +480,19 @@ class TestBlockViewSet(mixins.RetrieveModelMixin,
         """ Энд поинт отправки ответа студента на вопрос из тест блока """
         test_block = self.get_object()
         user = request.user
-        question = test_block.questions.filter(
-            type_question__in=['task', 'essay']).first()
-
-        if not question:
-            return Response(
-                {
-                    "error": "В этом тест-блоке нет вопросов типа"
-                             " task или essay"},
-                status=status.HTTP_400_BAD_REQUEST
-            )
+        question = test_block.questions.first()
 
         data = request.data.copy()
         data.pop('score', None)
         data['type_of'] = 'question'
 
+        if question and question.type_question == 'test':
+            data['check_automaty'] = True
+
         context = {
             'request': request,
             'test_block': test_block,
-            'question': question,
-            'student': user
+            'question': question
         }
 
         serializer = serializers.AssessmentSubmissionSerializer(data=data,
@@ -525,52 +518,6 @@ class TestBlockViewSet(mixins.RetrieveModelMixin,
             serializers.AssessmentSubmissionSerializer(submission).data,
             status=status.HTTP_201_CREATED
         )
-
-    @action(methods=['post'], detail=True, url_path='assessment')
-    def assessment(self, request, block_id=None):
-        """Эндпоинт для оценки задания преподавателем"""
-        test_block = self.get_object()
-        user = request.user
-
-        student_id = request.data.get('student_id')
-        if not student_id:
-            return Response(
-                {"error": "Необходимо указать студента"},
-                status=status.HTTP_400_BAD_REQUEST
-            )
-
-        try:
-            submission = models.AssessmentSubmission.objects.get(
-                test_block=test_block,
-                student_id=student_id,
-                type_of='question',
-                score__isnull=True
-            )
-        except models.AssessmentSubmission.DoesNotExist:
-            return Response(
-                {
-                    "error": "Не найдено неоцененное задание для"
-                             " указанного студента"},
-                status=status.HTTP_404_NOT_FOUND
-            )
-
-        data = request.data.copy()
-        data.update({
-            'type_of': 'answer',
-            'teacher': user.id,
-            'test_block': test_block.id,
-            'student': student_id
-        })
-
-        serializer = serializers.AssessmentSubmissionSerializer(
-            instance=submission,
-            data=data,
-            partial=True
-        )
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-
-        return Response(serializer.data, status=status.HTTP_200_OK)
 
     # @action(methods=['delete'], detail=True)
     # def reset(self, request, block_id=None):
