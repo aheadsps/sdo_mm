@@ -1,5 +1,5 @@
 import { DislikeIcon, LikeIcon } from '@assets/icons'
-import { selectEvent } from '@services/slices'
+import { selectCourse, selectEvent } from '@services/slices'
 import { useAppSelector } from '@services/store'
 import { Card, Typography, ProgressBar } from '@shared/components'
 
@@ -9,9 +9,10 @@ import s from './about-course.module.scss'
 
 export const AboutCourse = () => {
   const event = useAppSelector(selectEvent)
-  // console.log(event)
-  const course = event?.course
-  const lessons = Number(course?.lessons.length)
+  const course = useAppSelector(selectCourse)
+  console.log(event)
+  console.log(course)
+  const lessons = Number(course.lessons.length)
   return (
     <div className={s.container}>
       <Card className={s.progress}>
@@ -35,7 +36,7 @@ export const AboutCourse = () => {
           {lessons} урока
         </Typography>
         <div className={s.lessonItems}>
-          {course?.lessons.map((lesson) => {
+          {course.lessons.map((lesson) => {
             return <LessonItemCard key={lesson.id} lesson={lesson} />
           })}
           {/* <Button variant="secondary" className={s.lessonItemButton}>
@@ -49,7 +50,7 @@ export const AboutCourse = () => {
           Цель курса
         </Typography>
         <Typography variant="body_2" className={s.courseGoalDescription}>
-          {event.course.description}
+          {course.description}
         </Typography>
       </Card>
     </div>

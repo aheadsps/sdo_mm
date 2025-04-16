@@ -20,7 +20,7 @@ export const LessonCard: React.FC<Props> = ({ event }: Props) => {
   const daysLeft = getDaysLeft(event.end_date)
   const deadlineColor = getBackgroundColor(daysLeft)
   const dispatch = useAppDispatch()
-  // console.log(event)
+  console.log(event)
   const scorms = event.course.scorms
   const isScorm = Boolean(scorms.length > 0)
   const hendleClick = () => {
@@ -90,7 +90,7 @@ export const LessonCard: React.FC<Props> = ({ event }: Props) => {
           className={s.container__btn}
           children="Перейти к обучению"
           as={NavLink}
-          to={routes.course}
+          to={`${routes.course}/${event.course.id}`}
           onClick={() => hendleClick()}
         />
       </div>

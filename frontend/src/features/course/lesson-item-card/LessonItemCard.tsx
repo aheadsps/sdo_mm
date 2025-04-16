@@ -16,7 +16,7 @@ export const LessonItemCard = ({ children, lesson }: Props) => {
   console.log(lesson)
   return (
     <div className={s.lessonItemCard}>
-      <LessonItemTitle title={lesson.name} blocks="2 блока">
+      <LessonItemTitle title={lesson.name} blocks={`${lesson.serial} блок`}>
         <ArrowUpRightIcon className={s.icon} />
       </LessonItemTitle>
       <Typography variant="caption" className={s.lessonProgress}>

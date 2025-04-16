@@ -1,21 +1,31 @@
 import { routes } from '@routes/routes'
+import { useGetCourseQuery } from '@services/api'
 import {
+  selectCourse,
   selectCurrentEventId,
   selectCurrentScorms,
-  selectEvent,
   selectIsScorms,
+  setCourseById,
 } from '@services/slices'
 import { useAppDispatch, useAppSelector } from '@services/store'
 import { Button, Tabs, Typography, AiComponent, BackToPage } from '@shared/components'
 import { useToggle } from '@shared/hooks/useToggle'
+import { useEffect } from 'react'
+import { useParams } from 'react-router-dom'
 
 import s from './course.module.scss'
 import { tabsData } from './tabs/tabsData'
 
 export const Course = () => {
   const { isOpen: isOffcanvasOpen, close: closeOffcanvas, toggle: toggleOffCanvas } = useToggle()
-  // const dispatch = useAppDispatch()
-  const event = useAppSelector(selectEvent)
+  const dispatch = useAppDispatch()
+  const { id } = useParams()
+  const { data: currentCourse } = useGetCourseQuery(Number(id))
+  useEffect(() => {
+    if (currentCourse) dispatch(setCourseById(currentCourse))
+  }, [currentCourse, dispatch])
+  const course = useAppSelector(selectCourse)
+  // const event = useAppSelector(selectEvent)
   const isScorms = useAppSelector(selectIsScorms)
   const currentCourseId = useAppSelector(selectCurrentEventId)
   const currentScorms = useAppSelector(selectCurrentScorms)
@@ -42,7 +52,7 @@ export const Course = () => {
           <div className={s.titleBlock}>
             {/* separate reusable component */}
             <Typography variant="header_4" className={s.title}>
-              {event.course.name}
+              {course.name}
             </Typography>
             <div className={s.buttonsBlock}>
               <Button variant="secondary" className={s.button} onClick={toggleOffCanvas}>

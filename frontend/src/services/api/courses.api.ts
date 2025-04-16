@@ -31,4 +31,4 @@ export const coursesApi = createApi({
   }),
 })
 
-export const { useGetCoursesQuery, useGetCourseQuery } = coursesApi
+export const { useGetCoursesQuery, useGetCourseQuery, useLazyGetCoursesQuery } = coursesApi

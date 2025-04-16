@@ -57,6 +57,7 @@ export type Event = {
 export type Lesson = {
   id: number
   course: number
+  serial: number
   name: string
   steps: Step[]
   test_block: number
