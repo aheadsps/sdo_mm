@@ -5,7 +5,7 @@ import {
   selectEvent,
   selectIsScorms,
 } from '@services/slices'
-import { useAppSelector } from '@services/store'
+import { useAppDispatch, useAppSelector } from '@services/store'
 import { Button, Tabs, Typography, AiComponent, BackToPage } from '@shared/components'
 import { useToggle } from '@shared/hooks/useToggle'
 
@@ -14,10 +14,19 @@ import { tabsData } from './tabs/tabsData'
 
 export const Course = () => {
   const { isOpen: isOffcanvasOpen, close: closeOffcanvas, toggle: toggleOffCanvas } = useToggle()
+  // const dispatch = useAppDispatch()
   const event = useAppSelector(selectEvent)
   const isScorms = useAppSelector(selectIsScorms)
   const currentCourseId = useAppSelector(selectCurrentEventId)
   const currentScorms = useAppSelector(selectCurrentScorms)
+  // if (isScorms) const [getScormById] = useLazyGetScormByIdQuery(currentScorms[0])
+  // useEffect(() => {
+  //   getScormById()
+  //     .unwrap()
+  //     .then((res) => dispatch(setScormById(res.results)))
+  //     .catch((error) => handleError(error))
+  //     .finally(() => setisLoading(false))
+  // }, [getScormById, dispatch])
   const currentId = isScorms ? currentScorms : currentCourseId
   console.log(isScorms, currentId)
   return (

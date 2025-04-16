@@ -31,32 +31,44 @@ export type EventsResponse = {
   previous: null
   results: Event[]
 }
-
+export type LessonsResponse = [
+  {
+    id: number
+    name: string
+    serial: number
+    start_date: string
+    started: boolean
+    course: number
+    steps: Step[]
+    test_block: number
+  },
+]
 export type Event = {
+  id: number
   course: Course
   done_lessons: number
   end_date: string
   favorite: boolean
-  id: number
   start_date: string
   status: string
   user: number
 }
 
 export type Lesson = {
-  course: number
   id: number
+  course: number
   name: string
   steps: Step[]
   test_block: number
 }
 
 export type Step = {
-  attachments: number[]
+  id: number
+  title: string
   content_text: string
   lesson: number
   serial: number
-  title: string
+  attachments: number[]
 }
 
 // Admin
@@ -102,16 +114,19 @@ export type Course = {
 export type Scorm = {
   id: number
   name: string
+  course: number
   version: string
-  // - SCORM 1.0
-  // - SCORM 1.1
-  // - SCORM 1.2
-  // - 2004 1st Edition
-  // - 2004 2nd Edition
-  // - 2004 3rd Edition
-  // - 2004 4th Edition
-  index: string
+  resource: string
 }
+
+// - SCORM 1.0
+// - SCORM 1.1
+// - SCORM 1.2
+// - 2004 1st Edition
+// - 2004 2nd Edition
+// - 2004 3rd Edition
+// - 2004 4th Edition
+
 // export type Lesson = {
 //   course: number
 //   id: number
