@@ -237,6 +237,7 @@ class CourseViewSet(mixins.ListModelMixin,
 
     def list(self, request, *args, **kwargs):
         self.check_object_permissions(request=request, obj=None)
+        self.queryset = self.queryset.filter(teacher=self.request.user)
         return super().list(request, *args, **kwargs)
 
     @action(detail=True, methods=['POST'], url_path='upload-materials')
