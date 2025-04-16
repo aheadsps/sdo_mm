@@ -68,7 +68,7 @@ export const CMenu = ({
         <Typography variant="caption" className={s.title}>
           Структура курса
         </Typography>
-        <AddCard children={'Добавить модуль'} onClick={addNewItemModule} />
+        <AddCard children={'Добавить блок'} onClick={addNewItemModule} />
       </div>
     </aside>
   )
