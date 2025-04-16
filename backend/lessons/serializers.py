@@ -217,6 +217,10 @@ class AssessmentSubmissionSerializer(serializers.ModelSerializer):
                   "files",
                   "date_assessment",
                   )
+        validators = (
+            validators.TaskEssayQuestionValidator(),
+            validators.NoAnswerForTaskEssayValidator('answer'),
+        )
 
 
 class StepSerializer(serializers.ModelSerializer):
