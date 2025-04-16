@@ -1,8 +1,7 @@
+import { SendIcon } from '@assets/icons'
 import { Button } from '@shared/components/button'
 import { InputWithIcon } from '@shared/components/input-with-icon'
 // import { useToggle } from '@shared/hooks'
-
-import { SendIcon } from '@assets/icons'
 
 import s from './addComment.module.scss'
 import { Comment } from './comment'
