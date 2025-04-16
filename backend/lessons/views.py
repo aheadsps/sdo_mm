@@ -1,5 +1,6 @@
 import datetime
 import math
+from django.db import transaction
 from loguru import logger
 
 from django.utils import timezone
@@ -460,6 +461,50 @@ class TestBlockViewSet(mixins.RetrieveModelMixin,
         else:
             serializer_class = serializers.TestBlockSerializersOptimize
         return serializer_class
+
+    @action(methods=['post'], detail=True, url_path='submission')
+    def submission(self, request, block_id=None):
+        """ Энд поинт отправки ответа студента на вопрос из тест блока """
+        test_block = self.get_object()
+        user = request.user
+        question = test_block.questions.first()
+
+        data = request.data.copy()
+        data.pop('score', None)
+        data['type_of'] = 'question'
+
+        if question and question.type_question == 'test':
+            data['check_automaty'] = True
+
+        context = {
+            'request': request,
+            'test_block': test_block,
+            'question': question
+        }
+
+        serializer = serializers.AssessmentSubmissionSerializer(data=data,
+                                                                context=context
+                                                                )
+        serializer.is_valid(raise_exception=True)
+
+        with transaction.atomic():
+            submission = serializer.save(
+                test_block=test_block,
+                student=user,
+                teacher=None
+            )
+
+            if 'answer' in data:
+                models.UserStory.objects.create(
+                    user=user,
+                    answer_id=data['answer'],
+                    test_block=test_block
+                )
+
+        return Response(
+            serializers.AssessmentSubmissionSerializer(submission).data,
+            status=status.HTTP_201_CREATED
+        )
 
     # @action(methods=['delete'], detail=True)
     # def reset(self, request, block_id=None):
