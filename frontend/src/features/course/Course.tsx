@@ -4,7 +4,6 @@ import {
   selectCourse,
   selectCurrentEventId,
   selectCurrentScorms,
-  selectIsScorms,
   setCourseById,
 } from '@services/slices'
 import { useAppDispatch, useAppSelector } from '@services/store'
@@ -26,7 +25,7 @@ export const Course = () => {
   }, [currentCourse, dispatch])
   const course = useAppSelector(selectCourse)
   // const event = useAppSelector(selectEvent)
-  const isScorms = useAppSelector(selectIsScorms)
+  const isScorms = Boolean(course.scorms.length > 0)
   const currentCourseId = useAppSelector(selectCurrentEventId)
   const currentScorms = useAppSelector(selectCurrentScorms)
   // if (isScorms) const [getScormById] = useLazyGetScormByIdQuery(currentScorms[0])
@@ -42,6 +41,20 @@ export const Course = () => {
   return (
     <div className={s.courseContent}>
       <BackToPage to={routes.learning}>Вернуться к выбору курса</BackToPage>
+      <div className={s.titleBlock}>
+        {/* separate reusable component */}
+        <Typography variant="header_4" className={s.title}>
+          {course.name}
+        </Typography>
+        <div className={s.buttonsBlock}>
+          <Button variant="secondary" className={s.button} onClick={toggleOffCanvas}>
+            ИИ
+          </Button>
+          <Button variant="primary" className={s.button}>
+            Обсуждение урока
+          </Button>
+        </div>
+      </div>
       {isScorms ? (
         <iframe
           className={s.scorms}
@@ -49,20 +62,6 @@ export const Course = () => {
         ></iframe>
       ) : (
         <>
-          <div className={s.titleBlock}>
-            {/* separate reusable component */}
-            <Typography variant="header_4" className={s.title}>
-              {course.name}
-            </Typography>
-            <div className={s.buttonsBlock}>
-              <Button variant="secondary" className={s.button} onClick={toggleOffCanvas}>
-                ИИ
-              </Button>
-              <Button variant="primary" className={s.button}>
-                Обсуждение урока
-              </Button>
-            </div>
-          </div>
           <Tabs tabs={tabsData} variant="secondary" />
           <AiComponent isOpen={isOffcanvasOpen} close={closeOffcanvas} />
         </>
