@@ -1,13 +1,14 @@
 import datetime
 
 from django.core.exceptions import ValidationError
+from django.db.models import Q
 from django.utils import timezone
 
 from loguru import logger
 
 from lessons import exceptions
 from lessons.utils import get_value, tigger_to_check
-from lessons.models import SCORM, Lesson
+from lessons.models import SCORM, Lesson, Question
 
 
 class TimeValidator:
@@ -23,9 +24,9 @@ class TimeValidator:
         self.error_detail = dict()
 
     def _check_up_time(
-        self,
-        start_date: datetime.datetime,
-        end_date: datetime.datetime,
+            self,
+            start_date: datetime.datetime,
+            end_date: datetime.datetime,
     ) -> None:
         """
         Проверка корректности временых рамок
@@ -38,14 +39,17 @@ class TimeValidator:
             exceptions.UnprocessableEntityError: Исключение в случае не соотвествия
         """
         time_now = timezone.now()
-        logger.debug(f'dates in validator \nstart_date:{start_date} \nend_date: {end_date} \ntime_now: {time_now}')
+        logger.debug(
+            f'dates in validator \nstart_date:{start_date} \nend_date: {end_date} \ntime_now: {time_now}')
         if start_date and (time_now > start_date):
-            logger.debug(f'enter to error start_date {start_date and (time_now > start_date)}')
+            logger.debug(
+                f'enter to error start_date {start_date and (time_now > start_date)}')
             self.error_detail.update(
                 dict(start_date="Не может быть указано задним числом")
             )
         if end_date and (time_now > end_date):
-            logger.debug(f'enter to error end_date {end_date and (time_now > end_date)}')
+            logger.debug(
+                f'enter to error end_date {end_date and (time_now > end_date)}')
             self.error_detail.update(
                 dict(end_date="Не может быть указано задним числом")
             )
@@ -85,8 +89,8 @@ class CourseScormValidator:
         self.error_detail = dict()
 
     def _check_scorm_pass(
-        self,
-        instance
+            self,
+            instance
     ) -> None:
         """
         Проверка возможности присвоения SCORM пакета
@@ -124,8 +128,8 @@ class SCORMUniqueValidator:
         self.error_detail = dict()
 
     def _check_scorm_pass(
-        self,
-        name,
+            self,
+            name,
     ) -> None:
         """
         Проверка возможности присвоения SCORM пакета
@@ -162,8 +166,8 @@ class LessonScormValidator:
         self.error_detail = dict()
 
     def _check_scorm_pass(
-        self,
-        course,
+            self,
+            course,
     ) -> None:
         """
         Проверка возможности присвоения SCORM пакета
@@ -226,4 +230,57 @@ class QuestionTypeValidator:
             raise exceptions.UnprocessableEntityError({
                 self.field: "Ответы можно прикреплять только к"
                             " вопросам типа 'test'"
+            })
+
+
+class TaskEssayQuestionValidator:
+    """
+    Проверяет что в блоке не более 1 вопроса типа task/essay.
+    Нельзя добавить task/essay вопрос к блоку с таким вопросом
+    """
+    requires_context = True
+
+    def __init__(self, test_block_field, question_type_field):
+        self.test_block_field = test_block_field
+        self.question_type_field = question_type_field
+
+    def __call__(self, attrs, serializer):
+        test_block = attrs.get(self.test_block_field)
+        question_type = attrs.get(self.question_type_field)
+
+        if not test_block or not question_type:
+            return
+
+        if question_type in ['task', 'essay']:
+            exists = Question.objects.filter(
+                Q(test_block=test_block) &
+                Q(type_question__in=['task', 'essay'])
+            ).exists()
+
+            if exists:
+                raise exceptions.ValidationError({
+                    self.question_type_field:
+                        "TestBlock может содержать только один вопрос типа"
+                        " task или essay"
+                })
+
+
+class NoAnswerForTaskEssayValidator:
+    """
+    Проверяет что для вопросов типа task/essay нельзя прикреплять ответы
+    """
+    requires_context = True
+
+    def __init__(self, answer_field):
+        self.answer_field = answer_field
+
+    def __call__(self, attrs, serializer):
+        if self.answer_field not in attrs:
+            return
+
+        question = serializer.context.get('question')
+        if question and question.type_question in ['task', 'essay']:
+            raise exceptions.ValidationError({
+                self.answer_field: "Нельзя прикреплять ответы к вопросам"
+                                   " типа task или essay"
             })
