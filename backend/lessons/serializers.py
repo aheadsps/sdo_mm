@@ -681,6 +681,23 @@ class EventCoveredSerializer(serializers.ModelSerializer):
         )
 
 
+class EventCoveredViewSerializer(serializers.ModelSerializer):
+    """
+    Сериализатор покрытия эвентами упрощенный
+    """
+    user = user_serializers.UserSerializer(read_only=True)
+
+    class Meta:
+        model = models.EventCovered
+        fields = (
+            "user",
+            "event",
+            "favorite",
+            "procent",
+            "status",
+        )
+
+
 class EventCoveredCreateSerializer(serializers.ModelSerializer):
     """
     Сериализатор создания покрытия эвентами

@@ -73,6 +73,21 @@ class CanReadCourse(permissions.BasePermission):
         return event.exists()
 
 
+class CurrentTeacher(permissions.BasePermission):
+    """
+    Права доступа текущего учителя
+    """
+    message = {
+        'forbidden': 'Данный материал не доступен',
+    }
+    code = status.HTTP_403_FORBIDDEN
+
+    def has_object_permission(self, request, view, course):
+        if not course:
+            return
+        return course.teacher == request.user
+
+
 class CanReadLesson(permissions.BasePermission):
     """
     Права доступа на чтение урока

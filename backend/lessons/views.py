@@ -25,6 +25,7 @@ from lessons.permissions import (
     CanReadLessonStory,
     CanReadSCORM,
     InCover,
+    CurrentTeacher,
     )
 from users.models import WorkExperience
 
@@ -209,6 +210,9 @@ class CourseViewSet(mixins.ListModelMixin,
                 permissions.IsAuthenticated &
                 (CanReadCourse | IsAdminOrIsStaff)
             ]
+        elif self.action in ['partial_update', 'delete', 'retrieve', 'users']:
+            permission_classes = [permissions.IsAuthenticated &
+                                  (CurrentTeacher | permissions.IsAdminUser)]
         else:
             permission_classes = [permissions.IsAuthenticated &
                                   IsAdminOrIsStaff]
@@ -237,7 +241,9 @@ class CourseViewSet(mixins.ListModelMixin,
 
     def list(self, request, *args, **kwargs):
         self.check_object_permissions(request=request, obj=None)
-        self.queryset = self.queryset.filter(teacher=self.request.user)
+        user = request.user
+        if not user.is_superuser:
+            self.queryset = self.queryset.filter(teacher=self.request.user)
         return super().list(request, *args, **kwargs)
 
     @action(detail=True, methods=['POST'], url_path='upload-materials')
@@ -255,6 +261,13 @@ class CourseViewSet(mixins.ListModelMixin,
         serializer.save()
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+    @action(detail=True)
+    def users(self, request, course_id=None):
+        self.serializer_class = serializers.EventCoveredViewSerializer
+        users = models.EventCovered._default_manager.filter(event__course_id=course_id).select_related('user')
+        serializer = self.get_serializer(users, many=True)
+        return Response(serializer.data)
 
 
 # @method_decorator(queries_counter, name='dispatch')
