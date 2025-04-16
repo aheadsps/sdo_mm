@@ -186,6 +186,13 @@ class SCORM(models.Model):
                                null=True,
                                blank=True,
                                )
+    serial = models.IntegerField(_("Номер"),
+                                 null=False,
+                                 blank=False,
+                                 validators=[MinValueValidator(1)],
+                                 default=1,
+                                 help_text="Порядковый номер урока"
+                                 )
     started = models.BooleanField(_("флаг начатого"),
                                   default=False,
                                   )

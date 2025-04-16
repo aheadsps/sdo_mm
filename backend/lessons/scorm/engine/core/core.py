@@ -165,6 +165,7 @@ class CoreSCORM(BaseCoreSCORM):
                                root: ET.Element,
                                data: dict | None = None,
                                path: os.PathLike | None = None,
+                               serial: int = 0
                                ) -> (list[tuple[str, str],
                                           (list[tuple[str, str]] | None)]):
         sub_titles = list()
@@ -190,6 +191,7 @@ class CoreSCORM(BaseCoreSCORM):
             logger.debug(f'add to structure list item - {title, resource_link}')
             SCORM._default_manager.create(**data,
                                           name=title,
+                                          serial=serial,
                                           resourse='/' + str(path.joinpath(resource_link)),
                                           )
             return [dict(title=title,
@@ -205,6 +207,7 @@ class CoreSCORM(BaseCoreSCORM):
                     root=root,
                     data=data,
                     path=path,
+                    serial=serial + 1
                 ))
             return [dict(title=title,
                          resource=resource_link,
