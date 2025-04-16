@@ -62,10 +62,10 @@ class EventViewSet(own_viewsets.GetCreateUpdateDeleteViewSet):
         instance = serializer.save()
         # Создаем CeleryTask на изменение статуса
         TaskManager(instance.pk,
-                    instance.course,
+                    instance.course.pk,
                     instance.start_date,
                     instance.end_date
-                    ).create()
+                    ).create_for_event()
 
 
     def update(self, request, *args, **kwargs):

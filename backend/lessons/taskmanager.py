@@ -12,24 +12,24 @@ from lessons import tasks
 
 class TaskManager:
     """
-    Вместе с создание Эвента
-    составление clocked_time задачи
-    по переводу евента в статус "в процессе"
-    и обратному переводу в статусы завершения
+    Вызывается с созданием объекта
+    Вызывает задачу по времени clocked_time
+    для переданного ID
     Получает данные:
-    id-course: int,
+    id объекта: int
+    номер для идентификации задачи: int
     дата-тайм начала (может null),
     дата-тайм финиша (может null)
     """
     def __init__(
         self,
-        event_pk = None,
-        course = None,
+        event_pk: int = None,
+        number_task: int = None,
         data_start: str = None,
         data_end: str = None,
     ):
         self.event_pk = event_pk
-        self.course = course
+        self.number_task = number_task
         self.data_start = data_start
         self.data_end = data_end
 
@@ -103,9 +103,11 @@ class TaskManager:
         """
         Запросы на установку задач по изменению статуса евента
         """
-        task = "lessons.tasks.update_status_events"
+        task = kwargs.get('task')
         kwargs_for_task: dict = {
-            "pk": kwargs['pk']
+            "pk": kwargs['pk'],
+            'start_date': kwargs['start_date'],
+            'end_date': kwargs['end_date']
         }
         if self.schedule_start:
             clocked = self.schedule_start
@@ -119,19 +121,12 @@ class TaskManager:
             self._add_task_update(clocked, name, task, kwargs_for_task)
 
 
-    def create(self):
+    def create(self, kwargs):
         """
         Создать эвент. Создать задачи
         start_event на перевод по дате эвента в текущий и
         end_event его завершение
         """
-        kwargs = {
-            "course_id": self.course.pk,
-            "end_date": TaskManager.date_str(self.data_end),
-            "start_date": TaskManager.date_str(self.data_start),
-            "pk": self.event_pk,
-        }
-
         # если есть шедулера
         # ставим задачу на установку статуса на process
         # и задачу на установку статуса завершения
@@ -142,6 +137,7 @@ class TaskManager:
             # ставим задачу на отправку писем
             tasks.send_mail_users.delay(**kwargs)
 
+
     def update(self):
         kwargs = {
             "end_date": TaskManager.date_str(self.data_end),
@@ -149,3 +145,14 @@ class TaskManager:
             "pk": self.event_pk,
         }
         self._task_update_status_event(kwargs)
+
+
+    def create_for_event(self):
+        kwargs = {
+            "course_id": self.number_task,
+            "end_date": TaskManager.date_str(self.data_end),
+            "start_date": TaskManager.date_str(self.data_start),
+            "pk": self.event_pk,
+            "task": "lessons.tasks.update_status_events"
+        }
+        self.create(kwargs)
