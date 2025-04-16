@@ -2,7 +2,6 @@ import { AddItemIcon, BasketIcon, CopyIcon } from '@assets/icons'
 import { NewItem } from '@services/slices/constructor/constructor.types'
 import { DropdownCard } from '@shared/components'
 import { ConstructorContent } from '@shared/components/constructorContent'
-import { AddTest } from '@shared/components/constructorMenu/addTest/AddTest'
 import { ChangeEvent, useState } from 'react'
 
 import s from './block-dropdown.module.scss'
@@ -32,13 +31,13 @@ export const BlockDropdown = ({
     return newItems.map((item) => {
       switch (item.type) {
         case 'text':
-          return <ConstructorContent key={item.id} type="text" itemId={item.id} />
+          return <ConstructorContent key={item.id} type="text" itemId={item.id as number} />
         case 'video':
-          return <ConstructorContent key={item.id} type="video" itemId={item.id} />
+          return <ConstructorContent key={item.id} type="video" itemId={item.id as number} />
         case 'image':
-          return <ConstructorContent key={item.id} type="image" itemId={item.id} />
+          return <ConstructorContent key={item.id} type="image" itemId={item.id as number} />
         case 'test':
-          return <AddTest key={item.id} />
+          return <ConstructorContent key={item.id} type="test" itemId={item.id as number} />
         default:
           return null
       }
@@ -54,7 +53,10 @@ export const BlockDropdown = ({
   return (
     <DropdownCard
       title={title || ''}
-      icons={[<CopyIcon height={'12px'} width={'12px'} />, <BasketIcon onClick={deleteBlock} />]}
+      icons={[
+        <CopyIcon height={'16px'} width={'16px'} />,
+        <BasketIcon height={'16px'} width={'16px'} onClick={deleteBlock} />,
+      ]}
       wrapperClassName={s.dropdownHeader}
       className={s.dropdownContent}
       isOpen={isActiveBlock}

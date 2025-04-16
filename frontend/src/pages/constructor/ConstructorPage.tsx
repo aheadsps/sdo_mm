@@ -36,7 +36,6 @@ const lessonBlocks: LessonBlock[] = [
 ]
 
 export const ConstructorPage: React.FC = () => {
-  /* const [activeBlockId, setActiveBlockId] = useState<number | null>(1) */
   const [isSidebarPointed, setIsSidebarPointed] = useState(false)
   const activeBlockId = useAppSelector(selectActiveBlockId)
 
@@ -50,10 +49,6 @@ export const ConstructorPage: React.FC = () => {
   const [lastBlockId, setLastBlockId] = useState<number | null>(
     lessonBlocks[lessonBlocks.length - 1].id
   )
-
-  /* const onBlockActive = (id: number) => {
-    setActiveBlockId((prevId) => (prevId === id ? null : id))
-  } */
 
   const onBlockActive = (blockId: number) => {
     dispatch(setActiveBlockId({ blockId }))
@@ -71,8 +66,6 @@ export const ConstructorPage: React.FC = () => {
   const onDeleteBlock = (blockId: number) => {
     dispatch(deleteBlockItem({ blockId }))
   }
-
-  console.log(blocks[0]?.blockItems)
 
   return (
     <>

@@ -8,12 +8,13 @@ import React, { useRef } from 'react'
 
 import { Card } from '../card'
 import { ConstructorCard } from '../constructorCard'
+import { AddTest } from '../constructorMenu/addTest/AddTest'
 import { Input, Textarea } from '../text-field'
 
 import s from './constructorContent.module.scss'
 
 interface Props {
-  type: 'video' | 'text' | 'image'
+  type: 'video' | 'text' | 'image' | 'test'
   media?: string
   title?: string
   description?: string
@@ -77,11 +78,11 @@ export const ConstructorContent: React.FC<Props> = ({ type, itemId }) => {
             <div className={s.inputIconBlock}>
               <Input placeholder="Заголовок" className={s.input} />
               <div className={s.icons}>
-                <PictureIcon width={'12px'} height={'12px'} />
-                <PaintIcon width={'12px'} height={'12px'} />
-                <CopyIcon width={'12px'} height={'12px'} />
-                <BasketIcon width={'12px'} height={'12px'} onClick={onDeleteItem} />
-                <DragIcon width={'12px'} height={'12px'} />
+                <PictureIcon width={'16px'} height={'16px'} />
+                <PaintIcon width={'16px'} height={'16px'} />
+                <CopyIcon width={'16px'} height={'16px'} />
+                <BasketIcon width={'16px'} height={'16px'} onClick={onDeleteItem} />
+                <DragIcon width={'16px'} height={'16px'} />
               </div>
             </div>
             <Textarea className={s.textarea} placeholder="Описание (не обязательно) " />
@@ -126,6 +127,12 @@ export const ConstructorContent: React.FC<Props> = ({ type, itemId }) => {
                 className={s.fileInput}
               />
             </div>
+          </ConstructorCard>
+        )}
+
+        {type === 'test' && (
+          <ConstructorCard deleteItem={onDeleteItem}>
+            <AddTest />
           </ConstructorCard>
         )}
       </div>
