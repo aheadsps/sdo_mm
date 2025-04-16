@@ -1,9 +1,12 @@
+import { BasketIcon, CopyIcon, DragIcon, PaintIcon } from '@assets/icons'
 import PictureIcon from '@assets/icons/PictureIcon'
 import VideoIcon from '@assets/icons/VideoIcon'
 import { Typography } from '@shared/components/typography'
 import React, { useRef } from 'react'
 
+import { Card } from '../card'
 import { ConstructorCard } from '../constructorCard'
+import { Input, Textarea } from '../text-field'
 
 import s from './constructorContent.module.scss'
 
@@ -61,16 +64,19 @@ export const ConstructorContent: React.FC<Props> = ({ type }) => {
           </ConstructorCard>
         )}
         {type === 'text' && (
-          <div className={s.textBlock}>
-            <label className={s.label}>Введите текст</label>
-            <textarea
-              className={s.textarea}
-              placeholder="Например: Введение в технику безопасности"
-            />
-            <Typography variant="caption" className={s.caption}>
-              Вы можете использовать Enter, чтобы делать абзацы.
-            </Typography>
-          </div>
+          <Card className={s.textBlock}>
+            <div className={s.inputIconBlock}>
+              <Input placeholder="Заголовок" className={s.input} />
+              <div className={s.icons}>
+                <PictureIcon width={'12px'} height={'12px'} />
+                <PaintIcon width={'12px'} height={'12px'} />
+                <CopyIcon width={'12px'} height={'12px'} />
+                <BasketIcon width={'12px'} height={'12px'} />
+                <DragIcon width={'12px'} height={'12px'} />
+              </div>
+            </div>
+            <Textarea className={s.textarea} placeholder="Описание (не обязательно) " />
+          </Card>
         )}
 
         {type === 'image' && (

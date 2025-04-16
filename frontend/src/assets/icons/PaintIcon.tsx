@@ -1,22 +1,21 @@
 import { forwardRef, Ref, SVGProps } from 'react'
 
-const Basket = forwardRef<SVGSVGElement, SVGProps<SVGSVGElement>>(
+const PaintIcon = forwardRef<SVGSVGElement, SVGProps<SVGSVGElement>>(
   (props, ref: Ref<SVGSVGElement>) => (
     <svg
       width="12"
       height="10"
       viewBox="0 0 12 10"
-      fill="none"
       xmlns="http://www.w3.org/2000/svg"
       {...props}
       ref={ref}
     >
       <path
         d="M9.95088 6.38695C9.90105 6.42215 8.86755 7.51524 8.86755 8.28278C8.86755 9.09203 9.38159 9.60878 9.95088 9.63694C10.4416 9.66078 11.0342 9.15432 11.0342 8.28278C11.0342 7.47028 10.0007 6.42215 9.95088 6.38695ZM0.966797 5.84528C0.966797 6.13453 1.07946 6.40645 1.28421 6.6112L4.30996 9.63694C4.51471 9.84169 4.78663 9.95436 5.07588 9.95436C5.36513 9.95436 5.63705 9.84169 5.8418 9.63694L9.63346 5.84528L9.25051 5.46232L5.07588 1.2877L3.83384 0.0456543L3.06792 0.811571L4.30996 2.05361L1.28421 5.07936C1.07946 5.28411 0.966797 5.55603 0.966797 5.84528ZM5.07588 2.81953L8.10163 5.84528L5.07588 8.87103H5.07642L5.07588 9.41269V8.87103L2.05013 5.84528L5.07588 2.81953Z"
-        fill="#58151C"
+        fill="currentColor"
       />
     </svg>
   )
 )
 
-export default Basket
+export default PaintIcon

@@ -95,19 +95,38 @@
   gap: 8px;
 }
 
-.label {
-  font-size: 14px;
-  color: #58151C;
-  font-weight: 500;
+.inputIconBlock {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.input {
+  border: none;
+  margin-top: 0;
+
+  &::placeholder {
+    font-weight: var(--font-weight-light);
+    font-size: var(--font-size-s);
+  }
+}
+
+.icons {
+  color: var(--color-text-primary);
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  svg path{
+    fill: var(--color-text-primary);
+  }
 }
 
 .textarea {
   min-height: 120px;
   border: none;
   width: 100%;
-  padding: 12px 0;
   font-size: 16px;
-  resize: vertical;
+  resize: none;
   outline: none;
   background: transparent;
   font-family: inherit;
