@@ -6,10 +6,12 @@ import { NewItem } from './constructor.types'
 
 type InitialState = {
   lessonBlocks: LessonBlock[]
+  activeBlockId: number
 }
 
 const initialState: InitialState = {
   lessonBlocks: [],
+  activeBlockId: 1,
 }
 
 export const constructorSlice = createSlice({
@@ -31,12 +33,36 @@ export const constructorSlice = createSlice({
     deleteBlockItem: (state, action: PayloadAction<{ blockId: number }>) => {
       state.lessonBlocks = state.lessonBlocks.filter((block) => block.id !== action.payload.blockId)
     },
+
+    setActiveBlockId: (state, action: PayloadAction<{ blockId: number }>) => {
+      state.activeBlockId = action.payload.blockId
+    },
+    deleteItem: (state, action: PayloadAction<{ itemId: number; activeBlockId: number }>) => {
+      const { itemId, activeBlockId } = action.payload
+
+      state.lessonBlocks = state.lessonBlocks.map((block) => {
+        if (block.id !== activeBlockId) return block
+
+        return {
+          ...block,
+          blockItems: block.blockItems.filter((item) => item.id !== itemId),
+        }
+      })
+    },
   },
   selectors: {
     selectBlocks: (sliceState) => sliceState.lessonBlocks,
+    selectActiveBlockId: (sliceState) => sliceState.activeBlockId,
   },
 })
 
-export const { setBlocks, addNewBlock, addNewBlockItem, deleteBlockItem } = constructorSlice.actions
-export const { selectBlocks } = constructorSlice.selectors
+export const {
+  setBlocks,
+  addNewBlock,
+  addNewBlockItem,
+  deleteBlockItem,
+  setActiveBlockId,
+  deleteItem,
+} = constructorSlice.actions
+export const { selectBlocks, selectActiveBlockId } = constructorSlice.selectors
 export const constructorSliceReducer = constructorSlice.reducer

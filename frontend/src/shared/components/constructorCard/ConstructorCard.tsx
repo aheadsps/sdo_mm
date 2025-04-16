@@ -8,14 +8,15 @@ import s from './constructorCard.module.scss'
 
 interface Props {
   children: React.ReactNode
+  deleteItem: () => void
 }
 
-export const ConstructorCard: React.FC<Props> = ({ children }) => {
+export const ConstructorCard: React.FC<Props> = ({ children, deleteItem }) => {
   return (
     <Card className={s.wrapper}>
       <div className={s.inputBlock}>
         <Input placeholder="Описание (не обязательно)" />
-        <CardActionsBar />
+        <CardActionsBar deleteItem={deleteItem} />
       </div>
       {children}
     </Card>

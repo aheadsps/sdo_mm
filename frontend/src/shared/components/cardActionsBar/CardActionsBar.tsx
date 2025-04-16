@@ -10,9 +10,10 @@ import s from './cardActionsBar.module.scss'
 
 interface Props {
   description?: string
+  deleteItem: () => void
 }
 
-export const CardActionsBar: React.FC<Props> = ({ description }) => {
+export const CardActionsBar: React.FC<Props> = ({ description, deleteItem }) => {
   return (
     <div className={s.bar}>
       <div className={s.desc}>
@@ -30,7 +31,7 @@ export const CardActionsBar: React.FC<Props> = ({ description }) => {
         <button className={s.btn} title="Дублировать">
           <DoubleIcon />
         </button>
-        <button className={s.btn} title="Удалить">
+        <button className={s.btn} title="Удалить" onClick={deleteItem}>
           <DeleteIcon />
         </button>
         <button className={s.btn} title="Перетащить">

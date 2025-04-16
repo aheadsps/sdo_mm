@@ -1,6 +1,8 @@
 import { BasketIcon, CopyIcon, DragIcon, PaintIcon } from '@assets/icons'
 import PictureIcon from '@assets/icons/PictureIcon'
 import VideoIcon from '@assets/icons/VideoIcon'
+import { selectActiveBlockId, deleteItem } from '@services/slices/constructor/constructorSlice'
+import { useAppDispatch, useAppSelector } from '@services/store'
 import { Typography } from '@shared/components/typography'
 import React, { useRef } from 'react'
 
@@ -15,16 +17,23 @@ interface Props {
   media?: string
   title?: string
   description?: string
+  itemId: number
 }
 
-export const ConstructorContent: React.FC<Props> = ({ type }) => {
+export const ConstructorContent: React.FC<Props> = ({ type, itemId }) => {
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const activeBlockId = useAppSelector(selectActiveBlockId)
+  const dispatch = useAppDispatch()
+
+  const onDeleteItem = () => {
+    dispatch(deleteItem({ itemId, activeBlockId }))
+  }
 
   return (
     <div className={s.wrapper}>
       <div className={s.block}>
         {type === 'video' && (
-          <ConstructorCard>
+          <ConstructorCard deleteItem={onDeleteItem}>
             <div className={s.mediaBlock}>
               <div className={s.clickZone} onClick={() => fileInputRef.current?.click()}>
                 <div className={s.iconCircle}>
@@ -71,7 +80,7 @@ export const ConstructorContent: React.FC<Props> = ({ type }) => {
                 <PictureIcon width={'12px'} height={'12px'} />
                 <PaintIcon width={'12px'} height={'12px'} />
                 <CopyIcon width={'12px'} height={'12px'} />
-                <BasketIcon width={'12px'} height={'12px'} />
+                <BasketIcon width={'12px'} height={'12px'} onClick={onDeleteItem} />
                 <DragIcon width={'12px'} height={'12px'} />
               </div>
             </div>
@@ -80,7 +89,7 @@ export const ConstructorContent: React.FC<Props> = ({ type }) => {
         )}
 
         {type === 'image' && (
-          <ConstructorCard>
+          <ConstructorCard deleteItem={onDeleteItem}>
             <div className={s.mediaBlock}>
               <div className={s.clickZone} onClick={() => fileInputRef.current?.click()}>
                 <div className={s.iconCircle}>

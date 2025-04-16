@@ -6,6 +6,8 @@ import {
   deleteBlockItem,
   selectBlocks,
   setBlocks,
+  setActiveBlockId,
+  selectActiveBlockId,
 } from '@services/slices/constructor/constructorSlice'
 import { useAppDispatch, useAppSelector } from '@services/store'
 import { CMenu, Title } from '@shared/components'
@@ -34,8 +36,9 @@ const lessonBlocks: LessonBlock[] = [
 ]
 
 export const ConstructorPage: React.FC = () => {
-  const [activeBlockId, setActiveBlockId] = useState<number | null>(1)
+  /* const [activeBlockId, setActiveBlockId] = useState<number | null>(1) */
   const [isSidebarPointed, setIsSidebarPointed] = useState(false)
+  const activeBlockId = useAppSelector(selectActiveBlockId)
 
   const dispatch = useAppDispatch()
 
@@ -48,8 +51,12 @@ export const ConstructorPage: React.FC = () => {
     lessonBlocks[lessonBlocks.length - 1].id
   )
 
-  const onBlockActive = (id: number) => {
+  /* const onBlockActive = (id: number) => {
     setActiveBlockId((prevId) => (prevId === id ? null : id))
+  } */
+
+  const onBlockActive = (blockId: number) => {
+    dispatch(setActiveBlockId({ blockId }))
   }
 
   const onAddNewItem = (newItem: NewItem) => {
@@ -64,6 +71,8 @@ export const ConstructorPage: React.FC = () => {
   const onDeleteBlock = (blockId: number) => {
     dispatch(deleteBlockItem({ blockId }))
   }
+
+  console.log(blocks[0]?.blockItems)
 
   return (
     <>
@@ -81,7 +90,6 @@ export const ConstructorPage: React.FC = () => {
             <CMenu
               setNewItem={onAddNewItem}
               isSidebarPointed={isSidebarPointed}
-              setActiveBlockId={setActiveBlockId}
               lastBlockId={lastBlockId}
               setLastBlockId={setLastBlockId}
             />

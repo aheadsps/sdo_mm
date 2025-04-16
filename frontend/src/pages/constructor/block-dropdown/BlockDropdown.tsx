@@ -32,11 +32,11 @@ export const BlockDropdown = ({
     return newItems.map((item) => {
       switch (item.type) {
         case 'text':
-          return <ConstructorContent key={item.id} type="text" />
+          return <ConstructorContent key={item.id} type="text" itemId={item.id} />
         case 'video':
-          return <ConstructorContent key={item.id} type="video" />
+          return <ConstructorContent key={item.id} type="video" itemId={item.id} />
         case 'image':
-          return <ConstructorContent key={item.id} type="image" />
+          return <ConstructorContent key={item.id} type="image" itemId={item.id} />
         case 'test':
           return <AddTest key={item.id} />
         default:

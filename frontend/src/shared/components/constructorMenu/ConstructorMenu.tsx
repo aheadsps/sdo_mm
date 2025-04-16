@@ -1,5 +1,5 @@
 import { AddedMaterial, LessonBlock, NewItem } from '@services/slices/constructor/constructor.types'
-import { addNewBlock } from '@services/slices/constructor/constructorSlice'
+import { addNewBlock, setActiveBlockId } from '@services/slices/constructor/constructorSlice'
 import { useAppDispatch } from '@services/store'
 import { Typography } from '@shared/components'
 import clsx from 'clsx'
@@ -11,18 +11,11 @@ import s from './constructorMenu.module.scss'
 type Props = {
   setNewItem: (newItem: NewItem) => void
   isSidebarPointed: boolean
-  setActiveBlockId: (activeBlockId: number | null) => void
   lastBlockId: number | null
   setLastBlockId: (value: number) => void
 }
 
-export const CMenu = ({
-  setNewItem,
-  isSidebarPointed,
-  setActiveBlockId,
-  lastBlockId,
-  setLastBlockId,
-}: Props) => {
+export const CMenu = ({ setNewItem, isSidebarPointed, lastBlockId, setLastBlockId }: Props) => {
   const [addedItemId, setAddedItemId] = useState<number>(0)
   const dispatch = useAppDispatch()
 
@@ -44,7 +37,7 @@ export const CMenu = ({
       blockItems: [],
     }
     setLastBlockId(newBlockId)
-    setActiveBlockId(newItem.id)
+    dispatch(setActiveBlockId({ blockId: newItem.id }))
     dispatch(addNewBlock(newItem))
   }
 
