@@ -53,9 +53,9 @@ const Course = () => {
   }
 
   const currentCourse = useAppSelector(selectCourse)
-
+  // console.log(currentCourse)
   const [isEditMode, setIsEditMode] = useState(false)
-  const initialValue = 'Безопасность при работе с электроинструментом'
+  const initialValue = `${currentCourse.name}`
   const [title, setTitle] = useState(initialValue)
   const { isTablet } = useScreenWidth()
   const { isOpen: isModalOpen, close: closeModal, open: openModal } = useToggle()

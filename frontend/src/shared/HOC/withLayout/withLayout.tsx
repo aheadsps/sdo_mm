@@ -1,8 +1,9 @@
-import { useGetUserCurrentEventsQuery } from '@services/api'
+import { useLazyGetUserCurrentEventsQuery } from '@services/api'
 import { setCurrentEvents } from '@services/slices/events'
 import { useAppDispatch } from '@services/store'
 import { Header, Loader, Sidebar } from '@shared/components'
 import { useScreenWidth } from '@shared/hooks'
+import { handleError } from '@shared/utils'
 import { ComponentType, useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 
@@ -15,14 +16,23 @@ export const withLayout = <T extends object>(Component: ComponentType<T>) => {
     const { isMobile } = useScreenWidth()
     const dispatch = useAppDispatch()
 
-    const { data: events } = useGetUserCurrentEventsQuery()
-    useEffect(() => {
-      if (events?.results) {
-        dispatch(setCurrentEvents(events?.results))
-        setisLoading(false)
-      }
-    }, [events?.results, dispatch])
+    // const [getUserCurrentEvents] = useLazyGetUserCurrentEventsQuery()
+    // useEffect(() => {
+    //   getUserCurrentEvents()
+    //     .unwrap()
+    //     .then((res) => dispatch(setCurrentEvents(res.results)))
+    //     .catch((error) => handleError(error))
+    //     .finally(() => setisLoading(false))
+    // }, [getUserCurrentEvents, dispatch])
 
+    const [getUserCurrentEvents] = useLazyGetUserCurrentEventsQuery()
+    useEffect(() => {
+      getUserCurrentEvents()
+        .unwrap()
+        .then((res) => dispatch(setCurrentEvents(res.results)))
+        .catch((error) => handleError(error))
+        .finally(() => setisLoading(false))
+    }, [getUserCurrentEvents, dispatch])
     return (
       <>
         <Header />

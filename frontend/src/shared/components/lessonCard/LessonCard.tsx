@@ -20,7 +20,7 @@ export const LessonCard: React.FC<Props> = ({ event }: Props) => {
   const daysLeft = getDaysLeft(event.end_date)
   const deadlineColor = getBackgroundColor(daysLeft)
   const dispatch = useAppDispatch()
-  console.log(event)
+  // console.log(event)
   const scorms = event.course.scorms
   const isScorm = Boolean(scorms.length > 0)
   const hendleClick = () => {

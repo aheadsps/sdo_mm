@@ -28,7 +28,7 @@ const buttons: string[] = [
 
 const MyLearningComp: React.FC = () => {
   const [mode, setMode] = useState<string>('Все курсы')
-  const { isOpen: isTooltipeOpen, close: closeTooltipe } = useToggle(true)
+  const { isOpen: isTooltipeOpen, close: closeTooltipe } = useToggle(false)
   const { isOpen: isAIOpen, close: closeAI, toggle: toggleAI } = useToggle()
 
   const currentEvents = useAppSelector(selectCurrentEvents)

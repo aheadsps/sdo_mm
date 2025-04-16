@@ -9,7 +9,7 @@ import s from './about-course.module.scss'
 
 export const AboutCourse = () => {
   const event = useAppSelector(selectEvent)
-  console.log(event)
+  // console.log(event)
   const course = event?.course
   const lessons = Number(course?.lessons.length)
   return (

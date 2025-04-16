@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
-import { EventsResponse, Event } from './user.types'
+import { EventsResponse, Event } from './types'
 import { baseUrl, getToken } from './variables'
 
 export const eventsApi = createApi({
@@ -31,4 +31,5 @@ export const eventsApi = createApi({
   }),
 })
 
-export const { useGetUserCurrentEventsQuery, useGetEventQuery } = eventsApi
+// export const { useGetUserCurrentEventsQuery, useGetEventQuery } = eventsApi
+export const { useLazyGetUserCurrentEventsQuery, useGetEventQuery } = eventsApi
