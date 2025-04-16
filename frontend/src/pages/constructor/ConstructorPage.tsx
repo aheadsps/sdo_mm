@@ -80,7 +80,6 @@ export const ConstructorPage: React.FC = () => {
           <div className={s.container}>
             <CMenu
               setNewItem={onAddNewItem}
-              activeBlockId={activeBlockId as number}
               isSidebarPointed={isSidebarPointed}
               setActiveBlockId={setActiveBlockId}
               lastBlockId={lastBlockId}

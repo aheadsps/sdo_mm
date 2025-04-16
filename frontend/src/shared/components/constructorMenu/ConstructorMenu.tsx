@@ -3,13 +3,13 @@ import { addNewBlock } from '@services/slices/constructor/constructorSlice'
 import { useAppDispatch } from '@services/store'
 import { Typography } from '@shared/components'
 import clsx from 'clsx'
+import { useState } from 'react'
 
 import { AddCard } from './addCard/AddCard'
 import s from './constructorMenu.module.scss'
 
 type Props = {
   setNewItem: (newItem: NewItem) => void
-  activeBlockId: number
   isSidebarPointed: boolean
   setActiveBlockId: (activeBlockId: number | null) => void
   lastBlockId: number | null
@@ -18,18 +18,20 @@ type Props = {
 
 export const CMenu = ({
   setNewItem,
-  activeBlockId,
   isSidebarPointed,
   setActiveBlockId,
   lastBlockId,
   setLastBlockId,
 }: Props) => {
+  const [addedItemId, setAddedItemId] = useState<number>(0)
   const dispatch = useAppDispatch()
 
   const onAddNewItem = (type: AddedMaterial) => {
+    const newAddedItemId = addedItemId + 1
+    setAddedItemId(newAddedItemId)
     const newItem: NewItem = {
       type,
-      id: activeBlockId,
+      id: newAddedItemId,
     }
     setNewItem(newItem)
   }
