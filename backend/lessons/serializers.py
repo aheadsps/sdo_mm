@@ -407,6 +407,7 @@ class CreateCourseSerializer(serializers.ModelSerializer):
         logger.debug(validated_data)
         zip_scorm = validated_data.pop("scorm", None)
         if zip_scorm:
+            validated_data['status'] = 'edit'
             try:
                 with atomic():
                     course = SCORMLoader(zip_archive=zip_scorm).save(
@@ -666,6 +667,6 @@ class EventCoveredCreateSerializer(serializers.ModelSerializer):
         )
         read_only_fields = ["procent", "status"]
         validators = (
+            validators.PassRegistationsValidator("event", "user"),
             validators.RegistrationValidator("user", "event"),
-            validators.PassRegistationsValidator("event"),
         )

@@ -48,7 +48,7 @@ class EventCoveredViewSet(mixins.ListModelMixin,
         if self.action == "toggle_favorite":
             permission_classes = [permissions.IsAuthenticated &
                                   (InCover | IsAdminOrIsStaff)]
-        elif self.action in ['currents', 'register']:
+        elif self.action in ['currents', 'create']:
             permission_classes = [permissions.IsAuthenticated]
         else:
             permission_classes = [permissions.IsAuthenticated &
@@ -91,17 +91,6 @@ class EventCoveredViewSet(mixins.ListModelMixin,
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
 
-    @action(detail=True, methods=['POST'])
-    def registration(self, request, cover_id=None):
-        self.serializer_class = serializers.EventCoveredCreateSerializer
-        self.serializer_class.Meta.read_only_fields.append('user')
-        user = request.user
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save(user=user)
-        headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
-
 
 @method_decorator(queries_counter, name='dispatch')
 class EventViewSet(mixins.ListModelMixin,
@@ -141,7 +130,7 @@ class EventViewSet(mixins.ListModelMixin,
             time_now = timezone.now()
             date_now = datetime.date(year=time_now.year, month=time_now.month, day=time_now.day)
             experience_years = math.floor((date_now - user.date_commencement).days / 365)
-            experience = WorkExperience._default_manager.get_or_create(years=experience_years)
+            experience = WorkExperience._default_manager.get_or_create(years=experience_years)[0]
             self.queryset = self.queryset.filter(Q(course__experiences=experience) &
                                                  Q(course__profession=profession) &
                                                  ~Q(course__beginner=True))

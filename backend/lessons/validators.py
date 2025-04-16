@@ -68,20 +68,27 @@ class PassRegistationsValidator:
 
     requires_context = True
 
-    def __init__(self, event: str) -> None:
+    def __init__(self, event: str, user: str) -> None:
         self.event = str(event)
+        self.user = str(user)
         self.error_detail = dict()
 
     def _check(
         self,
         event,
+        user,
+        curr_user,
     ) -> None:
         """
         Проверка исключения временных рамок с статусом 'начинающий'
         """
-        user = self.context['request'].user
+        if (not curr_user.is_staff and not curr_user.is_superuser) and user != curr_user:
+            self.error_detail.update(dict(
+                user='Регистрация доступна только для себя'
+            ))
         course_profession = event.course.profession
         experiences = event.course.experiences.get_queryset()
+        logger.debug(f'validator check pass registations recieve user {user}')
         if course_profession:
             if not user.profession == course_profession:
                 self.error_detail.update(dict(
@@ -91,12 +98,14 @@ class PassRegistationsValidator:
             time_now = timezone.now()
             date_now = datetime.date(year=time_now.year, month=time_now.month, day=time_now.day)
             experience_years = math.floor((date_now - user.date_commencement).days / 365)
-            experience = WorkExperience._default_manager.get_or_create(years=experience_years)
+            experience = WorkExperience._default_manager.get_or_create(years=experience_years)[0]
+            logger.debug(f'validator check experience {experience} search is {experiences}')
             if experience not in experiences:
                 self.error_detail.update(
                     dict(status='Возможно зарегистрироваться только на курс подходящего стажа'),
                     )
-        if event.status in ['started', 'finished']:
+        logger.debug(f'event status is {event.status}')
+        if not event.status == 'expected':
             self.error_detail.update(
                 dict(status='Регистрация не возможна если курс уже начался или закончен'),
                 )
@@ -104,11 +113,14 @@ class PassRegistationsValidator:
 
     def __call__(self, attrs, serializer):
         self.error_detail = dict()
-        need_check = tigger_to_check(attrs, self.event)
+        need_check = tigger_to_check(attrs, self.event, self.user)
         if need_check:
             event = get_value(self.event, attrs, serializer)
+            user = get_value(self.user, attrs, serializer)
             self._check(
                 event=event,
+                user=user,
+                curr_user=serializer.context['request'].user,
             )
 
 
@@ -265,7 +277,7 @@ class RegistrationValidator:
         Проверка исключения интервала при начинающем курсе
         """
         if EventCovered._default_manager.filter(Q(user=user) & Q(event=event)).exists():
-            self.error_detail.update(dict(interval='Не возможно повторно зарегистрироваться'),
+            self.error_detail.update(dict(event='Не возможно повторно зарегистрироваться'),
                                      )
         process_error(error_detail=self.error_detail)
 

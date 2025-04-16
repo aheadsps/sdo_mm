@@ -98,6 +98,8 @@ class Course(models.Model):
         _("Название"),
         max_length=256,
         help_text="Название курса",
+        null=True,
+        blank=True,
     )
     description = models.TextField(
         _("Описание"),
