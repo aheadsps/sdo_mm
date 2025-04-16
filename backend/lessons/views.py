@@ -48,7 +48,7 @@ class EventCoveredViewSet(mixins.ListModelMixin,
         if self.action == "toggle_favorite":
             permission_classes = [permissions.IsAuthenticated &
                                   (InCover | IsAdminOrIsStaff)]
-        elif self.action in ['currents', 'create']:
+        elif self.action in ['currents', 'create', 'calendar']:
             permission_classes = [permissions.IsAuthenticated]
         else:
             permission_classes = [permissions.IsAuthenticated &
@@ -89,6 +89,47 @@ class EventCoveredViewSet(mixins.ListModelMixin,
             serializer = self.get_serializer(page, many=True)
             return self.get_paginated_response(serializer.data)
         serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
+    @action(detail=False)
+    def calendar(self, request):
+        """
+        Получение календаря событий по датам
+        """
+        self.serializer_class = serializers.CalendarSerializer
+        user = request.user
+        queryset = (self.queryset.
+                    filter(Q(user=user)).prefetch_related('event__course'))
+        logger.debug(f'calendar queryset is {queryset}')
+        qfilter = Q(*[Q(course=cover.event.course, course__beginner=False) for cover in queryset], _connector=Q.OR)
+        lessons = models.Lesson._default_manager.filter(qfilter)
+        scorms = models.SCORM._default_manager.filter(qfilter)
+        logger.debug(f'calendar lessons is {lessons}')
+        logger.debug(f'scorms lessons is {scorms}')
+        time_now = timezone.now()
+        course_story = []
+        for cover in queryset:
+            if cover.status == 'expected':
+                course_story.append(dict(name='Курс' + cover.event.course.name,
+                                         start_date=cover.event.start_date,
+                                         ))
+        for lesson in lessons:
+            if lesson.start_date > time_now:
+                course_story.append(dict(name='Урок' + lesson.name,
+                                         start_date=lesson.start_date,
+                                         ))
+        for scorm in scorms:
+            if scorm.start_date > time_now:
+                course_story.append(dict(name='Урок' + scorm.name,
+                                         start_date=scorm.start_date,
+                                         ))
+        if queryset:
+            calendar = sorted(course_story,
+                              key=lambda x: x['start_date'],
+                              reverse=True)
+        else:
+            calendar = []
+        serializer = self.get_serializer(calendar, many=True)
         return Response(serializer.data)
 
 

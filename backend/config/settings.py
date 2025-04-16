@@ -235,11 +235,11 @@ STATUS_COURSE = [
 STATUS_EVENTS = [
     (
         "finished",
-        "Заканчивает",
+        "Закончек",
     ),
     (
         "started",
-        "Начано",
+        "Начат",
     ),
     (
         "expected",

@@ -186,6 +186,12 @@ class SCORM(models.Model):
                                null=True,
                                blank=True,
                                )
+    started = models.BooleanField(_("флаг начатого"),
+                                  default=False,
+                                  )
+    start_date = models.DateTimeField(_("время начала"),
+                                      null=True,
+                                      )
     resourse = models.CharField(max_length=256, verbose_name=_('resourse'))
 
     class Meta:

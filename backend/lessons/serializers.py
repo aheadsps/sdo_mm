@@ -226,6 +226,14 @@ class StepCreateSerializer(serializers.ModelSerializer):
     #     return instance
 
 
+class CalendarSerializer(serializers.Serializer):
+    """
+    Сериализатор календаря
+    """
+    name = serializers.CharField()
+    start_date = serializers.DateTimeField()
+
+
 class StepViewSerializer(serializers.ModelSerializer):
     """
     Шаг детальный

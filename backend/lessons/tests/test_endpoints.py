@@ -789,6 +789,13 @@ class TestChain(APITestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['count'], 3)
 
+        # ========================= calendar =========================
+
+        url = '/api/v1/covers/calendar'
+        response = self.client.get(path=url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json(), '')
+
         # ========================= permissions =========================
         self.client.logout()
         self.client.force_authenticate(user=user_1)
