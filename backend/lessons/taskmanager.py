@@ -92,9 +92,10 @@ class TaskManager:
         else:
             # Если таск есть
             kwargs_old: dict = json.loads(task_event.kwargs)
-            kwargs_old["start_date"] = kwargs["start_date"]
-            kwargs_old["end_date"] = kwargs["end_date"]
+            #kwargs_old["start_date"] = kwargs["start_date"]
+            #kwargs_old["end_date"] = kwargs["end_date"]
             task_event.kwargs = json.dumps(kwargs_old)
+            task_event.one_off = True
             task_event.clocked = clocked
             task_event.save()
 
@@ -106,8 +107,8 @@ class TaskManager:
         task = kwargs.get('task')
         kwargs_for_task: dict = {
             "pk": kwargs['pk'],
-            'start_date': kwargs['start_date'],
-            'end_date': kwargs['end_date']
+            #'start_date': kwargs['start_date'],
+            #'end_date': kwargs['end_date']
         }
         if self.schedule_start:
             clocked = self.schedule_start
@@ -148,6 +149,10 @@ class TaskManager:
 
 
     def create_for_event(self):
+        """
+        Метод для универсального класса Таксманаджер
+        Меняет статусы в Эвентах
+        """
         kwargs = {
             "course_id": self.number_task,
             "end_date": TaskManager.date_str(self.data_end),

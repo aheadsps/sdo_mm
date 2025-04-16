@@ -138,8 +138,10 @@ class TestEndpoints(APITestCase):
         self.assertEqual(rezults.status, "process")
 
         # Проверим работу функции задачи 2
-        rst = update_status_events.delay(pk=2,
-            status='finished',
+        rst = update_status_events.apply(kwargs={
+            "pk": 2,
+            "status": 'finished',
+        }
         )
 
         # проверим, что event переписался

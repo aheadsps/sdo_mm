@@ -17,7 +17,7 @@ def update_status_events(course_id: int | None = None,
     event.save()
 
     # Меняем статусы в EventCovered
-    if status == 'process':
+    """if status == 'process':
         events_covered = (models.EventCovered._default_manager.
                           filter(event=event.pk, status='expected')
                           )
@@ -33,7 +33,7 @@ def update_status_events(course_id: int | None = None,
         models.EventCovered._default_manager.bulk_update(
                 events_covered,
                 ["status"]
-            )
+            )"""
 
 
 @app.task
