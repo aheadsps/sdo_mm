@@ -424,6 +424,10 @@ class CreateCourseSerializer(serializers.ModelSerializer):
             course = super().create(validated_data)
         return course
 
+    def update(self, instance, validated_data):
+        validated_data['status'] = 'archive'
+        return super().update(instance, validated_data)
+
 
 class CourseSerializer(serializers.ModelSerializer):
     """
@@ -536,6 +540,7 @@ class EventSerializerCreate(serializers.ModelSerializer):
             "status",
         )
         validators = (
+            validators.StatusEditValidator('course'),
             validators.SingleEventValidator("course"),
             validators.BeginnerValidator("course", "start_date"),
             validators.TimeValidator("start_date"),

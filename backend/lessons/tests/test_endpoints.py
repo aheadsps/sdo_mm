@@ -717,6 +717,39 @@ class TestChain(APITestCase):
         lesson.refresh_from_db()
         lesson_beginner.refresh_from_db()
 
+        data = dict(
+            course=course_scorm.pk,
+        )
+        response = self.client.post(
+            path=url,
+            data=data,
+            format='json',
+        )
+        self.assertEqual(response.status_code, 422)
+
+        url = f'/api/v1/courses/{course_scorm.pk}'
+        data = dict(
+            beginner=True
+        )
+        response = self.client.patch(
+            path=url,
+            data=data,
+            format='json',
+        )
+        course_scorm.refresh_from_db()
+        self.assertEqual(course_scorm.status, 'archive')
+
+        url = '/api/v1/events'
+        data = dict(
+            course=course_scorm.pk,
+        )
+        response = self.client.post(
+            path=url,
+            data=data,
+            format='json',
+        )
+        self.assertEqual(response.status_code, 201)
+
         # ========================= test_block functions =========================
 
         self.assertEqual(lesson.test_block.max_score, 9)
@@ -727,7 +760,7 @@ class TestChain(APITestCase):
 
         # ========================= event set functions =========================
 
-        self.assertEqual(self.user.events.count(), 1)
+        self.assertEqual(self.user.events.count(), 2)
         user_1 = get_user_model()._default_manager.create_user(
             email='user1@gmail.com',
             password='usersuseruser',
@@ -738,7 +771,7 @@ class TestChain(APITestCase):
                 day=1,
                 ),
         )
-        self.assertEqual(user_1.events.count(), 1)
+        self.assertEqual(user_1.events.count(), 2)
 
         # ========================= event registration =========================
 
@@ -749,19 +782,19 @@ class TestChain(APITestCase):
         )
         response = self.client.post(path=url, data=data, format='json')
         self.assertEqual(response.status_code, 201)
-        self.assertEqual(self.user.events.count(), 2)
+        self.assertEqual(self.user.events.count(), 3)
 
         url = '/api/v1/covers/currents'
         response = self.client.get(path=url)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json()['count'], 2)
+        self.assertEqual(response.json()['count'], 3)
 
         # ========================= permissions =========================
         self.client.logout()
         self.client.force_authenticate(user=user_1)
         response = self.client.get(path=url)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json()['count'], 1)
+        self.assertEqual(response.json()['count'], 2)
 
         url = '/api/v1/covers'
         data = dict(
@@ -770,7 +803,7 @@ class TestChain(APITestCase):
         )
         response = self.client.post(path=url, data=data, format='json')
         self.assertEqual(response.status_code, 201)
-        self.assertEqual(user_1.events.count(), 2)
+        self.assertEqual(user_1.events.count(), 3)
 
         url = '/api/v1/events'
         response = self.client.get(path=url)

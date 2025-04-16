@@ -221,6 +221,29 @@ class BeginnerValidator:
             )
 
 
+class StatusEditValidator:
+    """
+    Валидатор на проверку Edit
+    """
+
+    requires_context = True
+
+    def __init__(self, course: str) -> None:
+        self.course = str(course)
+        self.error_detail = dict()
+
+    def __call__(self, attrs, serializer):
+        self.error_detail = dict()
+        need_check = tigger_to_check(attrs, self.course)
+        if need_check:
+            course = get_value(self.course, attrs, serializer)
+            if course.status == 'edit':
+                self.error_detail.update(dict(
+                    status='Курс черновом варианте, зайдите в редактирование и обновите его'
+                ))
+            process_error(error_detail=self.error_detail)
+
+
 class IntervalValidator:
     """
     Валидатор на проверку интервала
@@ -511,7 +534,7 @@ class EmptyLessonsValidator:
         """
         if isinstance(course, int):
             course = Course._default_manager.get(pk=course)
-        if not course.lessons.exists():
+        if not course.lessons.exists() and not course.scorms.exists():
             self.error_detail.update(dict(serial='Нельзя запустить курс без уроков'))
         process_error(error_detail=self.error_detail)
 
