@@ -24,12 +24,12 @@ class TaskManager:
     def __init__(
         self,
         event_pk: int = None,
-        number_task: int = None,
+        #number_task: int = None,
         data_start: str = None,
         data_end: str = None,
     ):
         self.event_pk = event_pk
-        self.number_task = number_task
+        #self.number_task = number_task
         self.data_start = data_start
         self.data_end = data_end
 
@@ -112,13 +112,13 @@ class TaskManager:
         }
         if self.schedule_start:
             clocked = self.schedule_start
-            name = f"StartEvent_{kwargs['pk']}"
+            name = f"Start_{kwargs['name']}"
             kwargs_for_task['status'] = 'process'
             self._add_task_update(clocked, name, task, kwargs_for_task)
         if self.schedule_end:
             clocked = self.schedule_end
             kwargs_for_task['status'] = 'finished'
-            name = f"EndEvent_{kwargs['pk']}"
+            name = f"End_{kwargs['name']}"
             self._add_task_update(clocked, name, task, kwargs_for_task)
 
 
@@ -139,25 +139,32 @@ class TaskManager:
             tasks.send_mail_users.delay(**kwargs)
 
 
-    def update(self):
-        kwargs = {
-            "end_date": TaskManager.date_str(self.data_end),
-            "start_date": TaskManager.date_str(self.data_start),
-            "pk": self.event_pk,
-        }
+    def update(self, kwargs):
         self._task_update_status_event(kwargs)
 
 
-    def create_for_event(self):
+
+
+class TaskManagerEvent(TaskManager):
+    def create(self):
         """
         Метод для универсального класса Таксманаджер
         Меняет статусы в Эвентах
         """
         kwargs = {
-            "course_id": self.number_task,
+            "name": f"Event_{self.event_pk}",
             "end_date": TaskManager.date_str(self.data_end),
             "start_date": TaskManager.date_str(self.data_start),
             "pk": self.event_pk,
             "task": "lessons.tasks.update_status_events"
         }
-        self.create(kwargs)
+        super().create(kwargs)
+
+    def update(self):
+        kwargs = {
+            "name": f"Event_{self.event_pk}",
+            "end_date": TaskManager.date_str(self.data_end),
+            "start_date": TaskManager.date_str(self.data_start),
+            "pk": self.event_pk,
+        }
+        super().update(kwargs)

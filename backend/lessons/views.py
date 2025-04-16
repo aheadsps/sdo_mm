@@ -18,7 +18,7 @@ from lessons.permissions import (
     CanReadLessonStory,
     CanReadSCORM,
     )
-from lessons.taskmanager import TaskManager
+from lessons.taskmanager import TaskManagerEvent
 
 
 class EventViewSet(own_viewsets.GetCreateUpdateDeleteViewSet):
@@ -61,11 +61,10 @@ class EventViewSet(own_viewsets.GetCreateUpdateDeleteViewSet):
     def perform_create(self, serializer):
         instance = serializer.save()
         # Создаем CeleryTask на изменение статуса
-        TaskManager(instance.pk,
-                    instance.course.pk,
+        TaskManagerEvent(instance.pk,
                     instance.start_date,
                     instance.end_date
-                    ).create_for_event()
+                    ).create()
 
 
     def update(self, request, *args, **kwargs):
@@ -76,8 +75,7 @@ class EventViewSet(own_viewsets.GetCreateUpdateDeleteViewSet):
     def perform_update(self, serializer):
         # Обновление задач селери
         instance = serializer.save()
-        TaskManager(instance.pk,
-                    instance.course,
+        TaskManagerEvent(instance.pk,
                     instance.start_date,
                     instance.end_date
                     ).update()
