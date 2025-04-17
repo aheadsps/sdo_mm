@@ -18,7 +18,6 @@ from lessons.utils import parse_exeption_error
 from lessons.servises import SetEventServise
 from lessons.scorm.engine.exceptions import SCORMExtractError, ManifestNotSetupError
 from users import serializers as user_serializers
-from users.models import WorkExperience
 
 
 T = TypeVar("T")
@@ -115,6 +114,12 @@ class ContentAttachmentSerializer(serializers.ModelSerializer):
         model = models.ContentAttachment
         fields = ["id", "file", "file_type", "step", 'materials']
         validators = (validators.AttachmentValidator('step', 'materials'),)
+
+    def to_representation(self, instance):
+        response = super().to_representation(instance)
+        if instance.file:
+            response['file'] = instance.file.url
+        return response
 
 
 class MaterialsSerializer(serializers.ModelSerializer):
@@ -347,7 +352,7 @@ class LessonViewSerializer(serializers.ModelSerializer):
     Сериализатор детального представления урока
     """
 
-    steps = StepViewSerializer(many=True)
+    steps = serializers.SerializerMethodField()
     test_block = TestBlockSerializersDetail()
 
     class Meta:
@@ -365,6 +370,10 @@ class LessonViewSerializer(serializers.ModelSerializer):
             "steps",
             "test_block",
         )
+
+    def get_steps(self, obj):
+        steps = models.Step._default_manager.filter(lesson=obj)
+        return StepViewSerializer(steps, many=True).data
 
 
 class ZIPFileField(serializers.FileField):
@@ -598,7 +607,8 @@ class EventSerializerCreate(serializers.ModelSerializer):
                  select_related('course').
                  prefetch_related('course__lessons')
                  ).get()
-        SetEventServise(instance=event).set_event_settings()
+        with atomic():
+            SetEventServise(instance=event).set_event_settings()
         instance.refresh_from_db()
         return instance
 

@@ -85,6 +85,10 @@ class PassRegistationsValidator:
             self.error_detail.update(dict(
                 user='Регистрация доступна только для себя'
             ))
+        if user.is_staff or user.is_superuser:
+            self.error_detail.update(dict(
+                user='Администратор и Учитель не могут зарегистрироваться'
+            ))
         course_profession = event.course.profession
         experiences = event.course.experiences.get_queryset()
         logger.debug(f'validator check pass registations recieve user {user}')
@@ -206,6 +210,8 @@ class BeginnerValidator:
             self.error_detail.update(dict(start_date='У курса для '
                                           'начинающих не может быть start_date'),
                                      )
+        if not start_date and not beginner:
+            self.error_detail.update(dict(start_date='Необходимо указать дату начала'))
         process_error(error_detail=self.error_detail)
 
     def __call__(self, attrs, serializer):

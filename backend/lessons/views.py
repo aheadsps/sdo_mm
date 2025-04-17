@@ -66,6 +66,10 @@ class EventCoveredViewSet(mixins.ListModelMixin,
         self.serializer_class = serializers.EventCoveredCreateSerializer
         return super().create(request, *args, **kwargs)
 
+    def list(self, request, *args, **kwargs):
+        self.check_object_permissions(request, None)
+        return super().list(request, *args, **kwargs)
+
     @action(detail=True, url_path="toggle-favorite")
     def toggle_favorite(self, request, cover_id=None):
         """
@@ -406,6 +410,14 @@ class StepViewSet(ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(teacher=self.request.user)
 
+    def create(self, request, *args, **kwargs):
+        self.check_object_permissions(request=request, obj=None)
+        return super().create(request, *args, **kwargs)
+
+    def list(self, request, *args, **kwargs):
+        self.check_object_permissions(request=request, obj=None)
+        return super().list(request, *args, **kwargs)
+
     def get_serializer_class(self):
         if self.action == 'retrieve':
             serializer_class = serializers.StepViewSerializer
@@ -465,6 +477,14 @@ class QuestionViewSet(viewsets.ModelViewSet):
     lookup_field = 'pk'
     lookup_url_kwarg = 'question_id'
 
+    def create(self, request, *args, **kwargs):
+        self.check_object_permissions(request=request, obj=None)
+        return super().create(request, *args, **kwargs)
+
+    def list(self, request, *args, **kwargs):
+        self.check_object_permissions(request=request, obj=None)
+        return super().list(request, *args, **kwargs)
+
     def get_serializer_class(self):
         if self.action in ['create', 'update', 'partial_update']:
             serializer_class = serializers.QuestionCreateSerializer
@@ -487,12 +507,28 @@ class AnswerViewSet(viewsets.ModelViewSet):
     lookup_field = 'pk'
     lookup_url_kwarg = 'answer_id'
 
+    def create(self, request, *args, **kwargs):
+        self.check_object_permissions(request=request, obj=None)
+        return super().create(request, *args, **kwargs)
+
+    def list(self, request, *args, **kwargs):
+        self.check_object_permissions(request=request, obj=None)
+        return super().list(request, *args, **kwargs)
+
 
 @method_decorator(queries_counter, name='dispatch')
 class UserStoryViewSet(viewsets.ModelViewSet):
     queryset = models.UserStory.objects.all()
     permission_classes = [IsAdminOrIsStaff]
     serializer_class = serializers.UserStorySerializer
+
+    def create(self, request, *args, **kwargs):
+        self.check_object_permissions(request=request, obj=None)
+        return super().create(request, *args, **kwargs)
+
+    def list(self, request, *args, **kwargs):
+        self.check_object_permissions(request=request, obj=None)
+        return super().list(request, *args, **kwargs)
 
     def get_permissions(self):
         if self.action in ["retrieve",
@@ -511,6 +547,14 @@ class LessonStoryViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAdminOrIsStaff]
     serializer_class = serializers.LessonStorySerializer
 
+    def create(self, request, *args, **kwargs):
+        self.check_object_permissions(request=request, obj=None)
+        return super().create(request, *args, **kwargs)
+
+    def list(self, request, *args, **kwargs):
+        self.check_object_permissions(request=request, obj=None)
+        return super().list(request, *args, **kwargs)
+
     def get_permissions(self):
         if self.action in ["retrieve",
                            ]:
@@ -523,7 +567,7 @@ class LessonStoryViewSet(viewsets.ModelViewSet):
 
 
 @method_decorator(queries_counter, name='dispatch')
-class FileViewSet(mixins.DestroyModelMixin, viewsets.GenericViewSet):
+class FileViewSet(mixins.CreateModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):
     """
     Виюв сет файлов
     """
@@ -531,6 +575,11 @@ class FileViewSet(mixins.DestroyModelMixin, viewsets.GenericViewSet):
     permission_classes = [permissions.IsAuthenticated & IsAdminOrIsStaff]
     lookup_field = 'pk'
     lookup_url_kwarg = 'file_id'
+    serializer_class = serializers.ContentAttachmentSerializer
+
+    def create(self, request, *args, **kwargs):
+        self.check_object_permissions(request=request, obj=None)
+        return super().create(request, *args, **kwargs)
 
     def destroy(self, request, *args, **kwargs):
         user = request.user

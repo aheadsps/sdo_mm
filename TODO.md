@@ -62,3 +62,8 @@ password: adminpassword
 email: <y@mail.ru>
 
 password: 12345678
+
+
+email: <some@yandex.ru>
+
+password: someuser
