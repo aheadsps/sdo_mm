@@ -1,6 +1,6 @@
 import { EditIcon } from '@assets/icons'
 import { useGetCourseQuery } from '@services/api'
-import { selectCourse, selectCurrentCourseId, setCourseById } from '@services/slices'
+import { selectCourse, setCourseById } from '@services/slices'
 import { useAppDispatch, useAppSelector } from '@services/store'
 import {
   Typography,
@@ -16,6 +16,7 @@ import { AddMaterials } from '@shared/components'
 import { withLayout } from '@shared/HOC'
 import { useScreenWidth, useToggle } from '@shared/hooks'
 import { useState } from 'react'
+import { useParams } from 'react-router-dom'
 
 import { StudentsList } from '../course/studentsList'
 
@@ -45,15 +46,15 @@ const tabsData: Tab[] = [
 
 const Course = () => {
   const dispatch = useAppDispatch()
-  const currentId = useAppSelector(selectCurrentCourseId)
-  // console.log(currentId)
-  const { data: course, isLoading } = useGetCourseQuery(currentId)
+  const { id } = useParams()
+
+  const { data: course, isLoading } = useGetCourseQuery(Number(id))
   if (course) {
     dispatch(setCourseById(course))
   }
 
   const currentCourse = useAppSelector(selectCourse)
-  // console.log(currentCourse)
+
   const [isEditMode, setIsEditMode] = useState(false)
   const initialValue = `${currentCourse.name}`
   const [title, setTitle] = useState(initialValue)

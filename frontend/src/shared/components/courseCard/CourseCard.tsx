@@ -36,7 +36,7 @@ export const CourseCard = ({ item }: Props) => {
       </div>
       <div className={s.buttonBox}>
         <ArchiveIcon />
-        <Link to={routes.trainingCenterCourse}>
+        <Link to={`${routes.trainingCenterCourse}/${item.id}`}>
           <Button
             variant="secondary"
             children={'Смотреть/ редактировать курс'}
