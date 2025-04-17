@@ -7,7 +7,7 @@ from django.conf import settings
 from django.test import override_settings
 
 from lessons.scorm import SCORMLoader
-from lessons.models import SCORM
+from lessons.models import Lesson
 
 
 class TestSCORMCore(TestCase):
@@ -27,5 +27,5 @@ class TestSCORMCore(TestCase):
             scorm = SCORMLoader(file)
             scorm.save()
 
-        self.assertEqual(SCORM._default_manager.count(), 1)
-        self.assertEqual(SCORM._default_manager.get().name, 'Первая помощь (часть 1)')
+        self.assertEqual(Lesson._default_manager.count(), 1)
+        self.assertEqual(Lesson._default_manager.get().name, 'Первая помощь (часть 1)')

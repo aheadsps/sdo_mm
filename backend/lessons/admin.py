@@ -99,24 +99,14 @@ class LessonAdmin(admin.ModelAdmin):
     list_display = (
         "teacher",
         "name",
+        "version",
         "serial",
+        "resourse",
         "course",
         "started",
         "start_date",
+        "end_date",
         )
-
-
-@admin.register(models.SCORM)
-class SCORMAdmin(admin.ModelAdmin):
-    """
-    Админ панель SCORM
-    """
-    list_display = (
-        'name',
-        'version',
-        'course',
-        'resourse',
-    )
 
 
 @admin.register(models.SCORMFile)
@@ -126,6 +116,7 @@ class SCORMFileAdmin(admin.ModelAdmin):
     """
     list_display = (
         'course',
+        'name',
         'file',
     )
 

@@ -9,7 +9,6 @@ from django.db.models import Q
 from lessons import exceptions
 from lessons.utils import get_value, tigger_to_check
 from lessons.models import (
-    SCORM,
     Lesson,
     Event,
     EventCovered,
@@ -378,38 +377,6 @@ class SingleEventValidator:
             self._check(course)
 
 
-class SCORMUniqueValidator:
-    """
-    Валидатор на проверку уникальности SCORM
-    """
-
-    requires_context = True
-
-    def __init__(self, name: str) -> None:
-        self.name = str(name)
-        self.error_detail = dict()
-
-    def _check_scorm_pass(
-        self,
-        name,
-    ) -> None:
-        """
-        Проверка возможности присвоения SCORM пакета
-        """
-        if SCORM._default_manager.filter(name=name).exists():
-            self.error_detail.update(
-                scorm='SCORM пакет с таким именем уже существует'
-            )
-        process_error(error_detail=self.error_detail)
-
-    def __call__(self, attrs, serializer):
-        self.error_detail = dict()
-        need_check = tigger_to_check(attrs, self.name)
-        if need_check:
-            name = get_value(self.name, attrs, serializer)
-            self._check_scorm_pass(name)
-
-
 class LessonScormValidator:
     """
     Валидатор на проверку возможности сохранения SCORM
@@ -428,7 +395,7 @@ class LessonScormValidator:
         """
         Проверка возможности присвоения SCORM пакета
         """
-        if course.scorms.exists():
+        if course.is_scorm:
             self.error_detail.update(
                 course='Не возможно присвоить урок курсу, который имеет SCORM пакет'
             )

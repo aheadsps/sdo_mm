@@ -13,7 +13,7 @@ from django.core.files.base import ContentFile
 from rest_framework.utils import model_meta
 
 from lessons.scorm.engine.utils import is_dir
-from lessons.models import SCORM, SCORMFile
+from lessons.models import Lesson, SCORMFile, TestBlock
 from lessons.scorm.engine.utils import sanitize_input
 from lessons.scorm.engine.exceptions import SCORMExtractError
 from .base import BaseCoreSCORM
@@ -189,11 +189,12 @@ class CoreSCORM(BaseCoreSCORM):
         )
         if not sub_items:
             logger.debug(f'add to structure list item - {title, resource_link}')
-            SCORM._default_manager.create(**data,
-                                          name=title,
-                                          serial=serial,
-                                          resourse='/' + str(path.joinpath(resource_link)),
-                                          )
+            lesson = Lesson._default_manager.create(**data,
+                                                    name=title,
+                                                    serial=serial,
+                                                    resourse='/' + str(path.joinpath(resource_link)),
+                                                    )
+            TestBlock._default_manager.create(lesson=lesson)
             return [dict(title=title,
                          resourse=resource_link,
                          files=files,
@@ -241,7 +242,7 @@ class CoreSCORM(BaseCoreSCORM):
                 field.set(value)
         return course
 
-    def save(self, instance=None, data: dict | None = None) -> SCORM:
+    def save(self, instance=None, data: dict | None = None) -> Lesson:
         """
         Сохранение курса в систему
         """
@@ -270,6 +271,7 @@ class CoreSCORM(BaseCoreSCORM):
                 if not is_dir(zipinfo):
                     list_files.append(SCORMFile(
                         course=course,
+                        name=original_title,
                         file=ContentFile(self._file.read(zipinfo.filename),
                                          zipinfo.filename,),
                         ))

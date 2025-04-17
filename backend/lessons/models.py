@@ -133,6 +133,7 @@ class Course(models.Model):
         null=True,
         blank=True,
     )
+    is_scorm = models.BooleanField(_("флаг скорм пакета"), default=False)
     profession = models.ForeignKey(
         "users.Profession",
         verbose_name=_("профессия"),
@@ -162,53 +163,6 @@ class Course(models.Model):
         return self.name
 
 
-class SCORM(models.Model):
-    """
-    Модель представления SCORM
-    """
-    teacher = models.ForeignKey(get_user_model(),
-                                verbose_name=_("учитель"),
-                                on_delete=models.SET_NULL,
-                                null=True,
-                                )
-    name = models.CharField(_("название"),
-                            max_length=256,
-                            unique=True,
-                            )
-    version = models.CharField(_('версия'),
-                               max_length=50,
-                               choices=settings.VERSIONS_SCORM,
-                               )
-    course = models.ForeignKey(Course,
-                               verbose_name=_("курс"),
-                               related_name='scorms',
-                               on_delete=models.CASCADE,
-                               null=True,
-                               blank=True,
-                               )
-    serial = models.IntegerField(_("Номер"),
-                                 null=False,
-                                 blank=False,
-                                 validators=[MinValueValidator(1)],
-                                 default=1,
-                                 help_text="Порядковый номер урока"
-                                 )
-    started = models.BooleanField(_("флаг начатого"),
-                                  default=False,
-                                  )
-    start_date = models.DateTimeField(_("время начала"),
-                                      null=True,
-                                      )
-    resourse = models.CharField(max_length=256, verbose_name=_('resourse'))
-
-    class Meta:
-        verbose_name = _("SCORM")
-        verbose_name_plural = _("SCORMs")
-
-    def __str__(self):
-        return self.name
-
-
 class SCORMFile(models.Model):
     """
     Модель представления SCORM файлов
@@ -220,6 +174,11 @@ class SCORMFile(models.Model):
                                null=True,
                                blank=True,
                                )
+    name = models.CharField(_("имя"),
+                            max_length=256,
+                            null=True,
+                            blank=True,
+                            )
     file = models.FileField(_("файл scorm"),
                             upload_to=path_maker_scorm,
                             )
@@ -247,6 +206,13 @@ class Lesson(models.Model):
                             blank=False,
                             help_text="Название урока",
                             )
+    version = models.CharField(_('версия'),
+                               max_length=50,
+                               choices=settings.VERSIONS_SCORM,
+                               help_text='Для SCORM пакета',
+                               null=True,
+                               blank=True,
+                               )
     serial = models.IntegerField(_("Номер"),
                                  null=False,
                                  blank=False,
@@ -254,6 +220,12 @@ class Lesson(models.Model):
                                  default=1,
                                  help_text="Порядковый номер урока"
                                  )
+    resourse = models.CharField(max_length=256,
+                                verbose_name=_('resourse'),
+                                help_text='Для SCORM пакета',
+                                null=True,
+                                blank=True,
+                                )
     course = models.ForeignKey(Course,
                                verbose_name=_("Курс"),
                                on_delete=models.CASCADE,

@@ -73,18 +73,19 @@ class SetEventServise:
                         beginner: bool,
                         ) -> models.TestBlock:
         test_block = lesson.test_block
+        questions = test_block.questions.all()
         max_score = 0
-        for question in test_block.questions.get_queryset():
-            max_score += question.weight
-        test_block.max_score = max_score
-        if not beginner:
-            test_block.end_date = end_date
-        return test_block
+        if questions:
+            for question in test_block.questions.get_queryset():
+                max_score += question.weight
+            test_block.max_score = max_score
+            if not beginner:
+                test_block.end_date = end_date
+            return test_block
 
     def _count_end_date(self,
                         instance: models.Event,
                         lessons: QuerySet[models.Lesson] | None,
-                        scorms: QuerySet[models.SCORM] | None,
                         interval: timedelta,
                         start_date: datetime,
                         update: bool,
@@ -92,7 +93,7 @@ class SetEventServise:
         update_lessons = []
         update_test_block = []
         beginner = instance.course.beginner
-        content = lessons or scorms
+        content = lessons
         for lesson in content:
             # Собираем шедулеры по открытия урока
             if not beginner:
@@ -101,17 +102,14 @@ class SetEventServise:
                 # Собираем шедулеры на окончиние тестовых блоков
                 start_date = start_date + interval
                 lesson.end_date = start_date
-            if not update and lessons:
+            if not update:
                 update_test_block.append(self._set_test_block(
                     lesson=lesson,
                     end_date=start_date,
                     beginner=beginner,
                 ))
-        if lessons:
-            models.Lesson._default_manager.bulk_update(update_lessons, fields=("start_date",))
-        else:
-            models.SCORM._default_manager.bulk_update(update_lessons, fields=("start_date",))
-        if not update and lessons:
+        models.Lesson._default_manager.bulk_update(update_lessons, fields=("start_date",))
+        if not update and None not in update_test_block:
             models.TestBlock._default_manager.bulk_update(update_test_block, fields=('max_score', 'end_date'))
         # Здесь дополнить еще одним шедулером на окончание курса
         instance.end_date = start_date
@@ -125,13 +123,11 @@ class SetEventServise:
         course = self.event.course
         start_date = self.event.start_date
         lessons = self.event.course.lessons.prefetch_related('test_block__questions').order_by("serial")
-        scorms = self.event.course.scorms.order_by('serial')
         interval = self.event.course.interval
         with atomic():
             self._count_end_date(
                 instance=self.event,
                 lessons=lessons,
-                scorms=scorms,
                 start_date=start_date,
                 interval=interval,
                 update=self.update,

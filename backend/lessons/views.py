@@ -111,9 +111,7 @@ class EventCoveredViewSet(mixins.ListModelMixin,
         logger.debug(f'calendar queryset is {queryset}')
         qfilter = Q(*[Q(course=cover.event.course, course__beginner=False) for cover in queryset], _connector=Q.OR)
         lessons = models.Lesson._default_manager.filter(qfilter, Q(start_date__gte=time_now)).values('name', 'start_date')
-        scorms = models.SCORM._default_manager.filter(qfilter, Q(start_date__gte=time_now)).values('name', 'start_date')
         logger.debug(f'calendar lessons is {lessons}')
-        logger.debug(f'scorms lessons is {scorms}')
         course_story = []
         for cover in queryset:
             if cover.status == 'expected':
@@ -126,11 +124,6 @@ class EventCoveredViewSet(mixins.ListModelMixin,
                                      start_date=lesson['start_date'],
                                      ))
         logger.debug(f'after lessons {course_story}')
-        for scorm in scorms:
-            course_story.append(dict(name='Урок ' + scorm['name'],
-                                     start_date=scorm['start_date'],
-                                     ))
-        logger.debug(f'after scorms {course_story}')
         if queryset:
             calendar = sorted(course_story,
                               key=lambda x: x['start_date'])
@@ -159,9 +152,12 @@ class EventCoveredViewSet(mixins.ListModelMixin,
                     _connector=Q.OR)
         lessons = (models.Lesson._default_manager
                    .filter(qfilter & Q(started=True))
-                   .order_by('end_date').values('name', 'end_date'))
+                   .order_by('end_date'))
         logger.debug(f'main page lessons {lessons}')
-        serializer = serializer_class(lessons, many=True)
+        serializer = serializer_class(lessons,
+                                      many=True,
+                                      context=dict(request=request),
+                                      )
         return Response(serializer.data)
 
 
@@ -326,6 +322,7 @@ class CourseViewSet(mixins.ListModelMixin,
         serializer = serializer_class(data)
         return Response(serializer.data)
 
+
 # @method_decorator(queries_counter, name='dispatch')
 class LessonViewSet(viewsets.ModelViewSet):
     """
@@ -370,17 +367,6 @@ class LessonViewSet(viewsets.ModelViewSet):
     def list(self, request, *args, **kwargs):
         self.check_object_permissions(request=request, obj=None)
         return super().list(request, *args, **kwargs)
-
-
-# @method_decorator(queries_counter, name='dispatch')
-class SCROMViewSet(mixins.RetrieveModelMixin,
-                   viewsets.GenericViewSet):
-    queryset = models.SCORM._default_manager.get_queryset()
-    serializer_class = serializers.SCORMSerializer
-    lookup_field = 'id'
-    lookup_url_kwarg = 'scorm_id'
-    permission_classes = [permissions.IsAuthenticated &
-                          (CanReadSCORM | IsAdminOrIsStaff)]
 
 
 @method_decorator(queries_counter, name='dispatch')

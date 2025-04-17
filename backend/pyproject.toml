@@ -53,6 +53,7 @@ openedx-scorm-xblock = "^19.0.2"
 pytils = "^0.4.3"
 django-query-counter = "^0.4.1"
 pygments = "^2.19.1"
+django-extensions = "^4.1"
 
 
 [build-system]

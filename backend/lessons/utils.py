@@ -194,7 +194,7 @@ def path_maker_scorm(instance: "SCORMFile", filename: str) -> str:
     Создает корректный путь для сохранения файлов
     в системе.
     """
-    text_tranc = slugify(instance.course)
+    text_tranc = slugify(instance.course or instance.name)
     return f"scorms/{text_tranc}/{filename}"
 
 

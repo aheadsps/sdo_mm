@@ -375,11 +375,11 @@ class TestEndpoints(APITestCase):
                 "experiences": [self.experience.pk],
                 "image": None,
                 "interval": None,
+                "lessons": [],
                 "materials": {},
                 "name": "some_course",
                 "profession": self.profession.pk,
                 "status": 'archive',
-                "scorms": [],
             },
         )
 
@@ -570,12 +570,12 @@ class TestChain(APITestCase):
                              beginner=False,
                              image=None,
                              profession=None,
-                             scorms=[lessons_models.SCORM._default_manager.get().pk],
+                             lessons=[lessons_models.Lesson._default_manager.get(name='Первая помощь (часть 1)').pk],
                              experiences=[],
                              status='edit',
                          ))
         course_scorm = lessons_models.Course._default_manager.get(name='Первая помощь (часть 1)')
-        self.assertEqual(course_scorm.scorms.count(), 1)
+        self.assertEqual(course_scorm.lessons.count(), 1)
         self.assertEqual(course_scorm.teacher, self.user)
 
         url = f'/api/v1/courses/{course.pk}/upload-materials'
@@ -771,6 +771,10 @@ class TestChain(APITestCase):
         self.assertEqual(response.status_code, 200)
 
         url = f'/api/v1/courses/{course_beginner.pk}/about'
+        response = self.client.get(path=url)
+        self.assertEqual(response.status_code, 200)
+
+        url = '/api/v1/covers/main'
         response = self.client.get(path=url)
         self.assertEqual(response.status_code, 200)
 

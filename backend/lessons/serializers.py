@@ -327,7 +327,9 @@ class LessonSerializer(serializers.ModelSerializer):
             "teacher",
             "name",
             "serial",
+            "version",
             "started",
+            "resourse",
             "start_date",
             "course",
             "steps",
@@ -350,22 +352,14 @@ class LessonViewSerializer(serializers.ModelSerializer):
             "teacher",
             "name",
             "serial",
+            "version",
             "started",
+            "resourse",
             "start_date",
             "course",
             "steps",
             "test_block",
         )
-
-
-class SCORMSerializer(serializers.ModelSerializer):
-    """
-    Сериализатор SCORM пакета
-    """
-
-    class Meta:
-        model = models.SCORM
-        fields = ("id", "teacher", "name", "version", "resourse")
 
 
 class ZIPFileField(serializers.FileField):
@@ -396,9 +390,6 @@ class CreateCourseSerializer(serializers.ModelSerializer):
     """
 
     scorm = ZIPFileField(required=False)
-    scorms = serializers.PrimaryKeyRelatedField(
-        read_only=True, required=False, many=True
-    )
     materials = MaterialsSerializer(read_only=True)
 
     class Meta:
@@ -412,7 +403,7 @@ class CreateCourseSerializer(serializers.ModelSerializer):
             "image",
             "profession",
             "scorm",
-            "scorms",
+            "lessons",
             "experiences",
             "status",
             'materials',
@@ -421,13 +412,14 @@ class CreateCourseSerializer(serializers.ModelSerializer):
             validators.CourseScormValidator("scorm"),
             validators.IntervalValidator("beginner", "interval"),
         )
-        read_only_fields = ("scorms", "teacher", "status",)
+        read_only_fields = ("teacher", "status", "lessons",)
 
     def create(self, validated_data: dict):
         logger.debug(validated_data)
         zip_scorm = validated_data.pop("scorm", None)
         if zip_scorm:
             validated_data['status'] = 'edit'
+            validated_data['is_scorm'] = True
             try:
                 with atomic():
                     course = SCORMLoader(zip_archive=zip_scorm).save(
@@ -456,7 +448,6 @@ class CourseSerializer(serializers.ModelSerializer):
     """
 
     lessons = LessonSerializer(many=True)
-    scorms = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
     materials = MaterialsSerializer(read_only=True)
 
     class Meta:
@@ -472,7 +463,6 @@ class CourseSerializer(serializers.ModelSerializer):
             "update_date",
             "image",
             "profession",
-            "scorms",
             "experiences",
             "lessons",
             "status",
@@ -488,7 +478,6 @@ class ViewCourseSerializer(serializers.ModelSerializer):
     experiences = user_serializers.WorkExperienceSerializer(many=True)
     profession = user_serializers.ProfessionSerializer()
     lessons = LessonViewSerializer(many=True)
-    scorms = SCORMSerializer(many=True)
     materials = MaterialsSerializer(read_only=True)
 
     class Meta:
@@ -506,7 +495,6 @@ class ViewCourseSerializer(serializers.ModelSerializer):
             "status",
             "profession",
             "experiences",
-            "scorms",
             "lessons",
             "materials",
         )
@@ -711,8 +699,10 @@ class MainLessonsSerializer(serializers.HyperlinkedModelSerializer):
     """
     Сериализатор для Main страницы Lessons
     """
-    name = serializers.CharField()
-    end_date = serializers.DateTimeField()
+    url = serializers.HyperlinkedIdentityField(
+        view_name='lessons:lesson-detail',
+        lookup_url_kwarg='lesson_id',
+    )
 
     class Meta:
         model = models.Lesson
