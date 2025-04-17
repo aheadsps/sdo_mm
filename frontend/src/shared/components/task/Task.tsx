@@ -12,11 +12,12 @@ import s from './task.module.scss'
 type Props = {
   daysLeft?: number
   children: ReactNode
+  courseId: number
 } & ComponentPropsWithRef<'div'>
 
-export const Task = ({ daysLeft, children, className }: Props) => {
+export const Task = ({ daysLeft, children, className, courseId }: Props) => {
   return (
-    <NavLink className={clsx(s.card, className)} to={routes.course}>
+    <NavLink className={clsx(s.card, className)} to={`${routes.course}/${courseId}`}>
       <span className={s.leftBar} style={{ backgroundColor: getBackgroundColor(daysLeft) }}></span>
       <div className={s.content}>
         <Typography variant="body_1" className={s.title}>
