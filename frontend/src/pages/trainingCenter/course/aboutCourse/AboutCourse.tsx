@@ -1,6 +1,10 @@
 import { CalendarIcon, EditIcon } from '@assets/icons'
-import { Button, InputWithIcon, Select, Typography } from '@shared/components'
+import { selectCourse } from '@services/slices'
+import { useAppSelector } from '@services/store'
+import { Button, EditableText, InputWithIcon, Select, Typography } from '@shared/components'
 import { useToggle } from '@shared/hooks'
+import { formatDate } from '@shared/utils'
+import { useState } from 'react'
 
 import s from './aboutCourse.module.scss'
 
@@ -26,6 +30,12 @@ export const AboutCourse = () => {
   const { isOpen: isOpenStart, toggle: toggleStart } = useToggle()
   const { isOpen: isOpenEnd, toggle: toggleEnd } = useToggle()
 
+  const currentCourse = useAppSelector(selectCourse)
+  const [description, setDescription] = useState(currentCourse.description)
+  const [isEditMode, setIsEditMode] = useState(false)
+
+  const toggleEditMode = () => setIsEditMode((prev) => !prev)
+
   return (
     <div className={s.container}>
       <div className={s.leftBlock}>
@@ -33,10 +43,11 @@ export const AboutCourse = () => {
         <InputWithIcon
           children={'Здесь будет календарь'}
           className={s.select}
-          placeholder="Дата создания"
+          placeholder={formatDate(currentCourse.create_date)}
           isOpen={isOpenStart}
           icon={<CalendarIcon />}
           onClick={toggleStart}
+          // type="date"
         />
         <InputWithIcon
           className={s.select}
@@ -45,10 +56,11 @@ export const AboutCourse = () => {
           onClick={toggleEnd}
           icon={<CalendarIcon />}
           isOpen={isOpenEnd}
+          // type="date"
         />
         <h6 className={s.subtitle}>
           <p className={s.sutitleLeft}>Количество студентов:</p>
-          <p className={s.sutitleRight}>654</p>
+          <p className={s.sutitleRight}> {Math.floor(Math.random() * 1500) + 1}</p>
         </h6>
         <Select options={courseStatuses} placeholder="Статус курса" className={s.select} />
         <Select options={teachers} placeholder="Преподаватель" className={s.select} />
@@ -57,22 +69,18 @@ export const AboutCourse = () => {
         <div className={s.top}>
           <div className={s.titleBox}>
             <div className={s.img}>
-              <EditIcon width={'15px'} height={'15px'} />
+              <EditIcon width={'15px'} height={'15px'} onClick={toggleEditMode} />
             </div>
             <Typography variant="header_3" className={s.title}>
               Цель курса
             </Typography>
           </div>
-          <Typography variant="body_1" className={s.txt}>
-            Этот курс поможет тебе понять, на каком уровне ты находишься, выявить пробелы в знаниях
-            и исправить их. Ты разберёшь частые ошибки в грамматике и лексике, получишь персональные
-            рекомендации и выстроишь эффективную стратегию обучения.
-          </Typography>
-          <Typography variant="body_1" className={s.txt}>
-            Курс состоит из четырёх уроков с тестами, видео и практикой. В среднем на его
-            прохождение потребуется около 120 минут, но можно проходить в удобном темпе. Материалы
-            доступны в любое время, а в чате можно задать вопросы и разобраться в сложных вопросах.
-          </Typography>
+          <EditableText
+            title={description}
+            setTitle={setDescription}
+            isEditMode={isEditMode}
+            variant="body_1"
+          />
         </div>
         <div className={s.buttonBox}>
           <Button

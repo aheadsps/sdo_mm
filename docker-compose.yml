@@ -19,8 +19,8 @@ services:
   db:
     restart: always
     image: postgres:16.3-alpine
-    volumes:
-      - postgres_data:/var/lib/postgresql/data/
+    #volumes:
+      #- postgres_data:/var/lib/postgresql/data/
     hostname: db
     networks:
       - backend

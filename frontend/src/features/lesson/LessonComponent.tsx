@@ -4,7 +4,7 @@ import { AiComponent, Typography, Button, Title } from '@shared/components'
 import { withLayout } from '@shared/HOC'
 import { useToggle } from '@shared/hooks/useToggle'
 import { useState } from 'react'
-import { NavLink, useNavigate } from 'react-router-dom'
+import { NavLink, useNavigate, useParams } from 'react-router-dom'
 
 import { LessonContent } from './lesson-content/LessonContent'
 import { LessonPlan } from './lesson-plan'
@@ -27,9 +27,10 @@ const LessonComponent = () => {
   const btn1 = 'ИИ'
   const btn2 = 'Обсуждение урока'
   const navigate = useNavigate()
+  const { id } = useParams()
 
   const handleNavigate = async () => {
-    await navigate('/learning/course')
+    await navigate(`/learning/course/${id}`)
   }
 
   const onItemClick = (item: SelectedStep) => {
@@ -42,7 +43,7 @@ const LessonComponent = () => {
 
   return (
     <div className={s.container}>
-      <NavLink to={'/learning/course'} className={s.backToPage}>
+      <NavLink to={`/learning/course/${id}`} className={s.backToPage}>
         <ArrowLeftIcon className={s.icon} />
         <Typography variant="body_2" className={s.backText}>
           Вернуться на общую страницу курса
