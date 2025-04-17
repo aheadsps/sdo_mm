@@ -1,4 +1,4 @@
-import { Calendar } from '@shared/components'
+import { Schedule } from '@shared/components'
 
 import s from './main.module.scss'
 import { CurrentTasks } from './tasks-elements/CurrentTasks'
@@ -15,7 +15,7 @@ export const Main = () => {
       <div className={s.warning}>
         <WarningCard />
       </div>
-      <Calendar />
+      <Schedule />
     </div>
   )
 }
