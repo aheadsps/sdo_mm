@@ -1,11 +1,10 @@
 import { ArrowRightIcon, CalendarIcon } from '@assets/icons'
 import { routes } from '@routes/routes'
+import { LessonType } from '@services/api'
 import { Button, InputWithIcon, Input, type Option, Select, Typography } from '@shared/components'
 import { useToggle } from '@shared/hooks'
 import clsx from 'clsx'
 import { NavLink } from 'react-router-dom'
-
-import { LessonType } from '../data'
 
 import s from './lesson-content.module.scss'
 
@@ -23,10 +22,10 @@ export const LessonContent = <T extends LessonType>({
   return (
     <div className={s.lessonContent}>
       <div className={s.title}>
-        {!lesson?.title ? (
+        {!lesson?.name ? (
           <Input placeholder="Введите тему" />
         ) : (
-          <Typography variant="body_2">{lesson?.title ? lesson.title : 'Введите тему'}</Typography>
+          <Typography variant="body_2">{lesson?.name ? lesson.name : 'Введите тему'}</Typography>
         )}
       </div>
       {isExpandableContent ? (
@@ -49,7 +48,7 @@ export const LessonContent = <T extends LessonType>({
         <>
           <InputWithIcon
             className={s.formInput}
-            placeholder={lesson?.dateTime ? lesson?.dateTime : 'Введите дату урока'}
+            placeholder={'Введите дату урока'}
             content={'Здесь будет календарь'}
             onClick={toggle}
             icon={<CalendarIcon />}
@@ -57,11 +56,7 @@ export const LessonContent = <T extends LessonType>({
           >
             Здесь будет календарь
           </InputWithIcon>
-          <Select
-            className={s.format}
-            placeholder={lesson?.format ? lesson?.format : 'Формат'}
-            options={options}
-          />
+          <Select className={s.format} placeholder={'Формат'} options={options} />
         </>
       )}
     </div>

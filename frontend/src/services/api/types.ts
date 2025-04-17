@@ -54,23 +54,67 @@ export type Event = {
   user: number
 }
 
-export type Lesson = {
+export type Attachments = {
+  id: number
+  file: string
+  file_type: string
+}
+
+export type Answer = {
+  id: number
+  question: number
+  text: string
+}
+
+export type TestQuestion = {
+  id: number
+  image: string | null
+  text: string
+  answers: Answer[]
+}
+
+export type TestBlock = {
+  id: number
+  lesson: number
+  user_story: string[] //??? data type
+  questions: TestQuestion[]
+}
+
+export type Step = {
+  serial: number
+  title: string
+  content_text: string
+  lesson: number
+  attachments: Attachments[]
+}
+
+export type LessonType = {
+  course: number
+  id: number
+  name: string
+  serial: number
+  steps: Step[]
+  test_block: TestBlock
+} & {
+  expanded: boolean
+}
+/* export type Lesson = {
   id: number
   course: number
   serial: number
   name: string
   steps: Step[]
   test_block: number
-}
+} */
 
-export type Step = {
+/* export type Step = {
   id: number
   title: string
   content_text: string
   lesson: number
   serial: number
   attachments: number[]
-}
+} */
 
 // Admin
 export type CoursesResponse = {
@@ -90,7 +134,7 @@ export type CourseVeiw = {
   experiences: number[]
   id: number
   image: string
-  lessons: Lesson[]
+  lessons: LessonType[]
   name: string
   profession: number
   update_date: string
@@ -104,7 +148,7 @@ export type Course = {
   create_date: string
   update_date: string
   description: string
-  lessons: Lesson[]
+  lessons: LessonType[]
   beginer: boolean
   image: string
   profession: number

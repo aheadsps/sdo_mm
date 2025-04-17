@@ -1,25 +1,30 @@
+import { Step } from '@services/api'
 import { Card } from '@shared/components'
 
 import { BlockHeader } from '../block-header/BlockHeader'
-import { lessonsData, optionsAccess } from '../data'
-import { LessonContent } from '../lesson-content/LessonContent'
 
 import s from './expanded-content.module.scss'
 
 const columns = ['Тема блока', 'Условия видимости', 'Конструкторт']
 
-export const ExpandedContent = () => {
+type Props = {
+  steps: Step[]
+}
+export const ExpandedContent = ({ steps }: Props) => {
   return (
     <div className={s.expandedContent}>
       <BlockHeader columns={columns} />
       <Card className={s.card}>
-        {lessonsData.map((lesson) => (
+        {/*  {steps.map((step) => (
           <LessonContent
-            key={lesson.id}
-            lesson={lesson}
+            key={step.serial}
+            lesson={step}
             options={optionsAccess}
             isExpandableContent
           />
+        ))} */}
+        {steps.map((step) => (
+          <div key={step.serial}>{step.content_text}</div>
         ))}
       </Card>
     </div>
