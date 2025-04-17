@@ -2,11 +2,12 @@ import { selectCourse } from '@services/slices'
 import { useAppSelector } from '@services/store'
 import { DropdownCard } from '@shared/components'
 import { Button, Typography } from '@shared/components'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useParams } from 'react-router-dom'
 
 import s from './course-content.module.scss'
 
 export const CourseContent = () => {
+  const { id } = useParams()
   const course = useAppSelector(selectCourse)
   return (
     <>
@@ -15,7 +16,7 @@ export const CourseContent = () => {
           <DropdownCard key={lesson.id} title={lesson.name} blocks={`${lesson.serial} блок`}>
             <div className={s.contentTitle}>
               <Typography variant="body_2">{lesson.name}</Typography>
-              <NavLink to={'/learning/course/lesson'}>
+              <NavLink to={`/learning/course/${id}/lesson`}>
                 <Button className={s.lessonButton}>Открыть урок</Button>
               </NavLink>
             </div>

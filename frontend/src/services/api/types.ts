@@ -81,6 +81,7 @@ export type TestBlock = {
 }
 
 export type Step = {
+  id: number
   serial: number
   title: string
   content_text: string

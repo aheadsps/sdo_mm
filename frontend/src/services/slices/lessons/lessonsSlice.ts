@@ -1,9 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
-import { Lesson, Scorm } from '@services/api'
+import { LessonType, Scorm } from '@services/api'
 
 type InitialState = {
-  lessons: Lesson[]
+  lessons: LessonType[]
   scorm: Scorm
 }
 const initialState: InitialState = {
@@ -20,7 +20,7 @@ export const lessonsSlice = createSlice({
   name: 'lessons',
   initialState,
   reducers: {
-    setAllLessons: (state, action: PayloadAction<Lesson[]>) => {
+    setAllLessons: (state, action: PayloadAction<LessonType[]>) => {
       state.lessons = action.payload
     },
     setScormById: (state, action: PayloadAction<Scorm>) => {
