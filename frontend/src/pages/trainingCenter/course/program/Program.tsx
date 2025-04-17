@@ -23,7 +23,6 @@ export const Program: React.FC = () => {
     expanded: false,
   }))
   const scorm = currentCourse.scorms
-  console.log(scorm)
 
   const [lessons, setLessons] = useState(courseLessons)
 

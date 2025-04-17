@@ -6,6 +6,7 @@ import { Title, CourseCard, Modal, Loader } from '@shared/components'
 import { AddMaterials } from '@shared/components'
 import { withLayout } from '@shared/HOC'
 import { useToggle } from '@shared/hooks'
+import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { Filters } from './Filters'
@@ -24,7 +25,10 @@ const Training = () => {
   }
   const { data: courses, isLoading } = useGetCoursesQuery()
   const dispatch = useAppDispatch()
-  if (courses?.results) dispatch(setAllCourses(courses?.results))
+
+  useEffect(() => {
+    if (courses?.results) dispatch(setAllCourses(courses?.results))
+  }, [courses?.results, dispatch])
 
   const allCourses = useAppSelector(selectCourses)
 
