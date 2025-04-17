@@ -308,10 +308,10 @@ TYPE_QUESTION = [
         "task",
         "задание",
     ),
-    [
+    (
         "essay",
         "эссе"
-    ]
+    ),
 ]
 
 TYPE_LESSON = [
@@ -322,7 +322,7 @@ TYPE_LESSON = [
     (
         "linearly ",
         "линейный",
-    )
+    ),
 ]
 TYPE_OF_ASSESSMENT = [
     (
@@ -332,7 +332,7 @@ TYPE_OF_ASSESSMENT = [
     (
         "question",
         "вопрос"
-    )
+    ),
 ]
 TYPE_TEST_BLOCK = [
     (
@@ -342,7 +342,7 @@ TYPE_TEST_BLOCK = [
     (
         "done",
         "Завершено"
-    )
+    ),
 ]
 
 
