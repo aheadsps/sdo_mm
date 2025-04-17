@@ -707,12 +707,21 @@ class UsersStatSerializer(serializers.Serializer):
     status = serializers.CharField()
 
 
-class MainLessonsSerializer(serializers.Serializer):
+class MainLessonsSerializer(serializers.HyperlinkedModelSerializer):
     """
     Сериализатор для Main страницы Lessons
     """
     name = serializers.CharField()
     end_date = serializers.DateTimeField()
+
+    class Meta:
+        model = models.Lesson
+        fields = (
+            'url',
+            'id',
+            'name',
+            'end_date',
+        )
 
 
 class CourseDetailSerializer(serializers.Serializer):

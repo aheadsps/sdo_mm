@@ -366,6 +366,12 @@ paths:
                 minItems: 1
                 items:
                   properties:
+                    id:
+                      type: integer
+                      minimum: 1
+                    url:
+                      type: string
+                      format: slug
                     name:
                       type: string
                     end_date:
@@ -2335,7 +2341,7 @@ components:
           minItems: 0
           items:
             $ref: "#/components/schemas/StepView"
-        test-block:
+        test_block:
           type: object
           description: Тестовый блок
           $ref: '#/components/schemas/TestBlockView'
