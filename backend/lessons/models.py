@@ -293,7 +293,7 @@ class TestBlock(models.Model):
                                   null=True,
                                   blank=True,
                                   )
-    max_score = models.DateTimeField(_("Максимальный балл"),
+    max_score = models.DecimalField(_("Максимальный балл"),
                                      max_digits=5,
                                      decimal_places=2,
                                      default=0.00,
