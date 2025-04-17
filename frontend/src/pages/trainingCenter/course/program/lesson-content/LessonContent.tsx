@@ -1,6 +1,6 @@
 import { ArrowRightIcon, CalendarIcon } from '@assets/icons'
 import { routes } from '@routes/routes'
-import { LessonType } from '@services/api'
+import { LessonType, Step } from '@services/api'
 import { Button, InputWithIcon, Input, type Option, Select, Typography } from '@shared/components'
 import { useToggle } from '@shared/hooks'
 import clsx from 'clsx'
@@ -8,24 +8,31 @@ import { NavLink } from 'react-router-dom'
 
 import s from './lesson-content.module.scss'
 
-type Props<T extends LessonType> = {
+const getDisplayName = (item?: LessonType | Step): string => {
+  if (!item) return ''
+  return 'name' in item ? item.name : item.title
+}
+
+type Props<T extends LessonType | Step> = {
   lesson?: T
   options?: Option[]
   isExpandableContent?: boolean
 }
-export const LessonContent = <T extends LessonType>({
+export const LessonContent = <T extends LessonType | Step>({
   lesson,
   options,
   isExpandableContent = false,
 }: Props<T>) => {
   const { isOpen, toggle } = useToggle()
+  const displayName = getDisplayName(lesson)
+
   return (
     <div className={s.lessonContent}>
       <div className={s.title}>
-        {!lesson?.name ? (
+        {!displayName ? (
           <Input placeholder="Введите тему" />
         ) : (
-          <Typography variant="body_2">{lesson?.name ? lesson.name : 'Введите тему'}</Typography>
+          <Typography variant="body_2">{lesson ? displayName : 'Введите тему'}</Typography>
         )}
       </div>
       {isExpandableContent ? (
