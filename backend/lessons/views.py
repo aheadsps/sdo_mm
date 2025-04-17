@@ -210,7 +210,7 @@ class CourseViewSet(mixins.ListModelMixin,
                 permissions.IsAuthenticated &
                 (CanReadCourse | IsAdminOrIsStaff)
             ]
-        elif self.action in ['partial_update', 'delete', 'retrieve', 'users']:
+        elif self.action in ['partial_update', 'delete', 'retrieve', 'users', 'about']:
             permission_classes = [permissions.IsAuthenticated &
                                   (CurrentTeacher | permissions.IsAdminUser)]
         else:
@@ -264,7 +264,7 @@ class CourseViewSet(mixins.ListModelMixin,
 
     @action(detail=True)
     def users(self, request, course_id=None):
-        serializer_class = serializers.UsersStatSerializer
+        serializer_class = serializers.CourseDetailSerializer
         self.kwargs.setdefault('context', self.get_serializer_context())
         users = (models.EventCovered
                  ._default_manager
@@ -274,6 +274,26 @@ class CourseViewSet(mixins.ListModelMixin,
         serializer = serializer_class(users, many=True)
         return Response(serializer.data)
 
+    @action(detail=True)
+    def about(self, request, course_id=None):
+        serializer_class = serializers.CourseDetailSerializer
+        self.kwargs.setdefault('context', self.get_serializer_context())
+        event = (models.Event._default_manager
+                 .filter(course_id=course_id)
+                 .prefetch_related('course').get())
+        students = event.covers.count()
+        data = dict(
+            name=event.course.name,
+            description=event.course.description,
+            create_date=event.course.create_date,
+            end_date=event.end_date,
+            count_students=students,
+            status=event.course.status,
+            teacher=event.course.teacher,
+        )
+        logger.debug(f'detail for this course is {data}')
+        serializer = serializer_class(data)
+        return Response(serializer.data)
 
 # @method_decorator(queries_counter, name='dispatch')
 class LessonViewSet(viewsets.ModelViewSet):

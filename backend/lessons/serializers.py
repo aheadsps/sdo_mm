@@ -707,6 +707,19 @@ class UsersStatSerializer(serializers.Serializer):
     status = serializers.CharField()
 
 
+class CourseDetailSerializer(serializers.Serializer):
+    """
+    Детали курса
+    """
+    name = serializers.CharField()
+    description = serializers.CharField()
+    create_date = serializers.DateTimeField()
+    end_date = serializers.DateTimeField()
+    count_students = serializers.IntegerField()
+    status = serializers.CharField()
+    teacher = user_serializers.UserSerializer()
+
+
 class EventCoveredCreateSerializer(serializers.ModelSerializer):
     """
     Сериализатор создания покрытия эвентами

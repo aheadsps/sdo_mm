@@ -797,6 +797,37 @@ paths:
         "422":
           $ref: "#/components/responses/UnprocessableEntity"
 
+  /courses/{course_id}/about:
+    get:
+      summary: Вывод деталей курса
+      parameters:
+        - in: path
+          name: course_id
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+      tags:
+        - Course
+      security:
+        - Token: []
+      responses:
+        "200":
+          description: JSON ответ с списком пользователей
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/CourseDetail"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+
   /scorms/{scorm_id}:
     get:
       operationId: api_scorms_retrieve
@@ -2183,6 +2214,35 @@ components:
         - profession
         - experiences
 
+    CourseDetail:
+      description: Сущность деталей текущего курса
+      additionalProperties: false
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        create_date:
+          type: string
+          format: date-time
+        end_date:
+          type: string
+          format: date-time
+        count_students:
+          type: integer
+          minimum: 0
+        status:
+          type: string
+          enum:
+            - run
+            - end
+            - archive
+            - edit
+        teacher:
+          type: object
+          $ref: "#/components/schemas/User"
+
     Rate:
       description: Сущность оценок по уроку
       additionalProperties: false
@@ -2959,6 +3019,7 @@ components:
             - finished
           readOnly: true
           default: expected
+
 
   securitySchemes:
     Token:
