@@ -3,18 +3,22 @@ import { selectExpiringEvents } from '@services/slices/events'
 import { useAppSelector } from '@services/store'
 import { Typography, Button } from '@shared/components'
 import { formatDate, getDaysLeft } from '@shared/utils'
+import clsx from 'clsx'
 import { NavLink } from 'react-router-dom'
 
 import s from './warning-card.module.scss'
 
-export const WarningCard = () => {
+type Props = {
+  className?: string
+}
+export const WarningCard = ({ className }: Props) => {
   const expiringEvents = useAppSelector(selectExpiringEvents)
 
   if (!expiringEvents || expiringEvents.length === 0) {
     return null
   }
   return expiringEvents.map((result) => (
-    <div className={s.warningCard} key={result.id}>
+    <div className={clsx(s.warningCard, className)} key={result.id}>
       <Typography variant="header_6" className={s.warningIndicator}>
         Время на прохождение истекает!
       </Typography>

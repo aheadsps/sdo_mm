@@ -1,4 +1,4 @@
-import SettingsIcon from '@assets/icons/SettingsIcon'
+/* import SettingsIcon from '@assets/icons/SettingsIcon'
 import { NewItem } from '@services/slices/constructor/constructor.types'
 import { LessonBlock } from '@services/slices/constructor/constructor.types'
 import {
@@ -95,6 +95,114 @@ export const ConstructorPage: React.FC = () => {
                   newItems={item.blockItems || []}
                   onActive={() => onBlockActive(item.id)}
                   deleteBlock={() => onDeleteBlock(item.id)}
+                  setIsSidebarPointed={setIsSidebarPointed}
+                />
+              ))}
+            </main>
+          </div>
+        </div>
+      </div>
+    </>
+  )
+}
+ */
+
+import SettingsIcon from '@assets/icons/SettingsIcon'
+import { NewItem, LessonBlock } from '@services/slices/constructor/constructor.types'
+import {
+  addNewBlockItem,
+  deleteBlockItem,
+  selectBlocks,
+  setBlocks,
+  setActiveBlockId,
+  selectActiveBlockId,
+} from '@services/slices/constructor/constructorSlice'
+import { useAppDispatch, useAppSelector } from '@services/store'
+import { CMenu, Title, Header } from '@shared/components'
+import { useEffect, useState } from 'react'
+
+import { BlockDropdown } from './block-dropdown/BlockDropdown'
+import s from './constructorPage.module.scss'
+
+const lessonBlocks: LessonBlock[] = [
+  {
+    id: 1,
+    title: 'Зачем нужны СИЗ? Психология безопасности',
+    blockItems: [],
+  },
+  {
+    id: 2,
+    title: 'Основные виды СИЗ и их роль',
+    blockItems: [],
+  },
+  {
+    id: 3,
+    title: 'Как выбрать СИЗ? Комфорт vs безопасность',
+    blockItems: [],
+  },
+]
+
+export const ConstructorPage: React.FC = () => {
+  const dispatch = useAppDispatch()
+  const blocks = useAppSelector(selectBlocks)
+  const activeBlockId = useAppSelector(selectActiveBlockId)
+
+  const [isSidebarPointed, setIsSidebarPointed] = useState(false)
+
+  useEffect(() => {
+    dispatch(setBlocks(lessonBlocks))
+  }, [dispatch])
+
+  const onBlockActive = (blockId: number) => {
+    if (activeBlockId === blockId) {
+      dispatch(setActiveBlockId({ blockId: null }))
+    } else {
+      dispatch(setActiveBlockId({ blockId }))
+    }
+  }
+
+  const onAddNewItem = (newItem: NewItem) => {
+    if (activeBlockId) {
+      dispatch(addNewBlockItem({ newItem, blockId: activeBlockId }))
+    }
+    if (isSidebarPointed) {
+      setIsSidebarPointed(false)
+    }
+  }
+
+  const onDeleteBlock = (blockId: number) => {
+    dispatch(deleteBlockItem({ blockId }))
+  }
+
+  return (
+    <>
+      <Header />
+      <div className={s.constructorWrapper}>
+        <div className={s.wrapper}>
+          <Title
+            txt="Конструктор курса"
+            btn0={<SettingsIcon />}
+            btn1="Предпросмотр"
+            btn2="Опубликовать"
+            className={s.visible}
+          />
+          <div className={s.container}>
+            <CMenu
+              setNewItem={onAddNewItem}
+              isSidebarPointed={isSidebarPointed}
+              lastBlockId={blocks.at(-1)?.id || null}
+              setLastBlockId={() => {}}
+            />
+            <main className={s.main}>
+              {blocks.map((block) => (
+                <BlockDropdown
+                  key={block.id}
+                  blockId={block.id}
+                  title={block.title}
+                  newItems={block.blockItems}
+                  isActiveBlock={activeBlockId === block.id}
+                  onActive={onBlockActive}
+                  deleteBlock={() => onDeleteBlock(block.id)}
                   setIsSidebarPointed={setIsSidebarPointed}
                 />
               ))}

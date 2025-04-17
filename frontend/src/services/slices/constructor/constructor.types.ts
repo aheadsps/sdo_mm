@@ -1,4 +1,4 @@
-export type AddedMaterial = 'text' | 'video' | 'image' | 'test' | 'module'
+export type AddedMaterial = 'text' | 'video' | 'image' | 'test'
 
 export type NewItem = {
   id?: number

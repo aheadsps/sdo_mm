@@ -1,6 +1,6 @@
 import { selectUser } from '@services/slices'
 import { useAppSelector } from '@services/store'
-import { Calendar, Typography } from '@shared/components'
+import { Schedule, Typography } from '@shared/components'
 import { Role } from '@shared/components/sidebar/sidebar.types'
 
 import s from './main.module.scss'
@@ -20,10 +20,8 @@ export const Main = () => {
             <CurrentTasks />
             <ExpiredTasks />
           </div>
-          <div className={s.warning}>
-            <WarningCard />
-          </div>
-          <Calendar />
+          <WarningCard className={s.warning} />
+          <Schedule />
         </div>
       ) : (
         <div className={s.contentBlock}>

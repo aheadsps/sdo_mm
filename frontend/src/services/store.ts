@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import { authApi, coursesApi, coversApi, eventsApi, lessonsApi } from './api'
 import { authReducer, coursesSliceReducer, coversSliceReducer } from './slices'
 import { auxiliarySliceReducer } from './slices/auxiliarySlice'
-import { userApi } from './api/user.api'
 import { constructorSliceReducer } from './slices/constructor/constructorSlice'
 import { eventsSliceReducer } from './slices/events/eventsSlice'
 import { lessonsSliceReducer } from './slices/lessons/lessonsSlice'
@@ -24,7 +23,6 @@ export const store = configureStore({
     [lessonsApi.reducerPath]: lessonsApi.reducer,
     // [authApi.reducerPath]: authApi.reducer,
     add: constructorSliceReducer,
-    [userApi.reducerPath]: userApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(

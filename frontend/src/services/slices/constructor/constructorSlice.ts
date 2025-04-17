@@ -6,7 +6,7 @@ import { NewItem } from './constructor.types'
 
 type InitialState = {
   lessonBlocks: LessonBlock[]
-  activeBlockId: number
+  activeBlockId: number | null
 }
 
 const initialState: InitialState = {
@@ -33,8 +33,7 @@ export const constructorSlice = createSlice({
     deleteBlockItem: (state, action: PayloadAction<{ blockId: number }>) => {
       state.lessonBlocks = state.lessonBlocks.filter((block) => block.id !== action.payload.blockId)
     },
-
-    setActiveBlockId: (state, action: PayloadAction<{ blockId: number }>) => {
+    setActiveBlockId: (state, action: PayloadAction<{ blockId: number | null }>) => {
       state.activeBlockId = action.payload.blockId
     },
     deleteItem: (state, action: PayloadAction<{ itemId: number; activeBlockId: number }>) => {
