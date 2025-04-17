@@ -9,12 +9,13 @@ import s from './studentBlock.module.scss'
 type Props<T extends studentType> = {
   student?: T
   onClick?: () => void
+  openModal?: () => void
 }
-export const StudentBlock = <T extends studentType>({ student, onClick }: Props<T>) => {
+export const StudentBlock = <T extends studentType>({ student, onClick, openModal }: Props<T>) => {
   const buttonColor = student ? '#E9ECEF' : '#831f29'
   return (
     <div className={s.studentBox}>
-      <div className={clsx(s.title, s.access)}>
+      <div className={clsx(s.title, s.access)} onClick={openModal}>
         {!student?.name ? (
           <Input placeholder="Начните вводить ФИО студента" />
         ) : (

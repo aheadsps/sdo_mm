@@ -13,14 +13,14 @@ import s from './studentsList.module.scss'
 
 export const StudentsList = () => {
   const [newStudentCount, setNewStudentCount] = useState<number[]>([])
-  const { isOpen: isOpenModal, toggle: toggleModal } = useToggle()
+  const { isOpen: isOpenModal, toggle: toggleModal, open: openModal } = useToggle()
 
   const onAddNewStudent = () => {
     setNewStudentCount((prev) => [...prev, prev.length + 1])
   }
   return (
     <div className={s.container}>
-      {!isOpenModal && (
+      {isOpenModal && (
         <Modal
           close={toggleModal}
           title="Васильевa Владислава Геннадиевнa"
@@ -34,7 +34,7 @@ export const StudentsList = () => {
         {studentsData.map((student) => {
           return (
             <div key={student.id}>
-              <StudentBlock student={student} />
+              <StudentBlock student={student} openModal={openModal} />
             </div>
           )
         })}

@@ -1,8 +1,12 @@
 import { routes } from '@routes/routes'
-import { Title, CourseCard, Modal } from '@shared/components'
+import { useGetCoursesQuery } from '@services/api'
+import { selectCourses, setAllCourses } from '@services/slices'
+import { useAppDispatch, useAppSelector } from '@services/store'
+import { Title, CourseCard, Modal, Loader } from '@shared/components'
 import { AddMaterials } from '@shared/components'
 import { withLayout } from '@shared/HOC'
 import { useToggle } from '@shared/hooks'
+import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { Filters } from './Filters'
@@ -19,22 +23,27 @@ const Training = () => {
   const goToConstructor = () => {
     navigate(routes.constructor)
   }
+  const { data: courses, isLoading } = useGetCoursesQuery()
+  const dispatch = useAppDispatch()
+
+  useEffect(() => {
+    if (courses?.results) dispatch(setAllCourses(courses?.results))
+  }, [courses?.results, dispatch])
+
+  const allCourses = useAppSelector(selectCourses)
 
   return (
     <div className={s.container}>
       <Title txt={txt} btn1={btn1} btn2={btn2} fstBtn={openModal} scndBtn={goToConstructor} />
       <Filters />
       <div className={s.cardsBlock}>
-        <CourseCard />
-        <CourseCard />
-        <CourseCard />
-        <CourseCard />
-        <CourseCard />
-        <CourseCard />
-        <CourseCard />
-        <CourseCard />
-        <CourseCard />
-        <CourseCard />
+        {isLoading ? (
+          <Loader />
+        ) : (
+          allCourses.map((course, index) => {
+            return <CourseCard key={index} item={course} />
+          })
+        )}
       </div>
 
       {isModalOpen && (

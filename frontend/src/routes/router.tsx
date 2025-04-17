@@ -38,7 +38,7 @@ export const router = createBrowserRouter([
         element: <TrainingCenter />,
       },
       {
-        path: routes.trainingCenterCourse,
+        path: `${routes.trainingCenterCourse}/:id`,
         element: <TrainingCenterCourse />,
       },
       {
@@ -56,11 +56,11 @@ export const router = createBrowserRouter([
         element: <MyLearning />,
       },
       {
-        path: routes.course,
+        path: `${routes.course}/:id`,
         element: <CoursePage />,
       },
       {
-        path: routes.lesson,
+        path: `${routes.course}/:id/lesson`,
         element: <Lesson />,
       },
     ],

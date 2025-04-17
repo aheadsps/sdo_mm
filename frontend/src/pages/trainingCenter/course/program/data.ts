@@ -1,10 +1,10 @@
-export type LessonType = {
+/* export type LessonType = {
   id: number
   title: string
   dateTime: string
   format: string
   expanded: boolean
-}
+} */
 
 export const optionsFormat = [
   {
@@ -28,7 +28,7 @@ export const optionsAccess = [
   },
 ]
 
-export const lessonsData: LessonType[] = [
+/* export const lessonsData: LessonType[] = [
   {
     id: 1,
     title: 'Введение в безопасность: основные риски при работе с электроинструментом',
@@ -43,4 +43,4 @@ export const lessonsData: LessonType[] = [
     format: 'Онлайн',
     expanded: false,
   },
-]
+] */

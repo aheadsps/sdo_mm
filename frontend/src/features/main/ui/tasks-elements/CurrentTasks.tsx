@@ -15,7 +15,7 @@ export const CurrentTasks = () => {
 
       {currentEvents?.length ? (
         currentEvents.map((result) => (
-          <Task key={result.id} daysLeft={getDaysLeft(result.end_date)}>
+          <Task key={result.id} daysLeft={getDaysLeft(result.end_date)} courseId={result.course.id}>
             {result.course.name}
           </Task>
         ))
