@@ -10,6 +10,7 @@ class AnswerAdmin(admin.ModelAdmin):
     """
 
     list_display = (
+        "id",
         "text",
         "correct",
         "question",
@@ -23,6 +24,7 @@ class QuestionAdmin(admin.ModelAdmin):
     """
 
     list_display = (
+        "id",
         "teacher",
         "text",
         "image",
@@ -33,6 +35,7 @@ class QuestionAdmin(admin.ModelAdmin):
 @admin.register(models.Step)
 class StepAdmin(admin.ModelAdmin):
     list_display = (
+        "id",
         "teacher",
         "serial",
         "title",
@@ -49,6 +52,7 @@ class CourseAdmin(admin.ModelAdmin):
     """
 
     list_display = (
+        "id",
         'teacher',
         "name",
         "description",
@@ -69,6 +73,7 @@ class EventAdmin(admin.ModelAdmin):
     """
 
     list_display = (
+        "id",
         'course',
         'start_date',
         'end_date',
@@ -83,6 +88,7 @@ class EventCoveredAdmin(admin.ModelAdmin):
     """
 
     list_display = (
+        "id",
         'user',
         'event',
         'favorite',
@@ -97,6 +103,7 @@ class LessonAdmin(admin.ModelAdmin):
     Админ панель Урока
     """
     list_display = (
+        "id",
         "teacher",
         "name",
         "version",
@@ -115,6 +122,7 @@ class SCORMFileAdmin(admin.ModelAdmin):
     Админ панель SCORMFile
     """
     list_display = (
+        "id",
         'course',
         'name',
         'file',
@@ -139,7 +147,7 @@ class AttachmentsAdmin(admin.ModelAdmin):
     """
     Админ для вложеностей
     """
-    list_display = ('file', 'file_type', 'step')
+    list_display = ("id", 'file', 'file_type', 'step')
 
 
 @admin.register(models.UserStory)
@@ -148,6 +156,7 @@ class UserStoryAdmin(admin.ModelAdmin):
     Админ панель истории пользователя
     """
     list_display = (
+        "id",
         'user',
         'answer',
         'test_block',
@@ -161,6 +170,7 @@ class LessonStoryAdmin(admin.ModelAdmin):
     Админ панель истории уроков
     """
     list_display = (
+        "id",
         'course',
         'step',
         'user',

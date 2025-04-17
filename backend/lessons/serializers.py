@@ -447,6 +447,12 @@ class CreateCourseSerializer(serializers.ModelSerializer):
         validated_data['status'] = 'archive'
         return super().update(instance, validated_data)
 
+    def to_representation(self, instance):
+        response = super().to_representation(instance)
+        if instance.image:
+            response['image'] = instance.image.url
+        return response
+
 
 class CourseSerializer(serializers.ModelSerializer):
     """
@@ -474,6 +480,12 @@ class CourseSerializer(serializers.ModelSerializer):
             "status",
             "materials",
         )
+
+    def to_representation(self, instance):
+        response = super().to_representation(instance)
+        if instance.image:
+            response['image'] = instance.image.url
+        return response
 
 
 class ViewCourseSerializer(serializers.ModelSerializer):
@@ -509,6 +521,12 @@ class ViewCourseSerializer(serializers.ModelSerializer):
     def get_lessons(self, obj):
         lessons = models.Lesson._default_manager.filter(course=obj)
         return LessonSerializer(lessons, many=True).data
+
+    def to_representation(self, instance):
+        response = super().to_representation(instance)
+        if instance.image:
+            response['image'] = instance.image.url
+        return response
 
 
 class EventViewSerializer(serializers.ModelSerializer):
