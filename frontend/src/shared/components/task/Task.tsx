@@ -1,7 +1,9 @@
 import { ArrowRightIcon } from '@assets/icons'
+import { routes } from '@routes/routes'
 import { getBackgroundColor } from '@shared/utils'
 import clsx from 'clsx'
 import { ComponentPropsWithRef, ReactNode } from 'react'
+import { NavLink } from 'react-router-dom'
 
 import { Typography } from '../typography'
 
@@ -10,11 +12,12 @@ import s from './task.module.scss'
 type Props = {
   daysLeft?: number
   children: ReactNode
+  courseId: number
 } & ComponentPropsWithRef<'div'>
 
-export const Task = ({ daysLeft, children, className }: Props) => {
+export const Task = ({ daysLeft, children, className, courseId }: Props) => {
   return (
-    <div className={clsx(s.card, className)}>
+    <NavLink className={clsx(s.card, className)} to={`${routes.course}/${courseId}`}>
       <span className={s.leftBar} style={{ backgroundColor: getBackgroundColor(daysLeft) }}></span>
       <div className={s.content}>
         <Typography variant="body_1" className={s.title}>
@@ -32,6 +35,6 @@ export const Task = ({ daysLeft, children, className }: Props) => {
           Просрочен
         </Typography>
       )}
-    </div>
+    </NavLink>
   )
 }

@@ -1,28 +1,48 @@
-import Basket from '@assets/icons/BasketIcon'
+import { ArchiveIcon } from '@assets/icons'
+import { routes } from '@routes/routes'
+import { Course } from '@services/api'
+import { setCurrentCourseId } from '@services/slices'
+import { useAppDispatch } from '@services/store'
+import { formatDate } from '@shared/utils'
+import { ComponentPropsWithoutRef } from 'react'
 import { Link } from 'react-router-dom'
 
 import { Button } from '../button'
 
 import s from './courseCard.module.scss'
 
-export const CourseCard = () => {
+type Props = {
+  item: Course
+} & ComponentPropsWithoutRef<'div'>
+
+export const CourseCard = ({ item }: Props) => {
+  const dispatch = useAppDispatch()
+  const hendleClick = () => {
+    dispatch(setCurrentCourseId(item.id))
+  }
+  // console.log(item)
   return (
     <div className={s.card}>
-      <h6 className={s.title}>English Check-Up: Продвинутый разбор</h6>
+      <h6 className={s.title}>{item.name}</h6>
       <div className={s.content}>
         <div className={s.item}>
           <div className={`${s.itemLeft} ${s.colorGreen}`}>Опубликован</div>
-          <div className={s.itemRight}>12.02.2025</div>
+          <div className={s.itemRight}>{formatDate(item.create_date)}</div>
         </div>
         <div className={s.item}>
-          <div className={s.itemLeft}>Прогресс: 20%</div>
-          <div className={s.itemRight}>Учится: 487</div>
+          <div className={s.itemLeft}>Прогресс: {Math.floor(Math.random() * 100) + 1}</div>
+          <div className={s.itemRight}>Учится: {Math.floor(Math.random() * 1500) + 1}</div>
         </div>
       </div>
       <div className={s.buttonBox}>
-        <Basket />
-        <Link to={'/trainingCenter/course'}>
-          <Button variant="secondary" children={'Смотреть/ редактировать курс'} className={s.btn} />
+        <ArchiveIcon />
+        <Link to={`${routes.trainingCenterCourse}/${item.id}`}>
+          <Button
+            variant="secondary"
+            children={'Смотреть/ редактировать курс'}
+            className={s.btn}
+            onClick={() => hendleClick()}
+          />
         </Link>
       </div>
     </div>

@@ -19,8 +19,8 @@ export const Comment = ({ data }: Props) => {
       <div className={s.headerBlock}>
         <p className={s.name}>{data.name}</p>
         <div className={s.dateBox}>
-          <p className={s.date}>data.date</p>
-          <p className={s.time}>data.time</p>
+          <p className={s.date}>{data.date}</p>
+          <p className={s.time}>{data.time}</p>
           <p></p>
         </div>
       </div>

@@ -1,31 +1,38 @@
 import { ArrowRightIcon, CalendarIcon } from '@assets/icons'
+import { routes } from '@routes/routes'
+import { LessonType, Scorm, Step } from '@services/api'
 import { Button, InputWithIcon, Input, type Option, Select, Typography } from '@shared/components'
 import { useToggle } from '@shared/hooks'
 import clsx from 'clsx'
-
-import { LessonType } from '../data'
+import { NavLink } from 'react-router-dom'
 
 import s from './lesson-content.module.scss'
 
-type Props<T extends LessonType> = {
+const getDisplayName = (item?: LessonType | Step | Scorm): string => {
+  if (!item) return ''
+  return 'name' in item ? item.name : item.title
+}
+
+type Props<T extends LessonType | Step | Scorm> = {
   lesson?: T
-  optionsDate?: Option[]
-  optionsFormat?: Option[]
+  options?: Option[]
   isExpandableContent?: boolean
 }
-export const LessonContent = <T extends LessonType>({
+export const LessonContent = <T extends LessonType | Step | Scorm>({
   lesson,
-  optionsFormat,
+  options,
   isExpandableContent = false,
 }: Props<T>) => {
   const { isOpen, toggle } = useToggle()
+  const displayName = getDisplayName(lesson)
+
   return (
     <div className={s.lessonContent}>
       <div className={s.title}>
-        {!lesson?.title ? (
+        {!displayName ? (
           <Input placeholder="Введите тему" />
         ) : (
-          <Typography variant="body_2">{lesson?.title ? lesson.title : 'Введите тему'}</Typography>
+          <Typography variant="body_2">{lesson ? displayName : 'Введите тему'}</Typography>
         )}
       </div>
       {isExpandableContent ? (
@@ -33,9 +40,14 @@ export const LessonContent = <T extends LessonType>({
           <Select
             className={clsx(s.date, s.access)}
             placeholder={'Выберите доступ'}
-            options={optionsFormat}
+            options={options}
           />
-          <Button variant="secondary" className={s.constructorBtn}>
+          <Button
+            variant="secondary"
+            className={s.constructorBtn}
+            as={NavLink}
+            to={routes.constructor}
+          >
             <ArrowRightIcon width={'12px'} height={'12px'} />
           </Button>
         </>
@@ -43,7 +55,7 @@ export const LessonContent = <T extends LessonType>({
         <>
           <InputWithIcon
             className={s.formInput}
-            placeholder={lesson?.dateTime ? lesson?.dateTime : 'Введите дату урока'}
+            placeholder={'Введите дату урока'}
             content={'Здесь будет календарь'}
             onClick={toggle}
             icon={<CalendarIcon />}
@@ -51,11 +63,7 @@ export const LessonContent = <T extends LessonType>({
           >
             Здесь будет календарь
           </InputWithIcon>
-          <Select
-            className={s.format}
-            placeholder={lesson?.format ? lesson?.format : 'Формат'}
-            options={optionsFormat}
-          />
+          <Select className={s.format} placeholder={'Формат'} options={options} />
         </>
       )}
     </div>

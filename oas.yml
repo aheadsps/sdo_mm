@@ -2318,6 +2318,12 @@ components:
         started:
           type: boolean
           default: false
+        start_date:
+          type: string
+          format: date-time
+        started:
+          type: boolean
+          default: false
         steps:
           type: array
           description: Шаги урока
@@ -2409,6 +2415,9 @@ components:
           type: string
           format: date-time
           description: Дата начала урока
+        started:
+          type: boolean
+          default: false
         started:
           type: boolean
           default: false
@@ -2941,10 +2950,14 @@ components:
           description: Статус прохождения курса
           enum:
             - started
+            - started
             - expected
             - finished
           readOnly: true
           default: expected
+      required:
+        - course
+        - start_date
       required:
         - course
         - start_date
@@ -2962,16 +2975,20 @@ components:
           type: string
           format: date-time
           readOnly: false
+          readOnly: false
           nullable: true
         end_date:
           type: string
           format: date-time
           description: Расчитывается исходя из интервала в курсе
           readOnly: true
+          description: Расчитывается исходя из интервала в курсе
+          readOnly: true
           nullable: true
         status:
           description: Статус прохождения курса
           enum:
+            - started
             - started
             - expected
             - finished
@@ -3000,6 +3017,7 @@ components:
           description: Статус прохождения курса
           enum:
             - started
+            - started
             - expected
             - finished
           readOnly: true
@@ -3026,6 +3044,7 @@ components:
         status:
           description: Статус прохождения курса
           enum:
+            - started
             - started
             - expected
             - finished

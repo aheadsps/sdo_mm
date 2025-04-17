@@ -13,7 +13,7 @@ type Props = {
 }
 
 export const Modal = ({ close, title, children, titleStyle }: Props) => {
-  const mainElement = document.querySelector('main')
+  const mainElement = document.querySelector('body')
 
   if (!mainElement) return null
 

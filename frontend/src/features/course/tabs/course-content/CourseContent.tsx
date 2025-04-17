@@ -1,47 +1,36 @@
+import { selectCourse } from '@services/slices'
+import { useAppSelector } from '@services/store'
 import { DropdownCard } from '@shared/components'
 import { Button, Typography } from '@shared/components'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useParams } from 'react-router-dom'
 
 import s from './course-content.module.scss'
 
 export const CourseContent = () => {
+  const { id } = useParams()
+  const course = useAppSelector(selectCourse)
   return (
     <>
-      <DropdownCard title="Урок 1. Проверка стартового уровня" blocks="2 блока">
-        <div className={s.contentTitle}>
-          <Typography variant="body_2">
-            Цель урока: проверить словарный запас и научиться избегать ложных друзей переводчика.
-          </Typography>
-          <NavLink to={'/lesson'}>
-            <Button className={s.lessonButton}>Открыть урок</Button>
-          </NavLink>
-        </div>
-        <Typography variant="body_2">1. Введение: Почему мы путаем слова?</Typography>
-      </DropdownCard>
-
-      <DropdownCard title="Урок 2. Проверка стартового уровня" blocks="2 блока">
-        <div className={s.contentTitle}>
-          <Typography variant="body_2">
-            Цель урока: проверить словарный запас и научиться избегать ложных друзей переводчика.
-          </Typography>
-          <NavLink to={'/lesson'}>
-            <Button className={s.lessonButton}>Открыть урок</Button>
-          </NavLink>
-        </div>
-        <Typography variant="body_2">1. Введение: Почему мы путаем слова?</Typography>
-      </DropdownCard>
-
-      <DropdownCard title="Урок 3. Проверка стартового уровня" blocks="2 блока">
-        <div className={s.contentTitle}>
-          <Typography variant="body_2">
-            Цель урока: проверить словарный запас и научиться избегать ложных друзей переводчика.
-          </Typography>
-          <NavLink to={'/lesson'}>
-            <Button className={s.lessonButton}>Открыть урок</Button>
-          </NavLink>
-        </div>
-        <Typography variant="body_2">1. Введение: Почему мы путаем слова?</Typography>
-      </DropdownCard>
+      {course.lessons.map((lesson) => {
+        return (
+          <DropdownCard key={lesson.id} title={lesson.name} blocks={`${lesson.serial} блок`}>
+            <div className={s.contentTitle}>
+              <Typography variant="body_2">{lesson.name}</Typography>
+              <NavLink to={`/learning/course/${id}/lesson`}>
+                <Button className={s.lessonButton}>Открыть урок</Button>
+              </NavLink>
+            </div>
+            {lesson.steps.map((step) => {
+              return (
+                <div key={step.id} className={s.step}>
+                  <Typography variant="body_2">{step.title}</Typography>
+                  <Typography variant="body_2">{step.content_text}</Typography>
+                </div>
+              )
+            })}
+          </DropdownCard>
+        )
+      })}
     </>
   )
 }

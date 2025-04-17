@@ -4,18 +4,44 @@ import { Event } from '@services/api'
 import { getDaysLeft } from '@shared/utils'
 
 type InitialState = {
+  events: Event[]
   currentEvents: Event[]
   expiringEvents: Event[]
   expiredEvents: Event[]
   completedEvents: Event[]
   favoriteEvents: Event[]
+
+  event: Event
 }
 const initialState: InitialState = {
+  events: [],
   currentEvents: [],
   expiringEvents: [],
   expiredEvents: [],
   completedEvents: [],
   favoriteEvents: [],
+  event: {
+    course: {
+      id: 0,
+      name: '',
+      create_date: '',
+      update_date: '',
+      description: '',
+      lessons: [],
+      beginer: false,
+      image: '',
+      profession: 0,
+      scorms: [],
+      experiences: [],
+    },
+    done_lessons: 0,
+    end_date: '',
+    favorite: false,
+    id: 0,
+    start_date: '',
+    status: '',
+    user: 0,
+  },
 }
 
 export const eventsSlice = createSlice({
@@ -34,6 +60,13 @@ export const eventsSlice = createSlice({
       state.favoriteEvents = action.payload.filter((result) => result.favorite)
     },
 
+    setAllEvents: (state, action: PayloadAction<Event[]>) => {
+      state.events = action.payload
+    },
+    setEvent: (state, action: PayloadAction<Event>) => {
+      state.event = action.payload
+    },
+
     clearCurrentEvents: (state) => {
       state.currentEvents = []
       state.expiringEvents = []
@@ -43,21 +76,25 @@ export const eventsSlice = createSlice({
     },
   },
   selectors: {
+    selectAllEvents: (state) => state.events,
     selectCurrentEvents: (state) => state.currentEvents,
     selectExpiringEvents: (state) => state.expiringEvents,
     selectExpiredEvents: (state) => state.expiredEvents,
     selectCompletedEvents: (state) => state.completedEvents,
     selectFavoriteEvents: (state) => state.favoriteEvents,
+    selectEvent: (state) => state.event,
   },
 })
 
-export const { setCurrentEvents, clearCurrentEvents } = eventsSlice.actions
+export const { setCurrentEvents, clearCurrentEvents, setAllEvents, setEvent } = eventsSlice.actions
 export const {
+  selectAllEvents,
   selectCurrentEvents,
   selectExpiringEvents,
   selectExpiredEvents,
   selectFavoriteEvents,
   selectCompletedEvents,
+  selectEvent,
 } = eventsSlice.selectors
 
 export const eventsSliceReducer = eventsSlice.reducer
