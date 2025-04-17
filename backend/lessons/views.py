@@ -365,6 +365,12 @@ class LessonViewSet(viewsets.ModelViewSet):
         self.check_object_permissions(request=request, obj=None)
         return super().create(request, *args, **kwargs)
 
+    def perform_destroy(self, instance):
+        if not instance.course.is_scorm:
+            instance.delete()
+        else:
+            raise ValidationError(dict(course='Не возможно удалить урок из скорм пакета'))
+
     def perform_create(self, serializer):
         instance = serializer.save(teacher=self.request.user)
         models.TestBlock._default_manager.create(
