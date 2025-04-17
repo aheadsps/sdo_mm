@@ -14,7 +14,6 @@ import styles from './program.module.scss'
 const columns = ['Уроки', 'Дата и время занятия', 'Формат']
 
 export const Program: React.FC = () => {
-  /* const [lessons, setLessons] = useState(lessonsData) */
   const [newLessonCount, setNewLessonCount] = useState<number[]>([])
   const [newTopicCount, setNewTopicCount] = useState<number[]>([])
   const currentCourse = useAppSelector(selectCourse)
@@ -23,7 +22,8 @@ export const Program: React.FC = () => {
     ...lesson,
     expanded: false,
   }))
-  /* const scorms = currentCourse.scorms */
+  const scorm = currentCourse.scorms
+  console.log(scorm)
 
   const [lessons, setLessons] = useState(courseLessons)
 
@@ -47,32 +47,42 @@ export const Program: React.FC = () => {
     <div className={styles.container}>
       <BlockHeader columns={columns} />
       <div className={styles.list}>
-        {lessons.map((lesson) => (
-          <div key={lesson.id} className={styles.lessonItem}>
-            <LessonContent options={optionsFormat} lesson={lesson} />
-            <Button
-              variant="primary"
-              className={styles.toggleButton}
-              onClick={() => toggleExpand(lesson.id)}
-            >
-              {lesson.expanded ? 'Скрыть блоки' : 'Открыть блоки'}
-              {lesson.expanded ? <ArrowUpIcon /> : <ArrowDownIcon />}
-            </Button>
-            {lesson.expanded && (
-              <div className={styles.expandedContent}>
-                <ExpandedContent steps={lesson.steps} />
-                {newTopicCount.map((topic) => (
-                  <div key={topic} className={styles.lessonItem}>
-                    <LessonContent isExpandableContent options={optionsFormat} />
+        {lessons.length
+          ? lessons.map((lesson) => (
+              <div key={lesson.id} className={styles.lessonItem}>
+                <LessonContent options={optionsFormat} lesson={lesson} />
+                <Button
+                  variant="primary"
+                  className={styles.toggleButton}
+                  onClick={() => toggleExpand(lesson.id)}
+                >
+                  {lesson.expanded ? 'Скрыть блоки' : 'Открыть блоки'}
+                  {lesson.expanded ? <ArrowUpIcon /> : <ArrowDownIcon />}
+                </Button>
+                {lesson && lesson.expanded && (
+                  <div className={styles.expandedContent}>
+                    <ExpandedContent steps={lesson.steps} />
+                    {newTopicCount.map((topic) => (
+                      <div key={topic} className={styles.lessonItem}>
+                        <LessonContent isExpandableContent options={optionsFormat} />
+                      </div>
+                    ))}
+                    <button className={styles.addButton}>
+                      <AddItemIcon height={'12px'} width={'12px'} onClick={onAddNewTopic} />
+                    </button>
                   </div>
-                ))}
-                <button className={styles.addButton}>
-                  <AddItemIcon height={'12px'} width={'12px'} onClick={onAddNewTopic} />
-                </button>
+                )}
               </div>
-            )}
-          </div>
-        ))}
+            ))
+          : scorm.map((item) => (
+              <div key={item.id} className={styles.lessonItem}>
+                <LessonContent options={optionsFormat} lesson={item} />
+                <Button disabled={!!item} variant="primary" className={styles.toggleButton}>
+                  'Открыть блоки'
+                  <ArrowDownIcon />
+                </Button>
+              </div>
+            ))}
         {newLessonCount.map((item) => (
           <div key={item} className={styles.lessonItem}>
             <LessonContent options={optionsFormat} />

@@ -1,6 +1,6 @@
 import { ArrowRightIcon, CalendarIcon } from '@assets/icons'
 import { routes } from '@routes/routes'
-import { LessonType, Step } from '@services/api'
+import { LessonType, Scorm, Step } from '@services/api'
 import { Button, InputWithIcon, Input, type Option, Select, Typography } from '@shared/components'
 import { useToggle } from '@shared/hooks'
 import clsx from 'clsx'
@@ -8,17 +8,17 @@ import { NavLink } from 'react-router-dom'
 
 import s from './lesson-content.module.scss'
 
-const getDisplayName = (item?: LessonType | Step): string => {
+const getDisplayName = (item?: LessonType | Step | Scorm): string => {
   if (!item) return ''
   return 'name' in item ? item.name : item.title
 }
 
-type Props<T extends LessonType | Step> = {
+type Props<T extends LessonType | Step | Scorm> = {
   lesson?: T
   options?: Option[]
   isExpandableContent?: boolean
 }
-export const LessonContent = <T extends LessonType | Step>({
+export const LessonContent = <T extends LessonType | Step | Scorm>({
   lesson,
   options,
   isExpandableContent = false,
