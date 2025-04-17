@@ -54,8 +54,9 @@ class SCORMLoader:
         self.zip_file.close()
         return scorm
 
-    def delete(self) -> None:
+    @classmethod
+    def delete(cls, name: str) -> None:
         """
         Удаление scorm
         """
-        self.core.delete()
+        cls._core.delete(name=name)

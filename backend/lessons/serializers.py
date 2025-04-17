@@ -18,6 +18,7 @@ from lessons.utils import parse_exeption_error
 from lessons.servises import SetEventServise
 from lessons.scorm.engine.exceptions import SCORMExtractError, ManifestNotSetupError
 from users import serializers as user_serializers
+from users.models import WorkExperience
 
 
 T = TypeVar("T")
@@ -317,7 +318,7 @@ class LessonSerializer(serializers.ModelSerializer):
     Сериализатор оптимизированного вывода
     """
 
-    steps = StepSerializer(many=True)
+    steps = serializers.SerializerMethodField()
     test_block = serializers.PrimaryKeyRelatedField(read_only=True)
 
     class Meta:
@@ -335,6 +336,10 @@ class LessonSerializer(serializers.ModelSerializer):
             "steps",
             "test_block",
         )
+
+    def get_steps(self, obj):
+        steps = models.Step._default_manager.filter(lesson=obj)
+        return StepSerializer(steps, many=True).data
 
 
 class LessonViewSerializer(serializers.ModelSerializer):
@@ -403,6 +408,7 @@ class CreateCourseSerializer(serializers.ModelSerializer):
             "image",
             "profession",
             "scorm",
+            "is_scorm",
             "lessons",
             "experiences",
             "status",
@@ -447,7 +453,6 @@ class CourseSerializer(serializers.ModelSerializer):
     Сериализатор Оптимизированого вывода
     """
 
-    lessons = LessonSerializer(many=True)
     materials = MaterialsSerializer(read_only=True)
 
     class Meta:
@@ -462,6 +467,7 @@ class CourseSerializer(serializers.ModelSerializer):
             "create_date",
             "update_date",
             "image",
+            "is_scorm",
             "profession",
             "experiences",
             "lessons",
@@ -477,7 +483,7 @@ class ViewCourseSerializer(serializers.ModelSerializer):
 
     experiences = user_serializers.WorkExperienceSerializer(many=True)
     profession = user_serializers.ProfessionSerializer()
-    lessons = LessonViewSerializer(many=True)
+    lessons = serializers.SerializerMethodField()
     materials = MaterialsSerializer(read_only=True)
 
     class Meta:
@@ -493,11 +499,16 @@ class ViewCourseSerializer(serializers.ModelSerializer):
             "update_date",
             "image",
             "status",
+            "is_scorm",
             "profession",
             "experiences",
             "lessons",
             "materials",
         )
+
+    def get_lessons(self, obj):
+        lessons = models.Lesson._default_manager.filter(course=obj)
+        return LessonSerializer(lessons, many=True).data
 
 
 class EventViewSerializer(serializers.ModelSerializer):

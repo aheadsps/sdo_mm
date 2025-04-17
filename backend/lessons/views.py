@@ -16,6 +16,7 @@ from query_counter.decorators import queries_counter
 
 from lessons import models, serializers
 from lessons import viewsets as own_viewsets
+from lessons.scorm import SCORMLoader
 from lessons.permissions import (
     IsAdminOrIsStaff,
     CanReadCourse,
@@ -24,7 +25,6 @@ from lessons.permissions import (
     CanReadBlock,
     CanReadUserStory,
     CanReadLessonStory,
-    CanReadSCORM,
     InCover,
     CurrentTeacher,
     )
@@ -215,7 +215,7 @@ class EventViewSet(mixins.ListModelMixin,
         return super().update(request)
 
 
-# @method_decorator(queries_counter, name='dispatch')
+@method_decorator(queries_counter, name='dispatch')
 class CourseViewSet(mixins.ListModelMixin,
                     own_viewsets.GetCreateUpdateDeleteViewSet,
                     ):
@@ -223,7 +223,7 @@ class CourseViewSet(mixins.ListModelMixin,
     Виювсет CRUD Курса
     """
 
-    queryset = models.Course._default_manager.get_queryset()
+    queryset = models.Course._default_manager.select_related('profession').prefetch_related('experiences')
     lookup_field = "pk"
     lookup_url_kwarg = "course_id"
     renderer_classes = [JSONRenderer, MultiPartRenderer]
@@ -260,6 +260,13 @@ class CourseViewSet(mixins.ListModelMixin,
     def create(self, request, *args, **kwargs):
         self.check_object_permissions(request=request, obj=None)
         return super().create(request, *args, **kwargs)
+
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        if instance.is_scorm:
+            SCORMLoader.delete(name=instance.name)
+        self.perform_destroy(instance)
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
     def perform_create(self, serializer):
         serializer.save(teacher=self.request.user)
@@ -323,7 +330,7 @@ class CourseViewSet(mixins.ListModelMixin,
         return Response(serializer.data)
 
 
-# @method_decorator(queries_counter, name='dispatch')
+@method_decorator(queries_counter, name='dispatch')
 class LessonViewSet(viewsets.ModelViewSet):
     """
     Вьюсет уроков с выбором сериализатора для CRUD-операций
@@ -405,7 +412,7 @@ class StepViewSet(ModelViewSet):
         return serializer_class
 
 
-# @method_decorator(queries_counter, name='dispatch')
+@method_decorator(queries_counter, name='dispatch')
 class TestBlockViewSet(mixins.RetrieveModelMixin,
                        viewsets.GenericViewSet):
     """
@@ -442,7 +449,7 @@ class TestBlockViewSet(mixins.RetrieveModelMixin,
     #     Здесь логика с UserStory
 
 
-# @method_decorator(queries_counter, name='dispatch')
+@method_decorator(queries_counter, name='dispatch')
 class QuestionViewSet(viewsets.ModelViewSet):
     """
     Виювсет вопроса
@@ -463,7 +470,7 @@ class QuestionViewSet(viewsets.ModelViewSet):
         serializer.save(teacher=self.request.user)
 
 
-# @method_decorator(queries_counter, name='dispatch')
+@method_decorator(queries_counter, name='dispatch')
 class AnswerViewSet(viewsets.ModelViewSet):
     """
     Виювсет ответов
@@ -475,7 +482,7 @@ class AnswerViewSet(viewsets.ModelViewSet):
     lookup_url_kwarg = 'answer_id'
 
 
-# @method_decorator(queries_counter, name='dispatch')
+@method_decorator(queries_counter, name='dispatch')
 class UserStoryViewSet(viewsets.ModelViewSet):
     queryset = models.UserStory.objects.all()
     permission_classes = [IsAdminOrIsStaff]
@@ -492,7 +499,7 @@ class UserStoryViewSet(viewsets.ModelViewSet):
         return [permission() for permission in permission_classes]
 
 
-# @method_decorator(queries_counter, name='dispatch')
+@method_decorator(queries_counter, name='dispatch')
 class LessonStoryViewSet(viewsets.ModelViewSet):
     queryset = models.LessonStory.objects.all()
     permission_classes = [IsAdminOrIsStaff]
@@ -509,6 +516,7 @@ class LessonStoryViewSet(viewsets.ModelViewSet):
         return [permission() for permission in permission_classes]
 
 
+@method_decorator(queries_counter, name='dispatch')
 class FileViewSet(mixins.DestroyModelMixin, viewsets.GenericViewSet):
     """
     Виюв сет файлов

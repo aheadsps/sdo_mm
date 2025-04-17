@@ -1,6 +1,7 @@
 import os
 import pathlib
 import zipfile
+import shutil
 import xml.etree.ElementTree as ET
 
 from typing import TypeVar
@@ -142,11 +143,11 @@ class CoreSCORM(BaseCoreSCORM):
         logger.debug(f'text title is {sanitize_text}')
         return sanitize_text
 
-    def _get_structures(self, version: str, instance, base_path: os.PathLike):
+    def _get_structures(self, version: str, instance, base_path: os.PathLike, teacher):
         structure_list = []
         root = self._manifest.getroot()
         if instance:
-            lesson_data = dict(version=version, course=instance)
+            lesson_data = dict(version=version, course=instance, teacher=teacher)
         else:
             lesson_data = dict()
         logger.debug(f'structure data is {lesson_data}')
@@ -215,15 +216,16 @@ class CoreSCORM(BaseCoreSCORM):
                          files=files,
                          ), sub_titles]
 
-    def delete(self) -> None:
+    @classmethod
+    def delete(cls, name: str) -> None:
         """
         Удаление курса из системы
         """
-        # root_path = self._get_root_path(
-        #     zip_infos=self._infos,
-        #     )
-        # title = slugify(self._get_item_title(self.organizations[0]))
-        scorm_packpage = SCORM._default_manager.filter(name=title)
+        path = pathlib.Path('media', 'scorms', slugify(name))
+        logger.debug(f'path delete SCORM {path}')
+        if path.exists():
+            shutil.rmtree(path.absolute(), ignore_errors=True)
+        scorm_packpage = Lesson._default_manager.filter(name=name)
         if not scorm_packpage.exists():
             return
         scorm_packpage.delete()
@@ -253,7 +255,10 @@ class CoreSCORM(BaseCoreSCORM):
         slugify_title = slugify(original_title)
         logger.debug(f'title is {original_title}')
         version = self.get_shema()
-        path = pathlib.Path('media', 'scorm', slugify_title)
+        teacher = data['teacher']
+        path = pathlib.Path('media', 'scorms', slugify_title)
+        if path.exists():
+            raise SCORMExtractError(f'{slugify_title} уже был выгружен в систему')
         if instance:
             course = self._create_model(instance=instance,
                                         data=data,
@@ -264,6 +269,7 @@ class CoreSCORM(BaseCoreSCORM):
         self._get_structures(version=version,
                              instance=course,
                              base_path=path,
+                             teacher=teacher,
                              )
         list_files = []
         for zipinfo in self._infos:
