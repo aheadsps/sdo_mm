@@ -1,4 +1,3 @@
-import json
 import datetime
 from pathlib import Path
 
@@ -87,10 +86,8 @@ class TestStepUrl(APITestCase):
         """
         url = f'/api/v1/step/{step.pk}'
         data = {
-            "serial": 4,
-            "title": "Шаг 4",
             "content_text": "Новый текст",
-            "attachments": [{"file": None, "file-type": "Image"}],
+            "attachments": [{"file": None, "file-type": "Image", 'step': step.pk}],
         }
         response = self.client.patch(url, data, format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -106,7 +103,7 @@ class TestStepUrl(APITestCase):
         """
         Выводим все объекты Step
         """
-        url = f'/api/v1/step'
+        url = '/api/v1/step'
         response = self.client.get(url, data, format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -152,7 +149,7 @@ class TestStepUrl(APITestCase):
         with image_path_2.open("rb") as image:
 
             data = {
-                "serial": 1,
+                "serial": 10,
                 "title": "Шаг 4",
                 "content_text": "content_text",
                 "attachments[0]file": image.raw,

@@ -26,7 +26,7 @@ TEST_IMAGE_PATH = BASE_DIR.joinpath(*("lessons", "tests", "image.png"))
 TEST_IMAGE_PATH_2 = BASE_DIR.joinpath(*("lessons", "tests", "image2.png"))
 
 
-TEST_SCORM_PATH = BASE_DIR.joinpath(*("lessons", "scorm", "tests", "SCORM.zip"))
+TEST_SCORM_PATH = BASE_DIR.joinpath(*("lessons", "scorm", "tests", "SCORM_test.zip"))
 
 
 SCORM_MANIFEST_NAME = 'imsmanifest.xml'
@@ -79,6 +79,8 @@ PROJECT_APPS = [
 
 # Приложения из вне.
 THIRD_PARTY_APPS = [
+    "django_extensions",
+    "django_filters",
     "drf_yasg",
     "drf_spectacular",
     "rest_framework",
@@ -213,24 +215,57 @@ SPECTACULAR_SETTINGS = {
     "SERVE_INCLUDE_SCHEMA": False,
 }
 
+STATUS_COURSE = [
+    (
+        'run',
+        'Запущен',
+    ),
+    (
+        'end',
+        'Окончен',
+    ),
+    (
+        'archive',
+        'Архив',
+    ),
+    (
+        'edit',
+        'Черновик',
+    ),
+]
 
 STATUS_EVENTS = [
     (
+        "finished",
+        "Закончек",
+    ),
+    (
+        "started",
+        "Начат",
+    ),
+    (
+        "expected",
+        "Ожидает начало",
+    ),
+]
+
+STATUS_COVERED = [
+    (
         "done",
         "Успешно",
+    ),
+    (
+        "failed",
+        "Проваленно",
     ),
     (
         "process",
         "В процессе",
     ),
     (
-        "failed",
-        "Провалено",
-    ),
-    (
         "expected",
-        "Ожидает начало",
-    ),
+        "Ожидает",
+    )
 ]
 
 VERSIONS_SCORM = [

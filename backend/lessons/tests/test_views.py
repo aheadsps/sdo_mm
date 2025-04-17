@@ -13,16 +13,6 @@ from users import models as users_models
 class TestBlockAPITestCase(APITestCase):
     def setUp(self):
         # Создаем тестовые данные
-        self.lesson_data = {
-            "name": "Lesson 1",
-            "serial": 1,
-            "course": Course.objects.create(
-                name="Course 1"
-            )
-        }
-        self.lesson = Lesson.objects.create(**self.lesson_data)
-        self.test_block_data = {"lesson": self.lesson}
-        self.test_block = TestBlock.objects.create(**self.test_block_data)
         self.profession = users_models.Profession._default_manager.create(
             en_name="prof",
             ru_name="проф",
@@ -42,6 +32,22 @@ class TestBlockAPITestCase(APITestCase):
             date_commencement=date_commencement,
             is_staff=True,
         )
+        self.lesson_data = {
+            "teacher": self.user,
+            "name": "Lesson 1",
+            "serial": 1,
+            "course": Course.objects.create(
+                teacher=self.user,
+                name="Course 1",
+                interval=datetime.timedelta(days=7),
+            )
+        }
+        self.lesson = Lesson.objects.create(**self.lesson_data)
+        self.test_block_data = {"lesson": self.lesson,
+                                "end_date": datetime.datetime(year=2027, month=1, day=1),
+                                "max_score": 5.0,
+                                }
+        self.test_block = TestBlock.objects.create(**self.test_block_data)
         self.client.force_authenticate(self.user)
 
     def test_retrieve_test_block(self):

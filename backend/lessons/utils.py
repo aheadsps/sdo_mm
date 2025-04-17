@@ -1,14 +1,17 @@
 import os
-from typing import TYPE_CHECKING, Any
 
-from rest_framework.serializers import ModelSerializer
+from typing import TYPE_CHECKING, Any, ClassVar
 from datetime import datetime, timedelta, timezone
-from typing import ClassVar
-
 from pytils.translit import slugify
 
 from loguru import logger
 from pydantic import BaseModel, Field
+
+from django.db.models import QuerySet
+from django.utils import timezone as dj_timezone
+from rest_framework.serializers import ModelSerializer
+
+from users.models import WorkExperience
 
 if TYPE_CHECKING:
     from lessons.models import Question, Course, ContentAttachment, SCORMFile
@@ -174,7 +177,7 @@ def path_maker_question(instance: "Question", filename: str) -> str:
     в системе.
     """
     text_tranc = instance.text[0:10]
-    return f"question/{text_tranc}/{filename}"
+    return f"questions/{text_tranc}/{filename}"
 
 
 def path_maker_course(instance: "Course", filename: str) -> str:
@@ -183,7 +186,7 @@ def path_maker_course(instance: "Course", filename: str) -> str:
     в системе.
     """
     text_tranc = instance.name
-    return f"course/{text_tranc}/{filename}"
+    return f"courses/{text_tranc}/{filename}"
 
 
 def path_maker_scorm(instance: "SCORMFile", filename: str) -> str:
@@ -191,8 +194,8 @@ def path_maker_scorm(instance: "SCORMFile", filename: str) -> str:
     Создает корректный путь для сохранения файлов
     в системе.
     """
-    text_tranc = slugify(instance.course)
-    return f"scorm/{text_tranc}/{filename}"
+    text_tranc = slugify(instance.course or instance.name)
+    return f"scorms/{text_tranc}/{filename}"
 
 
 def path_maker_content_attachment(instance: 'ContentAttachment', filename: str) -> str:
@@ -200,10 +203,15 @@ def path_maker_content_attachment(instance: 'ContentAttachment', filename: str) 
     Создает корректный путь для сохранения медиа файлов
     в системе.
     """
-    text_tranc = instance.step.title
+    if instance.step:
+        text_tranc = instance.step.title
+        root = 'steps'
+    else:
+        text_tranc = instance.materials.course.name
+        root = 'courses'
     filename = os.path.basename(filename)
     # Когда будут уроки вставить папку "lesson №..."
-    return f'content_attachment/{latinizator(text_tranc)}/{latinizator(filename)}'
+    return f'{root}/{latinizator(text_tranc)}/{latinizator(filename)}'
 
 
 def get_value(field: str,
@@ -252,3 +260,27 @@ def set_value(
     value: str,
 ) -> None:
     dict_data[key] = value
+
+
+def get_intervals(experiences: QuerySet[WorkExperience]) -> list[tuple]:
+    """
+    Получение списка из интервалов времени по шагу 1 год
+    """
+    time_now = dj_timezone.now()
+    years_experience = list()
+    if experiences:
+        for exp in experiences:
+            logger.debug(f'set intervals for {exp}')
+            left_limit = time_now - timedelta(days=365 * (exp.years + 1))
+            logger.debug(f'left limit intervals {left_limit}')
+            rigth_limit = time_now - timedelta(days=(365 * exp.years))
+            logger.debug(f'rigth limit intervals {rigth_limit}')
+            interval = (left_limit, rigth_limit)
+            logger.debug(f'summary intervals {interval}')
+            years_experience.append(interval)
+    else:
+        left_limit = time_now - timedelta(days=(365 * 60))
+        rigth_limit = time_now
+        interval = (left_limit, rigth_limit)
+        years_experience.append(interval)
+    return years_experience
