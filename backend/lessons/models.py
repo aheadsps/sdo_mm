@@ -267,6 +267,9 @@ class Lesson(models.Model):
     start_date = models.DateTimeField(_("время начала"),
                                       null=True,
                                       )
+    end_date = models.DateTimeField(_("время конца"),
+                                    null=True,
+                                    )
 
     class Meta:
         verbose_name = _("Lesson")

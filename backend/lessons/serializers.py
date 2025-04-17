@@ -707,6 +707,14 @@ class UsersStatSerializer(serializers.Serializer):
     status = serializers.CharField()
 
 
+class MainLessonsSerializer(serializers.Serializer):
+    """
+    Сериализатор для Main страницы Lessons
+    """
+    name = serializers.CharField()
+    end_date = serializers.DateTimeField()
+
+
 class CourseDetailSerializer(serializers.Serializer):
     """
     Детали курса

@@ -4,7 +4,8 @@ from loguru import logger
 
 from django.utils import timezone
 from django.utils.decorators import method_decorator
-from django.db.models import Q
+from django.db.models import Q, QuerySet
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import permissions, status, mixins, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -44,13 +45,15 @@ class EventCoveredViewSet(mixins.ListModelMixin,
     serializer_class = serializers.EventCoveredSerializer
     lookup_field = "pk"
     lookup_url_kwarg = "cover_id"
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['status']
 
     def get_permissions(self):
         logger.debug(f"action is {self.action}")
         if self.action == "toggle_favorite":
             permission_classes = [permissions.IsAuthenticated &
                                   (InCover | IsAdminOrIsStaff)]
-        elif self.action in ['currents', 'create', 'calendar']:
+        elif self.action in ['currents', 'create', 'calendar', 'main']:
             permission_classes = [permissions.IsAuthenticated]
         else:
             permission_classes = [permissions.IsAuthenticated &
@@ -83,6 +86,7 @@ class EventCoveredViewSet(mixins.ListModelMixin,
         """
         Получение текущих эвентов на пользователя
         """
+        self.check_object_permissions(request, None)
         user = request.user
         queryset = self.filter_queryset(self.get_queryset())
         covers = queryset.filter(user=user)
@@ -98,6 +102,7 @@ class EventCoveredViewSet(mixins.ListModelMixin,
         """
         Получение календаря событий по датам
         """
+        self.check_object_permissions(request, None)
         self.serializer_class = serializers.CalendarSerializer
         time_now = timezone.now()
         user = request.user
@@ -133,6 +138,30 @@ class EventCoveredViewSet(mixins.ListModelMixin,
             calendar = []
         logger.debug(f'after sorting {calendar}')
         serializer = self.get_serializer(calendar, many=True)
+        return Response(serializer.data)
+
+    @action(detail=False)
+    def main(self, request):
+        """
+        Для страницы Main
+        """
+        self.check_object_permissions(request, None)
+        serializer_class = serializers.MainLessonsSerializer
+        user = request.user
+        queryset: QuerySet = (self.get_queryset()
+                              .filter(user=user)
+                              .select_related('event__course')
+                              .all())
+        logger.debug(f'main page queryset {queryset}')
+        qfilter = Q(*[Q(course=cover.event.course)
+                      for cover
+                      in queryset],
+                    _connector=Q.OR)
+        lessons = (models.Lesson._default_manager
+                   .filter(qfilter & Q(started=True))
+                   .order_by('end_date').values('name', 'end_date'))
+        logger.debug(f'main page lessons {lessons}')
+        serializer = serializer_class(lessons, many=True)
         return Response(serializer.data)
 
 

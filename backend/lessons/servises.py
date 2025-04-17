@@ -100,6 +100,7 @@ class SetEventServise:
                 update_lessons.append(lesson)
                 # Собираем шедулеры на окончиние тестовых блоков
                 start_date = start_date + interval
+                lesson.end_date = start_date
             if not update and lessons:
                 update_test_block.append(self._set_test_block(
                     lesson=lesson,
