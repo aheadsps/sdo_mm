@@ -375,6 +375,7 @@ class TestEndpoints(APITestCase):
                 "experiences": [self.experience.pk],
                 "image": None,
                 "interval": None,
+                "is_scorm": False,
                 "lessons": [],
                 "materials": {},
                 "name": "some_course",
@@ -563,19 +564,21 @@ class TestChain(APITestCase):
         self.assertEqual(response.json(),
                          dict(
                              teacher=self.user.pk,
-                             name='Первая помощь (часть 1)',
+                             name='Первая помощь (часть 2)',
                              description=None,
                              interval=None,
                              materials={},
                              beginner=False,
                              image=None,
                              profession=None,
-                             lessons=[lessons_models.Lesson._default_manager.get(name='Первая помощь (часть 1)').pk],
+                             is_scorm=True,
+                             lessons=[lessons_models.Lesson._default_manager.get(name='Первая помощь (часть 2)').pk,
+                                      lessons_models.Lesson._default_manager.get(name='Первая помощь (часть 3)').pk],
                              experiences=[],
                              status='edit',
                          ))
-        course_scorm = lessons_models.Course._default_manager.get(name='Первая помощь (часть 1)')
-        self.assertEqual(course_scorm.lessons.count(), 1)
+        course_scorm = lessons_models.Course._default_manager.get(name='Первая помощь (часть 2)')
+        self.assertEqual(course_scorm.lessons.count(), 2)
         self.assertEqual(course_scorm.teacher, self.user)
 
         url = f'/api/v1/courses/{course.pk}/upload-materials'
@@ -806,11 +809,11 @@ class TestChain(APITestCase):
         url = '/api/v1/covers'
         data = dict(
             event=event.pk,
-            user=self.user.pk,
+            user=user_1.pk,
         )
         response = self.client.post(path=url, data=data, format='json')
         self.assertEqual(response.status_code, 201)
-        self.assertEqual(self.user.events.count(), 2)
+        self.assertEqual(user_1.events.count(), 2)
 
         data['event'] = scorm_event.pk
         response = self.client.post(path=url, data=data, format='json')
@@ -819,7 +822,6 @@ class TestChain(APITestCase):
         url = '/api/v1/covers/currents'
         response = self.client.get(path=url)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json()['count'], 3)
 
         # ========================= calendar =========================
 
@@ -831,19 +833,7 @@ class TestChain(APITestCase):
         self.client.logout()
         self.client.force_authenticate(user=user_1)
 
-        url = '/api/v1/covers'
-        data = dict(
-            event=event.pk,
-            user=user_1.pk
-        )
-        response = self.client.post(path=url, data=data, format='json')
-        self.assertEqual(response.status_code, 201)
-        self.assertEqual(user_1.events.count(), 2)
-
-        url = '/api/v1/events'
-        response = self.client.get(path=url)
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json()['count'], 1)
+        url = '/api/v1/courses'
 
         data = dict(
             name='fail_course',

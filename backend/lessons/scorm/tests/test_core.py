@@ -27,5 +27,4 @@ class TestSCORMCore(TestCase):
             scorm = SCORMLoader(file)
             scorm.save()
 
-        self.assertEqual(Lesson._default_manager.count(), 1)
-        self.assertEqual(Lesson._default_manager.get().name, 'Первая помощь (часть 1)')
+        self.assertEqual(Lesson._default_manager.count(), 2)

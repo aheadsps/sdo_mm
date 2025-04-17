@@ -255,7 +255,7 @@ class CoreSCORM(BaseCoreSCORM):
         slugify_title = slugify(original_title)
         logger.debug(f'title is {original_title}')
         version = self.get_shema()
-        teacher = data['teacher']
+        teacher = data.get('teacher')
         path = pathlib.Path('media', 'scorms', slugify_title)
         if path.exists():
             raise SCORMExtractError(f'{slugify_title} уже был выгружен в систему')
