@@ -770,6 +770,10 @@ class TestChain(APITestCase):
         response = self.client.get(path=url)
         self.assertEqual(response.status_code, 200)
 
+        url = f'/api/v1/courses/{course_beginner.pk}/about'
+        response = self.client.get(path=url)
+        self.assertEqual(response.status_code, 200)
+
         # ========================= test_block functions =========================
 
         self.assertEqual(lesson.test_block.max_score, 9)

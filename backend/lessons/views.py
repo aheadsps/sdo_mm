@@ -264,7 +264,7 @@ class CourseViewSet(mixins.ListModelMixin,
 
     @action(detail=True)
     def users(self, request, course_id=None):
-        serializer_class = serializers.CourseDetailSerializer
+        serializer_class = serializers.UsersStatSerializer
         self.kwargs.setdefault('context', self.get_serializer_context())
         users = (models.EventCovered
                  ._default_manager
@@ -281,7 +281,9 @@ class CourseViewSet(mixins.ListModelMixin,
         event = (models.Event._default_manager
                  .filter(course_id=course_id)
                  .prefetch_related('course').get())
+        logger.debug(event)
         students = event.covers.count()
+        logger.debug(students)
         data = dict(
             name=event.course.name,
             description=event.course.description,
