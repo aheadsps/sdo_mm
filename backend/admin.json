@@ -149,7 +149,7 @@
         "model": "users.user",
         "pk": 1,
         "fields": {
-            "password": "pbkdf2_sha256$870000$ofpvZtUzC2ussdeThMQZDi$kd908xHVD4Gus40uz4t4yLpsuQ/EsYnwmFuUL8eifAs=",
+            "password": "pbkdf2_sha256$870000$ym4Yd9KuxflvCWseIl5YSv$fiCKYgkyTWdAyZ1m6tKzwPsL5bZxNxx01ROL94GW7Us=",
             "is_superuser": true,
             "email": "admin@admin.com",
             "is_staff": true,
@@ -158,7 +158,7 @@
             "first_name": "Vasia",
             "last_name": "Petechkin",
             "date_joined": "2025-03-17T06:12:30.791Z",
-            "last_login": "2025-04-14T09:12:42.650Z",
+            "last_login": "2025-04-17T07:12:04.249Z",
             "date_commencement": "2024-01-01",
             "profession": 1,
             "groups": [],
