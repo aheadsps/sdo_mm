@@ -197,7 +197,7 @@ paths:
           $ref: "#/components/responses/UnprocessableEntity"
 
   /logout:
-    get:
+    post:
       operationId: api_authemail_logout
       summary: Выход из системы (поиск токена данного пользователя и в последствии - удаление)
       tags:
