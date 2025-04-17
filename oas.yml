@@ -348,6 +348,36 @@ paths:
         "422":
           $ref: "#/components/responses/UnprocessableEntity"
 
+  /covers/main:
+    get:
+      operationId: api_covers_main
+      summary: Получение списка всех актуальных задач
+      tags:
+        - Cover
+      security:
+        - Token: []
+      responses:
+        "200":
+          description: JSON ответ с деталями залач
+          content:
+            application/json:
+              schema:
+                type: array
+                minItems: 1
+                items:
+                  properties:
+                    name:
+                      type: string
+                    end_date:
+                      type: string
+                      format: date-time
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+
   /covers/calendar:
     get:
       operationId: api_covers_calendar
