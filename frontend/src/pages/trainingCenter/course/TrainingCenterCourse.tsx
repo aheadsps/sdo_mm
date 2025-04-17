@@ -3,19 +3,17 @@ import { useGetCourseQuery } from '@services/api'
 import { selectCourse, setCourseById } from '@services/slices'
 import { useAppDispatch, useAppSelector } from '@services/store'
 import {
-  Typography,
   Button,
-  Input,
   Tabs,
-  Textarea,
   type Tab,
   Modal,
   Loader,
+  AddMaterials,
+  EditableText,
 } from '@shared/components'
-import { AddMaterials } from '@shared/components'
 import { withLayout } from '@shared/HOC'
-import { useScreenWidth, useToggle } from '@shared/hooks'
-import { useState } from 'react'
+import { useToggle } from '@shared/hooks'
+import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 
 import { StudentsList } from '../course/studentsList'
@@ -49,16 +47,22 @@ const Course = () => {
   const { id } = useParams()
 
   const { data: course, isLoading } = useGetCourseQuery(Number(id))
-  if (course) {
-    dispatch(setCourseById(course))
-  }
+
+  useEffect(() => {
+    if (course) {
+      dispatch(setCourseById(course))
+    }
+
+    if (course?.name) {
+      setTitle(course.name)
+    }
+  }, [dispatch, course])
 
   const currentCourse = useAppSelector(selectCourse)
 
   const [isEditMode, setIsEditMode] = useState(false)
-  const initialValue = `${currentCourse.name}`
-  const [title, setTitle] = useState(initialValue)
-  const { isTablet } = useScreenWidth()
+  const [title, setTitle] = useState(currentCourse.name)
+
   const { isOpen: isModalOpen, close: closeModal, open: openModal } = useToggle()
 
   const toggleEditClick = () => {
@@ -74,15 +78,7 @@ const Course = () => {
           <div className={s.titleBlock}>
             <div className={s.title}>
               <EditIcon width={'15px'} height={'15px'} onClick={toggleEditClick} />
-              {isEditMode ? (
-                isTablet ? (
-                  <Textarea value={title} onChange={(e) => setTitle(e.currentTarget.value)} />
-                ) : (
-                  <Input value={title} onChange={(e) => setTitle(e.currentTarget.value)} />
-                )
-              ) : (
-                <Typography variant="header_2">{currentCourse.name}</Typography>
-              )}
+              <EditableText isEditMode={isEditMode} title={title} setTitle={setTitle} />
             </div>
             <Button onClick={openModal}>Добавить материал</Button>
           </div>

@@ -1,9 +1,10 @@
 import { CalendarIcon, EditIcon } from '@assets/icons'
 import { selectCourse } from '@services/slices'
 import { useAppSelector } from '@services/store'
-import { Button, InputWithIcon, Select, Typography } from '@shared/components'
+import { Button, EditableText, InputWithIcon, Select, Typography } from '@shared/components'
 import { useToggle } from '@shared/hooks'
 import { formatDate } from '@shared/utils'
+import { useState } from 'react'
 
 import s from './aboutCourse.module.scss'
 
@@ -30,7 +31,11 @@ export const AboutCourse = () => {
   const { isOpen: isOpenEnd, toggle: toggleEnd } = useToggle()
 
   const currentCourse = useAppSelector(selectCourse)
-  console.log(currentCourse)
+  const [description, setDescription] = useState(currentCourse.description)
+  const [isEditMode, setIsEditMode] = useState(false)
+
+  const toggleEditMode = () => setIsEditMode((prev) => !prev)
+
   return (
     <div className={s.container}>
       <div className={s.leftBlock}>
@@ -64,15 +69,18 @@ export const AboutCourse = () => {
         <div className={s.top}>
           <div className={s.titleBox}>
             <div className={s.img}>
-              <EditIcon width={'15px'} height={'15px'} />
+              <EditIcon width={'15px'} height={'15px'} onClick={toggleEditMode} />
             </div>
             <Typography variant="header_3" className={s.title}>
               Цель курса
             </Typography>
           </div>
-          <Typography variant="body_1" className={s.txt}>
-            {currentCourse.description}
-          </Typography>
+          <EditableText
+            title={description}
+            setTitle={setDescription}
+            isEditMode={isEditMode}
+            variant="body_1"
+          />
         </div>
         <div className={s.buttonBox}>
           <Button
