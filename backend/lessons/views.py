@@ -467,14 +467,20 @@ class TestBlockViewSet(mixins.RetrieveModelMixin,
         """ Энд поинт отправки ответа студента на вопрос из тест блока """
         test_block = self.get_object()
         user = request.user
-        question = test_block.questions.first()
+        question = test_block.questions.filter(
+            type_question__in=['task', 'essay']).first()
+
+        if not question:
+            return Response(
+                {
+                    "error": "В этом тест-блоке нет вопросов типа"
+                             " task или essay"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
 
         data = request.data.copy()
         data.pop('score', None)
         data['type_of'] = 'question'
-
-        if question and question.type_question == 'test':
-            data['check_automaty'] = True
 
         context = {
             'request': request,
