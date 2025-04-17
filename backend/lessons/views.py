@@ -252,7 +252,7 @@ class CourseViewSet(mixins.ListModelMixin,
         self.kwargs.setdefault('context', self.get_serializer_context())
         course = self.get_object()
         if course.teacher != request.user:
-            raise ValidationError(detail=dict(user='Нет прав довтупа'), code=403)
+            raise ValidationError(detail=dict(user='Нет прав доcтупа'), code=403)
         materials = models.Materials._default_manager.get(course=course)
         request.data.update(materials=materials.pk)
         logger.debug(f'request data to save materials {request.data}')
@@ -264,9 +264,14 @@ class CourseViewSet(mixins.ListModelMixin,
 
     @action(detail=True)
     def users(self, request, course_id=None):
-        self.serializer_class = serializers.EventCoveredViewSerializer
-        users = models.EventCovered._default_manager.filter(event__course_id=course_id).select_related('user')
-        serializer = self.get_serializer(users, many=True)
+        serializer_class = serializers.UsersStatSerializer
+        self.kwargs.setdefault('context', self.get_serializer_context())
+        users = (models.EventCovered
+                 ._default_manager
+                 .filter(event__course_id=course_id)
+                 .select_related('user'))
+        logger.debug(f'users for this course is {users}')
+        serializer = serializer_class(users, many=True)
         return Response(serializer.data)
 
 

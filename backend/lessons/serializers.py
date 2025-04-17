@@ -698,6 +698,15 @@ class EventCoveredViewSerializer(serializers.ModelSerializer):
         )
 
 
+class UsersStatSerializer(serializers.Serializer):
+    """
+    Сериализатор покрытия эвентами упрощенный
+    """
+    user = user_serializers.UserSerializer(read_only=True)
+    procent = serializers.IntegerField()
+    status = serializers.CharField()
+
+
 class EventCoveredCreateSerializer(serializers.ModelSerializer):
     """
     Сериализатор создания покрытия эвентами

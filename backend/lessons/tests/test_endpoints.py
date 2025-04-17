@@ -588,6 +588,7 @@ class TestChain(APITestCase):
             response = self.client.post(path=url, data=data)
         self.assertEqual(response.status_code, 201)
         self.assertEquals(response.json()['materials'], course.materials.get().pk)
+
         # ========================= lessons =========================
         url = '/api/v1/lessons'
         data = dict(
@@ -764,6 +765,10 @@ class TestChain(APITestCase):
         )
         self.assertEqual(response.status_code, 201)
         scorm_event = lessons_models.Event._default_manager.get(course=course_scorm)
+
+        url = f'/api/v1/courses/{course_beginner.pk}/users'
+        response = self.client.get(path=url)
+        self.assertEqual(response.status_code, 200)
 
         # ========================= test_block functions =========================
 
