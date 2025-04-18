@@ -15,7 +15,7 @@ const columns = ['Уроки', 'Дата и время занятия', 'Фор�
 
 export const Program: React.FC = () => {
   const [newLessonCount, setNewLessonCount] = useState<number[]>([])
-  const [newTopicCount, setNewTopicCount] = useState<number[]>([])
+  const [newTopicCount, setNewTopicCount] = useState<Record<number, number[]>>({})
   const currentCourse = useAppSelector(selectCourse)
 
   const courseLessons: LessonType[] = currentCourse.lessons.map((lesson) => ({
@@ -38,8 +38,11 @@ export const Program: React.FC = () => {
     setNewLessonCount((prev) => [...prev, prev.length + 1])
   }
 
-  const onAddNewTopic = () => {
-    setNewTopicCount((prev) => [...prev, prev.length + 1])
+  const onAddNewTopic = (lessonId: number) => {
+    setNewTopicCount((prev) => {
+      const currentTopics = prev[lessonId] || []
+      return { ...prev, [lessonId]: [...currentTopics, currentTopics.length + 1] }
+    })
   }
 
   return (
@@ -61,13 +64,17 @@ export const Program: React.FC = () => {
                 {lesson && lesson.expanded && (
                   <div className={styles.expandedContent}>
                     <ExpandedContent steps={lesson.steps} />
-                    {newTopicCount.map((topic) => (
+                    {(newTopicCount[lesson.id] || []).map((topic) => (
                       <div key={topic} className={styles.lessonItem}>
                         <LessonContent isExpandableContent options={optionsFormat} />
                       </div>
                     ))}
                     <button className={styles.addButton}>
-                      <AddItemIcon height={'12px'} width={'12px'} onClick={onAddNewTopic} />
+                      <AddItemIcon
+                        height={'12px'}
+                        width={'12px'}
+                        onClick={() => onAddNewTopic(lesson.id)}
+                      />
                     </button>
                   </div>
                 )}
