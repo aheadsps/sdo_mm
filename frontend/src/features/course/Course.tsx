@@ -40,13 +40,7 @@ export const Course = () => {
       {course.is_scorm ? (
         <>
           {course?.lessons.map((lesson) => {
-            return (
-              <iframe
-                key={lesson.id}
-                className={s.scorms}
-                // src={`http://localhost:8080/api/v1${lesson.resourse}`}
-              ></iframe>
-            )
+            return <iframe key={lesson.id} className={s.scorms} src={lesson.resourse}></iframe>
           })}
         </>
       ) : (

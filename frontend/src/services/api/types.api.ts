@@ -56,15 +56,27 @@ export type TestBlock = {
   user_story: Story[]
 }
 export type Lesson = {
-  id: number
-  teacher: number
-  name: string
-  serial: number
   course: number
+  id: number
+  name: string
+  resourse: string
+  serial: number
   start_date: string
   started: boolean
-  steps: Step[]
-  test_block: TestBlock
+  steps: []
+  teacher: number
+  test_block: number
+  version: string
+
+  // id: number
+  // teacher: number
+  // name: string
+  // serial: number
+  // course: number
+  // start_date: string
+  // started: boolean
+  // steps: Step[]
+  // test_block: TestBlock
 }
 export type LessonShort = {
   id: number

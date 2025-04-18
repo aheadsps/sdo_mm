@@ -40,7 +40,7 @@ export const LessonCard: React.FC<Props> = ({ cover }: Props) => {
           </button>
         </div>
         <ImageComponent
-          src={`http://localhost:8080/api/v1${course.image}`}
+          src={course.image}
           alt="course"
           className={s.img}
         />
