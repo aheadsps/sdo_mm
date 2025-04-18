@@ -1,6 +1,5 @@
-import { ComponentPropsWithRef, ElementType } from 'react'
-
 import { AddItemIcon, ButtonIcon } from '@assets/icons'
+import { ComponentPropsWithRef, ElementType } from 'react'
 
 import s from './addCard.module.scss'
 

@@ -1,6 +1,5 @@
-import clsx from 'clsx'
-
 import { CloseIcon, TooltipeCheckboxIcon } from '@assets/icons'
+import clsx from 'clsx'
 
 import s from './tooltipe.module.scss'
 
