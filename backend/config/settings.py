@@ -312,6 +312,7 @@ TYPE_LESSON = [
 ]
 
 EVENT_SWITCH_STATUS = 'lessons.tasks.event_switch_status'
+LESSON_SWITCH_STATUS = 'lessons.tasks.lesson_switch_status'
 
 EMAIL_FROM = os.getenv("DEFAULT_EMAIL_FROM")
 EMAIL_BCC = os.getenv("DEFAULT_EMAIL_BCC")
