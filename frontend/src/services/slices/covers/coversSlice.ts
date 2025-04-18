@@ -1,12 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
-import { Course } from '@services/api/types'
-import { EventShort } from '@services/api/types.api'
+import { CoverCurrent } from '@services/api/types.api'
 
 type InitialState = {
-  covers: Course[]
+  covers: CoverCurrent[]
   coverId: number
-  currentCovers: EventShort[]
+  currentCovers: CoverCurrent[]
 }
 const initialState: InitialState = {
   covers: [],
@@ -18,10 +17,10 @@ export const coversSlice = createSlice({
   name: 'covers',
   initialState,
   reducers: {
-    setAllCovers: (state, action: PayloadAction<Course[]>) => {
+    setAllCovers: (state, action: PayloadAction<CoverCurrent[]>) => {
       state.covers = action.payload
     },
-    setCurrentCovers: (state, action: PayloadAction<EventShort[]>) => {
+    setCurrentCovers: (state, action: PayloadAction<CoverCurrent[]>) => {
       state.currentCovers = action.payload
     },
     setCoverId: (state, action: PayloadAction<number>) => {

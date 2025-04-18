@@ -235,5 +235,5 @@ export type CurrentCoversResponse = {
   count: number
   next: null
   previous: null
-  results: EventShort[]
+  results: CoverCurrent[]
 }

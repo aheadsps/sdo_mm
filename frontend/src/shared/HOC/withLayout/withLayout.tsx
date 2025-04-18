@@ -16,25 +16,17 @@ export const withLayout = <T extends object>(Component: ComponentType<T>) => {
     const { isMobile } = useScreenWidth()
     const dispatch = useAppDispatch()
 
-    // const [getUserCurrentEvents] = useLazyGetUserCurrentEventsQuery()
+    // const [getCovers] = useLazyGetCoversQuery()
     // useEffect(() => {
-    //   getUserCurrentEvents()
+    //   getCovers()
     //     .unwrap()
-    //     .then((res) => dispatch(setCurrentEvents(res.results)))
+    //     .then((res) => {
+    //       console.log(res.results)
+    //       dispatch(setAllCovers(res.results))
+    //     })
     //     .catch((error) => handleError(error))
     //     .finally(() => setisLoading(false))
-    // }, [getUserCurrentEvents, dispatch])
-    const [getCovers] = useLazyGetCoversQuery()
-    useEffect(() => {
-      getCovers()
-        .unwrap()
-        .then((res) => {
-          console.log(res.results)
-          dispatch(setAllCovers(res.results))
-        })
-        .catch((error) => handleError(error))
-        .finally(() => setisLoading(false))
-    }, [getCovers, dispatch])
+    // }, [getCovers, dispatch])
 
     const [getCurrentCovers] = useLazyGetCurrentCoversQuery()
     useEffect(() => {
