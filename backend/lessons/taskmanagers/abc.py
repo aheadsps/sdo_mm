@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 
-class AbstractTaskManaged(ABC):
+class AbstractTaskManager(ABC):
     """
     Абстрактный Таск менеджер
     """
