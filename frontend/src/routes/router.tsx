@@ -2,6 +2,7 @@ import { Lesson } from '@features/lesson'
 import { AuthPage } from '@pages/auth'
 import { ConstructorPage } from '@pages/constructor'
 import { CoursePage } from '@pages/course/CoursePage'
+import { Library } from '@pages/library'
 import { MainPage } from '@pages/main'
 import { MyLearning } from '@pages/my-learning/MyLearning'
 import { TrainingCenterCourse } from '@pages/trainingCenter/course/TrainingCenterCourse'
@@ -62,6 +63,10 @@ export const router = createBrowserRouter([
       {
         path: `${routes.course}/:id/lesson`,
         element: <Lesson />,
+      },
+      {
+        path: routes.library,
+        element: <Library />,
       },
     ],
   },
