@@ -507,7 +507,7 @@ class EmptyLessonsValidator:
         """
         if isinstance(course, int):
             course = Course._default_manager.get(pk=course)
-        if not course.lessons.exists() and not course.scorms.exists():
+        if not course.lessons.exists():
             self.error_detail.update(dict(serial='Нельзя запустить курс без уроков'))
         process_error(error_detail=self.error_detail)
 
