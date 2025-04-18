@@ -271,6 +271,8 @@ class IntervalValidator:
         if interval and beginner:
             self.error_detail.update(dict(interval='Курс для начинающих не может иметь интервал'),
                                      )
+        if not interval and not beginner:
+            self.error_detail.update(dict(interval='Интервал обязательное поле, если курс не beginner'))
         process_error(error_detail=self.error_detail)
 
     def __call__(self, attrs, serializer):
