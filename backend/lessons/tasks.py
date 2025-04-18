@@ -31,6 +31,7 @@ def lesson_switch_status(lesson_id: int) -> str:
 def test_block_process(test_block_id: int) -> str:
     ...
 
+
 @app.task
 def update_status_events(course_id: int | None = None,
                   start_date: str = None,

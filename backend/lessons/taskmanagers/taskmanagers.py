@@ -104,7 +104,7 @@ class TaskManagerTestBlockSwitch(BaseTaskManager):
     Созданиие таски для изменения статуса
     """
 
-    TASK = settings.LESSON_SWITCH_STATUS
+    TASK = settings.TESTBLOCK_SWITCH_STATUS
 
     def __init__(self,
                  date: datetime,
