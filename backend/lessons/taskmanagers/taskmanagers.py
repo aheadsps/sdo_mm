@@ -45,6 +45,25 @@ class TaskManagerEventSwitch(BaseTaskManager):
         settings['kwargs'] = kwargs
         return settings
 
+    def bulk_create(self) -> PeriodicTask:
+        """
+        Создает экземпляр PeriodicTask для дальнейшего сохранения
+        """
+        unique_name = self._unique_name(
+            event_id=self.event_id,
+            date=self.date,
+            started=self.started,
+        )
+        kwargs = json.dumps(dict(
+            event_id=self.event_id,
+            started=self.started,
+            ))
+        settings = self._updated_settings(
+            unique_name=unique_name,
+            kwargs=kwargs,
+        )
+        return PeriodicTask(**settings)
+
     def create(self) -> PeriodicTask:
         """
         Создание задач для изменения статуса
