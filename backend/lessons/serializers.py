@@ -45,7 +45,7 @@ class UserStorySerializer(serializers.ModelSerializer):
 class LessonStorySerializer(serializers.ModelSerializer):
     class Meta:
         model = models.LessonStory
-        fields = ["course", "lesson", "user", "date_opened"]
+        fields = ["id", "course", "lesson", "user", "date_opened"]
         read_only_fields = ["user", "date_opened"]
 
     def validate(self, data):
@@ -128,7 +128,7 @@ class MaterialsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Materials
-        fields = ('files',)
+        fields = ("id", 'files',)
 
 
 class StepSerializer(serializers.ModelSerializer):
@@ -409,6 +409,7 @@ class CreateCourseSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Course
         fields = (
+            "id",
             "teacher",
             "name",
             "description",
@@ -700,6 +701,7 @@ class EventCoveredSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.EventCovered
         fields = (
+            "id",
             "user",
             "event",
             "favorite",
@@ -717,6 +719,7 @@ class EventCoveredViewSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.EventCovered
         fields = (
+            "id",
             "user",
             "event",
             "favorite",
@@ -774,13 +777,14 @@ class EventCoveredCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.EventCovered
         fields = (
+            "id",
             "user",
             "event",
             "favorite",
             "procent",
             "status",
         )
-        read_only_fields = ["procent", "status"]
+        read_only_fields = ["id", "procent", "status"]
         validators = (
             validators.PassRegistationsValidator("event", "user"),
             validators.RegistrationValidator("user", "event"),
