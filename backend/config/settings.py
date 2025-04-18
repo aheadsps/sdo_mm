@@ -335,3 +335,6 @@ CHANNELS_ALLOWED_WS_ORIGINS = [
     "ws://localhost:8000",
     "ws://localhost:5173",
 ]
+
+
+X_FRAME_OPTIONS = "SAMEORIGIN"
