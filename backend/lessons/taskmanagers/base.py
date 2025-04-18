@@ -25,8 +25,13 @@ class BaseTaskManager(AbstractTaskManager):
             raise DateTimeTypeError(f'{date} не является типом datetime')
         self.date = date
         self.schedule = self._clocked_schedule(date)
+        self._settings = self._get_settings()
 
-    def get_settings_task(self) -> dict[str, int | bool | str | datetime]:
+    @property
+    def settings(self):
+        return self._settings
+
+    def _get_settings(self) -> dict[str, int | bool | str | datetime]:
         settings = dict(
             task=self.TASK,
             expire_seconds=self._expire_seconds,
@@ -34,6 +39,9 @@ class BaseTaskManager(AbstractTaskManager):
             start_time=self.date,
         )
         return settings
+
+    def update_settings(self, **kwargs):
+        self._settings | kwargs
 
     def _time_to_UNIX(self):
         time_cast = (UTCTimeCast(input_time=self.date)

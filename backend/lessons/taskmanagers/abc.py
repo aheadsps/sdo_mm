@@ -6,8 +6,12 @@ class AbstractTaskManager(ABC):
     Абстрактный Таск менеджер
     """
 
+    @property
     @abstractmethod
-    def get_settings_task(self): ...
+    def settings(self, **kwargs): ...
+
+    @abstractmethod
+    def update_settings(self): ...
 
     @abstractmethod
     def create(self): ...

@@ -6,6 +6,7 @@ from django.conf import settings
 from django_celery_beat.models import PeriodicTask
 
 from .base import BaseTaskManager
+from .exceptions import TaskDoNotExists
 
 
 class TaskManagerEventSwitch(BaseTaskManager):
@@ -36,50 +37,48 @@ class TaskManagerEventSwitch(BaseTaskManager):
         logger.debug(f'unique name {unique_name}')
         return unique_name
 
-    def _updated_settings(self,
-                          unique_name: str,
-                          kwargs: str,
-                          ):
-        settings = self.get_settings_task()
-        settings['name'] = unique_name
-        settings['kwargs'] = kwargs
-        return settings
+    def _updated_settings(self, **kwargs):
+
+        unique_name = self._unique_name(
+            event_id=self.event_id,
+            date=self.date,
+            started=self.started,
+        )
+        set_kwargs = json.dumps(dict(
+            event_id=self.event_id,
+            started=self.started,
+            ))
+        self.update_settings(unique_name=unique_name,
+                             kwargs=set_kwargs,
+                             **kwargs,
+                             )
 
     def bulk_create(self) -> PeriodicTask:
         """
         Создает экземпляр PeriodicTask для дальнейшего сохранения
         """
-        unique_name = self._unique_name(
-            event_id=self.event_id,
-            date=self.date,
-            started=self.started,
-        )
-        kwargs = json.dumps(dict(
-            event_id=self.event_id,
-            started=self.started,
-            ))
-        settings = self._updated_settings(
-            unique_name=unique_name,
-            kwargs=kwargs,
-        )
-        return PeriodicTask(**settings)
+        self._updated_settings()
+        return PeriodicTask(**self.settings)
 
     def create(self) -> PeriodicTask:
         """
         Создание задач для изменения статуса
         """
-        unique_name = self._unique_name(
-            event_id=self.event_id,
-            date=self.date,
-            started=self.started,
-        )
-        kwargs = json.dumps(dict(
-            event_id=self.event_id,
-            started=self.started,
-            ))
-        settings = self._updated_settings(
-            unique_name=unique_name,
-            kwargs=kwargs,
-        )
-        task = PeriodicTask._default_manager.create(**settings)
+        self._updated_settings()
+        task = PeriodicTask._default_manager.create(**self.settings)
+        return task
+
+    def update(self, **kwargs):
+        """
+        Обновление задачи
+        """
+        self._updated_settings()
+        task = PeriodicTask._default_manager.filter(**self.settings)
+        if not task.exists():
+            raise TaskDoNotExists(f'Задачи с настройками {self.settings} не существует')
+        self._updated_settings(**kwargs)
+        task = task.get()
+        task(**self.settings)
+        task.save()
+        task.refresh_from_db()
         return task
