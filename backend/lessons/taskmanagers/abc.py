@@ -7,6 +7,9 @@ class AbstractTaskManager(ABC):
     """
 
     @abstractmethod
+    def get_settings_task(self): ...
+
+    @abstractmethod
     def create(self): ...
 
     @abstractmethod

@@ -1,6 +1,10 @@
+import json
+
 from loguru import logger
 
 from django.conf import settings
+from django_celery_beat.models import PeriodicTask
+
 from .base import BaseTaskManager
 
 
@@ -32,11 +36,31 @@ class TaskManagerEventSwitch(BaseTaskManager):
         logger.debug(f'unique name {unique_name}')
         return unique_name
 
-    def create(self):
-        """Создание задач для изменения статуса
+    def _updated_settings(self,
+                          unique_name: str,
+                          kwargs: str,
+                          ):
+        settings = self.get_settings_task()
+        settings['name'] = unique_name
+        settings['kwargs'] = kwargs
+        return settings
+
+    def create(self) -> PeriodicTask:
+        """
+        Создание задач для изменения статуса
         """
         unique_name = self._unique_name(
             event_id=self.event_id,
             date=self.date,
             started=self.started,
         )
+        kwargs = json.dumps(dict(
+            event_id=self.event_id,
+            started=self.started,
+            ))
+        settings = self._updated_settings(
+            unique_name=unique_name,
+            kwargs=kwargs,
+        )
+        task = PeriodicTask._default_manager.create(**settings)
+        return task

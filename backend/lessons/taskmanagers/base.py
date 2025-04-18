@@ -2,6 +2,7 @@ from typing import ClassVar
 from datetime import datetime
 
 from django_celery_beat.models import ClockedSchedule
+from django.conf import settings
 
 from .abc import AbstractTaskManager
 from .exceptions import DateTimeTypeError
@@ -14,6 +15,8 @@ class BaseTaskManager(AbstractTaskManager):
     """
 
     TASK: ClassVar[str | None] = None
+    _one_of: ClassVar[bool] = True
+    _expire_seconds: ClassVar[int] = settings.CELERY_EXPIRE_SECONDS
 
     def __init__(self,
                  date: datetime,
@@ -22,6 +25,15 @@ class BaseTaskManager(AbstractTaskManager):
             raise DateTimeTypeError(f'{date} не является типом datetime')
         self.date = date
         self.schedule = self._clocked_schedule(date)
+
+    def get_settings_task(self) -> dict[str, int | bool | str | datetime]:
+        settings = dict(
+            task=self.TASK,
+            expire_seconds=self._expire_seconds,
+            one_off=self._one_of,
+            start_time=self.date,
+        )
+        return settings
 
     def _time_to_UNIX(self):
         time_cast = (UTCTimeCast(input_time=self.date)
