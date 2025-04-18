@@ -271,6 +271,8 @@ class IntervalValidator:
         if interval and beginner:
             self.error_detail.update(dict(interval='Курс для начинающих не может иметь интервал'),
                                      )
+        if not interval and not beginner:
+            self.error_detail.update(dict(interval='Интервал обязательное поле, если курс не beginner'))
         process_error(error_detail=self.error_detail)
 
     def __call__(self, attrs, serializer):
@@ -505,7 +507,7 @@ class EmptyLessonsValidator:
         """
         if isinstance(course, int):
             course = Course._default_manager.get(pk=course)
-        if not course.lessons.exists() and not course.scorms.exists():
+        if not course.lessons.exists():
             self.error_detail.update(dict(serial='Нельзя запустить курс без уроков'))
         process_error(error_detail=self.error_detail)
 
