@@ -1,4 +1,4 @@
-from django.core.validators import MinValueValidator
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth import get_user_model
@@ -18,13 +18,6 @@ class Event(models.Model):
     """
     Модель представления Ивента
     """
-    user = models.ForeignKey(get_user_model(),
-                             verbose_name=_("пользователь"),
-                             on_delete=models.CASCADE,
-                             help_text='Пользователь которому '
-                                       'будет назначен ивент',
-                             related_name='events',
-                             )
     course = models.ForeignKey('lessons.Course',
                                verbose_name='курс',
                                on_delete=models.CASCADE,
@@ -32,28 +25,17 @@ class Event(models.Model):
                                          'ивент',
                                related_name='events',
                                )
-    done_lessons = models.SmallIntegerField(_("Количество выполненых уроков"),
-                                            default=0,
-                                            )
     start_date = models.DateTimeField(verbose_name='дата начала ивента',
                                       null=True,
-                                      help_text='Дата начала ивента, '
-                                      'нужно для Celery что бы в рассписании '
-                                      'поставить дату выдачи ивента',
+                                      blank=True,
                                       default=None,
                                       )
     end_date = models.DateTimeField(verbose_name='дедлайн',
                                     null=True,
-                                    help_text='Дедлайн ивента, если'
-                                              'дедлайна нет тогда бессрочно',
+                                    blank=True,
                                     default=None,
                                     )
-    favorite = models.BooleanField(_("Избранный ивент"),
-                                   default=False,
-                                   help_text='Указатель является ли данный'
-                                             'ивент избранным')
     status = models.CharField(choices=settings.STATUS_EVENTS,
-                              null=True,
                               default='expected',
                               verbose_name='статус ивента',
                               help_text='Текущий статус данного ивента',
@@ -64,18 +46,60 @@ class Event(models.Model):
         verbose_name_plural = _("Events")
 
     def __str__(self):
-        return f"event_for_user_{self.user.pk}_{self.pk}"
+        return f"event_with_course_{self.course.pk}"
+
+
+class EventCovered(models.Model):
+    """
+    Покрытие эвентами
+    """
+    user = models.ForeignKey(get_user_model(),
+                             verbose_name=_("пользователь"),
+                             on_delete=models.CASCADE,
+                             related_name='events',
+                             )
+    event = models.ForeignKey(Event,
+                              verbose_name=_("эвент"),
+                              on_delete=models.CASCADE,
+                              related_name='covers',
+                              )
+    favorite = models.BooleanField(_("Избранный ивент"),
+                                   default=False,
+                                   help_text='Указатель является ли данный'
+                                             'ивент избранным')
+    procent = models.SmallIntegerField(_("Процент прохождения"),
+                                       default=0,
+                                       validators=[MinValueValidator(0), MaxValueValidator(100)],
+                                       )
+    status = models.CharField(_("статус"),
+                              max_length=50,
+                              choices=settings.STATUS_COVERED,
+                              default='expected',
+                              )
+
+    class Meta:
+        verbose_name = _("EventCovered")
+        verbose_name_plural = _("EventCovereds")
+
+    def __str__(self):
+        return f'user_{self.user.pk}_event_{self.event.pk}'
 
 
 class Course(models.Model):
     """
     Модель представления курса
     """
-
+    teacher = models.ForeignKey(get_user_model(),
+                                verbose_name=_("учитель"),
+                                on_delete=models.SET_NULL,
+                                null=True,
+                                )
     name = models.CharField(
         _("Название"),
         max_length=256,
         help_text="Название курса",
+        null=True,
+        blank=True,
     )
     description = models.TextField(
         _("Описание"),
@@ -84,7 +108,11 @@ class Course(models.Model):
         blank=True,
         default=None,
     )
-    beginer = models.BooleanField(
+    interval = models.DurationField(verbose_name=_('интервал'),
+                                    null=True,
+                                    blank=True,
+                                    )
+    beginner = models.BooleanField(
         _("Начинающий"),
         help_text="Курс для начинающих",
         default=False,
@@ -105,6 +133,7 @@ class Course(models.Model):
         null=True,
         blank=True,
     )
+    is_scorm = models.BooleanField(_("флаг скорм пакета"), default=False)
     profession = models.ForeignKey(
         "users.Profession",
         verbose_name=_("профессия"),
@@ -117,40 +146,18 @@ class Course(models.Model):
         "users.WorkExperience",
         verbose_name=_("Стаж"),
         help_text="На какие стажи расчитан " "курс",
+        null=True,
+        blank=True
     )
+    status = models.CharField(_("статус"),
+                              max_length=50,
+                              choices=settings.STATUS_COURSE,
+                              default='archive',
+                              )
 
     class Meta:
         verbose_name = _("Course")
         verbose_name_plural = _("Courses")
-
-    def __str__(self):
-        return self.name
-
-
-class SCORM(models.Model):
-    """
-    Модель представления SCORM
-    """
-    name = models.CharField(_("название"),
-                            max_length=256,
-                            unique=True,
-                            )
-    version = models.CharField(_('версия'),
-                               max_length=50,
-                               choices=settings.VERSIONS_SCORM,
-                               )
-    course = models.ForeignKey(Course,
-                               verbose_name=_("курс"),
-                               related_name='scorms',
-                               on_delete=models.CASCADE,
-                               null=True,
-                               blank=True,
-                               )
-    resourse = models.CharField(max_length=256, verbose_name=_('resourse'))
-
-    class Meta:
-        verbose_name = _("SCORM")
-        verbose_name_plural = _("SCORMs")
 
     def __str__(self):
         return self.name
@@ -164,7 +171,14 @@ class SCORMFile(models.Model):
                                verbose_name=_("SCORM"),
                                related_name='files',
                                on_delete=models.CASCADE,
+                               null=True,
+                               blank=True,
                                )
+    name = models.CharField(_("имя"),
+                            max_length=256,
+                            null=True,
+                            blank=True,
+                            )
     file = models.FileField(_("файл scorm"),
                             upload_to=path_maker_scorm,
                             )
@@ -181,12 +195,24 @@ class Lesson(models.Model):
     """
     Модель преставления урока
     """
+    teacher = models.ForeignKey(get_user_model(),
+                                verbose_name=_("учитель"),
+                                on_delete=models.SET_NULL,
+                                null=True,
+                                )
     name = models.CharField(_("Название"),
                             max_length=256,
                             null=False,
                             blank=False,
                             help_text="Название урока",
                             )
+    version = models.CharField(_('версия'),
+                               max_length=50,
+                               choices=settings.VERSIONS_SCORM,
+                               help_text='Для SCORM пакета',
+                               null=True,
+                               blank=True,
+                               )
     serial = models.IntegerField(_("Номер"),
                                  null=False,
                                  blank=False,
@@ -194,6 +220,12 @@ class Lesson(models.Model):
                                  default=1,
                                  help_text="Порядковый номер урока"
                                  )
+    resourse = models.CharField(max_length=256,
+                                verbose_name=_('resourse'),
+                                help_text='Для SCORM пакета',
+                                null=True,
+                                blank=True,
+                                )
     course = models.ForeignKey(Course,
                                verbose_name=_("Курс"),
                                on_delete=models.CASCADE,
@@ -201,12 +233,15 @@ class Lesson(models.Model):
                                null=True,
                                blank=True,
                                )
-    type_lesson = models.CharField(verbose_name=_('Тип урока'),
-                                   max_length=10,
-                                   choices=settings.TYPE_LESSON,
-                                   default='linearly',
-                                   help_text='Текущий тип данного урока',
-                                   )
+    started = models.BooleanField(_("флаг начатого"),
+                                  default=False,
+                                  )
+    start_date = models.DateTimeField(_("время начала"),
+                                      null=True,
+                                      )
+    end_date = models.DateTimeField(_("время конца"),
+                                    null=True,
+                                    )
 
     class Meta:
         verbose_name = _("Lesson")
@@ -220,7 +255,11 @@ class Step(models.Model):
     """
     Шаги урока
     """
-
+    teacher = models.ForeignKey(get_user_model(),
+                                verbose_name=_("учитель"),
+                                on_delete=models.SET_NULL,
+                                null=True,
+                                )
     title = models.CharField(
         max_length=256, null=False, blank=False, verbose_name="Шаг урока"
     )
@@ -250,6 +289,17 @@ class Step(models.Model):
         return f"Шаг: {self.title}"
 
 
+class Materials(models.Model):
+    """
+    Материалы к курсу
+    """
+    course = models.ForeignKey(Course,
+                               verbose_name=_("курс"),
+                               related_name='materials',
+                               on_delete=models.CASCADE,
+                               )
+
+
 class ContentAttachment(models.Model):
     file = models.FileField(
         upload_to=path_maker_content_attachment, null=True, blank=True
@@ -258,6 +308,13 @@ class ContentAttachment(models.Model):
         max_length=10, choices=settings.TYPE_CONTENTS,
         default="Image", verbose_name="Тип файла"
     )
+    materials = models.ForeignKey(Materials,
+                                  verbose_name=_('материалы'),
+                                  null=True,
+                                  blank=True,
+                                  on_delete=models.CASCADE,
+                                  related_name='files',
+                                  )
     step = models.ForeignKey(
         Step, unique=False,
         on_delete=models.CASCADE,
@@ -278,7 +335,14 @@ class TestBlock(models.Model):
     """
     Модель тестового блока
     """
-
+    end_date = models.DateTimeField(_("время окончания"),
+                                    null=True,
+                                    blank=True,
+                                    )
+    max_score = models.FloatField(_("максимальный балл"),
+                                  null=True,
+                                  blank=True,
+                                  )
     lesson = models.OneToOneField(Lesson,
                                   on_delete=models.CASCADE,
                                   related_name="test_block",
@@ -298,6 +362,11 @@ class Question(models.Model):
     """
     Модель представления Вопроса
     """
+    teacher = models.ForeignKey(get_user_model(),
+                                verbose_name=_("учитель"),
+                                on_delete=models.SET_NULL,
+                                null=True,
+                                )
     text = models.TextField(verbose_name='текст вопроса',
                             help_text='Текст вопроса',
                             )
@@ -307,6 +376,9 @@ class Question(models.Model):
                               null=True,
                               blank=True,
                               )
+    weight = models.SmallIntegerField(_("вес вопроса"),
+                                      validators=[MinValueValidator(1)],
+                                      )
     test_block = models.ForeignKey(TestBlock,
                                    verbose_name=_("тестовый блок"),
                                    on_delete=models.CASCADE,
@@ -415,11 +487,11 @@ class LessonStory(models.Model):
                                related_name='lesson_story',
                                help_text='Курс'
                                )
-    lesson = models.ForeignKey(Lesson,
-                               verbose_name=_('Урок'),
-                               on_delete=models.CASCADE,
-                               related_name='lesson_story'
-                               )
+    step = models.ForeignKey(Step,
+                             verbose_name=_('Урок'),
+                             on_delete=models.CASCADE,
+                             related_name='lesson_story'
+                             )
     user = models.ForeignKey(get_user_model(),
                              verbose_name=_('Пользователь'),
                              on_delete=models.CASCADE,
@@ -431,7 +503,7 @@ class LessonStory(models.Model):
                                        )
 
     def clean(self):
-        LessonStoryValidator(course=self.course, lesson=self.lesson)()
+        LessonStoryValidator(course=self.course, step=self.step)()
 
     def save(self, *args, **kwargs):
         self.full_clean()
@@ -440,7 +512,7 @@ class LessonStory(models.Model):
     class Meta:
         verbose_name = _("Lesson story")
         verbose_name_plural = _('Lesson stories')
-        unique_together = ('user', 'lesson')
+        unique_together = ('user', 'step')
 
     def __str__(self):
         return (f"{self.user.email} открыл {self.course.title}"

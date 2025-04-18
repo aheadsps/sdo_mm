@@ -1,7 +1,8 @@
 import datetime
 import re
 
-from django.db.models import Q
+from typing import TypeVar
+
 from rest_framework import serializers
 from rest_framework.validators import ValidationError
 from django.db.utils import IntegrityError
@@ -14,8 +15,13 @@ from lessons.d_types import VD
 from lessons.patrials import set_status
 from lessons.scorm import SCORMLoader
 from lessons.utils import parse_exeption_error
+from lessons.servises import SetEventServise
 from lessons.scorm.engine.exceptions import SCORMExtractError, ManifestNotSetupError
 from users import serializers as user_serializers
+
+
+T = TypeVar("T")
+
 
 PROCESS = "process"
 EXPECTED = "expected"
@@ -26,13 +32,12 @@ FAILED = "failed"
 class UserStorySerializer(serializers.ModelSerializer):
     class Meta:
         model = models.UserStory
-        fields = ['id', 'user', 'answer', 'test_block', 'date_opened']
-        read_only_fields = ['id', 'user', 'date_opened']
+        fields = ["id", "user", "answer", "test_block", "date_opened"]
+        read_only_fields = ["id", "user", "date_opened"]
 
     def validate(self, data):
         validators.UserStoryValidator(
-            answer=data.get('answer'),
-            test_block=data.get('test_block')
+            answer=data.get("answer"), test_block=data.get("test_block")
         )()
         return data
 
@@ -40,13 +45,12 @@ class UserStorySerializer(serializers.ModelSerializer):
 class LessonStorySerializer(serializers.ModelSerializer):
     class Meta:
         model = models.LessonStory
-        fields = ['course', 'lesson', 'user', 'date_opened']
-        read_only_fields = ['user', 'date_opened']
+        fields = ["course", "lesson", "user", "date_opened"]
+        read_only_fields = ["user", "date_opened"]
 
     def validate(self, data):
         validators.LessonStoryValidator(
-            course=data.get('course'),
-            lesson=data.get('lesson')
+            course=data.get("course"), lesson=data.get("lesson")
         )()
         return data
 
@@ -78,7 +82,7 @@ class QuestionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Question
-        fields = ("id", "text", "image", "answers")
+        fields = ("id", "teacher", "text", "image", "weight", "answers")
 
     # def create(self, validated_data: dict[str, str]):
     #     """
@@ -101,14 +105,30 @@ class QuestionCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Question
-        fields = ("id", "text", "image", "test_block")
-        read_only_fields = ("id",)
+        fields = ("id", "teacher", "text", "image", "weight", "test_block")
+        read_only_fields = ("id", 'teacher',)
 
 
 class ContentAttachmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.ContentAttachment
-        fields = ["id", "file", "file_type"]
+        fields = ["id", "file", "file_type", "step", 'materials']
+        validators = (validators.AttachmentValidator('step', 'materials'),)
+
+    def to_representation(self, instance):
+        response = super().to_representation(instance)
+        if instance.file:
+            response['file'] = instance.file.url
+        return response
+
+
+class MaterialsSerializer(serializers.ModelSerializer):
+
+    files = ContentAttachmentSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = models.Materials
+        fields = ('files',)
 
 
 class StepSerializer(serializers.ModelSerializer):
@@ -120,12 +140,15 @@ class StepSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Step
-        fields = ("serial",
-                  "title",
-                  "content_text",
-                  "attachments",
-                  "lesson",
-                  )
+        fields = (
+            "id",
+            "teacher",
+            "serial",
+            "title",
+            "content_text",
+            "attachments",
+            "lesson",
+        )
 
 
 class StepCreateSerializer(serializers.ModelSerializer):
@@ -135,12 +158,18 @@ class StepCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Step
-        fields = ("serial",
-                  "title",
-                  "content_text",
-                  "lesson",
-                  )
-        validators = (validators.MoreThanZeroValidator("serial"),)
+        fields = (
+            "id",
+            "teacher",
+            "serial",
+            "title",
+            "content_text",
+            "lesson",
+        )
+        validators = (validators.MoreThanZeroValidator("serial"),
+                      validators.StepSerialValidator('serial', 'lesson'),
+                      )
+        read_only_fields = ('id', 'teacher',)
 
     # def create(self, validated_data: dict[int, str, str, dict]):
     #     """
@@ -213,6 +242,14 @@ class StepCreateSerializer(serializers.ModelSerializer):
     #     return instance
 
 
+class CalendarSerializer(serializers.Serializer):
+    """
+    Сериализатор календаря
+    """
+    name = serializers.CharField()
+    start_date = serializers.DateTimeField()
+
+
 class StepViewSerializer(serializers.ModelSerializer):
     """
     Шаг детальный
@@ -222,12 +259,15 @@ class StepViewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Step
-        fields = ("serial",
-                  "title",
-                  "content_text",
-                  "lesson",
-                  "attachments",
-                  )
+        fields = (
+            "id",
+            "serial",
+            "teacher",
+            "title",
+            "content_text",
+            "lesson",
+            "attachments",
+        )
 
 
 class TestBlockSerializersOptimize(serializers.ModelSerializer):
@@ -265,81 +305,95 @@ class LessonCreateSerializer(serializers.ModelSerializer):
         model = models.Lesson
         fields = (
             "id",
+            "teacher",
             "name",
             "serial",
             "course",
+            "started",
+            "start_date",
         )
-        read_only_fields = ("id",)
-        validators = (validators.LessonScormValidator('course'),)
+        read_only_fields = ("id", "teacher", "started", "start_date")
+        validators = (validators.LessonScormValidator("course"),
+                      validators.LessonSerialValidator('serial', 'course',),
+                      )
 
 
 class LessonSerializer(serializers.ModelSerializer):
     """
     Сериализатор оптимизированного вывода
     """
-    steps = StepSerializer(many=True)
+
+    steps = serializers.SerializerMethodField()
     test_block = serializers.PrimaryKeyRelatedField(read_only=True)
 
     class Meta:
         model = models.Lesson
         fields = (
             "id",
+            "teacher",
             "name",
             "serial",
+            "version",
+            "started",
+            "resourse",
+            "start_date",
             "course",
             "steps",
             "test_block",
         )
+
+    def get_steps(self, obj):
+        steps = models.Step._default_manager.filter(lesson=obj)
+        return StepSerializer(steps, many=True).data
 
 
 class LessonViewSerializer(serializers.ModelSerializer):
     """
     Сериализатор детального представления урока
     """
-    steps = StepViewSerializer(many=True)
+
+    steps = serializers.SerializerMethodField()
     test_block = TestBlockSerializersDetail()
 
     class Meta:
         model = models.Lesson
         fields = (
             "id",
+            "teacher",
             "name",
             "serial",
+            "version",
+            "started",
+            "resourse",
+            "start_date",
             "course",
             "steps",
             "test_block",
         )
 
-
-class SCORMSerializer(serializers.ModelSerializer):
-    """
-    Сериализатор SCORM пакета
-    """
-
-    class Meta:
-        model = models.SCORM
-        fields = ('id', 'name', 'version', 'resourse')
+    def get_steps(self, obj):
+        steps = models.Step._default_manager.filter(lesson=obj)
+        return StepViewSerializer(steps, many=True).data
 
 
 class ZIPFileField(serializers.FileField):
 
     def to_internal_value(self, data):
-        self.error_messages.update(non_zip='File need to be zip format')
+        self.error_messages.update(non_zip="File need to be zip format")
         try:
             file_name = data.name
             file_size = data.size
         except AttributeError:
-            self.fail('invalid')
-        if not re.match(r'\S*.zip', file_name):
-            self.fail('non_zip')
+            self.fail("invalid")
+        if not re.match(r"\S*.zip", file_name):
+            self.fail("non_zip")
 
         if not file_name:
-            self.fail('no_name')
+            self.fail("no_name")
         if not self.allow_empty_file and not file_size:
-            self.fail('empty')
+            self.fail("empty")
         if self.max_length and len(file_name) > self.max_length:
-            self.fail('max_length', max_length=self.max_length,
-                      length=len(file_name))
+            self.fail("max_length", max_length=self.max_length, length=len(file_name))
 
         return data
 
@@ -350,63 +404,97 @@ class CreateCourseSerializer(serializers.ModelSerializer):
     """
 
     scorm = ZIPFileField(required=False)
-    scorms = serializers.PrimaryKeyRelatedField(read_only=True, required=False, many=True)
+    materials = MaterialsSerializer(read_only=True)
 
     class Meta:
         model = models.Course
         fields = (
+            "teacher",
             "name",
             "description",
-            "beginer",
+            "interval",
+            "beginner",
             "image",
             "profession",
             "scorm",
-            "scorms",
+            "is_scorm",
+            "lessons",
             "experiences",
+            "status",
+            'materials',
         )
-        validators = (validators.CourseScormValidator('scorm'),)
+        validators = (
+            validators.CourseScormValidator("scorm"),
+            validators.IntervalValidator("beginner", "interval"),
+        )
+        read_only_fields = ("teacher", "status", "lessons",)
 
     def create(self, validated_data: dict):
         logger.debug(validated_data)
-        zip_scorm = validated_data.pop('scorm', None)
+        zip_scorm = validated_data.pop("scorm", None)
         if zip_scorm:
+            validated_data['status'] = 'edit'
+            validated_data['is_scorm'] = True
             try:
                 with atomic():
                     course = SCORMLoader(zip_archive=zip_scorm).save(
                         self.Meta.model,
                         validated_data,
-                        )
+                    )
             except IntegrityError as er:
-                raise ValidationError(dict(scorm=f'This SCORM packpage {parse_exeption_error(er)}'))
+                raise ValidationError(
+                    dict(scorm=f"This SCORM packpage {parse_exeption_error(er)}")
+                )
             except (SCORMExtractError, ManifestNotSetupError) as er:
                 raise ValidationError(dict(scorm=er))
         else:
             course = super().create(validated_data)
+        models.Materials._default_manager.create(course=course)
         return course
+
+    def update(self, instance, validated_data):
+        validated_data['status'] = 'archive'
+        return super().update(instance, validated_data)
+
+    def to_representation(self, instance):
+        response = super().to_representation(instance)
+        if instance.image:
+            response['image'] = instance.image.url
+        return response
 
 
 class CourseSerializer(serializers.ModelSerializer):
     """
     Сериализатор Оптимизированого вывода
     """
-    lessons = LessonSerializer(many=True)
-    scorms = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+
+    materials = MaterialsSerializer(read_only=True)
 
     class Meta:
         model = models.Course
         fields = (
             "id",
+            "teacher",
             "name",
             "description",
-            "beginer",
+            "interval",
+            "beginner",
             "create_date",
             "update_date",
             "image",
+            "is_scorm",
             "profession",
-            "scorms",
             "experiences",
             "lessons",
+            "status",
+            "materials",
         )
+
+    def to_representation(self, instance):
+        response = super().to_representation(instance)
+        if instance.image:
+            response['image'] = instance.image.url
+        return response
 
 
 class ViewCourseSerializer(serializers.ModelSerializer):
@@ -416,26 +504,38 @@ class ViewCourseSerializer(serializers.ModelSerializer):
 
     experiences = user_serializers.WorkExperienceSerializer(many=True)
     profession = user_serializers.ProfessionSerializer()
-    lessons = LessonViewSerializer(many=True)
-    scorms = SCORMSerializer(many=True)
-    lesson_story = LessonStorySerializer(many=True)
+    lessons = serializers.SerializerMethodField()
+    materials = MaterialsSerializer(read_only=True)
 
     class Meta:
         model = models.Course
         fields = (
             "id",
+            "teacher",
             "name",
             "description",
-            "beginer",
+            "interval",
+            "beginner",
             "create_date",
             "update_date",
             "image",
+            "status",
+            "is_scorm",
             "profession",
             "experiences",
-            "scorms",
             "lessons",
-            "lesson_story",
+            "materials",
         )
+
+    def get_lessons(self, obj):
+        lessons = models.Lesson._default_manager.filter(course=obj)
+        return LessonSerializer(lessons, many=True).data
+
+    def to_representation(self, instance):
+        response = super().to_representation(instance)
+        if instance.image:
+            response['image'] = instance.image.url
+        return response
 
 
 class EventViewSerializer(serializers.ModelSerializer):
@@ -449,12 +549,9 @@ class EventViewSerializer(serializers.ModelSerializer):
         model = models.Event
         fields = (
             "id",
-            "user",
             "course",
-            "done_lessons",
             "start_date",
             "end_date",
-            "favorite",
             "status",
         )
 
@@ -470,12 +567,9 @@ class EventSerializer(serializers.ModelSerializer):
         model = models.Event
         fields = (
             "id",
-            "user",
             "course",
-            "done_lessons",
             "start_date",
             "end_date",
-            "favorite",
             "status",
         )
 
@@ -490,14 +584,61 @@ class EventSerializerCreate(serializers.ModelSerializer):
     class Meta:
         model = models.Event
         fields = (
-            "user",
+            "id",
             "course",
             "start_date",
             "end_date",
-            "favorite",
             "status",
         )
-        validators = (validators.TimeValidator("start_date", "end_date"),)
+        validators = (
+            validators.StatusEditValidator('course'),
+            validators.SingleEventValidator("course"),
+            validators.BeginnerValidator("course", "start_date"),
+            validators.TimeValidator("start_date"),
+            validators.EmptyLessonsValidator('course'),
+        )
+        read_only_fields = ("id", "status", "end_date")
+
+    def create(self, validated_data):
+        instance = super().create(validated_data)
+        event = (models.Event.
+                 _default_manager.
+                 filter(pk=instance.pk).
+                 select_related('course').
+                 prefetch_related('course__lessons')
+                 ).get()
+        with atomic():
+            SetEventServise(instance=event).set_event_settings()
+        instance.refresh_from_db()
+        return instance
+
+
+class EventSerializerUpdate(serializers.ModelSerializer):
+    """
+    Сериализатор Создания в Изменения Эвента
+    """
+
+    status = serializers.CharField(read_only=True)
+
+    class Meta:
+        model = models.Event
+        fields = (
+            "id",
+            "course",
+            "start_date",
+            "end_date",
+            "status",
+        )
+        validators = (
+            validators.BeginnerValidator("course", "start_date"),
+            validators.TimeValidator("start_date"),
+        )
+        read_only_fields = (
+            "id",
+            "course",
+            "status",
+            "end_date",
+        )
 
     def _is_process(self, start_date: datetime.datetime) -> bool:
         """
@@ -535,66 +676,112 @@ class EventSerializerCreate(serializers.ModelSerializer):
                     process=is_process,
                 )
 
-    def _create_lesson_stories(self, user, course):
-        """
-        Создает LessonStory для всех free-уроков и урока с serial=1
-        """
-        try:
-            lesson_ids = set(
-                models.Lesson.objects.filter(
-                    Q(course=course) & (Q(type_lesson="free") | Q(serial=1))
-                ).values_list('id', flat=True)
-            )
-
-            logger.debug(
-                f'Нашлось {len(lesson_ids)} открытых на данный момент'
-                f' уроков в курсе {course.id}')
-
-            if lesson_ids:
-                models.LessonStory.objects.bulk_create([
-                    models.LessonStory(user=user, lesson_id=lesson_id,
-                                       course=course)
-                    for lesson_id in lesson_ids
-                ], ignore_conflicts=True)
-
-                logger.success(
-                    f'Создано {len(lesson_ids)} открытых уроков  в LessonStory')
-
-        except Exception as e:
-            logger.error(f"Ошибка создания LessonStory: {str(e)}")
-            raise
-
-    def create(self, validated_data):
-        event = super().create(validated_data)
-        self._create_lesson_stories(
-            user=validated_data["user"],
-            course=validated_data["course"]
-        )
-        return event
-
-    def save(self, **kwargs):
-        logger.debug(f"before {self.validated_data}")
-        self._correct_status(self.validated_data)
-        logger.debug(f"after {self.validated_data}")
-        return super().save(**kwargs)
+    def update(self, instance, validated_data):
+        instance = super().update(instance, validated_data)
+        event = (models.Event.
+                 _default_manager.
+                 filter(pk=instance.pk).
+                 select_related('course').
+                 prefetch_related('course__lessons')
+                 ).get()
+        self._correct_status(validated_data)
+        SetEventServise(instance=event, update=True).set_event_settings()
+        instance.refresh_from_db()
+        return instance
 
 
-class EventSerializerUpdate(serializers.ModelSerializer):
+class EventCoveredSerializer(serializers.ModelSerializer):
     """
-    Сериализатор Создания в Изменения Эвента
+    Сериализатор покрытия эвентами
     """
 
-    status = serializers.CharField(read_only=True)
+    event = EventSerializer(read_only=True)
 
     class Meta:
-        model = models.Event
+        model = models.EventCovered
         fields = (
             "user",
-            "course",
-            "start_date",
-            "end_date",
+            "event",
             "favorite",
+            "procent",
             "status",
         )
-        validators = (validators.TimeValidator("start_date", "end_date"),)
-        read_only_fields = ("id", "start_date", "course", "user")
+
+
+class EventCoveredViewSerializer(serializers.ModelSerializer):
+    """
+    Сериализатор покрытия эвентами упрощенный
+    """
+    user = user_serializers.UserSerializer(read_only=True)
+
+    class Meta:
+        model = models.EventCovered
+        fields = (
+            "user",
+            "event",
+            "favorite",
+            "procent",
+            "status",
+        )
+
+
+class UsersStatSerializer(serializers.Serializer):
+    """
+    Сериализатор покрытия эвентами упрощенный
+    """
+    user = user_serializers.UserSerializer(read_only=True)
+    procent = serializers.IntegerField()
+    status = serializers.CharField()
+
+
+class MainLessonsSerializer(serializers.HyperlinkedModelSerializer):
+    """
+    Сериализатор для Main страницы Lessons
+    """
+    url = serializers.HyperlinkedIdentityField(
+        view_name='lessons:lesson-detail',
+        lookup_url_kwarg='lesson_id',
+    )
+
+    class Meta:
+        model = models.Lesson
+        fields = (
+            'url',
+            'id',
+            'name',
+            'end_date',
+        )
+
+
+class CourseDetailSerializer(serializers.Serializer):
+    """
+    Детали курса
+    """
+    name = serializers.CharField()
+    description = serializers.CharField()
+    create_date = serializers.DateTimeField()
+    end_date = serializers.DateTimeField()
+    count_students = serializers.IntegerField()
+    status = serializers.CharField()
+    teacher = user_serializers.UserSerializer()
+
+
+class EventCoveredCreateSerializer(serializers.ModelSerializer):
+    """
+    Сериализатор создания покрытия эвентами
+    """
+
+    class Meta:
+        model = models.EventCovered
+        fields = (
+            "user",
+            "event",
+            "favorite",
+            "procent",
+            "status",
+        )
+        read_only_fields = ["procent", "status"]
+        validators = (
+            validators.PassRegistationsValidator("event", "user"),
+            validators.RegistrationValidator("user", "event"),
+        )

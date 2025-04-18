@@ -38,7 +38,7 @@ WORKDIR /app
 
 RUN chown -R user:user .
 
-USER user
+#USER user
 
 EXPOSE 8080
 

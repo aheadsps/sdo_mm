@@ -128,7 +128,7 @@ def save_model(self, request, obj, form, change):
 class ProfileAdmin(admin.ModelAdmin):
     """Регистрация модели Profile в админке."""
 
-    list_display = ("user", "phone", "date_birthday")
+    list_display = ("id", "user", "phone", "date_birthday")
     list_filter = ("date_birthday",)
     search_fields = ("user__email", "phone")
     raw_id_fields = ("user",)
@@ -146,7 +146,7 @@ class ProfessionAdmin(admin.ModelAdmin):
         "ru_name",
         "en_name",
     )
-    search_fields = ("ru_name", "en_name")
+    search_fields = ("id", "ru_name", "en_name")
 
     def save_model(self, request, obj, form, change):
         """

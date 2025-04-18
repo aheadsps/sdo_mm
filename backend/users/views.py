@@ -1,17 +1,22 @@
-from authemail.serializers import LoginSerializer
-from authemail.views import Login, Logout, PasswordChange, UserMe
 from django.contrib.auth import authenticate
 from django.utils.translation import gettext as _
+from django.utils.decorators import method_decorator
+
 from rest_framework import status
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
+
+from authemail.views import Login, Logout, PasswordChange, UserMe
+from query_counter.decorators import queries_counter
+
 from users.serializers import (CustomLoginSerializer,
                                CustomPasswordChangeSerializer,
                                CustomUserSerializer)
 from users.utils import custom_send_multi_format_email
 
 
+@method_decorator(queries_counter, name='dispatch')
 class CustomLogin(Login):
     """Кастомный класс для входа пользователя."""
 
@@ -47,6 +52,7 @@ class CustomLogin(Login):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+@method_decorator(queries_counter, name='dispatch')
 class CustomLogout(Logout):
     """Кастомный класс для выхода пользователя."""
 
@@ -61,6 +67,7 @@ class CustomLogout(Logout):
         return Response(content, status=status.HTTP_200_OK)
 
 
+@method_decorator(queries_counter, name='dispatch')
 class CustomPasswordChange(PasswordChange):
     """Кастомный класс для изменения пароля пользователя."""
 
@@ -95,6 +102,7 @@ class CustomPasswordChange(PasswordChange):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+@method_decorator(queries_counter, name='dispatch')
 class CustomUserMe(UserMe):
     permission_classes = (IsAuthenticated,)
     serializer_class = CustomUserSerializer
