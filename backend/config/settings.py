@@ -327,14 +327,14 @@ EMAIL_USE_SSL = False
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:8000",
     "http://localhost:5173",
+    "https://edu.sdo-metro.ru",
 ]
 
 CHANNELS_ALLOWED_WS_ORIGINS = [
     "http://localhost:8000",
     "http://localhost:5173",
+    "https://edu.sdo-metro.ru",
     "ws://localhost:8000",
     "ws://localhost:5173",
+    "ws://edu.sdo-metro.ru"
 ]
-
-
-X_FRAME_OPTIONS = "SAMEORIGIN"
