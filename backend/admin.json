@@ -22,9 +22,19 @@
         "pk": 4,
         "fields": {
             "course": 18,
-            "start_date": "2025-04-18T17:00:00Z",
+            "start_date": "2025-04-21T17:00:00Z",
             "end_date": "2025-05-02T17:00:00Z",
-            "status": "expected"
+            "status": "started"
+        }
+    },
+    {
+        "model": "lessons.event",
+        "pk": 5,
+        "fields": {
+            "course": 4,
+            "start_date": "2025-04-17T23:00:00Z",
+            "end_date": "2025-05-09T23:00:00Z",
+            "status": "started"
         }
     },
     {
@@ -61,6 +71,17 @@
         }
     },
     {
+        "model": "lessons.eventcovered",
+        "pk": 7,
+        "fields": {
+            "user": 2,
+            "event": 4,
+            "favorite": false,
+            "procent": 0,
+            "status": "expected"
+        }
+    },
+    {
         "model": "lessons.course",
         "pk": 4,
         "fields": {
@@ -74,7 +95,7 @@
             "image": "",
             "is_scorm": false,
             "profession": 2,
-            "status": "archive",
+            "status": "run",
             "experiences": [
                 2,
                 3
@@ -1364,7 +1385,7 @@
             "resourse": null,
             "course": 4,
             "started": false,
-            "start_date": null,
+            "start_date": "2025-04-18T23:00:00Z",
             "end_date": null
         }
     },
@@ -1379,7 +1400,7 @@
             "resourse": null,
             "course": 4,
             "started": false,
-            "start_date": null,
+            "start_date": "2025-04-25T23:00:00Z",
             "end_date": null
         }
     },
@@ -1394,7 +1415,7 @@
             "resourse": null,
             "course": 4,
             "started": false,
-            "start_date": null,
+            "start_date": "2025-05-02T23:00:00Z",
             "end_date": null
         }
     },
@@ -1775,7 +1796,7 @@
             "first_name": "Vasia",
             "last_name": "Petechkin",
             "date_joined": "2025-03-17T06:12:30.791Z",
-            "last_login": "2025-04-17T07:12:04.249Z",
+            "last_login": "2025-04-18T18:54:42.113Z",
             "date_commencement": "2024-01-01",
             "profession": 1,
             "groups": [],
@@ -1795,8 +1816,8 @@
             "first_name": "Alex",
             "last_name": "Martira",
             "date_joined": "2025-03-21T17:51:25.332Z",
-            "last_login": "2025-03-27T16:50:01.552Z",
-            "date_commencement": "2025-03-21",
+            "last_login": "2025-04-18T19:00:30.964Z",
+            "date_commencement": "2023-03-21",
             "profession": 2,
             "groups": [
                 1
@@ -1865,6 +1886,13 @@
         "pk": 4,
         "fields": {
             "years": 3
+        }
+    },
+    {
+        "model": "users.workexperience",
+        "pk": 5,
+        "fields": {
+            "years": 0
         }
     },
     {
