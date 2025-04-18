@@ -12,3 +12,11 @@ class TaskDoNotExists(Exception):
     """
 
     ...
+
+
+class UpdateSettingsNotSet(Exception):
+    """
+    Ошибка не установленного обновления настроек
+    """
+
+    ...

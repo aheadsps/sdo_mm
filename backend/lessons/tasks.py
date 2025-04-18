@@ -20,6 +20,12 @@ def event_switch_status(event_id: int, started: bool) -> str:
 
 
 @app.task
+def lesson_switch_status(lesson_id: int) -> str:
+    lesson = models.Lesson._default_manager.get(id=lesson_id)
+    lesson.started = True
+    lesson.save(update_fields=('started',))
+
+@app.task
 def update_status_events(course_id: int | None = None,
                   start_date: str = None,
                   end_date: str | None = None,

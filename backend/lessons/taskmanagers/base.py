@@ -1,11 +1,14 @@
 from typing import ClassVar
 from datetime import datetime
 
-from django_celery_beat.models import ClockedSchedule
+from django_celery_beat.models import ClockedSchedule, PeriodicTask
 from django.conf import settings
 
 from .abc import AbstractTaskManager
-from .exceptions import DateTimeTypeError
+from .exceptions import (DateTimeTypeError,
+                         TaskDoNotExists,
+                         UpdateSettingsNotSet,
+                         )
 from lessons.utils import UTCTimeCast
 
 
@@ -43,10 +46,24 @@ class BaseTaskManager(AbstractTaskManager):
     def update_settings(self, **kwargs):
         self._settings | kwargs
 
+    def _get_task(self) -> PeriodicTask:
+        self._updated_settings()
+        task = PeriodicTask._default_manager.filter(**self.settings)
+        if not task.exists():
+            raise TaskDoNotExists(f'Задачи с настройками {self.settings} не существует')
+        return task.get()
+
     def _time_to_UNIX(self):
         time_cast = (UTCTimeCast(input_time=self.date)
                      .get_microseconds_off_UTC_time())
         return time_cast
+
+    def _updated_settings(self, **kwargs):
+        """
+        Переопределение строек для стандарных settings
+        Обязательно для переопределения
+        """
+        raise UpdateSettingsNotSet('Необходимо установить логику переопределения настроек')
 
     def _clocked_schedule(self, data_clocked):
         """
@@ -57,11 +74,40 @@ class BaseTaskManager(AbstractTaskManager):
         )
         return schedule
 
-    def create(self):
-        return super().create()
+    def bulk_create(self) -> PeriodicTask:
+        """
+        Создает экземпляр PeriodicTask для дальнейшего сохранения
+        """
+        self._updated_settings()
+        return PeriodicTask(**self.settings)
 
-    def update(self):
-        return super().update()
+    def create(self) -> PeriodicTask:
+        """
+        Создание задач для изменения статуса
+        """
+        self._updated_settings()
+        task = PeriodicTask._default_manager.create(**self.settings)
+        return task
 
-    def delete(self):
-        return super().delete()
+    def update(self, **kwargs) -> PeriodicTask:
+        """
+        Обновление задачи
+        """
+        task = self._get_task()
+        self._updated_settings(**kwargs)
+        task(**self.settings)
+        task.save()
+        task.refresh_from_db()
+        return task
+
+    def bulk_update(self, **kwargs) -> PeriodicTask:
+        """
+        Обновление задачи без сохранения
+        """
+        task = self._get_task()
+        self._updated_settings(**kwargs)
+        return task(**self.settings)
+
+    def delete(self) -> None:
+        task = self._get_task()
+        task.delete()

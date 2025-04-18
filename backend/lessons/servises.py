@@ -5,10 +5,11 @@ from loguru import logger
 from django.db.models import QuerySet, Q
 from django.db.transaction import atomic
 from django.contrib.auth import get_user_model
-from django_celery_beat.models import ClockedSchedule, PeriodicTask
+from django_celery_beat.models import PeriodicTask
 
 from lessons import models
 from lessons.utils import get_intervals
+from lessons.taskmanagers import TaskManagerEventSwitch
 
 
 class SetEventServise:
@@ -116,6 +117,11 @@ class SetEventServise:
         instance.end_date = start_date
         # Множественное сохранение шедулеров
         instance.save()
+        manager = TaskManagerEventSwitch(date=start_date,
+                                         event_id=self.event.id,
+                                         started=False,
+                                         )
+        manager.create()
 
     def set_event_settings(self):
         """
@@ -125,6 +131,12 @@ class SetEventServise:
         start_date = self.event.start_date
         lessons = self.event.course.lessons.prefetch_related('test_block__questions').order_by("serial")
         interval = self.event.course.interval
+        manager = TaskManagerEventSwitch(
+            date=start_date,
+            event_id=self.event.id,
+            started=True,
+        )
+        manager.create()
         with atomic():
             self._count_end_date(
                 instance=self.event,
