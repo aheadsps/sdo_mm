@@ -137,3 +137,45 @@ class TaskManagerTestBlockSwitch(BaseTaskManager):
                              kwargs=set_kwargs,
                              **kwargs,
                              )
+
+
+class TaskManagerSendMain(BaseTaskManager):
+    """
+    Созданиие таски для отправки email
+    """
+
+    TASK = settings.SEND_MAIL_TASK
+
+    def __init__(self,
+                 date: datetime,
+                 users: list,
+                 course_id: int,
+                 lesson_id: int,
+                 ):
+        super().__init__(date=date)
+        self.test_block_id = int(test_block_id)
+
+    def _unique_name(self,
+                     test_block_id: int,
+                     ) -> str:
+        """
+        Получение уникального имени
+        """
+        time_cast = self._time_to_UNIX()
+        logger.debug(f'set timecast {time_cast}')
+        unique_name = f'EmailSend_{test_block_id}_{time_cast}'
+        logger.debug(f'unique name {unique_name}')
+        return unique_name
+
+    def _updated_settings(self, **kwargs):
+        unique_name = self._unique_name(
+            test_block_id=self.test_block_id,
+            date=self.date,
+        )
+        set_kwargs = json.dumps(dict(
+            test_block_id=self.test_block_id,
+            ))
+        self.update_settings(unique_name=unique_name,
+                             kwargs=set_kwargs,
+                             **kwargs,
+                             )

@@ -314,6 +314,7 @@ TYPE_LESSON = [
 EVENT_SWITCH_STATUS = 'lessons.tasks.event_switch_status'
 LESSON_SWITCH_STATUS = 'lessons.tasks.lesson_switch_status'
 TESTBLOCK_SWITCH_STATUS = 'lessons.tasks.test_block_process'
+SEND_MAIL_TASK = 'lessons.tasks.send_mail_users'
 
 EMAIL_FROM = os.getenv("DEFAULT_EMAIL_FROM")
 EMAIL_BCC = os.getenv("DEFAULT_EMAIL_BCC")

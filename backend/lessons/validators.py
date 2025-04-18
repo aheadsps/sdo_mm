@@ -28,7 +28,7 @@ class TimeValidator:
     def __init__(self, start_date: str) -> None:
         self.start_date = str(start_date)
         self.error_detail = dict()
-        self.valid_start = valid_start
+
     def _check_up_time(
         self,
         start_date: datetime.datetime,

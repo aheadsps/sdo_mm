@@ -27,6 +27,7 @@ def lesson_switch_status(lesson_id: int) -> str:
 
 @app.task
 def test_block_process(test_block_id: int) -> str:
+    # Проверка результатов
     ...
 
 
