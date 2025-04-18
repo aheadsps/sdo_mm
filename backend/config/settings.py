@@ -238,30 +238,7 @@ STATUS_COURSE = [
 STATUS_EVENTS = [
     (
         "finished",
-        "Закончек",
-    ),
-    (
-        "started",
-        "Начат",
-    ),
-    (
-        "expected",
-        "Ожидает начало",
-    ),
-    (
-        "finished",
-        "Закончено",
-    )
-]
-
-STATUS_COVERED = [
-    (
-        "finished",
-        "Закончек",
-    ),
-    (
-        "failed",
-        "Проваленно",
+        "Закончен",
     ),
     (
         "started",
@@ -333,6 +310,8 @@ TYPE_LESSON = [
         "линейный",
     )
 ]
+
+EVENT_SWITCH_STATUS = 'lessons.tasks.event_switch_status'
 
 EMAIL_FROM = os.getenv("DEFAULT_EMAIL_FROM")
 EMAIL_BCC = os.getenv("DEFAULT_EMAIL_BCC")

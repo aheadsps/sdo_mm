@@ -5,6 +5,7 @@ from loguru import logger
 from django.db.models import QuerySet, Q
 from django.db.transaction import atomic
 from django.contrib.auth import get_user_model
+from django_celery_beat.models import ClockedSchedule, PeriodicTask
 
 from lessons import models
 from lessons.utils import get_intervals
@@ -99,7 +100,7 @@ class SetEventServise:
             if not beginner:
                 lesson.start_date = start_date
                 update_lessons.append(lesson)
-                # Собираем шедулеры на окончиние тестовых блоков
+                # Собираем шедулеры на окончание тестовых блоков
                 start_date = start_date + interval
                 lesson.end_date = start_date
             if not update:

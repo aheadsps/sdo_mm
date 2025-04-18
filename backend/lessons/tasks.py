@@ -5,6 +5,20 @@ from users.models import User
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 
+from lessons import models
+
+
+@app.task
+def event_switch_status(event_id: int, started: bool) -> str:
+    event = models.Event._default_manager.get(id=event_id)
+    event.status = 'started' if started else 'finished'
+    event.save(update_fields=('status',))
+    course = event.course
+    course.status = 'run' if started else 'end'
+    course.save(update_fields=('status',))
+    return 'Done'
+
+
 @app.task
 def update_status_events(course_id: int | None = None,
                   start_date: str = None,
@@ -55,8 +69,3 @@ def send_mail_users(course_id: int | None = None,
         )
         msg.attach_alternative(html_content, 'text/html')
         msg.send()
-
-
-
-
-

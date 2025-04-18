@@ -1,13 +1,70 @@
 import json
-from lessons import models
+
+from typing import ClassVar
+
 from celery.local import Proxy
 
+from loguru import logger
+
 from django_celery_beat.models import PeriodicTask, ClockedSchedule
-from django.core.exceptions import ObjectDoesNotExist
 from django.utils import timezone
-from django.db.models import Q
+from django.conf import settings
 from datetime import datetime
+
+from lessons.utils import UTCTimeCast
 from lessons import tasks
+
+
+
+class TaskManagerEventSwitch:
+    """
+    Созданиие таски для изменения статуса
+    """
+
+    TASK: ClassVar[str] = settings.EVENT_SWITCH_STATUS
+
+    def __init__(self,
+                 date: datetime,
+                 event_id: int,
+                 started: bool,
+                 ):
+        self.date = date
+        self.event_id = int(event_id)
+        self.started = bool(started)
+        self.schedule = self._clocked_schedule(date)
+
+    def _clocked_schedule(self, data_clocked):
+        """
+        Назначаем шедулер или берем старый если есть
+        """
+        schedule, _ = ClockedSchedule._default_manager.get_or_create(
+            clocked_time=data_clocked
+        )
+        return schedule
+
+    def _unique_name(self,
+                     event_id: int,
+                     date: datetime,
+                     started: bool,
+                     ) -> str:
+        """
+        Получение уникального имени
+        """
+        status = 'start' if started else 'finished'
+        time_cast = UTCTimeCast(input_time=date).get_microseconds_off_UTC_time()
+        logger.debug(f'set timecast {time_cast}')
+        unique_name = f'Event_{event_id}_{status}_{time_cast}'
+        logger.debug(f'unique name {unique_name}')
+        return unique_name
+
+    def create(self):
+        """Создание задач для изменения статуса
+        """
+        unique_name = self._unique_name(
+            event_id=self.event_id,
+            date=self.date,
+            started=self.started,
+        )
 
 
 class TaskManager:
@@ -21,15 +78,16 @@ class TaskManager:
     дата-тайм начала (может null),
     дата-тайм финиша (может null)
     """
+
     def __init__(
         self,
         event_pk: int = None,
-        #number_task: int = None,
+        # number_task: int = None,
         data_start: str = None,
         data_end: str = None,
     ):
         self.event_pk = event_pk
-        #self.number_task = number_task
+        # self.number_task = number_task
         self.data_start = data_start
         self.data_end = data_end
 
@@ -44,7 +102,6 @@ class TaskManager:
         else:
             self.schedule_end = None
 
-
     def _clocked_schedule(self, data_clocked):
         """
         Назначаем шедулер или берем старый если есть
@@ -56,7 +113,6 @@ class TaskManager:
             return schedule
         return None
 
-
     @staticmethod
     def date_str(dt: datetime):
         """
@@ -67,20 +123,14 @@ class TaskManager:
         else:
             return None
 
-
-    def _add_task_update(self,
-                         clocked: object,
-                         name_task: str,
-                         task: str,
-                         kwargs: dict
-                         ) -> None:
+    def _add_task_update(
+        self, clocked: object, name_task: str, task: str, kwargs: dict
+    ) -> None:
         """
         Установка задач
         """
         # Проверить есть ли таск для этого курса
-        task_event = PeriodicTask._default_manager.filter(
-            name=name_task
-        ).first()
+        task_event = PeriodicTask._default_manager.filter(name=name_task).first()
         if not task_event:
             instance = PeriodicTask._default_manager.create(
                 clocked=clocked,
@@ -92,35 +142,33 @@ class TaskManager:
         else:
             # Если таск есть
             kwargs_old: dict = json.loads(task_event.kwargs)
-            #kwargs_old["start_date"] = kwargs["start_date"]
-            #kwargs_old["end_date"] = kwargs["end_date"]
+            # kwargs_old["start_date"] = kwargs["start_date"]
+            # kwargs_old["end_date"] = kwargs["end_date"]
             task_event.kwargs = json.dumps(kwargs_old)
             task_event.one_off = True
             task_event.clocked = clocked
             task_event.save()
 
-
     def _task_update_status_event(self, kwargs):
         """
         Запросы на установку задач по изменению статуса евента
         """
-        task = kwargs.get('task')
+        task = kwargs.get("task")
         kwargs_for_task: dict = {
-            "pk": kwargs['pk'],
+            "pk": kwargs["pk"],
             #'start_date': kwargs['start_date'],
             #'end_date': kwargs['end_date']
         }
         if self.schedule_start:
             clocked = self.schedule_start
             name = f"Start_{kwargs['name']}"
-            kwargs_for_task['status'] = 'process'
+            kwargs_for_task["status"] = "process"
             self._add_task_update(clocked, name, task, kwargs_for_task)
         if self.schedule_end:
             clocked = self.schedule_end
-            kwargs_for_task['status'] = 'finished'
+            kwargs_for_task["status"] = "finished"
             name = f"End_{kwargs['name']}"
             self._add_task_update(clocked, name, task, kwargs_for_task)
-
 
     def create(self, kwargs):
         """
@@ -138,11 +186,8 @@ class TaskManager:
             # ставим задачу на отправку писем
             tasks.send_mail_users.delay(**kwargs)
 
-
     def update(self, kwargs):
         self._task_update_status_event(kwargs)
-
-
 
 
 class TaskManagerEvent(TaskManager):
@@ -156,7 +201,7 @@ class TaskManagerEvent(TaskManager):
             "end_date": TaskManager.date_str(self.data_end),
             "start_date": TaskManager.date_str(self.data_start),
             "pk": self.event_pk,
-            "task": "lessons.tasks.update_status_events"
+            "task": "lessons.tasks.update_status_events",
         }
         super().create(kwargs)
 
