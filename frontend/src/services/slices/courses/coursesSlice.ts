@@ -1,11 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
-import { Course, CourseVeiw } from '@services/api/types'
+import { Course } from '@services/api/types.api'
 
 type InitialState = {
   courses: Course[]
   currentId: number
-  course: CourseVeiw
+  course: Course
+  // userCourse: CourseShort
 }
 const initialState: InitialState = {
   courses: [],
@@ -14,16 +15,45 @@ const initialState: InitialState = {
     beginer: false,
     create_date: '',
     description: '',
-    experiences: [],
     id: 0,
     image: '',
     lessons: [],
     name: '',
-    profession: 0,
+    profession: {
+      id: 0,
+      en_name: '',
+      ru_name: '',
+    },
     update_date: '',
     scorms: [],
-    lesson_story: [],
+    teacher: 0,
+    interval: '',
+    experiences: [],
+    materials: {
+      id: 0,
+      files: [],
+    },
+    status: '',
+    is_scorm: false,
   },
+  // userCourse: {
+  //   id: 0,
+  //   teacher: 0,
+  //   name: '',
+  //   description: '',
+  //   interval: '',
+  //   lessons: [],
+  //   beginner: false,
+  //   image: '',
+  //   profession: 0,
+  //   experiences: [],
+  //   materials: {
+  //     id: 0,
+  //     files: [],
+  //   },
+  //   status: '',
+  //   is_scorm: false,
+  // },
 }
 
 export const coursesSlice = createSlice({
@@ -33,17 +63,21 @@ export const coursesSlice = createSlice({
     setAllCourses: (state, action: PayloadAction<Course[]>) => {
       state.courses = action.payload
     },
-    setCourseById: (state, action: PayloadAction<CourseVeiw>) => {
+    setCourseById: (state, action: PayloadAction<Course>) => {
       state.course = action.payload
     },
     setCurrentId: (state, action: PayloadAction<number>) => {
       state.currentId = action.payload
     },
+    // setUserCourse: (state, action: PayloadAction<CourseShort>) => {
+    //   state.userCourse = action.payload
+    // },
   },
   selectors: {
     selectCourses: (state) => state.courses,
     selectCurrentId: (state) => state.currentId,
     selectCourse: (state) => state.course,
+    // selectUserCourse: (state) => state.userCourse,
   },
 })
 

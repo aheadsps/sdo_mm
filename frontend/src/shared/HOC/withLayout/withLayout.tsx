@@ -1,5 +1,5 @@
-import { useLazyGetCoversQuery, useLazyGetCurrentCoversQuery } from '@services/api'
-import { setAllCovers, setCurrentCovers } from '@services/slices'
+import { useLazyGetCurrentCoversQuery } from '@services/api'
+import { setUserCovers } from '@services/slices'
 import { useAppDispatch } from '@services/store'
 import { Header, Loader, Sidebar } from '@shared/components'
 import { useScreenWidth } from '@shared/hooks'
@@ -34,7 +34,7 @@ export const withLayout = <T extends object>(Component: ComponentType<T>) => {
         .unwrap()
         .then((res) => {
           console.log(res.results)
-          dispatch(setCurrentCovers(res.results))
+          dispatch(setUserCovers(res.results))
         })
         .catch((error) => handleError(error))
         .finally(() => setisLoading(false))

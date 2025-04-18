@@ -118,7 +118,8 @@ export type Course = {
   scorms: Scorm[]
   experiences: Experience[]
   materials: Materials
-  status: string[]
+  status: string
+  is_scorm: boolean
 }
 export type CourseShort = {
   id: number
@@ -127,27 +128,59 @@ export type CourseShort = {
   description: string
   interval: string
   lessons: LessonShort[]
-  beginer: boolean
+  beginner: boolean
   image: string
   profession: number
-  scorms: number[]
+  //   scorms: number[] | boolean
   experiences: number[]
   materials: Materials
   status: string
+} & {
+  is_scorm: boolean
 }
-
+export type LessonCovered = {
+  course: number
+  id: number
+  name: string
+  resourse: string
+  serial: number
+  start_date: string
+  started: false
+  steps: StepShort[]
+  teacher: number
+  test_block: number
+  version: string
+}
+export type CourseCovered = {
+  beginner: boolean
+  create_date: string
+  description: string
+  experiences: number[]
+  id: number
+  image: string
+  interval: null
+  is_scorm: boolean
+  lessons: LessonCovered[]
+  materials: Materials
+  name: string
+  profession: Profession
+  status: string
+  teacher: number
+  update_date: string
+}
 export type EventShort = {
+  id: number
   course: CourseShort
   start_date: string
   end_date: string
   status: string
 }
-
-export type Event = {
-  course: Course
-  start_date: '2025-04-17T11:04:00.534Z'
-  end_date: '2025-04-17T11:04:00.534Z'
-  status: 'expected'
+export type EventCovered = {
+  id: number
+  course: CourseCovered
+  start_date: string
+  end_date: string
+  status: string
 }
 
 export type CoverShort = {
@@ -160,7 +193,7 @@ export type CoverShort = {
 }
 export type CoverCurrent = {
   id: number
-  event: EventShort
+  event: EventCovered
   user: number
   procent: number
   favorite: boolean
@@ -215,14 +248,6 @@ export type ProfileResponse = {
   profession: number
   profile: UserProfile
 }
-export type EventCovered = {
-  id: number
-  event: EventShort
-  user: number
-  procent: number
-  favorite: boolean
-  status: string
-}
 
 export type CoversResponse = {
   count: number
@@ -236,4 +261,16 @@ export type CurrentCoversResponse = {
   next: null
   previous: null
   results: CoverCurrent[]
+}
+export type CoursesResponse = {
+  count: number
+  next: null
+  previous: null
+  results: CourseShort[]
+}
+export type EventsResponse = {
+  count: number
+  next: null
+  previous: null
+  results: EventShort[]
 }

@@ -1,9 +1,10 @@
 import {
-  selectCompletedEvents,
-  selectCurrentEvents,
-  selectExpiredEvents,
-  selectFavoriteEvents,
-} from '@services/slices/events'
+  selectCompletedCovers,
+  selectCurrentCovers,
+  selectExpiredCovers,
+  selectFavoriteCovers,
+  selectUserCovers,
+} from '@services/slices'
 import { useAppSelector } from '@services/store'
 import {
   AiComponent,
@@ -21,6 +22,7 @@ import s from './myLearning.module.scss'
 
 const buttons: string[] = [
   'Все курсы',
+  'Назначенные курсы',
   'Просроченные курсы',
   'Избранные курсы',
   'Завершённые курсы',
@@ -31,22 +33,26 @@ const MyLearningComp: React.FC = () => {
   const { isOpen: isTooltipeOpen, close: closeTooltipe } = useToggle(false)
   const { isOpen: isAIOpen, close: closeAI, toggle: toggleAI } = useToggle()
 
-  const currentEvents = useAppSelector(selectCurrentEvents)
-  const expiredEvents = useAppSelector(selectExpiredEvents)
-  const favoriteEvents = useAppSelector(selectFavoriteEvents)
-  const completedEvents = useAppSelector(selectCompletedEvents)
+  const userCovers = useAppSelector(selectUserCovers)
+  const currentCovers = useAppSelector(selectCurrentCovers)
+  const expiredCovers = useAppSelector(selectExpiredCovers)
+  const favoriteCovers = useAppSelector(selectFavoriteCovers)
+  const completedCovers = useAppSelector(selectCompletedCovers)
 
   const displayCurrentCourses = () => {
     if (mode === 'Все курсы') {
-      return currentEvents
+      return userCovers
+    }
+    if (mode === 'Назначенные курсы') {
+      return currentCovers
     }
     if (mode === 'Просроченные курсы') {
-      return expiredEvents
+      return expiredCovers
     }
     if (mode === 'Избранные курсы') {
-      return favoriteEvents
+      return favoriteCovers
     }
-    return completedEvents
+    return completedCovers
   }
 
   return (
@@ -66,8 +72,8 @@ const MyLearningComp: React.FC = () => {
         </div>
         <div className={s.container__content}>
           {displayCurrentCourses()?.length > 0 ? (
-            displayCurrentCourses().map((event) => {
-              return <LessonCard event={event} key={event.id} />
+            displayCurrentCourses().map((cover) => {
+              return <LessonCard cover={cover} key={cover.event.id} />
             })
           ) : (
             <Typography variant="body_1">В данном списке нет курсов</Typography>

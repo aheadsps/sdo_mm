@@ -21,7 +21,7 @@ export const coversApi = createApi({
     }),
     getCurrentCovers: build.query<CurrentCoversResponse, void>({
       query: () => ({
-        url: `/covers/currents`,
+        url: `/covers/currents?status=process`,
         method: 'GET',
         headers: {
           Authorization: `Token ${getToken()}`,
