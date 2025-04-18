@@ -38,7 +38,6 @@ class TaskManagerEventSwitch(BaseTaskManager):
         return unique_name
 
     def _updated_settings(self, **kwargs):
-
         unique_name = self._unique_name(
             event_id=self.event_id,
             date=self.date,
@@ -52,6 +51,13 @@ class TaskManagerEventSwitch(BaseTaskManager):
                              kwargs=set_kwargs,
                              **kwargs,
                              )
+
+    def _get_task(self) -> PeriodicTask:
+        self._updated_settings()
+        task = PeriodicTask._default_manager.filter(**self.settings)
+        if not task.exists():
+            raise TaskDoNotExists(f'Задачи с настройками {self.settings} не существует')
+        return task.get()
 
     def bulk_create(self) -> PeriodicTask:
         """
@@ -68,17 +74,25 @@ class TaskManagerEventSwitch(BaseTaskManager):
         task = PeriodicTask._default_manager.create(**self.settings)
         return task
 
-    def update(self, **kwargs):
+    def update(self, **kwargs) -> PeriodicTask:
         """
         Обновление задачи
         """
-        self._updated_settings()
-        task = PeriodicTask._default_manager.filter(**self.settings)
-        if not task.exists():
-            raise TaskDoNotExists(f'Задачи с настройками {self.settings} не существует')
+        task = self._get_task()
         self._updated_settings(**kwargs)
-        task = task.get()
         task(**self.settings)
         task.save()
         task.refresh_from_db()
         return task
+
+    def bulk_update(self, **kwargs) -> PeriodicTask:
+        """
+        Обновление задачи без сохранения
+        """
+        task = self._get_task()
+        self._updated_settings(**kwargs)
+        return task(**self.settings)
+
+    def delete(self) -> None:
+        task = self._get_task()
+        task.delete()
