@@ -11,60 +11,8 @@ from django.utils import timezone
 from django.conf import settings
 from datetime import datetime
 
-from lessons.utils import UTCTimeCast
+
 from lessons import tasks
-
-
-
-class TaskManagerEventSwitch:
-    """
-    Созданиие таски для изменения статуса
-    """
-
-    TASK: ClassVar[str] = settings.EVENT_SWITCH_STATUS
-
-    def __init__(self,
-                 date: datetime,
-                 event_id: int,
-                 started: bool,
-                 ):
-        self.date = date
-        self.event_id = int(event_id)
-        self.started = bool(started)
-        self.schedule = self._clocked_schedule(date)
-
-    def _clocked_schedule(self, data_clocked):
-        """
-        Назначаем шедулер или берем старый если есть
-        """
-        schedule, _ = ClockedSchedule._default_manager.get_or_create(
-            clocked_time=data_clocked
-        )
-        return schedule
-
-    def _unique_name(self,
-                     event_id: int,
-                     date: datetime,
-                     started: bool,
-                     ) -> str:
-        """
-        Получение уникального имени
-        """
-        status = 'start' if started else 'finished'
-        time_cast = UTCTimeCast(input_time=date).get_microseconds_off_UTC_time()
-        logger.debug(f'set timecast {time_cast}')
-        unique_name = f'Event_{event_id}_{status}_{time_cast}'
-        logger.debug(f'unique name {unique_name}')
-        return unique_name
-
-    def create(self):
-        """Создание задач для изменения статуса
-        """
-        unique_name = self._unique_name(
-            event_id=self.event_id,
-            date=self.date,
-            started=self.started,
-        )
 
 
 class TaskManager:
