@@ -1,53 +1,48 @@
 import SettingsIcon from '@assets/icons/SettingsIcon'
+import { useGetLessonQuery } from '@services/api'
 import { NewItem } from '@services/slices/constructor/constructor.types'
-import { LessonBlock } from '@services/slices/constructor/constructor.types'
 import {
   addNewBlockItem,
   deleteBlockItem,
-  selectBlocks,
-  setBlocks,
   setActiveBlockId,
   selectActiveBlockId,
+  selectCurrentSteps,
+  setCurrentLesson,
+  setCurrentSteps,
 } from '@services/slices/constructor/constructorSlice'
 import { useAppDispatch, useAppSelector } from '@services/store'
 import { CMenu, Title, Header } from '@shared/components'
 import { useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom'
 
 import { BlockDropdown } from './block-dropdown/BlockDropdown'
 import s from './constructorPage.module.scss'
 
-const lessonBlocks: LessonBlock[] = [
-  {
-    id: 1,
-    title: 'Зачем нужны СИЗ? Психология безопасности',
-    blockItems: [],
-  },
-  {
-    id: 2,
-    title: 'Основные виды СИЗ и их роль',
-    blockItems: [],
-  },
-  {
-    id: 3,
-    title: 'Как выбрать СИЗ? Комфорт vs безопасность',
-    blockItems: [],
-  },
-]
-
 export const ConstructorPage: React.FC = () => {
   const [isSidebarPointed, setIsSidebarPointed] = useState(false)
   const activeBlockId = useAppSelector(selectActiveBlockId)
+  const { id } = useParams()
+  const { data: lesson } = useGetLessonQuery(Number(id))
 
   const dispatch = useAppDispatch()
 
   useEffect(() => {
-    dispatch(setBlocks(lessonBlocks))
-  }, [dispatch])
+    if (lesson) {
+      dispatch(setCurrentLesson(lesson))
+      dispatch(setCurrentSteps(lesson.steps))
+    }
+  }, [dispatch, lesson])
 
-  const blocks = useAppSelector(selectBlocks)
-  const [lastBlockId, setLastBlockId] = useState<number | null>(
-    lessonBlocks[lessonBlocks.length - 1].id
-  )
+  const steps = useAppSelector(selectCurrentSteps)
+
+  const [lastBlockId, setLastBlockId] = useState<number | null>(steps[steps.length - 1]?.id)
+
+  useEffect(() => {
+    if (steps.length) {
+      const latestId = steps[steps.length - 1].id
+      setLastBlockId(latestId)
+    }
+  }, [steps])
 
   const onBlockActive = (blockId: number) => {
     if (activeBlockId === blockId) {
@@ -88,9 +83,10 @@ export const ConstructorPage: React.FC = () => {
               isSidebarPointed={isSidebarPointed}
               lastBlockId={lastBlockId}
               setLastBlockId={setLastBlockId}
+              lessonId={Number(id)}
             />
             <main className={s.main}>
-              {blocks.map((item) => (
+              {steps.map((item) => (
                 <BlockDropdown
                   key={item.id}
                   blockId={item.id}

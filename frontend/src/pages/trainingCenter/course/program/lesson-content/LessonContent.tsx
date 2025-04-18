@@ -1,5 +1,4 @@
 import { ArrowRightIcon, CalendarIcon } from '@assets/icons'
-import { routes } from '@routes/routes'
 import { LessonType, Scorm, Step } from '@services/api'
 import { Button, InputWithIcon, Input, type Option, Select, Typography } from '@shared/components'
 import { useToggle } from '@shared/hooks'
@@ -17,11 +16,15 @@ type Props<T extends LessonType | Step | Scorm> = {
   lesson?: T
   options?: Option[]
   isExpandableContent?: boolean
+  onClick?: () => void
+  path?: string
 }
 export const LessonContent = <T extends LessonType | Step | Scorm>({
   lesson,
   options,
   isExpandableContent = false,
+  path,
+  onClick,
 }: Props<T>) => {
   const { isOpen, toggle } = useToggle()
   const displayName = getDisplayName(lesson)
@@ -42,13 +45,8 @@ export const LessonContent = <T extends LessonType | Step | Scorm>({
             placeholder={'Выберите доступ'}
             options={options}
           />
-          <Button
-            variant="secondary"
-            className={s.constructorBtn}
-            as={NavLink}
-            to={routes.constructor}
-          >
-            <ArrowRightIcon width={'12px'} height={'12px'} />
+          <Button variant="secondary" className={s.constructorBtn} as={NavLink} to={path as string}>
+            <ArrowRightIcon width={'12px'} height={'12px'} onClick={onClick} />
           </Button>
         </>
       ) : (

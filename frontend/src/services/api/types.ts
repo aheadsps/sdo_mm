@@ -1,3 +1,5 @@
+import { NewItem } from '@services/slices/constructor/constructor.types'
+
 //auth
 export type LoginData = {
   email: string
@@ -87,6 +89,8 @@ export type Step = {
   content_text: string
   lesson: number
   attachments: Attachments[]
+} & {
+  blockItems: NewItem[]
 }
 
 export type LessonType = {

@@ -42,7 +42,7 @@ export const router = createBrowserRouter([
         element: <TrainingCenterCourse />,
       },
       {
-        path: routes.constructor,
+        path: `${routes.constructor}/:id`,
         element: <ConstructorPage />,
       },
     ],
