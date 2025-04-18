@@ -1,7 +1,9 @@
+import { routes } from '@routes/routes'
 import { selectExpiringEvents } from '@services/slices/events'
 import { useAppSelector } from '@services/store'
 import { Typography, Button } from '@shared/components'
 import { formatDate, getDaysLeft } from '@shared/utils'
+import { NavLink } from 'react-router-dom'
 
 import s from './warning-card.module.scss'
 
@@ -24,7 +26,7 @@ export const WarningCard = () => {
         <Typography variant="caption" className={s.caption}>
           {`Остался ${getDaysLeft(result.end_date)} день, пройдите до ${formatDate(result.end_date)}`}
         </Typography>
-        <Button type="button" className={s.button}>
+        <Button type="button" className={s.button} as={NavLink} to={routes.course}>
           Перейти к инструктажу
         </Button>
       </div>

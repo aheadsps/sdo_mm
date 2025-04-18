@@ -1,27 +1,34 @@
-export type LessonType = {
+/* export type LessonType = {
   id: number
   title: string
   dateTime: string
   format: string
   expanded: boolean
-}
+} */
 
-export const options = [
+export const optionsFormat = [
   {
     id: 1,
-    value: 'Cat',
+    value: 'Онлайн',
   },
   {
     id: 2,
-    value: 'Dog',
-  },
-  {
-    id: 3,
-    value: 'Apple',
+    value: 'Оффлайн',
   },
 ]
 
-export const lessonsData: LessonType[] = [
+export const optionsAccess = [
+  {
+    id: 1,
+    value: 'Свободный доступ',
+  },
+  {
+    id: 2,
+    value: 'Линейное открытие',
+  },
+]
+
+/* export const lessonsData: LessonType[] = [
   {
     id: 1,
     title: 'Введение в безопасность: основные риски при работе с электроинструментом',
@@ -36,4 +43,4 @@ export const lessonsData: LessonType[] = [
     format: 'Онлайн',
     expanded: false,
   },
-]
+] */

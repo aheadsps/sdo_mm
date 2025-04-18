@@ -26,13 +26,14 @@ class LessonStoryValidator:
     Валидатор для модели LessonStory
     """
 
-    def __init__(self, course=None, lesson=None):
+    def __init__(self, course=None, step=None):
         self.course = course
-        self.lesson = lesson
+        self.step = step
 
     def __call__(self):
         self._validate_lesson_have_course()
 
     def _validate_lesson_have_course(self):
-        if self.lesson.course != self.course:
-            raise ValidationError("Урок не принадлежит указанному курсу")
+        if self.step.lesson and self.step.lesson.course:
+            if self.step.lesson.course != self.course:
+                raise ValidationError("Урок не принадлежит указанному курсу")

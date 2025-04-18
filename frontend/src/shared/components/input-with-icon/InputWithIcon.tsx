@@ -10,6 +10,7 @@ type Props = {
   icon?: ReactNode
   className?: string
   isOpen?: boolean
+  type?: string
   onClick?: () => void
 } & ComponentPropsWithoutRef<'input'>
 
@@ -19,6 +20,7 @@ export const InputWithIcon = ({
   placeholder,
   isOpen,
   icon,
+  type,
   onClick,
 }: Props) => {
   const { width } = useScreenWidth()
@@ -27,7 +29,7 @@ export const InputWithIcon = ({
       {width < 425 ? (
         <Textarea className={className} placeholder={placeholder} />
       ) : (
-        <Input className={className} placeholder={placeholder} />
+        <Input className={className} placeholder={placeholder} type={type} />
       )}
       <div className={s.icon} onClick={onClick}>
         {icon}
