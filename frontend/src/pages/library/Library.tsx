@@ -4,8 +4,8 @@ import { withLayout } from '@shared/HOC'
 import clsx from 'clsx'
 import { useState } from 'react'
 
-import Category from './Category'
 import s from './library.module.scss'
+import { isNew, categoryColors } from './libraryUtils'
 import { articles } from './mockData'
 
 const buttons: string[] = [
@@ -19,26 +19,7 @@ const buttons: string[] = [
 
 const LibraryComp: React.FC = () => {
   const [mode, setMode] = useState<string>('Все')
-  const isNew = (date: string) => {
-    const [day, month, year] = date.split('.').map(Number)
-    const dt = new Date(year, month, day)
-    return (new Date() - dt) / (1000 * 60 * 60 * 24) <= 7
-  }
 
-  const categoryColors = (cat: Category) => {
-    switch (cat) {
-      case Category.STUDY:
-        return s.categoryStudy
-      case Category.SUPPORT:
-        return s.categorySupport
-      case Category.NAVIGATION:
-        return s.categoryNavigation
-      case Category.QUESTIONS:
-        return s.categoryQuestions
-      default:
-        return ''
-    }
-  }
   return (
     <>
       <div className={s.library}>
