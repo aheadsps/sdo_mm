@@ -202,7 +202,6 @@ class BeginnerValidator:
         """
         Проверка исключения временных рамок с статусом 'начинающий'
         """
-        logger.debug(f'I dont know what is this {course}')
         if isinstance(course, int):
             course = Course._default_manager.get(pk=course)
         beginner = course.beginner

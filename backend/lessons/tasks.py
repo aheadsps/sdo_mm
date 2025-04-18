@@ -24,6 +24,12 @@ def lesson_switch_status(lesson_id: int) -> str:
     lesson = models.Lesson._default_manager.get(id=lesson_id)
     lesson.started = True
     lesson.save(update_fields=('started',))
+    return 'Done'
+
+
+@app.task
+def test_block_process(test_block_id: int) -> str:
+    ...
 
 @app.task
 def update_status_events(course_id: int | None = None,

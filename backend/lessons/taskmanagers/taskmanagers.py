@@ -109,23 +109,19 @@ class TaskManagerTestBlockSwitch(BaseTaskManager):
     def __init__(self,
                  date: datetime,
                  test_block_id: int,
-                 started: bool,
                  ):
         super().__init__(date=date)
         self.test_block_id = int(test_block_id)
-        self.started = bool(started)
 
     def _unique_name(self,
                      test_block_id: int,
-                     started: bool,
                      ) -> str:
         """
         Получение уникального имени
         """
-        status = 'start' if started else 'finished'
         time_cast = self._time_to_UNIX()
         logger.debug(f'set timecast {time_cast}')
-        unique_name = f'TestBlock_{test_block_id}_{status}_{time_cast}'
+        unique_name = f'TestBlock_{test_block_id}_{time_cast}'
         logger.debug(f'unique name {unique_name}')
         return unique_name
 
@@ -133,7 +129,6 @@ class TaskManagerTestBlockSwitch(BaseTaskManager):
         unique_name = self._unique_name(
             test_block_id=self.test_block_id,
             date=self.date,
-            started=self.started,
         )
         set_kwargs = json.dumps(dict(
             test_block_id=self.test_block_id,

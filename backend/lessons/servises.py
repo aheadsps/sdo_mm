@@ -9,7 +9,11 @@ from django_celery_beat.models import PeriodicTask
 
 from lessons import models
 from lessons.utils import get_intervals
-from lessons.taskmanagers import TaskManagerEventSwitch
+from lessons.taskmanagers import (
+    TaskManagerEventSwitch,
+    TaskManagerLessonSwitch,
+    TaskManagerTestBlockSwitch,
+    )
 
 
 class SetEventServise:
@@ -73,16 +77,24 @@ class SetEventServise:
                         lesson: models.Lesson,
                         end_date: datetime,
                         beginner: bool,
+                        schedulers: list,
+                        update: bool,
                         ) -> models.TestBlock:
         test_block = lesson.test_block
         questions = test_block.questions.all()
         max_score = 0
         if questions:
-            for question in test_block.questions.get_queryset():
-                max_score += question.weight
-            test_block.max_score = max_score
+            if not test_block.max_score:
+                for question in test_block.questions.get_queryset():
+                    max_score += question.weight
+                test_block.max_score = max_score
             if not beginner:
-                test_block.end_date = end_date
+                if update:
+                    TaskManagerTestBlockSwitch(test_block.end_date, test_block.pk).update(start_time=end_date)
+                    test_block.end_date = end_date
+                else:
+                    test_block.end_date = end_date
+                    schedulers.append(TaskManagerTestBlockSwitch(end_date, test_block.pk).bulk_create())
             return test_block
 
     def _count_end_date(self,
@@ -94,34 +106,42 @@ class SetEventServise:
                         ) -> None:
         update_lessons = []
         update_test_block = []
+        schedulers = []
         beginner = instance.course.beginner
         content = lessons
+        schedulers.append(TaskManagerEventSwitch(start_date,
+                                                 self.event.id,
+                                                 True,
+                                                 ).bulk_create())
         for lesson in content:
-            # Собираем шедулеры по открытия урока
             if not beginner:
                 lesson.start_date = start_date
                 update_lessons.append(lesson)
-                # Собираем шедулеры на окончание тестовых блоков
+                schedulers.append(TaskManagerLessonSwitch(start_date,
+                                                          lesson.pk,
+                                                          ).bulk_create())
                 start_date = start_date + interval
                 lesson.end_date = start_date
-            if not update:
-                update_test_block.append(self._set_test_block(
-                    lesson=lesson,
-                    end_date=start_date,
-                    beginner=beginner,
-                ))
-        models.Lesson._default_manager.bulk_update(update_lessons, fields=("start_date",))
+            else:
+                lesson.started = True
+                update_lessons.append(lesson)
+            update_test_block.append(self._set_test_block(
+                lesson=lesson,
+                end_date=start_date,
+                beginner=beginner,
+                schedulers=schedulers,
+                update=update,
+            ))
+        models.Lesson._default_manager.bulk_update(update_lessons, fields=("start_date", "started"))
         if not update and None not in update_test_block:
             models.TestBlock._default_manager.bulk_update(update_test_block, fields=('max_score', 'end_date'))
-        # Здесь дополнить еще одним шедулером на окончание курса
         instance.end_date = start_date
-        # Множественное сохранение шедулеров
+        schedulers.append(TaskManagerEventSwitch(start_date,
+                                                 self.event.id,
+                                                 False,
+                                                 ).bulk_create())
+        PeriodicTask._default_manager.bulk_create(schedulers)
         instance.save()
-        manager = TaskManagerEventSwitch(date=start_date,
-                                         event_id=self.event.id,
-                                         started=False,
-                                         )
-        manager.create()
 
     def set_event_settings(self):
         """
@@ -131,12 +151,6 @@ class SetEventServise:
         start_date = self.event.start_date
         lessons = self.event.course.lessons.prefetch_related('test_block__questions').order_by("serial")
         interval = self.event.course.interval
-        manager = TaskManagerEventSwitch(
-            date=start_date,
-            event_id=self.event.id,
-            started=True,
-        )
-        manager.create()
         with atomic():
             self._count_end_date(
                 instance=self.event,
