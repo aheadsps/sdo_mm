@@ -1,10 +1,8 @@
 from config.celery import app
-from lessons import models
-
-from users.models import User
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 
+from users.models import User
 from lessons import models
 
 
