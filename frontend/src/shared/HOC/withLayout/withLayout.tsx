@@ -1,18 +1,18 @@
-import { useLazyGetUserCurrentEventsQuery } from '@services/api'
-import { setCurrentEvents } from '@services/slices/events'
+import { useLazyGetCoversQuery, useLazyGetCurrentCoversQuery } from '@services/api'
+import { setAllCovers, setCurrentCovers } from '@services/slices'
 import { useAppDispatch } from '@services/store'
 import { Header, Loader, Sidebar } from '@shared/components'
 import { useScreenWidth } from '@shared/hooks'
 import { handleError } from '@shared/utils'
 import { ComponentType, useEffect, useState } from 'react'
-import { useLocation } from 'react-router-dom'
+// import { useLocation } from 'react-router-dom'
 
 import s from './layout.module.scss'
 
 export const withLayout = <T extends object>(Component: ComponentType<T>) => {
   return (props: T) => {
     const [isLoading, setisLoading] = useState<boolean>(true)
-    const path = useLocation()
+    // const path = useLocation()
     const { isMobile } = useScreenWidth()
     const dispatch = useAppDispatch()
 
@@ -24,15 +24,29 @@ export const withLayout = <T extends object>(Component: ComponentType<T>) => {
     //     .catch((error) => handleError(error))
     //     .finally(() => setisLoading(false))
     // }, [getUserCurrentEvents, dispatch])
-
-    const [getUserCurrentEvents] = useLazyGetUserCurrentEventsQuery()
+    const [getCovers] = useLazyGetCoversQuery()
     useEffect(() => {
-      getUserCurrentEvents()
+      getCovers()
         .unwrap()
-        .then((res) => dispatch(setCurrentEvents(res.results)))
+        .then((res) => {
+          console.log(res.results)
+          dispatch(setAllCovers(res.results))
+        })
         .catch((error) => handleError(error))
         .finally(() => setisLoading(false))
-    }, [getUserCurrentEvents, dispatch])
+    }, [getCovers, dispatch])
+
+    const [getCurrentCovers] = useLazyGetCurrentCoversQuery()
+    useEffect(() => {
+      getCurrentCovers()
+        .unwrap()
+        .then((res) => {
+          console.log(res.results)
+          dispatch(setCurrentCovers(res.results))
+        })
+        .catch((error) => handleError(error))
+        .finally(() => setisLoading(false))
+    }, [getCurrentCovers, dispatch])
     return (
       <>
         <Header />

@@ -1,31 +1,17 @@
 import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
-import { Course, CourseVeiw } from '@services/api/types'
+import { Course } from '@services/api/types'
+import { EventShort } from '@services/api/types.api'
 
 type InitialState = {
   covers: Course[]
   coverId: number
-  currentCovers: CourseVeiw[]
+  currentCovers: EventShort[]
 }
 const initialState: InitialState = {
   covers: [],
   coverId: 0,
-  currentCovers: [
-    {
-      beginer: false,
-      create_date: '',
-      description: '',
-      experiences: [],
-      id: 0,
-      image: '',
-      lessons: [],
-      name: '',
-      profession: 0,
-      update_date: '',
-      scorms: [],
-      lesson_story: [],
-    },
-  ],
+  currentCovers: [],
 }
 
 export const coversSlice = createSlice({
@@ -35,7 +21,7 @@ export const coversSlice = createSlice({
     setAllCovers: (state, action: PayloadAction<Course[]>) => {
       state.covers = action.payload
     },
-    setCurrentCovers: (state, action: PayloadAction<CourseVeiw[]>) => {
+    setCurrentCovers: (state, action: PayloadAction<EventShort[]>) => {
       state.currentCovers = action.payload
     },
     setCoverId: (state, action: PayloadAction<number>) => {

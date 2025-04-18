@@ -8,9 +8,9 @@ export const eventsApi = createApi({
   tagTypes: ['Events'],
   baseQuery: fetchBaseQuery({ baseUrl }),
   endpoints: (build) => ({
-    getUserCurrentEvents: build.query<EventsResponse, void>({
+    getEvents: build.query<EventsResponse, void>({
       query: () => ({
-        url: '/events/currents',
+        url: '/events',
         method: 'GET',
         headers: {
           Authorization: `Token ${getToken()}`,
@@ -31,5 +31,4 @@ export const eventsApi = createApi({
   }),
 })
 
-// export const { useGetUserCurrentEventsQuery, useGetEventQuery } = eventsApi
-export const { useLazyGetUserCurrentEventsQuery, useGetEventQuery } = eventsApi
+export const { useGetEventsQuery, useGetEventQuery } = eventsApi
