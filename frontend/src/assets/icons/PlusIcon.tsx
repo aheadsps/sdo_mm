@@ -1,6 +1,6 @@
 import { forwardRef, Ref, SVGProps } from 'react'
 
-const AddItemIcon = forwardRef<SVGSVGElement, SVGProps<SVGSVGElement>>(
+const PlusIcon = forwardRef<SVGSVGElement, SVGProps<SVGSVGElement>>(
   (props, ref: Ref<SVGSVGElement>) => (
     <svg
       width="14"
@@ -12,8 +12,8 @@ const AddItemIcon = forwardRef<SVGSVGElement, SVGProps<SVGSVGElement>>(
       ref={ref}
     >
       <path
-        d="M7 1.34314V12.6568M1.34315 6.99999H12.6569"
-        stroke="currentColor"
+        d="M7.00012 1.34314V12.6568M1.34326 6.99999H12.657"
+        stroke="#58151C"
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -22,4 +22,4 @@ const AddItemIcon = forwardRef<SVGSVGElement, SVGProps<SVGSVGElement>>(
   )
 )
 
-export default AddItemIcon
+export default PlusIcon

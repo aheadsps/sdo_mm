@@ -6,7 +6,7 @@ import s from './lesson-item-title.module.scss'
 
 type Props = ComponentPropsWithoutRef<'div'> & {
   title: string
-  blocks: string
+  blocks?: string
 }
 
 export const LessonItemTitle = ({ children, className, title, blocks }: Props) => {

@@ -36,18 +36,12 @@ export const withLayout = <T extends object>(Component: ComponentType<T>) => {
     return (
       <>
         <Header />
-        {path.pathname.includes('/constructor') ? (
-          <div className={s.constructorWrapper}>
-            {isLoading ? <Loader /> : <Component {...props} />}
-          </div>
-        ) : (
-          <div className={s.appWrapper}>
-            {!isMobile && <Sidebar />}
-            <main>
-              <div className={s.main}>{isLoading ? <Loader /> : <Component {...props} />}</div>
-            </main>
-          </div>
-        )}
+        <div className={s.appWrapper}>
+          {!isMobile && <Sidebar />}
+          <main>
+            <div className={s.main}>{isLoading ? <Loader /> : <Component {...props} />}</div>
+          </main>
+        </div>
       </>
     )
   }

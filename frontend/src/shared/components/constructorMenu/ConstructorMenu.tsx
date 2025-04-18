@@ -1,32 +1,70 @@
-import { Typography } from '../typography'
+import { AddedMaterial, LessonBlock, NewItem } from '@services/slices/constructor/constructor.types'
+import { addNewBlock, setActiveBlockId } from '@services/slices/constructor/constructorSlice'
+import { useAppDispatch } from '@services/store'
+import { Typography } from '@shared/components'
+import clsx from 'clsx'
+import { useState } from 'react'
 
 import { AddCard } from './addCard/AddCard'
 import s from './constructorMenu.module.scss'
-import { addTest } from './data'
 
-export const CMenu = () => {
+type Props = {
+  setNewItem: (newItem: NewItem) => void
+  isSidebarPointed: boolean
+  lastBlockId: number | null
+  setLastBlockId: (value: number) => void
+}
+
+export const CMenu = ({ setNewItem, isSidebarPointed, lastBlockId, setLastBlockId }: Props) => {
+  const [addedItemId, setAddedItemId] = useState<number>(0)
+  const dispatch = useAppDispatch()
+
+  const onAddNewItem = (type: AddedMaterial) => {
+    const newAddedItemId = addedItemId + 1
+    setAddedItemId(newAddedItemId)
+    const newItem: NewItem = {
+      type,
+      id: newAddedItemId,
+    }
+    setNewItem(newItem)
+  }
+
+  const addNewItemModule = () => {
+    const newBlockId = lastBlockId ? ++lastBlockId : 1
+    const newItem: LessonBlock = {
+      id: newBlockId,
+      title: '',
+      blockItems: [],
+    }
+    setLastBlockId(newBlockId)
+    dispatch(setActiveBlockId({ blockId: newItem.id }))
+    dispatch(addNewBlock(newItem))
+  }
+
   return (
-    <div className={s.container}>
+    <aside className={clsx(s.container, isSidebarPointed && s.pointed)}>
       <div className={s.block}>
-        <Typography variant="caption" children={'Теоретический материал'} className={s.title} />
-        <AddCard children={'Добавить текст'} />
-        <AddCard children={'Добавить видео'} />
-        <AddCard children={'Добавить изображение'} />
+        <Typography variant="caption" className={s.title}>
+          Теоретический материал
+        </Typography>
+        <AddCard children={'Добавить текст'} onClick={() => onAddNewItem('text')} />
+        <AddCard children={'Добавить видео'} onClick={() => onAddNewItem('video')} />
+        <AddCard children={'Добавить изображение'} onClick={() => onAddNewItem('image')} />
       </div>
+
       <div className={s.block}>
-        <Typography
-          variant="caption"
-          children={'Интерактивные задания (добавить тест)'}
-          className={s.title}
-        />
-        {addTest.map((test) => {
-          return <AddCard children={test.title} key={test.id} />
-        })}
+        <Typography variant="caption" className={s.title}>
+          Интерактивные задания (добавить тест)
+        </Typography>
+        <AddCard children={'Добавить тест'} onClick={() => onAddNewItem('test')} />
       </div>
+
       <div className={s.block}>
-        <Typography variant="caption" children={'Структура курса'} className={s.title} />
-        <AddCard children={'Добавить модуль'} />
+        <Typography variant="caption" className={s.title}>
+          Структура курса
+        </Typography>
+        <AddCard children={'Добавить блок'} onClick={addNewItemModule} />
       </div>
-    </div>
+    </aside>
   )
 }
