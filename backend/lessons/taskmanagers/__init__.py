@@ -1,4 +1,11 @@
-from .taskmanagers import TaskManagerEventSwitch
+from .taskmanagers import (
+    TaskManagerEventSwitch,
+    TaskManagerLessonSwitch,
+    TaskManagerTestBlockSwitch,
+    )
 
 
-__all__ = ('TaskManagerEventSwitch',)
+__all__ = ('TaskManagerEventSwitch',
+           'TaskManagerLessonSwitch',
+           'TaskManagerTestBlockSwitch',
+           )
