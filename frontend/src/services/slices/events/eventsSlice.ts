@@ -1,11 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
-import { Event } from '@services/api'
-import { EventShort } from '@services/api/types.api'
+import { Event, EventShort } from '@services/api'
 import { getDaysLeft } from '@shared/utils'
 
 type InitialState = {
-  events: Event[]
+  events: EventShort[]
   currentEvents: Event[]
   expiringEvents: Event[]
   expiredEvents: Event[]
@@ -21,27 +20,33 @@ const initialState: InitialState = {
   expiredEvents: [],
   completedEvents: [],
   favoriteEvents: [],
+
   event: {
     course: {
       id: 0,
       name: '',
+      user: 0,
+      interval: '',
       create_date: '',
       update_date: '',
       description: '',
       lessons: [],
       beginer: false,
       image: '',
-      profession: 0,
+      profession: { id: 0, en_name: '', ru_name: '' },
       scorms: [],
       experiences: [],
+      teacher: 0,
+      materials: {
+        id: 0,
+        files: [],
+      },
+      status: '',
+      is_scorm: false,
     },
-    done_lessons: 0,
-    end_date: '',
-    favorite: false,
-    id: 0,
     start_date: '',
+    end_date: '',
     status: '',
-    user: 0,
   },
 }
 
@@ -56,12 +61,11 @@ export const eventsSlice = createSlice({
       )
       state.expiredEvents = action.payload.filter((result) => result.status === 'failed')
     },
-
-    setFavoriteEvents: (state, action: PayloadAction<Event[]>) => {
-      state.favoriteEvents = action.payload.filter((result) => result.favorite)
-    },
-
-    setAllEvents: (state, action: PayloadAction<Event[]>) => {
+    // Поле favorite существует только в сущности Cover
+    // setFavoriteEvents: (state, action: PayloadAction<Event[]>) => {
+    //   state.favoriteEvents = action.payload.filter((result) => result.favorite)
+    // },
+    setAllEvents: (state, action: PayloadAction<EventShort[]>) => {
       state.events = action.payload
     },
     setEvent: (state, action: PayloadAction<Event>) => {
@@ -73,7 +77,6 @@ export const eventsSlice = createSlice({
       state.expiringEvents = []
       state.expiredEvents = []
       state.completedEvents = []
-      state.favoriteEvents = []
     },
   },
   selectors: {
@@ -82,18 +85,16 @@ export const eventsSlice = createSlice({
     selectExpiringEvents: (state) => state.expiringEvents,
     selectExpiredEvents: (state) => state.expiredEvents,
     selectCompletedEvents: (state) => state.completedEvents,
-    selectFavoriteEvents: (state) => state.favoriteEvents,
     selectEvent: (state) => state.event,
   },
 })
 
-export const { setCurrentEvents, clearCurrentEvents, setAllEvents, setEvent } = eventsSlice.actions
+export const { setCurrentEvents, clearCurrentEvents, setEvent } = eventsSlice.actions
 export const {
   selectAllEvents,
   selectCurrentEvents,
   selectExpiringEvents,
   selectExpiredEvents,
-  selectFavoriteEvents,
   selectCompletedEvents,
   selectEvent,
 } = eventsSlice.selectors

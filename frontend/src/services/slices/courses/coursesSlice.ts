@@ -1,12 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
-import { Course } from '@services/api/types.api'
+import { Course, CourseShort } from '@services/api/types.api'
 
 type InitialState = {
-  courses: Course[]
+  courses: CourseShort[]
   currentId: number
   course: Course
-  // userCourse: CourseShort
 }
 const initialState: InitialState = {
   courses: [],
@@ -60,7 +59,7 @@ export const coursesSlice = createSlice({
   name: 'courses',
   initialState,
   reducers: {
-    setAllCourses: (state, action: PayloadAction<Course[]>) => {
+    setAllCourses: (state, action: PayloadAction<CourseShort[]>) => {
       state.courses = action.payload
     },
     setCourseById: (state, action: PayloadAction<Course>) => {

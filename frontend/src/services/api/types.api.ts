@@ -7,27 +7,20 @@ export type ProfileResponse = {
   last_name: string
   date_commencement: string
   profession: number
-  profile: UserProfile
+  profile: Profile
+  //UserProfile
 }
-
 export type CoversResponse = {
   count: number
   next: null
   previous: null
   results: CoverShort[]
 }
-
 export type CurrentCoversResponse = {
   count: number
   next: null
   previous: null
   results: CoverCurrent[]
-}
-export type CoursesResponse = {
-  count: number
-  next: null
-  previous: null
-  results: CourseShort[]
 }
 export type EventsResponse = {
   count: number
@@ -35,7 +28,12 @@ export type EventsResponse = {
   previous: null
   results: EventShort[]
 }
-
+export type CoursesResponse = {
+  count: number
+  next: null
+  previous: null
+  results: CourseShort[]
+}
 export type LessonsResponse = {
   count: number
   next: null
@@ -48,6 +46,7 @@ export type StepsResponse = {
   previous: null
   results: StepShort[]
 }
+
 // Типизация вложенности Covers/ CoversCurrent
 export type EventCovered = {
   // В теле ответа НЕТ поля id!
@@ -72,19 +71,6 @@ export type CoverCurrent = {
   favorite: boolean
   status: string
 }
-export type LessonCovered = {
-  course: number
-  id: number
-  name: string
-  resourse: string
-  serial: number
-  start_date: string
-  started: false
-  steps: StepShort[]
-  teacher: number
-  test_block: number
-  version: string
-}
 export type CourseCovered = {
   id: number
   name: string
@@ -99,12 +85,24 @@ export type CourseCovered = {
   status: string
   is_scorm: boolean
   materials: Materials
-
   teacher: number
   create_date: string
   update_date: string
 } & {
   user: number
+}
+export type LessonCovered = {
+  course: number
+  id: number
+  name: string
+  resourse: string
+  serial: number
+  start_date: string
+  started: false
+  steps: StepShort[]
+  teacher: number
+  test_block: number
+  version: string
 }
 
 // Типизация сокращённых сущностей (обычно вложены в responses, при получении листа)
@@ -157,6 +155,7 @@ export type StepShort = {
 }
 
 // Типизация развёрнутых сущностей (обычно получены через id)
+
 export type Step = {
   title: string
   teacher: number
@@ -200,11 +199,11 @@ export type Course = {
   profession: Profession
   scorms: Scorm[]
   experiences: Experience[]
-  materials: Materials
   status: string
+  materials: Materials
+  user: number
   is_scorm: boolean
 }
-
 export type Event = {
   // !! Получаем Event по id эвента, но в теле ответа id эвента нет!
   course: Course
@@ -212,6 +211,7 @@ export type Event = {
   end_date: string
   status: string
 }
+
 // Типизация вспомогательных сущностей (обычно вложены в развёрнутые)
 export type Attachment = {
   id: number
@@ -233,18 +233,16 @@ export type Answer = {
   question: number
 }
 
-export type Question = [
-  {
-    id: number
-    teacher: number
-    text: string
-    image: string
-    test_block: number
-    type_question: string
-    check_automaty: boolean
-    answers: Answer[]
-  },
-]
+export type Question = {
+  id: number
+  teacher: number
+  text: string
+  image: string
+  test_block: number
+  type_question: string
+  check_automaty: boolean
+  answers: Answer[]
+}
 export type TestBlock = {
   id: number
   end_date: string
@@ -294,18 +292,15 @@ export type Profile = {
   image: string
   date_birthday: string
 }
-
 export type LoginData = {
   email: string
   password: string
 }
-
 export type LoginResponse = {
   token: string
 }
-
-export type UserProfile = {
-  phone: string
-  image: string
-  date_birthday: string
-}
+// export type UserProfile = {
+//   phone: string
+//   image: string
+//   date_birthday: string
+// }
