@@ -36,8 +36,7 @@ export const sidebarItemsStudent: SidebarItem[] = [
     id: 'knowledge-library',
     icon: <LibraryIcon width={24} height={24} />,
     text: 'Библиотека',
-    path: routes.tbd,
-    disabled: true,
+    path: routes.library,
   },
   {
     id: 'news',
