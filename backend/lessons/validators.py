@@ -284,3 +284,39 @@ class NoAnswerForTaskEssayValidator:
                 self.answer_field: "Нельзя прикреплять ответы к вопросам"
                                    " типа task или essay"
             })
+
+
+class AssessmentScoreValidator:
+    """
+    Проверяет что оценка не превышает max_score и оценка ещё не была
+    проставлена ранее
+    """
+    requires_context = True
+
+    def __init__(self, score_field):
+        self.score_field = score_field
+
+    def __call__(self, attrs, serializer):
+        if self.score_field not in attrs:
+            return
+
+        score = attrs[self.score_field]
+        if score is None:
+            return
+
+        submission = serializer.instance
+        test_block = attrs.get('test_block') or getattr(submission,
+                                                        'test_block', None)
+        if not test_block:
+            return
+
+        if score > test_block.max_score:
+            raise exceptions.ValidationError({
+                self.score_field: f'Оценка не может превышать максимальный'
+                                  f' балл ({test_block.max_score})'
+            })
+
+        if submission and submission.score is not None:
+            raise exceptions.ValidationError({
+                self.score_field: 'Оценка уже была выставлена ранее'
+            })
