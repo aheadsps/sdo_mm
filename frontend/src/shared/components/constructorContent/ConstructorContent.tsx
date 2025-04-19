@@ -27,7 +27,7 @@ export const ConstructorContent: React.FC<Props> = ({ type, itemId }) => {
   const dispatch = useAppDispatch()
 
   const onDeleteItem = () => {
-    dispatch(deleteItem({ itemId, activeBlockId }))
+    if (activeBlockId) dispatch(deleteItem({ itemId, activeBlockId }))
   }
 
   return (

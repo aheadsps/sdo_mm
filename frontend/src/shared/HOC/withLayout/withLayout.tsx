@@ -5,25 +5,14 @@ import { Header, Loader, Sidebar } from '@shared/components'
 import { useScreenWidth } from '@shared/hooks'
 import { handleError } from '@shared/utils'
 import { ComponentType, useEffect, useState } from 'react'
-import { useLocation } from 'react-router-dom'
 
 import s from './layout.module.scss'
 
 export const withLayout = <T extends object>(Component: ComponentType<T>) => {
   return (props: T) => {
     const [isLoading, setisLoading] = useState<boolean>(true)
-    const path = useLocation()
     const { isMobile } = useScreenWidth()
     const dispatch = useAppDispatch()
-
-    // const [getUserCurrentEvents] = useLazyGetUserCurrentEventsQuery()
-    // useEffect(() => {
-    //   getUserCurrentEvents()
-    //     .unwrap()
-    //     .then((res) => dispatch(setCurrentEvents(res.results)))
-    //     .catch((error) => handleError(error))
-    //     .finally(() => setisLoading(false))
-    // }, [getUserCurrentEvents, dispatch])
 
     const [getUserCurrentEvents] = useLazyGetUserCurrentEventsQuery()
     useEffect(() => {

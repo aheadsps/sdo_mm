@@ -1,10 +1,9 @@
 import { AddItemIcon, ArrowDownIcon, ArrowUpIcon } from '@assets/icons'
 import { LessonType } from '@services/api'
 import { selectCourse } from '@services/slices'
-import { setCurrentLesson } from '@services/slices/constructor/constructorSlice'
-import { useAppDispatch, useAppSelector } from '@services/store'
+import { useAppSelector } from '@services/store'
 import { Button } from '@shared/components'
-import React, { useState } from 'react'
+import { useState, FC } from 'react'
 
 import { BlockHeader } from './block-header/BlockHeader'
 import { optionsFormat } from './data'
@@ -14,11 +13,10 @@ import styles from './program.module.scss'
 
 const columns = ['Уроки', 'Дата и время занятия', 'Формат']
 
-export const Program: React.FC = () => {
+export const Program: FC = () => {
   const [newLessonCount, setNewLessonCount] = useState<number[]>([])
   const [newTopicCount, setNewTopicCount] = useState<Record<number, number[]>>({})
   const currentCourse = useAppSelector(selectCourse)
-  const dispatch = useAppDispatch()
 
   const courseLessons: LessonType[] = currentCourse.lessons.map((lesson) => ({
     ...lesson,
@@ -46,12 +44,6 @@ export const Program: React.FC = () => {
       return { ...prev, [lessonId]: [...currentTopics, currentTopics.length + 1] }
     })
   }
-  const onConstructorButtonClick = (lessonId: number) => {
-    const currentLesson = lessons.find((lesson) => lesson.id === lessonId)
-    if (currentLesson) {
-      dispatch(setCurrentLesson(currentLesson))
-    }
-  }
 
   return (
     <div className={styles.container}>
@@ -71,11 +63,7 @@ export const Program: React.FC = () => {
                 </Button>
                 {lesson && lesson.expanded && (
                   <div className={styles.expandedContent}>
-                    <ExpandedContent
-                      lessonId={lesson.id}
-                      steps={lesson.steps}
-                      onClick={() => onConstructorButtonClick(lesson.id)}
-                    />
+                    <ExpandedContent lessonId={lesson.id} steps={lesson.steps} />
                     {(newTopicCount[lesson.id] || []).map((topic) => (
                       <div key={topic} className={styles.lessonItem}>
                         <LessonContent isExpandableContent options={optionsFormat} />

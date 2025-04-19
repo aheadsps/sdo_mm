@@ -45,8 +45,14 @@ export const LessonContent = <T extends LessonType | Step | Scorm>({
             placeholder={'Выберите доступ'}
             options={options}
           />
-          <Button variant="secondary" className={s.constructorBtn} as={NavLink} to={path as string}>
-            <ArrowRightIcon width={'12px'} height={'12px'} onClick={onClick} />
+          <Button
+            variant="secondary"
+            className={s.constructorBtn}
+            as={NavLink}
+            to={path as string}
+            onClick={onClick}
+          >
+            <ArrowRightIcon width={'12px'} height={'12px'} />
           </Button>
         </>
       ) : (
