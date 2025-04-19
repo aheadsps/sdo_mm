@@ -220,6 +220,7 @@ class AssessmentSubmissionSerializer(serializers.ModelSerializer):
         validators = (
             validators.TaskEssayQuestionValidator(),
             validators.NoAnswerForTaskEssayValidator('answer'),
+            validators.AssessmentScoreValidator('score'),
         )
 
 
