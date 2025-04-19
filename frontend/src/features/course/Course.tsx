@@ -19,7 +19,7 @@ export const Course = () => {
     if (currentCourse) dispatch(setCourseById(currentCourse))
   }, [currentCourse, dispatch])
   const course = useAppSelector(selectCourse)
-  console.log(course)
+  // console.log(course)
   return (
     <div className={s.courseContent}>
       <BackToPage to={routes.learning}>Вернуться к выбору курса</BackToPage>

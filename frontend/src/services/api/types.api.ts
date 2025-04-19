@@ -22,6 +22,14 @@ export type CurrentCoversResponse = {
   previous: null
   results: CoverCurrent[]
 }
+// ?? Приблизительный ответ на GET /events/${event_id}/users
+// ?? По документации это строка, а по логике должен быть массив юзеров
+export type usersEventsResponse = {
+  count: number
+  next: null
+  previous: null
+  results: User[]
+}
 export type EventsResponse = {
   count: number
   next: null
@@ -46,7 +54,13 @@ export type StepsResponse = {
   previous: null
   results: StepShort[]
 }
-
+// Предполагаемый тип ответа сервера по запросу GET /test-block/{block_id}
+export type TestsResponse = {
+  count: number
+  next: null
+  previous: null
+  results: Test[]
+}
 // Типизация вложенности Covers/ CoversCurrent
 export type EventCovered = {
   // В теле ответа НЕТ поля id!
@@ -157,7 +171,14 @@ export type StepShort = {
 }
 
 // Типизация развёрнутых сущностей (обычно получены через id)
-
+export type Test = {
+  id: number
+  end_date: string
+  lesson: number
+  max_score: number
+  questions: Question[]
+  user_story: Story[]
+}
 export type Step = {
   title: string
   teacher: number
@@ -179,7 +200,9 @@ export type Lesson = {
   test_block: number
   version: string
 } & {
-  expanded: string
+  //! Приписан временно для вкладки Программа (методист)
+  //! В новом api этого поля больше нет на бэке !
+  expanded: boolean
 }
 export type Scorm = {
   id: number
@@ -239,21 +262,14 @@ export type Answer = {
 
 export type Question = {
   id: number
-  teacher: number
   text: string
   image: string
   test_block: number
   type_question: string
   check_automaty: boolean
   answers: Answer[]
-}
-export type TestBlock = {
-  id: number
-  end_date: string
-  lesson: number
-  max_score: number
-  questions: Question[]
-  user_story: Story[]
+} & {
+  teacher: number
 }
 export type Profession = {
   id: number
@@ -275,6 +291,7 @@ export type Materials = {
 }
 
 //Типизация авторизации и профиля
+
 export type User = {
   id: number
   first_name: string
@@ -303,8 +320,3 @@ export type LoginData = {
 export type LoginResponse = {
   token: string
 }
-// export type UserProfile = {
-//   phone: string
-//   image: string
-//   date_birthday: string
-// }

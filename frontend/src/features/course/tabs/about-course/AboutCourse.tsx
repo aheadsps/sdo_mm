@@ -2,16 +2,18 @@ import { DislikeIcon, LikeIcon } from '@assets/icons'
 import { selectCourse, selectEvent } from '@services/slices'
 import { useAppSelector } from '@services/store'
 import { Card, Typography, ProgressBar } from '@shared/components'
+import { useState } from 'react'
 
 import { LessonItemCard } from '../../lesson-item-card'
 
 import s from './about-course.module.scss'
 
 export const AboutCourse = () => {
+  const [isFav, setIsFav] = useState<boolean>(false)
   const event = useAppSelector(selectEvent)
   const course = useAppSelector(selectCourse)
-  console.log(event)
-  console.log(course)
+  // console.log(event)
+  // console.log(course)
   const lessons = Number(course.lessons.length)
   return (
     <div className={s.container}>
@@ -27,7 +29,11 @@ export const AboutCourse = () => {
           </div>
           <ProgressBar progress={1} total={lessons} />
         </div>
-        {event?.favorite ? <LikeIcon className={s.icon} /> : <DislikeIcon className={s.icon} />}
+        {isFav ? (
+          <LikeIcon className={s.icon} onClick={() => setIsFav(!isFav)} />
+        ) : (
+          <DislikeIcon className={s.icon} onClick={() => setIsFav(!isFav)} />
+        )}
       </Card>
 
       <Card className={s.lessons}>

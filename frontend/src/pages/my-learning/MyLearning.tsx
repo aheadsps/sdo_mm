@@ -72,8 +72,8 @@ const MyLearningComp: React.FC = () => {
         </div>
         <div className={s.container__content}>
           {displayCurrentCourses()?.length > 0 ? (
-            displayCurrentCourses().map((cover) => {
-              return <LessonCard cover={cover} key={cover.event.id} />
+            displayCurrentCourses().map((cover, index) => {
+              return <LessonCard cover={cover} key={index} />
             })
           ) : (
             <Typography variant="body_1">В данном списке нет курсов</Typography>

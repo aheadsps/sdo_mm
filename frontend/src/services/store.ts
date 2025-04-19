@@ -1,7 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { authApi, coursesApi, coversApi, eventsApi, lessonsApi } from './api'
+import { authApi, coursesApi, coversApi, eventsApi, lessonsApi, testsApi } from './api'
 import { stepsApi } from './api/steps.api'
 import { authReducer, coursesSliceReducer, coversSliceReducer } from './slices'
 import { auxiliarySliceReducer } from './slices/auxiliarySlice'
@@ -9,6 +9,7 @@ import { constructorSliceReducer } from './slices/constructor/constructorSlice'
 import { eventsSliceReducer } from './slices/events/eventsSlice'
 import { lessonsSliceReducer } from './slices/lessons/lessonsSlice'
 import { stepsSliceReducer } from './slices/steps'
+import { testsSliceReducer } from './slices/tests'
 
 export const store = configureStore({
   reducer: {
@@ -19,13 +20,15 @@ export const store = configureStore({
     auxiliary: auxiliarySliceReducer,
     lessons: lessonsSliceReducer,
     steps: stepsSliceReducer,
+    tests: testsSliceReducer,
+    add: constructorSliceReducer,
     [authApi.reducerPath]: authApi.reducer,
     [coversApi.reducerPath]: coversApi.reducer,
     [eventsApi.reducerPath]: eventsApi.reducer,
     [coursesApi.reducerPath]: coursesApi.reducer,
     [lessonsApi.reducerPath]: lessonsApi.reducer,
     [stepsApi.reducerPath]: stepsApi.reducer,
-    add: constructorSliceReducer,
+    [testsApi.reducerPath]: testsApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(
@@ -34,8 +37,8 @@ export const store = configureStore({
       eventsApi.middleware,
       coursesApi.middleware,
       lessonsApi.middleware,
-      stepsApi.middleware
-      // authApi.middleware,
+      stepsApi.middleware,
+      testsApi.middleware
     ),
 })
 

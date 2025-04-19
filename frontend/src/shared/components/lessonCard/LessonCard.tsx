@@ -19,7 +19,7 @@ export const LessonCard: React.FC<Props> = ({ cover }: Props) => {
   const daysLeft = cover.event.end_date ? getDaysLeft(cover.event.end_date) : 10
   const deadlineColor = getBackgroundColor(daysLeft)
   // const dispatch = useAppDispatch()
-  console.log(cover)
+  // console.log(cover)
   const hendleClick = () => {
     // dispatch(setIsScorms(isScorm))
     // if (isScorm) dispatch(setCurrentScorms(scorms))
