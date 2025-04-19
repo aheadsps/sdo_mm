@@ -11,7 +11,7 @@ const initialState: InitialState = {
   courses: [],
   currentId: 0,
   course: {
-    beginer: false,
+    beginner: false,
     create_date: '',
     description: '',
     id: 0,
@@ -34,6 +34,7 @@ const initialState: InitialState = {
     },
     status: '',
     is_scorm: false,
+    user: 0,
   },
   // userCourse: {
   //   id: 0,

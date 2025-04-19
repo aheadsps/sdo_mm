@@ -31,7 +31,7 @@ const initialState: InitialState = {
       update_date: '',
       description: '',
       lessons: [],
-      beginer: false,
+      beginner: false,
       image: '',
       profession: { id: 0, en_name: '', ru_name: '' },
       scorms: [],

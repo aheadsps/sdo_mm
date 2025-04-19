@@ -130,6 +130,8 @@ export type CourseShort = {
   teacher: number
   user: number
   is_scorm: boolean
+  create_date: string
+  update_date: string
 }
 export type LessonShort = {
   id: number
@@ -176,6 +178,8 @@ export type Lesson = {
   teacher: number
   test_block: number
   version: string
+} & {
+  expanded: string
 }
 export type Scorm = {
   id: number
@@ -192,7 +196,7 @@ export type Course = {
   description: string
   interval: string
   lessons: Lesson[]
-  beginer: boolean
+  beginner: boolean
   create_date: string
   update_date: string
   image: string

@@ -28,7 +28,18 @@ export const eventsApi = createApi({
       }),
       providesTags: () => ['Events'],
     }),
+    //Вывод пользователей исходя из эвента
+    getUsersEvent: build.query<string, number>({
+      query: (event_id) => ({
+        url: `/events/${event_id}/users`,
+        method: 'GET',
+        headers: {
+          Authorization: `Token ${getToken()}`,
+        },
+      }),
+      // providesTags: () => ['Events'],
+    }),
   }),
 })
 
-export const { useGetEventsQuery, useGetEventQuery } = eventsApi
+export const { useGetEventsQuery, useGetEventQuery, useLazyGetUsersEventQuery } = eventsApi
