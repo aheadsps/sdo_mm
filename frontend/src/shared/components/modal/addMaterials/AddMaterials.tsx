@@ -2,26 +2,13 @@ import { Button } from '@shared/components/button'
 import { Select } from '@shared/components/select'
 import { Input } from '@shared/components/text-field'
 import { Typography } from '@shared/components/typography'
+import { useFileUpload } from '@shared/hooks'
 import clsx from 'clsx'
-import { useRef, ChangeEvent, useState } from 'react'
 
 import s from './addMaterials.module.scss'
 
 export const AddMaterials = () => {
-  const [fileName, setFileName] = useState<string | null>(null)
-  const fileInputRef = useRef<HTMLInputElement>(null)
-
-  const handleButtonClick = () => {
-    fileInputRef.current?.click()
-  }
-
-  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0]
-    if (file) {
-      console.log('Selected file:', file)
-      setFileName(file.name)
-    }
-  }
+  const { fileInputRef, fileName, handleFileChange, handleButtonClick } = useFileUpload()
 
   return (
     <div className={s.box}>
