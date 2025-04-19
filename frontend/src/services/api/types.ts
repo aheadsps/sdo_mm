@@ -122,7 +122,8 @@ export type CourseVeiw = {
   lessons: LessonType[]
   materials: object //???
   name: string
-  profession: { id: number; en_name: string; ru_name: string }
+  profession: number // to fix it is an object below
+  /*  profession: { id: number; en_name: string; ru_name: string } */
   status: string
   teacher: number
   update_date: string

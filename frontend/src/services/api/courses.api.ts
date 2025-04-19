@@ -26,6 +26,13 @@ export const coursesApi = createApi({
           Authorization: `Token ${getToken()}`,
         },
       }),
+      transformResponse: (response: CourseVeiw): CourseVeiw => ({
+        ...response,
+        lessons: response.lessons.map((lesson) => ({
+          ...lesson,
+          expanded: false,
+        })),
+      }),
       providesTags: () => ['Courses'],
     }),
   }),

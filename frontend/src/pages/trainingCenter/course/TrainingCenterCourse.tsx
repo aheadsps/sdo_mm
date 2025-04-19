@@ -2,6 +2,7 @@ import { EditIcon } from '@assets/icons'
 import { routes } from '@routes/routes'
 import { useGetCourseQuery } from '@services/api'
 import { selectCourse, setCourseById } from '@services/slices'
+import { setCurrentLessons } from '@services/slices/constructor/constructorSlice'
 import { useAppDispatch, useAppSelector } from '@services/store'
 import {
   Button,
@@ -53,6 +54,7 @@ const Course = () => {
   useEffect(() => {
     if (course) {
       dispatch(setCourseById(course))
+      dispatch(setCurrentLessons({ lessons: course.lessons, id: course.id }))
     }
 
     if (course?.name) {

@@ -1,7 +1,10 @@
 import { AddItemIcon, ArrowDownIcon, ArrowUpIcon } from '@assets/icons'
-import { LessonType } from '@services/api'
 import { selectCourse } from '@services/slices'
-import { useAppSelector } from '@services/store'
+import {
+  selectCurrentLessons,
+  setCurrentLessons,
+} from '@services/slices/constructor/constructorSlice'
+import { useAppDispatch, useAppSelector } from '@services/store'
 import { Button } from '@shared/components'
 import { useState, FC } from 'react'
 
@@ -16,23 +19,16 @@ const columns = ['Уроки', 'Дата и время занятия', 'Фор�
 export const Program: FC = () => {
   const [newLessonCount, setNewLessonCount] = useState<number[]>([])
   const [newTopicCount, setNewTopicCount] = useState<Record<number, number[]>>({})
+
   const currentCourse = useAppSelector(selectCourse)
+  const lessons = useAppSelector(selectCurrentLessons)
 
-  const courseLessons: LessonType[] = currentCourse.lessons.map((lesson) => ({
-    ...lesson,
-    expanded: false,
-  }))
-
-  const [lessons, setLessons] = useState(courseLessons)
+  const dispatch = useAppDispatch()
 
   const toggleExpand = (id: number) => {
-    setLessons((prevLessons) =>
-      prevLessons.map((lesson) =>
-        lesson.id === id && !currentCourse.is_scorm
-          ? { ...lesson, expanded: !lesson.expanded }
-          : lesson
-      )
-    )
+    if (!currentCourse.is_scorm) {
+      dispatch(setCurrentLessons({ lessons, id }))
+    }
   }
 
   const onAddNewLesson = () => {

@@ -25,7 +25,8 @@ export const Course = () => {
   }, [currentCourse, dispatch])
   const course = useAppSelector(selectCourse)
   // const event = useAppSelector(selectEvent)
-  const isScorms = Boolean(course.scorms.length > 0)
+  /* const isScorms = Boolean(course.scorms.length > 0) */
+  const isScorms = course.is_scorm
   const currentCourseId = useAppSelector(selectCurrentEventId)
   const currentScorms = useAppSelector(selectCurrentScorms)
   // if (isScorms) const [getScormById] = useLazyGetScormByIdQuery(currentScorms[0])
