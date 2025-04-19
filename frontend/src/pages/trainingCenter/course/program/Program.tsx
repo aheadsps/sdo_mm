@@ -22,14 +22,15 @@ export const Program: FC = () => {
     ...lesson,
     expanded: false,
   }))
-  const scorm = currentCourse.scorms
 
   const [lessons, setLessons] = useState(courseLessons)
 
   const toggleExpand = (id: number) => {
     setLessons((prevLessons) =>
       prevLessons.map((lesson) =>
-        lesson.id === id ? { ...lesson, expanded: !lesson.expanded } : lesson
+        lesson.id === id && !currentCourse.is_scorm
+          ? { ...lesson, expanded: !lesson.expanded }
+          : lesson
       )
     )
   }
@@ -49,46 +50,37 @@ export const Program: FC = () => {
     <div className={styles.container}>
       <BlockHeader columns={columns} />
       <div className={styles.list}>
-        {lessons.length
-          ? lessons.map((lesson) => (
-              <div key={lesson.id} className={styles.lessonItem}>
-                <LessonContent options={optionsFormat} lesson={lesson} />
-                <Button
-                  variant="primary"
-                  className={styles.toggleButton}
-                  onClick={() => toggleExpand(lesson.id)}
-                >
-                  {lesson.expanded ? 'Скрыть блоки' : 'Открыть блоки'}
-                  {lesson.expanded ? <ArrowUpIcon /> : <ArrowDownIcon />}
-                </Button>
-                {lesson && lesson.expanded && (
-                  <div className={styles.expandedContent}>
-                    <ExpandedContent lessonId={lesson.id} steps={lesson.steps} />
-                    {(newTopicCount[lesson.id] || []).map((topic) => (
-                      <div key={topic} className={styles.lessonItem}>
-                        <LessonContent isExpandableContent options={optionsFormat} />
-                      </div>
-                    ))}
-                    <button className={styles.addButton}>
-                      <AddItemIcon
-                        height={'12px'}
-                        width={'12px'}
-                        onClick={() => onAddNewTopic(lesson.id)}
-                      />
-                    </button>
+        {lessons.map((lesson) => (
+          <div key={lesson.id} className={styles.lessonItem}>
+            <LessonContent options={optionsFormat} lesson={lesson} />
+            <Button
+              disabled={currentCourse.is_scorm}
+              variant="primary"
+              className={styles.toggleButton}
+              onClick={() => toggleExpand(lesson.id)}
+            >
+              {lesson.expanded ? 'Скрыть блоки' : 'Открыть блоки'}
+              {lesson.expanded ? <ArrowUpIcon /> : <ArrowDownIcon />}
+            </Button>
+            {lesson && lesson.expanded && (
+              <div className={styles.expandedContent}>
+                <ExpandedContent lessonId={lesson.id} steps={lesson.steps} />
+                {(newTopicCount[lesson.id] || []).map((topic) => (
+                  <div key={topic} className={styles.lessonItem}>
+                    <LessonContent isExpandableContent options={optionsFormat} />
                   </div>
-                )}
+                ))}
+                <button className={styles.addButton}>
+                  <AddItemIcon
+                    height={'12px'}
+                    width={'12px'}
+                    onClick={() => onAddNewTopic(lesson.id)}
+                  />
+                </button>
               </div>
-            ))
-          : scorm.map((item) => (
-              <div key={item.id} className={styles.lessonItem}>
-                <LessonContent options={optionsFormat} lesson={item} />
-                <Button disabled={!!item} variant="primary" className={styles.toggleButton}>
-                  'Открыть блоки'
-                  <ArrowDownIcon />
-                </Button>
-              </div>
-            ))}
+            )}
+          </div>
+        ))}
         {newLessonCount.map((item) => (
           <div key={item} className={styles.lessonItem}>
             <LessonContent options={optionsFormat} />

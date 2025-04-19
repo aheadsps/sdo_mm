@@ -83,12 +83,13 @@ export type TestBlock = {
 }
 
 export type Step = {
-  id: number
-  serial: number
-  title: string
-  content_text: string
-  lesson: number
   attachments: Attachments[]
+  content_text: string
+  id: number
+  lesson: number
+  serial: number
+  teacher: number
+  title: string
 } & {
   blockItems: NewItem[]
 }
@@ -97,12 +98,46 @@ export type LessonType = {
   course: number
   id: number
   name: string
+  resource: string | null //????
+  serial: number
+  start_date: string
+  started: boolean
+  steps: Step[]
+  teacher: number
+  test_block: number
+  version: string | null //???
+} & {
+  expanded: boolean
+}
+
+export type CourseVeiw = {
+  beginner: boolean
+  create_date: string
+  description: string
+  experiences: number[] // to fix, it is an array of objects
+  id: number
+  image: string | null
+  interval: string
+  is_scorm: boolean
+  lessons: LessonType[]
+  materials: object //???
+  name: string
+  profession: { id: number; en_name: string; ru_name: string }
+  status: string
+  teacher: number
+  update_date: string
+}
+
+/* export type LessonType = {
+  course: number
+  id: number
+  name: string
   serial: number
   steps: Step[]
   test_block: TestBlock
 } & {
   expanded: boolean
-}
+} */
 /* export type Lesson = {
   id: number
   course: number
@@ -132,7 +167,7 @@ export type CoursesResponse = {
 //   results: CourseVeiw
 // }
 
-export type CourseVeiw = {
+/* export type CourseVeiw = {
   beginer: boolean
   create_date: string
   description: string
@@ -145,7 +180,7 @@ export type CourseVeiw = {
   update_date: string
   scorms: Scorm[]
   lesson_story: number[]
-}
+} */
 
 export type Course = {
   id: number
