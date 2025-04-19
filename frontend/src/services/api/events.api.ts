@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
-import { EventsResponse, Event } from './types'
+import { EventsResponse, Event } from './types.api'
 import { baseUrl, getToken } from './variables'
 
 export const eventsApi = createApi({

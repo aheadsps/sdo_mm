@@ -1,7 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
-import { CoversResponse } from './types'
-import { CurrentCoversResponse } from './types.api'
+import { CoversResponse, CurrentCoversResponse } from './types.api'
 import { baseUrl, getToken } from './variables'
 
 export const coversApi = createApi({

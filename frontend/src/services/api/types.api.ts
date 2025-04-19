@@ -1,8 +1,162 @@
-export type Attachment = {
+//Responses типизация ответов с сервера
+
+export type ProfileResponse = {
   id: number
-  file: string
-  file_type: string
+  email: string
+  first_name: string
+  last_name: string
+  date_commencement: string
+  profession: number
+  profile: UserProfile
 }
+
+export type CoversResponse = {
+  count: number
+  next: null
+  previous: null
+  results: CoverShort[]
+}
+
+export type CurrentCoversResponse = {
+  count: number
+  next: null
+  previous: null
+  results: CoverCurrent[]
+}
+export type CoursesResponse = {
+  count: number
+  next: null
+  previous: null
+  results: CourseShort[]
+}
+export type EventsResponse = {
+  count: number
+  next: null
+  previous: null
+  results: EventShort[]
+}
+
+export type LessonsResponse = {
+  count: number
+  next: null
+  previous: null
+  results: LessonShort[]
+}
+export type StepsResponse = {
+  count: number
+  next: null
+  previous: null
+  results: StepShort[]
+}
+// Типизация вложенности Covers/ CoversCurrent
+export type EventCovered = {
+  // В теле ответа НЕТ поля id!
+  // id: number
+  course: CourseCovered
+  start_date: string
+  end_date: string
+  status: string
+}
+export type CoverShort = {
+  event: EventCovered
+  user: number
+  procent: number
+  favorite: boolean
+  status: string
+}
+export type CoverCurrent = {
+  id: number
+  event: EventCovered
+  user: number
+  procent: number
+  favorite: boolean
+  status: string
+}
+export type LessonCovered = {
+  course: number
+  id: number
+  name: string
+  resourse: string
+  serial: number
+  start_date: string
+  started: false
+  steps: StepShort[]
+  teacher: number
+  test_block: number
+  version: string
+}
+export type CourseCovered = {
+  id: number
+  name: string
+  description: string
+  interval: string
+  lessons: LessonCovered[]
+  beginner: boolean
+  image: string
+  profession: Profession
+  scorms: number[]
+  experiences: number[]
+  status: string
+  is_scorm: boolean
+  materials: Materials
+
+  teacher: number
+  create_date: string
+  update_date: string
+} & {
+  user: number
+}
+
+// Типизация сокращённых сущностей (обычно вложены в responses, при получении листа)
+export type EventShort = {
+  id: number
+  course: CourseShort
+  start_date: string
+  end_date: string
+  status: string
+}
+export type CourseShort = {
+  id: number
+  name: string
+  description: string
+  interval: string
+  lessons: LessonShort[]
+  beginner: boolean
+  image: string
+  profession: number
+  scorms: number[]
+  experiences: number[]
+  status: string
+} & {
+  materials: Materials
+  teacher: number
+  user: number
+  is_scorm: boolean
+}
+export type LessonShort = {
+  id: number
+  name: string
+  serial: number
+  course: number
+  start_date: string
+  started: boolean
+  steps: StepShort[]
+  test_block: number
+} & {
+  teacher: number
+}
+export type StepShort = {
+  id: number
+  title: string
+  content_text: string
+  serial: number
+  lesson: number
+  attachments: number[]
+} & {
+  teacher: number
+}
+
+// Типизация развёрнутых сущностей (обычно получены через id)
 export type Step = {
   title: string
   teacher: number
@@ -11,14 +165,58 @@ export type Step = {
   lesson: number
   attachments: Attachment[]
 }
-export type StepShort = {
+export type Lesson = {
+  course: number
   id: number
-  title: string
-  teacher: number
-  content_text: string
+  name: string
+  resourse: string
   serial: number
-  lesson: number
-  attachments: number[]
+  start_date: string
+  started: boolean
+  steps: Step[]
+  teacher: number
+  test_block: number
+  version: string
+}
+export type Scorm = {
+  id: number
+  teacher: number
+  name: string
+  course: number
+  version: string
+  resource: string
+}
+export type Course = {
+  id: number
+  teacher: number
+  name: string
+  description: string
+  interval: string
+  lessons: Lesson[]
+  beginer: boolean
+  create_date: string
+  update_date: string
+  image: string
+  profession: Profession
+  scorms: Scorm[]
+  experiences: Experience[]
+  materials: Materials
+  status: string
+  is_scorm: boolean
+}
+
+export type Event = {
+  // !! Получаем Event по id эвента, но в теле ответа id эвента нет!
+  course: Course
+  start_date: string
+  end_date: string
+  status: string
+}
+// Типизация вспомогательных сущностей (обычно вложены в развёрнутые)
+export type Attachment = {
+  id: number
+  file: string
+  file_type: string
 }
 export type Story = {
   id: number
@@ -55,40 +253,6 @@ export type TestBlock = {
   questions: Question[]
   user_story: Story[]
 }
-export type Lesson = {
-  course: number
-  id: number
-  name: string
-  resourse: string
-  serial: number
-  start_date: string
-  started: boolean
-  steps: []
-  teacher: number
-  test_block: number
-  version: string
-
-  // id: number
-  // teacher: number
-  // name: string
-  // serial: number
-  // course: number
-  // start_date: string
-  // started: boolean
-  // steps: Step[]
-  // test_block: TestBlock
-}
-export type LessonShort = {
-  id: number
-  teacher: number
-  name: string
-  serial: number
-  course: number
-  start_date: string
-  started: boolean
-  steps: StepShort[]
-  test_block: number
-}
 export type Profession = {
   id: number
   en_name: string
@@ -97,14 +261,6 @@ export type Profession = {
 export type Experience = {
   id: number
   years: number
-}
-export type Scorm = {
-  id: number
-  teacher: number
-  name: string
-  course: number
-  version: string
-  resource: string
 }
 export type Files = {
   id: number
@@ -115,104 +271,8 @@ export type Materials = {
   id: number
   files: Files[]
 }
-export type Course = {
-  id: number
-  teacher: number
-  name: string
-  description: string
-  interval: string
-  lessons: Lesson[]
-  beginer: boolean
-  create_date: string
-  update_date: string
-  image: string
-  profession: Profession
-  scorms: Scorm[]
-  experiences: Experience[]
-  materials: Materials
-  status: string
-  is_scorm: boolean
-}
-export type CourseShort = {
-  id: number
-  teacher: number
-  name: string
-  description: string
-  interval: string
-  lessons: LessonShort[]
-  beginner: boolean
-  image: string
-  profession: number
-  //   scorms: number[] | boolean
-  experiences: number[]
-  materials: Materials
-  status: string
-} & {
-  is_scorm: boolean
-}
-export type LessonCovered = {
-  course: number
-  id: number
-  name: string
-  resourse: string
-  serial: number
-  start_date: string
-  started: false
-  steps: StepShort[]
-  teacher: number
-  test_block: number
-  version: string
-}
-export type CourseCovered = {
-  beginner: boolean
-  create_date: string
-  description: string
-  experiences: number[]
-  id: number
-  image: string
-  interval: null
-  is_scorm: boolean
-  lessons: LessonCovered[]
-  materials: Materials
-  name: string
-  profession: Profession
-  status: string
-  teacher: number
-  update_date: string
-}
-export type EventShort = {
-  id: number
-  course: CourseShort
-  start_date: string
-  end_date: string
-  status: string
-}
-export type EventCovered = {
-  id: number
-  course: CourseCovered
-  start_date: string
-  end_date: string
-  status: string
-}
 
-export type CoverShort = {
-  id: number
-  event: Event
-  user: number
-  procent: number
-  favorite: boolean
-  status: string
-}
-export type CoverCurrent = {
-  id: number
-  event: EventCovered
-  user: number
-  procent: number
-  favorite: boolean
-  status: string
-}
-
-//Auth
+//Типизация авторизации и профиля
 export type User = {
   id: number
   first_name: string
@@ -235,7 +295,6 @@ export type Profile = {
   date_birthday: string
 }
 
-//auth
 export type LoginData = {
   email: string
   password: string
@@ -249,40 +308,4 @@ export type UserProfile = {
   phone: string
   image: string
   date_birthday: string
-}
-
-export type ProfileResponse = {
-  id: number
-  email: string
-  first_name: string
-  last_name: string
-  date_commencement: string
-  profession: number
-  profile: UserProfile
-}
-
-export type CoversResponse = {
-  count: number
-  next: null
-  previous: null
-  results: Event[] //Short
-}
-
-export type CurrentCoversResponse = {
-  count: number
-  next: null
-  previous: null
-  results: CoverCurrent[]
-}
-export type CoursesResponse = {
-  count: number
-  next: null
-  previous: null
-  results: CourseShort[]
-}
-export type EventsResponse = {
-  count: number
-  next: null
-  previous: null
-  results: EventShort[]
 }

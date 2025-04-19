@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
-import { LessonsResponse } from './types'
+import { LessonsResponse } from './types.api'
 import { baseUrl, getToken } from './variables'
 
 export const lessonsApi = createApi({
