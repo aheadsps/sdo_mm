@@ -65,18 +65,22 @@ class TaskManagerLessonSwitch(BaseTaskManager):
     def __init__(self,
                  date: datetime,
                  lesson_id: int,
+                 started: bool,
                  ):
         super().__init__(date=date)
         self.lesson_id = int(lesson_id)
+        self.started = bool(started)
 
     def _unique_name(self,
                      lesson_id: int,
+                     started: bool,
                      ) -> str:
         """
         Получение уникального имени
         """
+        status = 'start' if started else 'finished'
         time_cast = self._time_to_UNIX()
-        unique_name = f'Lesson_{lesson_id}_{time_cast}'
+        unique_name = f'Lesson_{lesson_id}_{status}_{time_cast}'
         return unique_name
 
     def _updated_settings(self, **kwargs):

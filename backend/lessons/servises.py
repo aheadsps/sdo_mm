@@ -129,12 +129,17 @@ class SetEventServise:
                                                      ).bulk_create())
             for lesson in content:
                 lesson.start_date = start_date
-                update_lessons.append(lesson)
                 schedulers.append(TaskManagerLessonSwitch(start_date,
                                                           lesson.pk,
+                                                          started=True,
                                                           ).bulk_create())
                 start_date = start_date + interval
                 lesson.end_date = start_date
+                schedulers.append(TaskManagerLessonSwitch(start_date,
+                                                          lesson.pk,
+                                                          started=False,
+                                                          ).bulk_create())
+                update_lessons.append(lesson)
                 test_block = lesson.test_block
                 update_test_block.append(self._set_test_block(
                     test_block=test_block,
@@ -168,13 +173,50 @@ class SetEventServise:
                                                       )
         instance.save()
 
+    def _clear_test_block(self,
+                          test_block: models.TestBlock,
+                          ) -> models.TestBlock:
+        test_block.max_score = 0
+        test_block.end_date = None
+        return test_block
+
+    def _clear_lesson(self,
+                      lesson: models.Lesson,
+                      ) -> models.Lesson:
+        lesson.start_date = None
+        lesson.end_date = None
+        lesson.started = False
+        return lesson
+
+    def _process_delete_settings(self,
+                                 course: models.Course,
+                                 lessons: QuerySet[models.Lesson],
+                                 beginner: bool,
+                                 ):
+        course.status = 'archive'
+        course.save(update_fields=('status',))
+        lessons_update = []
+        test_block_update = []
+        for lesson in lessons:
+            test_block = lesson.test_block
+            if not beginner:
+                lessons_update.append(self._clear_lesson(lesson))
+            test_block_update.append(self._clear_test_block(test_block))
+
+
+
+
     def set_event_settings(self):
         """
         Установка всех настроек Event
         """
         course = self.event.course
         start_date = self.event.start_date
-        lessons = self.event.course.lessons.prefetch_related('test_block__questions').order_by("serial")
+        lessons = (models.Lesson
+                   ._default_manager
+                   .filter(course=course)
+                   .prefetch_related('test_block__questions')
+                   .order_by("serial"))
         interval = self.event.course.interval
         with atomic():
             self._count_end_date(
@@ -192,3 +234,20 @@ class SetEventServise:
                         course=course,
                     )
             self._change_status(course=course)
+
+    def delete_event_settings(self):
+        """
+        Удаление настроек
+        """
+        course = self.event.course
+        lessons = (models.Lesson
+                   ._default_manager
+                   .filter(course=course)
+                   .select_related('test_block')
+                   .order_by("serial"))
+        beginner = course.beginner
+        self._process_delete_settings(
+            course=course,
+            lessons=lessons,
+            beginner=beginner,
+        )
