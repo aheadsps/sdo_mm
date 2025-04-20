@@ -113,4 +113,5 @@ class BaseTaskManager(AbstractTaskManager):
 
     def delete(self) -> None:
         task = self._get_task()
+        logger.warning(f'get task to delete {task}')
         task.delete()

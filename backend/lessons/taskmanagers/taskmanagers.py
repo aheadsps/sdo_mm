@@ -2,8 +2,6 @@ import json
 
 from datetime import datetime
 
-from loguru import logger
-
 from django.conf import settings
 
 from .base import BaseTaskManager
@@ -86,6 +84,7 @@ class TaskManagerLessonSwitch(BaseTaskManager):
     def _updated_settings(self, **kwargs):
         unique_name = self._unique_name(
             lesson_id=self.lesson_id,
+            started=self.started,
         )
         set_kwargs = json.dumps(dict(
             lesson_id=self.lesson_id,

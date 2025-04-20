@@ -129,12 +129,14 @@ class SetEventServise:
                                                      ).bulk_create())
             for lesson in content:
                 lesson.start_date = start_date
+                logger.info(f'set start date to {lesson} - {lesson.start_date}')
                 schedulers.append(TaskManagerLessonSwitch(start_date,
                                                           lesson.pk,
                                                           started=True,
                                                           ).bulk_create())
                 start_date = start_date + interval
                 lesson.end_date = start_date
+                logger.info(f'set end date to {lesson} - {lesson.end_date}')
                 schedulers.append(TaskManagerLessonSwitch(start_date,
                                                           lesson.pk,
                                                           started=False,
@@ -163,6 +165,7 @@ class SetEventServise:
                 ))
         models.Lesson._default_manager.bulk_update(update_lessons,
                                                    fields=("start_date",
+                                                           "end_date",
                                                            "started",
                                                            ),
                                                    )
@@ -175,36 +178,62 @@ class SetEventServise:
 
     def _clear_test_block(self,
                           test_block: models.TestBlock,
+                          beginner: bool,
                           ) -> models.TestBlock:
-        test_block.max_score = 0
-        test_block.end_date = None
+        if not beginner:
+            end_date = test_block.end_date
+            if end_date:
+                TaskManagerTestBlockSwitch(end_date, test_block.pk).delete()
+            test_block.end_date = None
+        else:
+            test_block.max_score = 0
         return test_block
 
     def _clear_lesson(self,
                       lesson: models.Lesson,
+                      beginner: bool,
                       ) -> models.Lesson:
-        lesson.start_date = None
-        lesson.end_date = None
-        lesson.started = False
+        if not beginner:
+            start_date = lesson.start_date
+            end_date = lesson.end_date
+            logger.debug(f'clear lesson with dates {start_date} - {end_date}')
+            TaskManagerLessonSwitch(start_date, lesson.pk, True).delete()
+            TaskManagerLessonSwitch(end_date, lesson.pk, False).delete()
+            lesson.start_date = None
+            lesson.end_date = None
+        else:
+            lesson.started = False
         return lesson
 
     def _process_delete_settings(self,
+                                 event: models.Event,
                                  course: models.Course,
                                  lessons: QuerySet[models.Lesson],
                                  beginner: bool,
-                                 ):
+                                 ) -> None:
+        if not beginner:
+            start_date = event.start_date
+            end_date = event.end_date
+            logger.warning(f'delete task with dates {start_date} - {end_date}')
+            TaskManagerEventSwitch(start_date, event.pk, True).delete()
+            TaskManagerEventSwitch(end_date, event.pk, False).delete()
         course.status = 'archive'
         course.save(update_fields=('status',))
         lessons_update = []
         test_block_update = []
         for lesson in lessons:
             test_block = lesson.test_block
-            if not beginner:
-                lessons_update.append(self._clear_lesson(lesson))
-            test_block_update.append(self._clear_test_block(test_block))
-
-
-
+            lessons_update.append(
+                self._clear_lesson(lesson, beginner),
+                )
+            test_block_update.append(
+                self._clear_test_block(test_block, beginner),
+                )
+        models.Lesson._default_manager.bulk_update(lessons_update, fields=('started',
+                                                                           'start_date',
+                                                                           'end_date',
+                                                                           ))
+        models.TestBlock._default_manager.bulk_update(test_block_update, fields=('max_score', 'end_date'))
 
     def set_event_settings(self):
         """
@@ -247,6 +276,7 @@ class SetEventServise:
                    .order_by("serial"))
         beginner = course.beginner
         self._process_delete_settings(
+            event=self.event,
             course=course,
             lessons=lessons,
             beginner=beginner,
