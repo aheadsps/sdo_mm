@@ -30,7 +30,6 @@ export const withLayout = <T extends object>(Component: ComponentType<T>) => {
       getCurrentCovers('')
         .unwrap()
         .then((res) => {
-          // console.log(res.results)
           dispatch(setUserCovers(res.results))
         })
         .catch((error) => handleError(error))
