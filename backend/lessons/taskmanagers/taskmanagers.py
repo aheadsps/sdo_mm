@@ -34,9 +34,7 @@ class TaskManagerEventSwitch(BaseTaskManager):
         """
         status = 'start' if started else 'finished'
         time_cast = self._time_to_UNIX()
-        logger.debug(f'set timecast {time_cast}')
         unique_name = f'Event_{event_id}_{status}_{time_cast}'
-        logger.debug(f'unique name {unique_name}')
         return unique_name
 
     def _updated_settings(self, **kwargs):
@@ -78,9 +76,7 @@ class TaskManagerLessonSwitch(BaseTaskManager):
         Получение уникального имени
         """
         time_cast = self._time_to_UNIX()
-        logger.debug(f'set timecast {time_cast}')
         unique_name = f'Lesson_{lesson_id}_{time_cast}'
-        logger.debug(f'unique name {unique_name}')
         return unique_name
 
     def _updated_settings(self, **kwargs):
@@ -117,9 +113,7 @@ class TaskManagerTestBlockSwitch(BaseTaskManager):
         Получение уникального имени
         """
         time_cast = self._time_to_UNIX()
-        logger.debug(f'set timecast {time_cast}')
         unique_name = f'TestBlock_{test_block_id}_{time_cast}'
-        logger.debug(f'unique name {unique_name}')
         return unique_name
 
     def _updated_settings(self, **kwargs):
@@ -157,9 +151,7 @@ class TaskManagerSendMain(BaseTaskManager):
         Получение уникального имени
         """
         time_cast = self._time_to_UNIX()
-        logger.debug(f'set timecast {time_cast}')
         unique_name = f'EmailSend_{test_block_id}_{time_cast}'
-        logger.debug(f'unique name {unique_name}')
         return unique_name
 
     def _updated_settings(self, **kwargs):

@@ -73,14 +73,9 @@ class SetEventServise:
         event.status = "started"
         event.save()
 
-    def _set_test_block(self,
-                        lesson: models.Lesson,
-                        end_date: datetime,
-                        beginner: bool,
-                        schedulers: list,
-                        update: bool,
-                        ) -> models.TestBlock:
-        test_block = lesson.test_block
+    def _set_test_block_begginer(self,
+                                 test_block: models.TestBlock,
+                                 ):
         questions = test_block.questions.all()
         max_score = 0
         if questions:
@@ -88,14 +83,32 @@ class SetEventServise:
                 for question in test_block.questions.get_queryset():
                     max_score += question.weight
                 test_block.max_score = max_score
-            if not beginner:
-                if update:
-                    TaskManagerTestBlockSwitch(test_block.end_date, test_block.pk).update(start_time=end_date)
-                    test_block.end_date = end_date
-                else:
-                    test_block.end_date = end_date
-                    schedulers.append(TaskManagerTestBlockSwitch(end_date, test_block.pk).bulk_create())
-            return test_block
+        return test_block
+
+    def _set_test_block(self,
+                        test_block: models.TestBlock,
+                        end_date: datetime,
+                        schedulers: list,
+                        update: bool,
+                        ) -> models.TestBlock:
+        questions = test_block.questions.all()
+        max_score = 0
+        if questions:
+            if not test_block.max_score:
+                for question in test_block.questions.get_queryset():
+                    max_score += question.weight
+                test_block.max_score = max_score
+            if update:
+                TaskManagerTestBlockSwitch(test_block.end_date,
+                                           test_block.pk,
+                                           ).update(start_time=end_date)
+                test_block.end_date = end_date
+            else:
+                test_block.end_date = end_date
+                schedulers.append(TaskManagerTestBlockSwitch(end_date,
+                                                             test_block.pk,
+                                                             ).bulk_create())
+        return test_block
 
     def _count_end_date(self,
                         instance: models.Event,
@@ -109,12 +122,12 @@ class SetEventServise:
         schedulers = []
         beginner = instance.course.beginner
         content = lessons
-        schedulers.append(TaskManagerEventSwitch(start_date,
-                                                 self.event.id,
-                                                 True,
-                                                 ).bulk_create())
-        for lesson in content:
-            if not beginner:
+        if not beginner:
+            schedulers.append(TaskManagerEventSwitch(start_date,
+                                                     self.event.id,
+                                                     True,
+                                                     ).bulk_create())
+            for lesson in content:
                 lesson.start_date = start_date
                 update_lessons.append(lesson)
                 schedulers.append(TaskManagerLessonSwitch(start_date,
@@ -122,25 +135,37 @@ class SetEventServise:
                                                           ).bulk_create())
                 start_date = start_date + interval
                 lesson.end_date = start_date
-            else:
+                test_block = lesson.test_block
+                update_test_block.append(self._set_test_block(
+                    test_block=test_block,
+                    end_date=start_date,
+                    schedulers=schedulers,
+                    update=update,
+                ))
+            instance.end_date = start_date
+            schedulers.append(TaskManagerEventSwitch(start_date,
+                                                     self.event.id,
+                                                     False,
+                                                     ).bulk_create())
+            PeriodicTask._default_manager.bulk_create(schedulers)
+        else:
+            for lesson in content:
                 lesson.started = True
+                test_block = lesson.test_block
                 update_lessons.append(lesson)
-            update_test_block.append(self._set_test_block(
-                lesson=lesson,
-                end_date=start_date,
-                beginner=beginner,
-                schedulers=schedulers,
-                update=update,
-            ))
-        models.Lesson._default_manager.bulk_update(update_lessons, fields=("start_date", "started"))
-        if not update and None not in update_test_block:
-            models.TestBlock._default_manager.bulk_update(update_test_block, fields=('max_score', 'end_date'))
-        instance.end_date = start_date
-        schedulers.append(TaskManagerEventSwitch(start_date,
-                                                 self.event.id,
-                                                 False,
-                                                 ).bulk_create())
-        PeriodicTask._default_manager.bulk_create(schedulers)
+                update_test_block.append(self._set_test_block_begginer(
+                    test_block=test_block,
+                ))
+        models.Lesson._default_manager.bulk_update(update_lessons,
+                                                   fields=("start_date",
+                                                           "started",
+                                                           ),
+                                                   )
+        models.TestBlock._default_manager.bulk_update(update_test_block,
+                                                      fields=('max_score',
+                                                              'end_date',
+                                                              ),
+                                                      )
         instance.save()
 
     def set_event_settings(self):
