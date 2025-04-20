@@ -1,0 +1,106 @@
+.container__title {
+  font-size: var(--font-size-xxl);
+  margin-bottom: 30px;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  gap: 45px;
+  max-width: 100vw;
+  overflow-x: auto;
+  white-space: nowrap;
+  scrollbar-width: none;
+}
+
+.card {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  //   overflow-x: hidden;
+  height: 100%;
+
+
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  gap: 45px;
+  max-width: 100vw;
+  overflow-x: auto;
+  white-space: nowrap;
+  scrollbar-width: none;
+
+  &__container {
+    width: 312px;
+    height: fit-content;
+
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    box-shadow: 0 0 15px 0 #2c0b0f0a;
+    border-radius: 10px 10px 0 0;
+    // overflow: hidden;
+
+    @media screen and (max-width: 1349px) {
+      width: 100%;
+      height: fit-content;
+    }
+  }
+  &__status {
+    background-color: aqua;
+    padding: 20px;
+    border-radius: 10px 10px 0 0;
+  }
+
+  &__title {
+    color: var(--color-bg-gray100);
+    border-radius: 10px 10px 0 0;
+  }
+}
+
+
+
+.studentCard {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  justify-content: space-between;
+}
+
+.studentsList {
+  padding: 0px 16px 16px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.studentCard {
+  padding: 12px;
+  &:hover {
+    box-shadow: 0 0 15px 0 rgba(44, 11, 15, 0.06);
+    border-radius: 0px 8px 8px 0;
+  }
+}
+
+.studentCardleft {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.studentName {
+  font-size: var(--font-size-xs);
+}
+
+.statusUnsert {
+  background-color: var(--color-accent-negative);
+}
+
+.statusReviewing {
+  background-color: var(--color-accent-orange);
+}
+
+.statusDone {
+  background-color: var(--color-accent-success);
+}
