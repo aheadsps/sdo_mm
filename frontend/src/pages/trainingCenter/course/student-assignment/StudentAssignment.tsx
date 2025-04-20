@@ -10,11 +10,14 @@ import {
 import { withLayout } from '@shared/HOC'
 import { useToggle } from '@shared/hooks'
 
+import { AssignmentGradeModal } from './AssignmentGradeModal'
 import { CommentContent } from './CommentContent'
 import s from './student-assignment.module.scss'
 
 export const StudentAssignment = () => {
-  const { isOpen, toggle } = useToggle()
+  const { isOpen: isOpenDropdown, toggle: toggleDropdown } = useToggle()
+  const { isOpen: isOpenModal, open: openModal, close: closeModal } = useToggle()
+
   return (
     <div>
       <BackToPage>Вернуться в список учеников</BackToPage>
@@ -62,8 +65,8 @@ export const StudentAssignment = () => {
           <div>
             <DropdownCard
               title="История проверок"
-              isOpen={isOpen}
-              toggle={toggle}
+              isOpen={isOpenDropdown}
+              toggle={toggleDropdown}
               wrapperClassName={s.dropdownWrapper}
               className={s.dropdownContent}
             >
@@ -85,9 +88,12 @@ export const StudentAssignment = () => {
         </div>
         <div className={s.assignmentButtons}>
           <Button variant="secondary">Отправить на доработку</Button>
-          <Button variant="primary">Принять работу</Button>
+          <Button variant="primary" onClick={openModal}>
+            Принять работу
+          </Button>
         </div>
       </div>
+      {isOpenModal && <AssignmentGradeModal close={closeModal} />}
     </div>
   )
 }

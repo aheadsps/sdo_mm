@@ -32,7 +32,7 @@
 }
 
 .contentBlock {
-    max-width: 590px;
+  max-width: 590px;
 }
 
 .materialTitleBlock {
@@ -104,29 +104,57 @@
 }
 
 .dropdownContent {
-    border: none;
-    padding: 20px;
+  border: none;
+  padding: 20px;
 }
 
 .commentOwner {
-    display: flex;
-    justify-content: space-between;
+  display: flex;
+  justify-content: space-between;
 }
 
 .internal {
-    padding-left: 12px;
-    padding-right: 12px;
-    background-color: var(--color-accent-red500);
-    color: white;
+  padding-left: 12px;
+  padding-right: 12px;
+  background-color: var(--color-accent-red500);
+  color: white;
 }
 
 .dateTime {
-    display: flex;
-    gap: 12px;
-    color: var(--color-text-secondary);
+  display: flex;
+  gap: 12px;
+  color: var(--color-text-secondary);
 }
 
 .commentText {
-    margin-top: 16px;
-    margin-bottom: 30px;
+  margin-top: 16px;
+  margin-bottom: 30px;
+}
+
+.modalContent {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  margin-bottom: 40px;
+}
+
+.grade {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  input {
+    width: auto;
+    border: none;
+    max-width: 163px;
+    text-align: right;
+  }
+
+  input[type='checkbox'] {
+    accent-color: var(--color-accent-red500);
+  }
+}
+
+.points {
+  color: var(--color-text-secondary);
 }
