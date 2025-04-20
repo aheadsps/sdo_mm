@@ -16,12 +16,11 @@ from lessons.patrials import set_status
 from lessons.scorm import SCORMLoader
 from lessons.utils import parse_exeption_error
 from lessons.servises import SetEventServise
-from lessons.scorm.engine.exceptions import SCORMExtractError, ManifestNotSetupError
+from lessons.scorm.engine.exceptions import SCORMExtractError, \
+    ManifestNotSetupError
 from users import serializers as user_serializers
 
-
 T = TypeVar("T")
-
 
 PROCESS = "process"
 EXPECTED = "expected"
@@ -33,6 +32,7 @@ class CourseProgressSerializer(serializers.ModelSerializer):
     """
     Сериализатор прогресса студента в определенной точке курса
     """
+
     class Meta:
         model = models.CourseProgress
         fields = ("id",
@@ -51,8 +51,6 @@ class UserStorySerializer(serializers.ModelSerializer):
         model = models.UserStory
         fields = ["id", "user", "answer", "test_block", "date_opened"]
         read_only_fields = ["id", "user", "date_opened"]
-        fields = ('id', 'user', 'answer', 'test_block', 'date_opened')
-        read_only_fields = ('id', 'user', 'date_opened')
 
     def validate(self, data):
         validators.UserStoryValidator(
@@ -69,15 +67,8 @@ class LessonStorySerializer(serializers.ModelSerializer):
 
     def validate(self, data):
         validators.LessonStoryValidator(
-            course=data.get("course"), lesson=data.get("lesson")
-        )()
+            course=data.get("course"), step=data.get("step"))()
         return data
-    # def validate(self, data):
-    #     validators.LessonStoryValidator(
-    #         course=data.get('course'),
-    #         lesson=data.get('lesson')
-    #     )()
-    #     return data
 
 
 class AnswerSerializer(serializers.ModelSerializer):
@@ -121,7 +112,8 @@ class QuestionSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         response = super().to_representation(instance)
         if instance.image:
-            response['image'] = self.context['request'].build_absolute_uri(instance.image.url)
+            response['image'] = self.context['request'].build_absolute_uri(
+                instance.image.url)
         return response
 
     # def create(self, validated_data: dict[str, str]):
@@ -165,12 +157,12 @@ class ContentAttachmentSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         response = super().to_representation(instance)
         if instance.file:
-            response['file'] = self.context['request'].build_absolute_uri(instance.file.url)
+            response['file'] = self.context['request'].build_absolute_uri(
+                instance.file.url)
         return response
 
 
 class MaterialsSerializer(serializers.ModelSerializer):
-
     files = ContentAttachmentSerializer(many=True, read_only=True)
 
     class Meta:
@@ -385,7 +377,7 @@ class LessonCreateSerializer(serializers.ModelSerializer):
         )
         read_only_fields = ("id", "teacher", "started", "start_date")
         validators = (validators.LessonScormValidator("course"),
-                      validators.LessonSerialValidator('serial', 'course',),
+                      validators.LessonSerialValidator('serial', 'course', ),
                       )
 
 
@@ -421,7 +413,8 @@ class LessonSerializer(serializers.ModelSerializer):
         logger.debug(self.context)
         response = super().to_representation(instance)
         if instance.resourse:
-            response['resourse'] = self.context['request'].build_absolute_uri(instance.resourse)
+            response['resourse'] = self.context['request'].build_absolute_uri(
+                instance.resourse)
         return response
 
 
@@ -457,7 +450,8 @@ class LessonViewSerializer(serializers.ModelSerializer):
         logger.debug(self.context)
         response = super().to_representation(instance)
         if instance.resourse:
-            response['resourse'] = self.context['request'].build_absolute_uri(instance.resourse)
+            response['resourse'] = self.context['request'].build_absolute_uri(
+                instance.resourse)
         return response
 
 
@@ -478,7 +472,8 @@ class ZIPFileField(serializers.FileField):
         if not self.allow_empty_file and not file_size:
             self.fail("empty")
         if self.max_length and len(file_name) > self.max_length:
-            self.fail("max_length", max_length=self.max_length, length=len(file_name))
+            self.fail("max_length", max_length=self.max_length,
+                      length=len(file_name))
 
         return data
 
@@ -529,7 +524,8 @@ class CreateCourseSerializer(serializers.ModelSerializer):
                     )
             except IntegrityError as er:
                 raise ValidationError(
-                    dict(scorm=f"This SCORM packpage {parse_exeption_error(er)}")
+                    dict(
+                        scorm=f"This SCORM packpage {parse_exeption_error(er)}")
                 )
             except (SCORMExtractError, ManifestNotSetupError) as er:
                 raise ValidationError(dict(scorm=er))
@@ -545,7 +541,8 @@ class CreateCourseSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         response = super().to_representation(instance)
         if instance.image:
-            response['image'] = self.context['request'].build_absolute_uri(instance.image.url)
+            response['image'] = self.context['request'].build_absolute_uri(
+                instance.image.url)
         return response
 
 
@@ -579,7 +576,8 @@ class CourseSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         response = super().to_representation(instance)
         if instance.image:
-            response['image'] = self.context['request'].build_absolute_uri(instance.image.url)
+            response['image'] = self.context['request'].build_absolute_uri(
+                instance.image.url)
         return response
 
 
@@ -620,7 +618,8 @@ class ViewCourseSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         response = super().to_representation(instance)
         if instance.image:
-            response['image'] = self.context['request'].build_absolute_uri(instance.image.url)
+            response['image'] = self.context['request'].build_absolute_uri(
+                instance.image.url)
         return response
 
 
@@ -774,6 +773,8 @@ class EventSerializerUpdate(serializers.ModelSerializer):
         SetEventServise(instance=event, update=True).set_event_settings()
         instance.refresh_from_db()
         return instance
+
+    """Оставил, может пригодиться прошлая логика)))"""
     # def _create_lesson_stories(self, user, course):
     #     """
     #     Создает LessonStory для всех free-уроков и урока с serial=1
