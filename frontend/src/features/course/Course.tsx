@@ -1,6 +1,11 @@
 import { routes } from '@routes/routes'
 import { useGetCourseQuery } from '@services/api'
-import { selectCourse, setCourseById } from '@services/slices'
+import {
+  selectCourse,
+  selectCurrentEventId,
+  selectCurrentScorms,
+  setCourseById,
+} from '@services/slices'
 import { useAppDispatch, useAppSelector } from '@services/store'
 import { Button, Tabs, Typography, AiComponent, BackToPage } from '@shared/components'
 import { useToggle } from '@shared/hooks/useToggle'
@@ -54,7 +59,7 @@ export const Course = () => {
       {course.is_scorm ? (
         <>
           {course?.lessons.map((lesson) => {
-            return <iframe key={lesson.id} className={s.scorms} src={lesson.resourse}></iframe>
+            return <iframe key={lesson.id} className={s.scorms} src={lesson.resource}></iframe>
           })}
         </>
       ) : (
