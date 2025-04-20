@@ -16,7 +16,8 @@ from lessons.patrials import set_status
 from lessons.scorm import SCORMLoader
 from lessons.utils import parse_exeption_error
 from lessons.servises import SetEventServise
-from lessons.scorm.engine.exceptions import SCORMExtractError, ManifestNotSetupError
+from lessons.scorm.engine.exceptions import SCORMExtractError, \
+    ManifestNotSetupError
 from users import serializers as user_serializers
 
 
@@ -33,6 +34,7 @@ class CourseProgressSerializer(serializers.ModelSerializer):
     """
     Сериализатор прогресса студента в определенной точке курса
     """
+
     class Meta:
         model = models.CourseProgress
         fields = ("id",
@@ -67,8 +69,7 @@ class LessonStorySerializer(serializers.ModelSerializer):
 
     def validate(self, data):
         validators.LessonStoryValidator(
-            course=data.get("course"), lesson=data.get("lesson")
-        )()
+            course=data.get("course"), step=data.get("step"))()
         return data
     # def validate(self, data):
     #     validators.LessonStoryValidator(
@@ -407,7 +408,7 @@ class LessonCreateSerializer(serializers.ModelSerializer):
         )
         read_only_fields = ("id", "teacher", "started", "start_date")
         validators = (validators.LessonScormValidator("course"),
-                      validators.LessonSerialValidator('serial', 'course',),
+                      validators.LessonSerialValidator('serial', 'course', ),
                       )
 
 
@@ -796,6 +797,8 @@ class EventSerializerUpdate(serializers.ModelSerializer):
         SetEventServise(instance=event, update=True).set_event_settings()
         instance.refresh_from_db()
         return instance
+
+    """Оставил, может пригодиться прошлая логика)))"""
     # def _create_lesson_stories(self, user, course):
     #     """
     #     Создает LessonStory для всех free-уроков и урока с serial=1
