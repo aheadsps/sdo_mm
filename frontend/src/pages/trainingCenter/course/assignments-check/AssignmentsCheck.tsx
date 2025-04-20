@@ -4,7 +4,7 @@ import clsx from 'clsx'
 import { NavLink, useParams } from 'react-router-dom'
 
 import s from './assignments-check.module.scss'
-import { getStatusTitle, statusColors, statusGroups } from './assignmentsCheckUtils'
+import { getStatusTitle, statusColors, statusGroups, statusIcon } from './assignmentsCheckUtils'
 import Status from './Status'
 
 export type Student = {
@@ -34,6 +34,7 @@ export const AssignmentsCheck = () => {
           <Card className={s.card}>
             <div key={status} className={s.card__content}>
               <div className={clsx(s.card__status, statusColors(status as Status))}>
+                {statusIcon(status as Status)}
                 <Typography variant="body_2" className={s.card__title}>
                   {getStatusTitle(status as Status)}
                 </Typography>

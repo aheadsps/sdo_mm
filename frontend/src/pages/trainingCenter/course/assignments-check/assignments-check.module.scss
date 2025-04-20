@@ -28,6 +28,7 @@
 }
 
 .card {
+  padding: 0;
   display: flex;
   justify-content: space-between;
   gap: 24px;
@@ -50,8 +51,10 @@
   }
 
   &__status {
-    background-color: aqua;
     padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
     border-radius: 10px 10px 0 0;
   }
 
