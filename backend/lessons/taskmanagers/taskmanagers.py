@@ -88,6 +88,7 @@ class TaskManagerLessonSwitch(BaseTaskManager):
         )
         set_kwargs = json.dumps(dict(
             lesson_id=self.lesson_id,
+            started=self.started,
             ))
         self.update_settings(name=unique_name,
                              kwargs=set_kwargs,
