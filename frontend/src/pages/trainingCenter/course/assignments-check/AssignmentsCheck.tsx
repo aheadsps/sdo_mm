@@ -2,7 +2,7 @@ import { ArrowRightIcon, PointsIcon } from '@assets/icons'
 import { routes } from '@routes/routes'
 import { BackToPage, Card, Typography } from '@shared/components'
 import clsx from 'clsx'
-import { useParams } from 'react-router-dom'
+import { NavLink, useParams } from 'react-router-dom'
 
 import s from './assignments-check.module.scss'
 import { getStatusTitle, statusColors, statusGroups, statusIcon } from './assignmentsCheckUtils'
@@ -37,7 +37,11 @@ export const AssignmentsCheck = () => {
               </div>
               <div className={s.card__list}>
                 {students.map((student) => (
-                  <div key={student.id} className={s.card__item}>
+                  <NavLink
+                    key={student.id}
+                    className={s.card__item}
+                    to={`${routes.trainingCenterCourse}/user`}
+                  >
                     <div className={s.card__itemLeft}>
                       <PointsIcon width="7px" height="13px" />
                       <Typography variant="body_2" className={s.card__itemName}>
@@ -45,7 +49,7 @@ export const AssignmentsCheck = () => {
                       </Typography>
                     </div>
                     <ArrowRightIcon width="16px" height="16px" />
-                  </div>
+                  </NavLink>
                 ))}
               </div>
             </div>
