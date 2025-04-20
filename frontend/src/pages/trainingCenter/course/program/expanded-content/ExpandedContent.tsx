@@ -1,5 +1,5 @@
 import { routes } from '@routes/routes'
-import { Step } from '@services/api'
+import { StepView } from '@services/api'
 import { setActiveBlockId } from '@services/slices/constructor/constructorSlice'
 import { useAppDispatch } from '@services/store'
 import { Card } from '@shared/components'
@@ -14,7 +14,7 @@ const columns = ['Тема блока', 'Условия видимости', 'К
 
 type Props = {
   lessonId: number
-  steps: Step[]
+  steps: StepView[]
 }
 export const ExpandedContent = ({ lessonId, steps }: Props) => {
   const dispatch = useAppDispatch()

@@ -214,7 +214,7 @@ export type Step = {
   lesson: number
   attachments: Attachment[]
 }
-export type Lesson = {
+/* export type Lesson = {
   course: number
   id: number
   name: string
@@ -223,6 +223,24 @@ export type Lesson = {
   start_date: string
   started: boolean
   steps: Step[]
+  teacher: number
+  test_block: number
+  version: string
+} & {
+  //! Приписан временно для вкладки Программа (методист)
+  //! В новом api этого поля больше нет на бэке ?!
+  expanded: boolean
+} */
+
+export type Lesson = {
+  course: number
+  id: number
+  name: string
+  resource: string
+  serial: number
+  start_date: string
+  started: boolean
+  steps: StepView[]
   teacher: number
   test_block: number
   version: string

@@ -1,5 +1,5 @@
 import { DislikeIcon, LikeIcon } from '@assets/icons'
-import { selectCourse, selectEvent } from '@services/slices'
+import { selectCourse } from '@services/slices'
 import { useAppSelector } from '@services/store'
 import { Card, Typography, ProgressBar } from '@shared/components'
 import { useState } from 'react'
@@ -10,11 +10,9 @@ import s from './about-course.module.scss'
 
 export const AboutCourse = () => {
   const [isFav, setIsFav] = useState<boolean>(false)
-  const event = useAppSelector(selectEvent)
   const course = useAppSelector(selectCourse)
-  // console.log(event)
-  // console.log(course)
   const lessons = Number(course.lessons.length)
+
   return (
     <div className={s.container}>
       <Card className={s.progress}>
