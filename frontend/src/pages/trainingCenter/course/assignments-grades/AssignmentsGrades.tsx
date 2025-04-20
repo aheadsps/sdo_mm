@@ -1,3 +1,4 @@
+import { EditIcon } from '@assets/icons'
 import { routes } from '@routes/routes'
 import { Button, Card, Typography } from '@shared/components'
 import { Link, useParams } from 'react-router-dom'
@@ -41,11 +42,16 @@ export const AssignmentsGrades = () => {
               </Typography>
             </div>
           </div>
-          <Link to={`${routes.trainingCenterCourse}/${courseId}/${assignment.id}`}>
-            <Button variant="primary" className={s.button}>
-              Список учеников
+          <div className={s.buttonBlock}>
+            <Link to={`${routes.trainingCenterCourse}/${courseId}/${assignment.id}`}>
+              <Button variant="primary" className={s.button}>
+                Список учеников
+              </Button>
+            </Link>
+            <Button variant="secondary" className={s.button}>
+              <EditIcon width={'10px'} height={'10px'} />
             </Button>
-          </Link>
+          </div>
         </Card>
       ))}
     </div>
