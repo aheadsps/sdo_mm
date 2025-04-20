@@ -1,6 +1,7 @@
 import { LikeIcon, DislikeIcon } from '@assets/icons'
 import { routes } from '@routes/routes'
 import { EventShort } from '@services/api/types.api'
+import { useState } from 'react'
 import { NavLink } from 'react-router-dom'
 
 import { Button } from '../button'
@@ -15,10 +16,9 @@ interface Props {
 
 export const SubscriptionEventsCard: React.FC<Props> = ({ event }: Props) => {
   const course = event.course
-  // const daysLeft = course.beginner === true ? undefined : getDaysLeft(event.end_date)
-  // const deadlineColor = getBackgroundColor(daysLeft)
+  const [isFav, setIsFav] = useState<boolean>(false)
   // const dispatch = useAppDispatch()
-  // const hendleClick = () => {}
+  // const hendleClick = () => {}  onClick={() => hendleClick()}
   return (
     <div className={s.container}>
       <div className={s.container__top}>
@@ -28,12 +28,15 @@ export const SubscriptionEventsCard: React.FC<Props> = ({ event }: Props) => {
               Курс
             </Typography>
           </div>
-          <button className={s.container__like} onClick={() => hendleClick()}>
-            <DislikeIcon />
-            {/* // {cover.favorite ? <LikeIcon /> : <DislikeIcon />} */}
+          <button className={s.container__like} onClick={() => setIsFav(!isFav)}>
+            {isFav ? <LikeIcon /> : <DislikeIcon />}
           </button>
         </div>
-        <ImageComponent src={course.image} alt="course" className={s.img} />
+        <ImageComponent
+          src={course.image !== null ? course.image : 'img/svg/lesson-02.svg'}
+          alt="course"
+          className={s.img}
+        />
       </div>
 
       <div className={s.container__bottom}>
@@ -51,8 +54,8 @@ export const SubscriptionEventsCard: React.FC<Props> = ({ event }: Props) => {
           variant="secondary"
           className={s.container__btn}
           children="Записаться на курс"
-          as={NavLink}
-          to={`${routes.course}/${course.id}`}
+          // as={NavLink}
+          // to={`${routes.course}/${course.id}`}
         />
       </div>
     </div>

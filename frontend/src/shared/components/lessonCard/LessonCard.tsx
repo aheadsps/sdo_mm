@@ -33,7 +33,11 @@ export const LessonCard: React.FC<Props> = ({ cover }: Props) => {
             {cover.favorite ? <LikeIcon /> : <DislikeIcon />}
           </button>
         </div>
-        <ImageComponent src={course.image} alt="course" className={s.img} />
+        <ImageComponent
+          src={course.image !== null ? course.image : 'img/svg/lesson-02.svg'}
+          alt="course"
+          className={s.img}
+        />
       </div>
       <div className={s.container__bottom}>
         <div className={s.container__card}>

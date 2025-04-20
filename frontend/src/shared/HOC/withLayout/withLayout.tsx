@@ -18,7 +18,7 @@ export const withLayout = <T extends object>(Component: ComponentType<T>) => {
       getEvents()
         .unwrap()
         .then((res) => {
-          console.log(res.results)
+          // console.log(res.results)
           dispatch(setAllEvents(res.results))
         })
         .catch((error) => handleError(error))
