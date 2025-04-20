@@ -20,10 +20,10 @@ const courseStatuses: Option[] = [
 ]
 
 const teachers: Option[] = [
-  { id: 11, value: 'Иванов И.И.' },
-  { id: 12, value: 'Сидоров А.И.' },
-  { id: 13, value: 'Петров П.П.' },
   { id: 14, value: 'Гуру А.С.' },
+  { id: 11, value: 'Иванов И.И.' },
+  { id: 13, value: 'Петров П.П.' },
+  { id: 12, value: 'Сидоров А.И.' },
 ]
 
 export const AboutCourse = () => {

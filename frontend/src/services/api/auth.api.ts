@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
-import { LoginResponse, LoginData, ProfileResponse } from './types'
+import { LoginResponse, LoginData, ProfileResponse } from './types.api'
 import { baseUrl, getToken } from './variables'
 
 export const authApi = createApi({
@@ -36,33 +36,7 @@ export const authApi = createApi({
       }),
       providesTags: ['Profile'],
     }),
-    //  getUserCurrentEvents: build.query<EventsResponse, void>({
-    //    query: () => ({
-    //      url: '/events/currents',
-    //      method: 'GET',
-    //      headers: {
-    //        Authorization: `Token ${getToken()}`,
-    //      },
-    //    }),
-    //    providesTags: () => ['CurrentEvents'],
-    //  }),
-    //  getEvent: build.query<Event, number>({
-    //    query: (event_id) => ({
-    //      url: `/events/${event_id}`,
-    //      method: 'GET',
-    //      headers: {
-    //        Authorization: `Token ${getToken()}`,
-    //      },
-    //    }),
-    //    providesTags: () => ['CurrentEvents'],
-    //  }),
   }),
 })
 
-export const {
-  useLoginMutation,
-  useGetProfileQuery,
-  useLogoutMutation,
-  //   useGetUserCurrentEventsQuery,
-  //   useGetEventQuery,
-} = authApi
+export const { useLoginMutation, useGetProfileQuery, useLogoutMutation } = authApi

@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
-import { Covers, CoversResponse } from './types'
+import { CoversResponse, CurrentCoversResponse } from './types.api'
 import { baseUrl, getToken } from './variables'
 
 export const coversApi = createApi({
@@ -18,9 +18,9 @@ export const coversApi = createApi({
       }),
       providesTags: () => ['Covers'],
     }),
-    getCurrentCovers: build.query<Covers[], void>({
+    getCurrentCovers: build.query<CurrentCoversResponse, void>({
       query: () => ({
-        url: `/covers/currents`,
+        url: `/covers/currents?status=process`,
         method: 'GET',
         headers: {
           Authorization: `Token ${getToken()}`,
@@ -31,4 +31,9 @@ export const coversApi = createApi({
   }),
 })
 
-export const { useGetCoversQuery, useGetCurrentCoversQuery } = coversApi
+export const {
+  useGetCoversQuery,
+  useLazyGetCoversQuery,
+  useGetCurrentCoversQuery,
+  useLazyGetCurrentCoversQuery,
+} = coversApi

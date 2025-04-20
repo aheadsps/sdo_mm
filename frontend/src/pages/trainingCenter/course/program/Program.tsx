@@ -1,5 +1,5 @@
 import { AddItemIcon, ArrowDownIcon, ArrowUpIcon } from '@assets/icons'
-import { LessonType } from '@services/api'
+import { Lesson } from '@services/api'
 import { selectCourse } from '@services/slices'
 import { useAppSelector } from '@services/store'
 import { Button } from '@shared/components'
@@ -17,8 +17,8 @@ export const Program: React.FC = () => {
   const [newLessonCount, setNewLessonCount] = useState<number[]>([])
   const [newTopicCount, setNewTopicCount] = useState<number[]>([])
   const currentCourse = useAppSelector(selectCourse)
-
-  const courseLessons: LessonType[] = currentCourse.lessons.map((lesson) => ({
+  console.log(currentCourse)
+  const courseLessons: Lesson[] = currentCourse.lessons.map((lesson) => ({
     ...lesson,
     expanded: false,
   }))
