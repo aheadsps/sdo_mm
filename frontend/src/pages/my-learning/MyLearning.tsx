@@ -1,12 +1,11 @@
 import {
   selectAllEvents,
   selectCompletedCovers,
-  selectCurrentCovers,
   selectExpiredCovers,
   selectFavoriteCovers,
   selectUserCovers,
 } from '@services/slices'
-import { useAppDispatch, useAppSelector } from '@services/store'
+import { useAppSelector } from '@services/store'
 import {
   AiComponent,
   Tooltipe,
@@ -20,6 +19,7 @@ import { useToggle } from '@shared/hooks'
 import { useState } from 'react'
 
 import s from './myLearning.module.scss'
+import { SubscriptionEventsCard } from '@shared/components/subscriptionEventsCard'
 
 const buttons: string[] = [
   'Все курсы',
@@ -72,7 +72,28 @@ const MyLearningComp: React.FC = () => {
           <TabsButtons tabs={buttons} activeTab={mode} setActiveTab={setMode} />
           <Button children="ИИ" variant="secondary" onClick={toggleAI} />
         </div>
-        <div className={s.container__content}>
+        {mode === 'Все курсы' ? (
+          <div className={s.container__content}>
+            {displayCurrentCourses()?.length > 0 ? (
+              displayCurrentCourses().map((event, index) => {
+                return <SubscriptionEventsCard event={event} key={index} />
+              })
+            ) : (
+              <Typography variant="body_1">В данном списке нет курсов</Typography>
+            )}
+          </div>
+        ) : (
+          <div className={s.container__content}>
+            {displayCurrentCourses()?.length > 0 ? (
+              displayCurrentCourses().map((cover, index) => {
+                return <LessonCard cover={cover} key={index} />
+              })
+            ) : (
+              <Typography variant="body_1">В данном списке нет курсов</Typography>
+            )}
+          </div>
+        )}
+        {/* <div className={s.container__content}>
           {displayCurrentCourses()?.length > 0 ? (
             displayCurrentCourses().map((cover, index) => {
               return <>{mode === 'Все курсы' ? '' : <LessonCard cover={cover} key={index} />}</>
@@ -80,7 +101,7 @@ const MyLearningComp: React.FC = () => {
           ) : (
             <Typography variant="body_1">В данном списке нет курсов</Typography>
           )}
-        </div>
+        </div> */}
       </div>
     </>
   )
