@@ -1,0 +1,5 @@
+{% load i18n %}
+{% autoescape off %}
+{{ type_content }} {{ course }} успешно пройден!
+
+{%  endautoescape %}

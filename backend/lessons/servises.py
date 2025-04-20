@@ -1,10 +1,14 @@
-from datetime import timedelta, datetime, timezone
+from datetime import timedelta, datetime
 
 from loguru import logger
 
+from django.template import TemplateDoesNotExist, loader
+from django.core.mail import EmailMultiAlternatives
+from django.urls import NoReverseMatch
 from django.db.models import QuerySet, Q
 from django.db.transaction import atomic
 from django.contrib.auth import get_user_model
+from django.conf import settings
 from django_celery_beat.models import PeriodicTask
 
 from lessons import models
@@ -281,3 +285,60 @@ class SetEventServise:
             lessons=lessons,
             beginner=beginner,
         )
+
+
+def send_mails(course: str,
+               type_content: str,
+               users,
+               template: str,
+               ) -> None:
+    """Функция для оправки письма,
+    является внутренней начинкой другой функции TASK
+    """
+    email_template_name = template
+    subject_template_name = settings.SUBJECT_PATH
+    server_mail: str = settings.EMAIL_HOST_USER
+    user_email: str = [user.email for user in users]
+    bbc: str = [settings.EMAIL_BCC]
+
+    context = dict(
+        type_content=type_content,
+        system='edu.sdo-metro.ru',
+        course=course,
+    )
+
+    try:
+        subject = loader.render_to_string(
+            subject_template_name,
+            context=context,
+            )
+        subject = "".join(subject.splitlines())
+    except TemplateDoesNotExist:
+        raise TemplateDoesNotExist(
+            f'По заданному пути: {subject_template_name} - '
+            'шаблон не был найден',
+            )
+    except NoReverseMatch:
+        raise NoReverseMatch('Ошибка при постоении пути')
+
+    try:
+        body = loader.render_to_string(
+            email_template_name,
+            context=context,
+            )
+    except TemplateDoesNotExist:
+        raise TemplateDoesNotExist(
+            f'По заданному пути: {email_template_name} - '
+            'шаблон не был найден',
+            )
+    except NoReverseMatch:
+        raise NoReverseMatch('Ошибка при постоении пути')
+
+    email_message = EmailMultiAlternatives(
+        subject=subject,
+        body=body,
+        from_email=server_mail,
+        to=user_email,
+        bcc=bbc,
+        )
+    return email_message.send()
