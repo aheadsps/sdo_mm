@@ -1,9 +1,11 @@
 import { AddItemIcon } from '@assets/icons'
+import { useLazyGetUsersEventQuery } from '@services/api'
 import { Modal } from '@shared/components'
 import { AddComment } from '@shared/components/modal/addComment'
 import { Search } from '@shared/components/search'
 import { useToggle } from '@shared/hooks'
-import { useState } from 'react'
+import { handleError } from '@shared/utils'
+import { useEffect, useState } from 'react'
 
 import { BlockHeader } from '../program'
 
@@ -18,6 +20,16 @@ export const StudentsList = () => {
   const onAddNewStudent = () => {
     setNewStudentCount((prev) => [...prev, prev.length + 1])
   }
+  //Это ф-ция получения всех юзеров по id эвента, возвращает 404
+  const [getUsersEvent] = useLazyGetUsersEventQuery()
+  useEffect(() => {
+    getUsersEvent(5)
+      .unwrap()
+      .then((res) => {
+        console.log(res)
+      })
+      .catch((error) => handleError(error))
+  }, [getUsersEvent])
   return (
     <div className={s.container}>
       {isOpenModal && (

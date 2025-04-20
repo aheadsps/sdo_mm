@@ -1,5 +1,5 @@
-import { useLazyGetUserCurrentEventsQuery } from '@services/api'
-import { setCurrentEvents } from '@services/slices/events'
+import { useLazyGetCurrentCoversQuery } from '@services/api'
+import { setUserCovers } from '@services/slices'
 import { useAppDispatch } from '@services/store'
 import { Header, Loader, Sidebar } from '@shared/components'
 import { useScreenWidth } from '@shared/hooks'
@@ -16,23 +16,29 @@ export const withLayout = <T extends object>(Component: ComponentType<T>) => {
     const { isMobile } = useScreenWidth()
     const dispatch = useAppDispatch()
 
-    // const [getUserCurrentEvents] = useLazyGetUserCurrentEventsQuery()
+    // const [getCovers] = useLazyGetCoversQuery()
     // useEffect(() => {
-    //   getUserCurrentEvents()
+    //   getCovers()
     //     .unwrap()
-    //     .then((res) => dispatch(setCurrentEvents(res.results)))
+    //     .then((res) => {
+    //       console.log(res.results)
+    //       dispatch(setAllCovers(res.results))
+    //     })
     //     .catch((error) => handleError(error))
     //     .finally(() => setisLoading(false))
-    // }, [getUserCurrentEvents, dispatch])
+    // }, [getCovers, dispatch])
 
-    const [getUserCurrentEvents] = useLazyGetUserCurrentEventsQuery()
+    const [getCurrentCovers] = useLazyGetCurrentCoversQuery()
     useEffect(() => {
-      getUserCurrentEvents()
+      getCurrentCovers()
         .unwrap()
-        .then((res) => dispatch(setCurrentEvents(res.results)))
+        .then((res) => {
+          // console.log(res.results)
+          dispatch(setUserCovers(res.results))
+        })
         .catch((error) => handleError(error))
         .finally(() => setisLoading(false))
-    }, [getUserCurrentEvents, dispatch])
+    }, [getCurrentCovers, dispatch])
     return (
       <>
         <Header />
