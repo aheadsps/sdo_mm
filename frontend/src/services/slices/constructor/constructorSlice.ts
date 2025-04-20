@@ -1,14 +1,14 @@
 import type { PayloadAction } from '@reduxjs/toolkit'
 import { createSlice } from '@reduxjs/toolkit'
-import { LessonType, Step } from '@services/api'
+import { Lesson, LessonType, StepView } from '@services/api'
 
 import { NewItem } from './constructor.types'
 
 type InitialState = {
   activeBlockId: number | null
-  currentLessons: LessonType[]
+  currentLessons: Lesson[]
   currentLesson: LessonType | null
-  currentSteps: Step[]
+  currentSteps: StepView[]
 }
 
 const initialState: InitialState = {
@@ -22,7 +22,7 @@ export const constructorSlice = createSlice({
   name: 'add',
   initialState,
   reducers: {
-    addNewBlock: (state, action: PayloadAction<Step>) => {
+    addNewBlock: (state, action: PayloadAction<StepView>) => {
       state.currentSteps.push(action.payload)
     },
     addNewBlockItem: (state, action: PayloadAction<{ newItem: NewItem; blockId: number }>) => {
@@ -49,7 +49,7 @@ export const constructorSlice = createSlice({
         }
       })
     },
-    setCurrentLessons: (state, action: PayloadAction<{ lessons: LessonType[]; id: number }>) => {
+    setCurrentLessons: (state, action: PayloadAction<{ lessons: Lesson[]; id: number }>) => {
       state.currentLessons = action.payload.lessons.map((lesson) =>
         lesson.id === action.payload.id ? { ...lesson, expanded: !lesson.expanded } : lesson
       )
@@ -57,7 +57,7 @@ export const constructorSlice = createSlice({
     setCurrentLesson: (state, action: PayloadAction<LessonType>) => {
       state.currentLesson = action.payload
     },
-    setCurrentSteps: (state, action: PayloadAction<Step[]>) => {
+    setCurrentSteps: (state, action: PayloadAction<StepView[]>) => {
       state.currentSteps = action.payload.map((item) => ({ ...item, blockItems: [] }))
     },
   },

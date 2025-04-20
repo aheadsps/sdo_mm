@@ -13,7 +13,7 @@ const initialState: InitialState = {
     course: 0,
     id: 0,
     name: '',
-    resourse: '',
+    resource: '',
     serial: 0,
     start_date: '',
     started: false,
@@ -21,6 +21,8 @@ const initialState: InitialState = {
     teacher: 0,
     test_block: 0,
     version: '',
+    //Дописала свойство, которого нет в моём типе
+    expanded: false,
   },
   scorm: {
     id: 0,

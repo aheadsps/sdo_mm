@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
-import { LessonsResponse, Lesson } from './types.api'
+import { LessonsResponse, Lesson, LessonType } from './types.api'
 import { baseUrl, getToken } from './variables'
 
 export const lessonsApi = createApi({
@@ -39,7 +39,7 @@ export const lessonsApi = createApi({
       providesTags: ['Scorms'],
     }),
     /* change types here */
-    getLesson: build.query<Lesson, number>({
+    getLesson: build.query<LessonType, number>({
       query: (id: number) => ({
         url: `/lessons/${id}`,
         method: 'GET',
@@ -51,4 +51,9 @@ export const lessonsApi = createApi({
   }),
 })
 
-export const { useGetLessonsQuery, useGetLessonByIdQuery, useLazyGetScormByIdQuery, useGetLessonQuery } = lessonsApi
+export const {
+  useGetLessonsQuery,
+  useGetLessonByIdQuery,
+  useLazyGetScormByIdQuery,
+  useGetLessonQuery,
+} = lessonsApi
