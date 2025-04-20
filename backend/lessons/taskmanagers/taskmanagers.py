@@ -51,7 +51,7 @@ class TaskManagerEventSwitch(BaseTaskManager):
             event_id=self.event_id,
             started=self.started,
             ))
-        self.update_settings(unique_name=unique_name,
+        self.update_settings(name=unique_name,
                              kwargs=set_kwargs,
                              **kwargs,
                              )
@@ -90,7 +90,7 @@ class TaskManagerLessonSwitch(BaseTaskManager):
         set_kwargs = json.dumps(dict(
             lesson_id=self.lesson_id,
             ))
-        self.update_settings(unique_name=unique_name,
+        self.update_settings(name=unique_name,
                              kwargs=set_kwargs,
                              **kwargs,
                              )
@@ -129,7 +129,7 @@ class TaskManagerTestBlockSwitch(BaseTaskManager):
         set_kwargs = json.dumps(dict(
             test_block_id=self.test_block_id,
             ))
-        self.update_settings(unique_name=unique_name,
+        self.update_settings(name=unique_name,
                              kwargs=set_kwargs,
                              **kwargs,
                              )
@@ -149,7 +149,6 @@ class TaskManagerSendMain(BaseTaskManager):
                  lesson_id: int,
                  ):
         super().__init__(date=date)
-        self.test_block_id = int(test_block_id)
 
     def _unique_name(self,
                      test_block_id: int,
@@ -171,7 +170,7 @@ class TaskManagerSendMain(BaseTaskManager):
         set_kwargs = json.dumps(dict(
             test_block_id=self.test_block_id,
             ))
-        self.update_settings(unique_name=unique_name,
+        self.update_settings(name=unique_name,
                              kwargs=set_kwargs,
                              **kwargs,
                              )

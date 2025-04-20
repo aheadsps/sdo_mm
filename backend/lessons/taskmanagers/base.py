@@ -1,6 +1,8 @@
 from typing import ClassVar
 from datetime import datetime
 
+from loguru import logger
+
 from django_celery_beat.models import ClockedSchedule, PeriodicTask
 from django.conf import settings
 
@@ -44,7 +46,7 @@ class BaseTaskManager(AbstractTaskManager):
         return settings
 
     def update_settings(self, **kwargs):
-        self._settings | kwargs
+        self._settings = self._settings | kwargs
 
     def _get_task(self) -> PeriodicTask:
         self._updated_settings()
@@ -79,6 +81,7 @@ class BaseTaskManager(AbstractTaskManager):
         Создает экземпляр PeriodicTask для дальнейшего сохранения
         """
         self._updated_settings()
+        logger.debug(f'settings \n{self.settings}')
         return PeriodicTask(**self.settings)
 
     def create(self) -> PeriodicTask:
