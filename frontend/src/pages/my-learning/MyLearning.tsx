@@ -14,12 +14,12 @@ import {
   LessonCard,
   Typography,
 } from '@shared/components'
+import { SubscriptionEventsCard } from '@shared/components/subscriptionEventsCard'
 import { withLayout } from '@shared/HOC'
 import { useToggle } from '@shared/hooks'
 import { useState } from 'react'
 
 import s from './myLearning.module.scss'
-import { SubscriptionEventsCard } from '@shared/components/subscriptionEventsCard'
 
 const buttons: string[] = [
   'Все курсы',
@@ -43,9 +43,9 @@ const MyLearningComp: React.FC = () => {
   const completedCovers = useAppSelector(selectCompletedCovers)
 
   const displayCurrentCourses = () => {
-    if (mode === 'Все курсы') {
-      return subscriptionEvents
-    }
+    // if (mode === 'Все курсы') {
+    //   return subscriptionEvents
+    // }
     if (mode === 'Назначенные курсы') {
       return userCovers
     }
@@ -74,8 +74,8 @@ const MyLearningComp: React.FC = () => {
         </div>
         {mode === 'Все курсы' ? (
           <div className={s.container__content}>
-            {displayCurrentCourses()?.length > 0 ? (
-              displayCurrentCourses().map((event, index) => {
+            {subscriptionEvents?.length > 0 ? (
+              subscriptionEvents.map((event, index) => {
                 return <SubscriptionEventsCard event={event} key={index} />
               })
             ) : (
