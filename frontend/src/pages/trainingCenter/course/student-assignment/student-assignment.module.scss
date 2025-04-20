@@ -24,10 +24,15 @@
 
 .mainBlock {
   display: flex;
+  justify-content: space-between;
 
   @media screen and (max-width: 1349px) {
     flex-direction: column;
   }
+}
+
+.contentBlock {
+    max-width: 590px;
 }
 
 .materialTitleBlock {
@@ -101,4 +106,27 @@
 .dropdownContent {
     border: none;
     padding: 20px;
+}
+
+.commentOwner {
+    display: flex;
+    justify-content: space-between;
+}
+
+.internal {
+    padding-left: 12px;
+    padding-right: 12px;
+    background-color: var(--color-accent-red500);
+    color: white;
+}
+
+.dateTime {
+    display: flex;
+    gap: 12px;
+    color: var(--color-text-secondary);
+}
+
+.commentText {
+    margin-top: 16px;
+    margin-bottom: 30px;
 }
