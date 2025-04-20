@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
-import { EventsResponse, Event } from './types'
+import { EventsResponse, Event } from './types.api'
 import { baseUrl, getToken } from './variables'
 
 export const eventsApi = createApi({
@@ -8,9 +8,9 @@ export const eventsApi = createApi({
   tagTypes: ['Events'],
   baseQuery: fetchBaseQuery({ baseUrl }),
   endpoints: (build) => ({
-    getUserCurrentEvents: build.query<EventsResponse, void>({
+    getEvents: build.query<EventsResponse, void>({
       query: () => ({
-        url: '/events/currents',
+        url: '/events',
         method: 'GET',
         headers: {
           Authorization: `Token ${getToken()}`,
@@ -28,8 +28,18 @@ export const eventsApi = createApi({
       }),
       providesTags: () => ['Events'],
     }),
+    //Вывод пользователей исходя из эвента
+    getUsersEvent: build.query<string, number>({
+      query: (event_id) => ({
+        url: `/events/${event_id}/users`,
+        method: 'GET',
+        headers: {
+          Authorization: `Token ${getToken()}`,
+        },
+      }),
+      // providesTags: () => ['Events'],
+    }),
   }),
 })
 
-// export const { useGetUserCurrentEventsQuery, useGetEventQuery } = eventsApi
-export const { useLazyGetUserCurrentEventsQuery, useGetEventQuery } = eventsApi
+export const { useGetEventsQuery, useGetEventQuery, useLazyGetUsersEventQuery } = eventsApi

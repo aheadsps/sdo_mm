@@ -1,6 +1,6 @@
 import { ArchiveIcon } from '@assets/icons'
 import { routes } from '@routes/routes'
-import { Course } from '@services/api'
+import { CourseShort } from '@services/api'
 import { setCurrentCourseId } from '@services/slices'
 import { useAppDispatch } from '@services/store'
 import { formatDate } from '@shared/utils'
@@ -12,7 +12,7 @@ import { Button } from '../button'
 import s from './courseCard.module.scss'
 
 type Props = {
-  item: Course
+  item: CourseShort
 } & ComponentPropsWithoutRef<'div'>
 
 export const CourseCard = ({ item }: Props) => {

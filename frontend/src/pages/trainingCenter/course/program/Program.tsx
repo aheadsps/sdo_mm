@@ -1,4 +1,5 @@
 import { AddItemIcon, ArrowDownIcon, ArrowUpIcon } from '@assets/icons'
+import { Lesson } from '@services/api'
 import { selectCourse } from '@services/slices'
 import {
   selectCurrentLessons,
