@@ -1,3 +1,4 @@
+import { EditIcon } from '@assets/icons'
 import { Button, Card, Typography } from '@shared/components'
 
 import s from './assignments-grades.module.scss'
@@ -35,9 +36,14 @@ export const AssignmentsGrades = () => {
             </Typography>
           </div>
         </div>
-        <Button variant="primary" className={s.button}>
-          Список учеников
-        </Button>
+        <div className={s.buttonBlock}>
+          <Button variant="primary" className={s.button}>
+            Список учеников
+          </Button>
+          <Button variant="secondary" className={s.button}>
+            <EditIcon width={'10px'} height={'10px'} />
+          </Button>
+        </div>
       </Card>
       <Card className={s.card}>
         <Typography variant="header_6" className={s.cardTitle}>
@@ -69,9 +75,14 @@ export const AssignmentsGrades = () => {
             </Typography>
           </div>
         </div>
-        <Button variant="primary" className={s.button}>
-          Список учеников
-        </Button>
+        <div className={s.buttonBlock}>
+          <Button variant="primary" className={s.button}>
+            Список учеников
+          </Button>
+          <Button variant="secondary" className={s.button}>
+            <EditIcon width={'10px'} height={'10px'} />
+          </Button>
+        </div>
       </Card>
       <Card className={s.card}>
         <Typography variant="header_6" className={s.cardTitle}>
@@ -103,9 +114,14 @@ export const AssignmentsGrades = () => {
             </Typography>
           </div>
         </div>
-        <Button variant="primary" className={s.button}>
-          Список учеников
-        </Button>
+        <div className={s.buttonBlock}>
+          <Button variant="primary" className={s.button}>
+            Список учеников
+          </Button>
+          <Button variant="secondary" className={s.button}>
+            <EditIcon width={'10px'} height={'10px'} />
+          </Button>
+        </div>
       </Card>
     </div>
   )

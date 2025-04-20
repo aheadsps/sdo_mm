@@ -1,4 +1,5 @@
-import { AddedMaterial, LessonBlock, NewItem } from '@services/slices/constructor/constructor.types'
+import { Step } from '@services/api'
+import { AddedMaterial, NewItem } from '@services/slices/constructor/constructor.types'
 import { addNewBlock, setActiveBlockId } from '@services/slices/constructor/constructorSlice'
 import { useAppDispatch } from '@services/store'
 import { Typography } from '@shared/components'
@@ -13,9 +14,16 @@ type Props = {
   isSidebarPointed: boolean
   lastBlockId: number | null
   setLastBlockId: (value: number) => void
+  lessonId: number
 }
 
-export const CMenu = ({ setNewItem, isSidebarPointed, lastBlockId, setLastBlockId }: Props) => {
+export const CMenu = ({
+  setNewItem,
+  isSidebarPointed,
+  lastBlockId,
+  setLastBlockId,
+  lessonId,
+}: Props) => {
   const [addedItemId, setAddedItemId] = useState<number>(0)
   const dispatch = useAppDispatch()
 
@@ -30,11 +38,15 @@ export const CMenu = ({ setNewItem, isSidebarPointed, lastBlockId, setLastBlockI
   }
 
   const addNewItemModule = () => {
-    const newBlockId = lastBlockId ? ++lastBlockId : 1
-    const newItem: LessonBlock = {
+    const newBlockId = (lastBlockId ?? 0) + 1
+    const newItem: Step = {
       id: newBlockId,
       title: '',
+      serial: 1,
+      attachments: [],
+      content_text: '',
       blockItems: [],
+      lesson: lessonId,
     }
     setLastBlockId(newBlockId)
     dispatch(setActiveBlockId({ blockId: newItem.id }))

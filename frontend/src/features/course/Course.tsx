@@ -19,7 +19,21 @@ export const Course = () => {
     if (currentCourse) dispatch(setCourseById(currentCourse))
   }, [currentCourse, dispatch])
   const course = useAppSelector(selectCourse)
-  // console.log(course)
+  // const event = useAppSelector(selectEvent)
+  /* const isScorms = Boolean(course.scorms.length > 0) */
+  const isScorms = course.is_scorm
+  const currentCourseId = useAppSelector(selectCurrentEventId)
+  const currentScorms = useAppSelector(selectCurrentScorms)
+  // if (isScorms) const [getScormById] = useLazyGetScormByIdQuery(currentScorms[0])
+  // useEffect(() => {
+  //   getScormById()
+  //     .unwrap()
+  //     .then((res) => dispatch(setScormById(res.results)))
+  //     .catch((error) => handleError(error))
+  //     .finally(() => setisLoading(false))
+  // }, [getScormById, dispatch])
+  const currentId = isScorms ? currentScorms : currentCourseId
+  console.log(isScorms, currentId)
   return (
     <div className={s.courseContent}>
       <BackToPage to={routes.learning}>Вернуться к выбору курса</BackToPage>

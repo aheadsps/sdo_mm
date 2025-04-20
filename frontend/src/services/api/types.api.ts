@@ -1,4 +1,31 @@
-//Responses типизация ответов с сервера
+import { NewItem } from '@services/slices/constructor/constructor.types'
+export type StepView = {
+  attachments: Attachment[]
+  content_text: string
+  id: number
+  lesson: number
+  serial: number
+  teacher: number
+  title: string
+} & {
+  blockItems: NewItem[]
+}
+
+export type LessonType = {
+  course: number
+  id: number
+  name: string
+  resource: string | null //????
+  serial: number
+  start_date: string
+  started: boolean
+  steps: StepView[]
+  teacher: number
+  test_block: number
+  version: string | null //???
+} & {
+  expanded: boolean
+} //Responses типизация ответов с сервера
 
 export type ProfileResponse = {
   id: number
@@ -191,7 +218,7 @@ export type Lesson = {
   course: number
   id: number
   name: string
-  resourse: string
+  resource: string
   serial: number
   start_date: string
   started: boolean
@@ -201,9 +228,10 @@ export type Lesson = {
   version: string
 } & {
   //! Приписан временно для вкладки Программа (методист)
-  //! В новом api этого поля больше нет на бэке !
+  //! В новом api этого поля больше нет на бэке ?!
   expanded: boolean
 }
+
 export type Scorm = {
   id: number
   teacher: number
