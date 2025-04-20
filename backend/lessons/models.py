@@ -354,12 +354,6 @@ class TestBlock(models.Model):
                                   null=True,
                                   blank=True,
                                   )
-    max_score = models.DecimalField(_("Максимальный балл"),
-                                     max_digits=5,
-                                     decimal_places=2,
-                                     default=0.00,
-                                     help_text="Максимальный балл"
-                                     )
 
     class Meta:
         verbose_name = "тестовый блок"
@@ -402,11 +396,6 @@ class Question(models.Model):
                                    null=True,
                                    blank=True,
                                    )
-    type_question = models.CharField(verbose_name=_('Тип вопроса'),
-                                     max_length=8,
-                                     choices=settings.TYPE_QUESTION,
-                                     help_text='Текущий тип данного вопроса',
-                                     )
     check_automaty = models.BooleanField(_("Автоматическая проверка"),
                                          default=False,
                                          help_text="Автоматическая проверка"
