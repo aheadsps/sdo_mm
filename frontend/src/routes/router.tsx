@@ -5,6 +5,7 @@ import { CoursePage } from '@pages/course/CoursePage'
 import { Library } from '@pages/library'
 import { MainPage } from '@pages/main'
 import { MyLearning } from '@pages/my-learning/MyLearning'
+import { AssignmentsCheckLayout } from '@pages/trainingCenter/course'
 import { TrainingCenterCourse } from '@pages/trainingCenter/course/TrainingCenterCourse'
 import { TrainingCenter } from '@pages/trainingCenter/TrainingCenter'
 import { Role } from '@shared/components/sidebar/sidebar.types'
@@ -43,7 +44,11 @@ export const router = createBrowserRouter([
         element: <TrainingCenterCourse />,
       },
       {
-        path: routes.constructor,
+        path: `${routes.trainingCenterCourse}/:id/:assignmentId`,
+        element: <AssignmentsCheckLayout />,
+      },
+      {
+        path: `${routes.constructor}/:id`,
         element: <ConstructorPage />,
       },
     ],

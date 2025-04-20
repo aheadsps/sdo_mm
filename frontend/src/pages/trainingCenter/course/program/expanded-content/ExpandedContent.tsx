@@ -1,4 +1,7 @@
-import { Step } from '@services/api'
+import { routes } from '@routes/routes'
+import { StepView } from '@services/api'
+import { setActiveBlockId } from '@services/slices/constructor/constructorSlice'
+import { useAppDispatch } from '@services/store'
 import { Card } from '@shared/components'
 
 import { BlockHeader } from '../block-header/BlockHeader'
@@ -10,9 +13,16 @@ import s from './expanded-content.module.scss'
 const columns = ['Тема блока', 'Условия видимости', 'Конструкторт']
 
 type Props = {
-  steps: Step[]
+  lessonId: number
+  steps: StepView[]
 }
-export const ExpandedContent = ({ steps }: Props) => {
+export const ExpandedContent = ({ lessonId, steps }: Props) => {
+  const dispatch = useAppDispatch()
+
+  const onStepClick = (id: number) => {
+    dispatch(setActiveBlockId({ blockId: id }))
+  }
+
   return (
     <div className={s.expandedContent}>
       <BlockHeader columns={columns} />
@@ -23,6 +33,8 @@ export const ExpandedContent = ({ steps }: Props) => {
             lesson={step}
             options={optionsAccess}
             isExpandableContent
+            onClick={() => onStepClick(step.id)}
+            path={`${routes.constructor}/${lessonId}`}
           />
         ))}
       </Card>

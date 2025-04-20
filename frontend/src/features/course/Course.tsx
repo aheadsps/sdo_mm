@@ -25,7 +25,8 @@ export const Course = () => {
   }, [currentCourse, dispatch])
   const course = useAppSelector(selectCourse)
   // const event = useAppSelector(selectEvent)
-  const isScorms = Boolean(course.scorms.length > 0)
+  /* const isScorms = Boolean(course.scorms.length > 0) */
+  const isScorms = course.is_scorm
   const currentCourseId = useAppSelector(selectCurrentEventId)
   const currentScorms = useAppSelector(selectCurrentScorms)
   // if (isScorms) const [getScormById] = useLazyGetScormByIdQuery(currentScorms[0])
@@ -55,11 +56,12 @@ export const Course = () => {
           </Button>
         </div>
       </div>
-      {isScorms ? (
-        <iframe
-          className={s.scorms}
-          // src={}
-        ></iframe>
+      {course.is_scorm ? (
+        <>
+          {course?.lessons.map((lesson) => {
+            return <iframe key={lesson.id} className={s.scorms} src={lesson.resource}></iframe>
+          })}
+        </>
       ) : (
         <>
           <Tabs tabs={tabsData} variant="secondary" />

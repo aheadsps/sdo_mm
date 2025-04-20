@@ -1,10 +1,9 @@
-import { BasketIcon, CopyIcon, DragIcon, PaintIcon } from '@assets/icons'
-import PictureIcon from '@assets/icons/PictureIcon'
-import VideoIcon from '@assets/icons/VideoIcon'
+import { BasketIcon, CopyIcon, DragIcon, PaintIcon, PictureIcon, VideoIcon } from '@assets/icons'
 import { selectActiveBlockId, deleteItem } from '@services/slices/constructor/constructorSlice'
 import { useAppDispatch, useAppSelector } from '@services/store'
-import { Typography } from '@shared/components/typography'
-import React, { useRef } from 'react'
+import { Typography } from '@shared/components'
+import { useFileUpload } from '@shared/hooks'
+import { FC } from 'react'
 
 import { Card } from '../card'
 import { ConstructorCard } from '../constructorCard'
@@ -21,13 +20,13 @@ interface Props {
   itemId: number
 }
 
-export const ConstructorContent: React.FC<Props> = ({ type, itemId }) => {
-  const fileInputRef = useRef<HTMLInputElement>(null)
+export const ConstructorContent: FC<Props> = ({ type, itemId }) => {
   const activeBlockId = useAppSelector(selectActiveBlockId)
+  const { fileInputRef, fileName, handleButtonClick, handleFileChange } = useFileUpload()
   const dispatch = useAppDispatch()
 
   const onDeleteItem = () => {
-    dispatch(deleteItem({ itemId, activeBlockId }))
+    if (activeBlockId) dispatch(deleteItem({ itemId, activeBlockId }))
   }
 
   return (
@@ -92,10 +91,12 @@ export const ConstructorContent: React.FC<Props> = ({ type, itemId }) => {
         {type === 'image' && (
           <ConstructorCard deleteItem={onDeleteItem}>
             <div className={s.mediaBlock}>
-              <div className={s.clickZone} onClick={() => fileInputRef.current?.click()}>
+              <div className={s.clickZone} onClick={handleButtonClick}>
                 <div className={s.iconCircle}>
                   <PictureIcon />
                 </div>
+
+                {fileName && <Typography variant="body_2">{fileName}</Typography>}
 
                 <Typography variant="body_1" className={s.uploadText}>
                   Загрузить изображение можно нажав на этот блок или вставить ссылку на файл
@@ -107,14 +108,7 @@ export const ConstructorContent: React.FC<Props> = ({ type, itemId }) => {
                   onClick={(e) => e.stopPropagation()}
                 />
 
-                <Typography
-                  variant="caption"
-                  className={s.caption}
-                  onClick={(e: React.MouseEvent) => {
-                    e.stopPropagation()
-                    fileInputRef.current?.click()
-                  }}
-                >
+                <Typography variant="caption" className={s.caption} onClick={handleButtonClick}>
                   Загрузка файлов: jpg, jpeg, png, gif (до 5 Mb) <br />
                   Источники: Unsplash, Pexels, Pixabay, Freepik, Flickr, StockSnap
                 </Typography>
@@ -125,6 +119,7 @@ export const ConstructorContent: React.FC<Props> = ({ type, itemId }) => {
                 type="file"
                 accept="image/jpeg, image/png, image/jpg, image/gif"
                 className={s.fileInput}
+                onChange={handleFileChange}
               />
             </div>
           </ConstructorCard>

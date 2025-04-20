@@ -42,10 +42,21 @@
   color: var(--color-text-primary);
 }
 
+.buttonBlock {
+  display: flex;
+  gap: 40px;
+
+  @media screen and (min-width: 1350px) {
+    justify-content: space-between;
+  }
+}
+
 .button {
   margin-top: 40px;
 
-  @media screen and (max-width: 1349px) {
-    width: 100%;
+  &:first-child {
+    @media screen and (max-width: 1349px) {
+      width: 100%;
+    }
   }
 }

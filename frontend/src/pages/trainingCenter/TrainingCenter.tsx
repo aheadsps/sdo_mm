@@ -31,7 +31,6 @@ const Training = () => {
   }, [courses?.results, dispatch])
 
   const allCourses = useAppSelector(selectCourses)
-
   return (
     <div className={s.container}>
       <Title txt={txt} btn1={btn1} btn2={btn2} fstBtn={openModal} scndBtn={goToConstructor} />
