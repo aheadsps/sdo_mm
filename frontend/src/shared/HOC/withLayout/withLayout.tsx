@@ -25,17 +25,17 @@ export const withLayout = <T extends object>(Component: ComponentType<T>) => {
         .finally(() => setisLoading(false))
     }, [getEvents, dispatch])
 
-    // const [getCurrentCovers] = useLazyGetCurrentCoversQuery()
-    // useEffect(() => {
-    //   getCurrentCovers()
-    //     .unwrap()
-    //     .then((res) => {
-    //       // console.log(res.results)
-    //       dispatch(setUserCovers(res.results))
-    //     })
-    //     .catch((error) => handleError(error))
-    //     .finally(() => setisLoading(false))
-    // }, [getCurrentCovers, dispatch])
+    const [getCurrentCovers] = useLazyGetCurrentCoversQuery()
+    useEffect(() => {
+      getCurrentCovers('')
+        .unwrap()
+        .then((res) => {
+          // console.log(res.results)
+          dispatch(setUserCovers(res.results))
+        })
+        .catch((error) => handleError(error))
+        .finally(() => setisLoading(false))
+    }, [getCurrentCovers, dispatch])
     return (
       <>
         <Header />

@@ -1,11 +1,12 @@
 import {
+  selectAllEvents,
   selectCompletedCovers,
   selectCurrentCovers,
   selectExpiredCovers,
   selectFavoriteCovers,
   selectUserCovers,
 } from '@services/slices'
-import { useAppSelector } from '@services/store'
+import { useAppDispatch, useAppSelector } from '@services/store'
 import {
   AiComponent,
   Tooltipe,
@@ -32,20 +33,21 @@ const MyLearningComp: React.FC = () => {
   const [mode, setMode] = useState<string>('Все курсы')
   const { isOpen: isTooltipeOpen, close: closeTooltipe } = useToggle(false)
   const { isOpen: isAIOpen, close: closeAI, toggle: toggleAI } = useToggle()
-
+  // const dispatch = useAppDispatch()
+  const subscriptionEvents = useAppSelector(selectAllEvents)
+  console.log(subscriptionEvents)
   const userCovers = useAppSelector(selectUserCovers)
-  const currentCovers = useAppSelector(selectCurrentCovers)
+  // const currentCovers = useAppSelector(selectCurrentCovers)
   const expiredCovers = useAppSelector(selectExpiredCovers)
   const favoriteCovers = useAppSelector(selectFavoriteCovers)
   const completedCovers = useAppSelector(selectCompletedCovers)
-  // const completedCovers = useAppSelector(selectCompletedCovers)
 
   const displayCurrentCourses = () => {
     if (mode === 'Все курсы') {
-      return userCovers
+      return subscriptionEvents
     }
     if (mode === 'Назначенные курсы') {
-      return currentCovers
+      return userCovers
     }
     if (mode === 'Просроченные курсы') {
       return expiredCovers
@@ -55,7 +57,6 @@ const MyLearningComp: React.FC = () => {
     }
     return completedCovers
   }
-
   return (
     <>
       <AiComponent isOpen={isAIOpen} close={closeAI} />
@@ -74,7 +75,7 @@ const MyLearningComp: React.FC = () => {
         <div className={s.container__content}>
           {displayCurrentCourses()?.length > 0 ? (
             displayCurrentCourses().map((cover, index) => {
-              return <LessonCard cover={cover} key={index} />
+              return <>{mode === 'Все курсы' ? '' : <LessonCard cover={cover} key={index} />}</>
             })
           ) : (
             <Typography variant="body_1">В данном списке нет курсов</Typography>

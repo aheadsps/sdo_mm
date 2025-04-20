@@ -16,16 +16,10 @@ interface Props {
 
 export const LessonCard: React.FC<Props> = ({ cover }: Props) => {
   const course = cover.event.course
-  const daysLeft = cover.event.end_date ? getDaysLeft(cover.event.end_date) : 10
+  const daysLeft = course.beginner === true ? undefined : getDaysLeft(cover.event.end_date)
   const deadlineColor = getBackgroundColor(daysLeft)
   // const dispatch = useAppDispatch()
-  // console.log(cover)
-  const hendleClick = () => {
-    // dispatch(setIsScorms(isScorm))
-    // if (isScorm) dispatch(setCurrentScorms(scorms))
-    // else dispatch(setCurrentEventId(cover.event.id))
-    // dispatch(setEvent(cover.event))
-  }
+  const hendleClick = () => {}
   return (
     <div className={s.container}>
       <div className={s.container__top}>
@@ -35,7 +29,7 @@ export const LessonCard: React.FC<Props> = ({ cover }: Props) => {
               Курс
             </Typography>
           </div>
-          <button className={s.container__like}>
+          <button className={s.container__like} onClick={() => hendleClick()}>
             {cover.favorite ? <LikeIcon /> : <DislikeIcon />}
           </button>
         </div>
@@ -55,7 +49,7 @@ export const LessonCard: React.FC<Props> = ({ cover }: Props) => {
                     style={{ backgroundColor: `${deadlineColor}` }}
                   ></div>
                   <Typography variant="body_2" className={s.container__paramTxt}>
-                    {course.beginner === true
+                    {daysLeft === undefined
                       ? 'Бессрочно'
                       : cover.status === 'process' && daysLeft > 0
                         ? `${daysLeft} дней`
@@ -88,11 +82,11 @@ export const LessonCard: React.FC<Props> = ({ cover }: Props) => {
           </div>
         </div>
         <Button
+          variant={cover.status === 'expected' ? 'secondary' : 'primary'}
           className={s.container__btn}
-          children="Перейти к обучению"
+          children={cover.status === 'expected' ? 'Записаться на курс' : 'Перейти к обучению'}
           as={NavLink}
           to={`${routes.course}/${cover.event.course.id}`}
-          onClick={() => hendleClick()}
         />
       </div>
     </div>
