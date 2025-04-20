@@ -9,44 +9,46 @@
   flex-wrap: nowrap;
   gap: 45px;
   max-width: 100vw;
-  overflow-x: auto;
   white-space: nowrap;
   scrollbar-width: none;
+}
+
+.cards {
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  gap: 24px;
+  
+  max-width: 100vw;
+  white-space: nowrap;
+  scrollbar-width: none;
+  
 }
 
 .card {
   display: flex;
   justify-content: space-between;
   gap: 24px;
-  //   overflow-x: hidden;
   height: 100%;
+  border-radius: 10px 10px 0 0;
 
-
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  gap: 45px;
-  max-width: 100vw;
-  overflow-x: auto;
-  white-space: nowrap;
-  scrollbar-width: none;
-
-  &__container {
+  &__content {
     width: 312px;
     height: fit-content;
 
     display: flex;
     flex-direction: column;
     gap: 16px;
-    box-shadow: 0 0 15px 0 #2c0b0f0a;
     border-radius: 10px 10px 0 0;
-    // overflow: hidden;
 
     @media screen and (max-width: 1349px) {
       width: 100%;
       height: fit-content;
     }
   }
+
   &__status {
     background-color: aqua;
     padding: 20px;
@@ -103,4 +105,16 @@
 
 .statusDone {
   background-color: var(--color-accent-success);
+}
+
+.backToPage {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 30px;
+  text-decoration: none;
+
+  &:visited {
+    color: var(--color-text-secondary);
+  }
 }

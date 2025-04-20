@@ -1,6 +1,6 @@
 import { forwardRef, Ref, SVGProps } from 'react'
 
-const ArrowRightIcon = forwardRef<SVGSVGElement, SVGProps<SVGSVGElement>>(
+const ArrowLeftIcon = forwardRef<SVGSVGElement, SVGProps<SVGSVGElement>>(
   (props, ref: Ref<SVGSVGElement>) => (
     <svg
       width="6"
@@ -22,4 +22,4 @@ const ArrowRightIcon = forwardRef<SVGSVGElement, SVGProps<SVGSVGElement>>(
   )
 )
 
-export default ArrowRightIcon
+export default ArrowLeftIcon
