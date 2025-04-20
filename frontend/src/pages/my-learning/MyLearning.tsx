@@ -37,7 +37,7 @@ const MyLearningComp: React.FC = () => {
   const subscriptionEvents = useAppSelector(selectAllEvents)
   console.log(subscriptionEvents)
   const userCovers = useAppSelector(selectUserCovers)
-  // const currentCovers = useAppSelector(selectCurrentCovers)
+  console.log(userCovers)
   const expiredCovers = useAppSelector(selectExpiredCovers)
   const favoriteCovers = useAppSelector(selectFavoriteCovers)
   const completedCovers = useAppSelector(selectCompletedCovers)
@@ -93,15 +93,6 @@ const MyLearningComp: React.FC = () => {
             )}
           </div>
         )}
-        {/* <div className={s.container__content}>
-          {displayCurrentCourses()?.length > 0 ? (
-            displayCurrentCourses().map((cover, index) => {
-              return <>{mode === 'Все курсы' ? '' : <LessonCard cover={cover} key={index} />}</>
-            })
-          ) : (
-            <Typography variant="body_1">В данном списке нет курсов</Typography>
-          )}
-        </div> */}
       </div>
     </>
   )
