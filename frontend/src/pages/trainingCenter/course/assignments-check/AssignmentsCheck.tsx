@@ -40,19 +40,17 @@ export const AssignmentsCheck = () => {
                 </Typography>
               </div>
 
-              <div className={s.studentsList}>
+              <div className={s.card__list}>
                 {students.map((student) => (
-                  <div key={student.id} className={s.studentCard}>
-                    <div className={s.studentCardleft}>
-                      <PointsIcon width="7px" height="13px" className={s.library__icon} />
-                      <Typography variant="body_2" className={s.studentName}>
+                  <div key={student.id} className={s.card__item}>
+                    <div className={s.card__itemLeft}>
+                      <PointsIcon width="7px" height="13px" />
+                      <Typography variant="body_2" className={s.card__itemName}>
                         {student.name}
                       </Typography>
                     </div>
 
-                    <div className={s.studentCardright}>
-                      <ArrowRightIcon width="16px" height="16px" className={s.library__icon} />
-                    </div>
+                    <ArrowRightIcon width="16px" height="16px" />
                   </div>
                 ))}
               </div>

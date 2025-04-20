@@ -7,7 +7,6 @@
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
-  gap: 45px;
   max-width: 100vw;
   white-space: nowrap;
   scrollbar-width: none;
@@ -20,11 +19,10 @@
   flex-direction: row;
   flex-wrap: nowrap;
   gap: 24px;
-  
+
   max-width: 100vw;
   white-space: nowrap;
   scrollbar-width: none;
-  
 }
 
 .card {
@@ -62,41 +60,38 @@
     color: var(--color-bg-gray100);
     border-radius: 10px 10px 0 0;
   }
-}
 
+  &__list {
+    padding: 0px 16px 16px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
 
+  &__item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    justify-content: space-between;
+    padding: 12px;
 
-.studentCard {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  justify-content: space-between;
-}
+    &:hover {
+      box-shadow: 0 0 15px 0 rgba(44, 11, 15, 0.06);
+      border-radius: 0px 8px 8px 0;
+    }
+  }
 
-.studentsList {
-  padding: 0px 16px 16px 0;
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-}
+  &__itemName {
+    font-size: var(--font-size-xs);
+  }
 
-.studentCard {
-  padding: 12px;
-  &:hover {
-    box-shadow: 0 0 15px 0 rgba(44, 11, 15, 0.06);
-    border-radius: 0px 8px 8px 0;
+  &__itemLeft {
+    display: flex;
+    align-items: center;
+    gap: 12px;
   }
 }
 
-.studentCardleft {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.studentName {
-  font-size: var(--font-size-xs);
-}
 
 .statusUnsert {
   background-color: var(--color-accent-negative);
@@ -119,5 +114,20 @@
 
   &:visited {
     color: var(--color-text-secondary);
+  }
+}
+
+
+@media screen and (min-width: 768px) and (max-width: 1349px) {
+  .container__title {
+    font-size: var(--font-size-l);
+    margin-bottom: 40px;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .container__title {
+    font-size: var(--font-size-h6);
+    margin-bottom: 40px;
   }
 }
