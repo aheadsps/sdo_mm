@@ -1,7 +1,8 @@
-import { ArrowLeftIcon, ArrowRightIcon, PointsIcon } from '@assets/icons'
-import { Card, Typography } from '@shared/components'
+import { ArrowRightIcon, PointsIcon } from '@assets/icons'
+import { routes } from '@routes/routes'
+import { BackToPage, Card, Typography } from '@shared/components'
 import clsx from 'clsx'
-import { NavLink, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 
 import s from './assignments-check.module.scss'
 import { getStatusTitle, statusColors, statusGroups, statusIcon } from './assignmentsCheckUtils'
@@ -18,17 +19,12 @@ export const AssignmentsCheck = () => {
 
   return (
     <div className={s.container}>
-      <NavLink to={`/training-center/course/${courseId}`} className={s.backToPage}>
-        <ArrowLeftIcon className={s.icon} />
-        <Typography variant="body_2" className={s.backText}>
-          Вернуться к редактированию курса
-        </Typography>
-      </NavLink>
-
+      <BackToPage to={`${routes.trainingCenterCourse}/${courseId}`}>
+        Вернуться к редактированию курса
+      </BackToPage>
       <Typography variant="header_2" className={s.container__title}>
         Проверка заданий по курсу
       </Typography>
-
       <div className={s.cards}>
         {Object.entries(statusGroups).map(([status, students]) => (
           <Card className={s.card}>
@@ -39,7 +35,6 @@ export const AssignmentsCheck = () => {
                   {getStatusTitle(status as Status)}
                 </Typography>
               </div>
-
               <div className={s.card__list}>
                 {students.map((student) => (
                   <div key={student.id} className={s.card__item}>
@@ -49,7 +44,6 @@ export const AssignmentsCheck = () => {
                         {student.name}
                       </Typography>
                     </div>
-
                     <ArrowRightIcon width="16px" height="16px" />
                   </div>
                 ))}
