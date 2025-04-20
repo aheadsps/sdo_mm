@@ -40,7 +40,6 @@ def send_mail_users(course: str,
                     type_content: str,
                     template: str,
                     ) -> str:
-
     qfilter = Q(*[Q(id=user_id) for user_id in users])
     users = get_user_model()._default_manager.filter(qfilter).get_queryset()
     send_mails(

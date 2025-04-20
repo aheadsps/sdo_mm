@@ -62,7 +62,7 @@ class BaseTaskManager(AbstractTaskManager):
 
     def _updated_settings(self, **kwargs):
         """
-        Переопределение строек для стандарных settings
+        Переопределение настроек для стандарных settings
         Обязательно для переопределения
         """
         raise UpdateSettingsNotSet('Необходимо установить логику переопределения настроек')

@@ -1,4 +1,5 @@
 import json
+from typing import Literal
 
 from datetime import datetime
 
@@ -142,29 +143,38 @@ class TaskManagerSendMain(BaseTaskManager):
 
     def __init__(self,
                  date: datetime,
-                 users: list,
                  course_id: int,
-                 lesson_id: int,
+                 ids_users: list[int],
+                 template: str,
+                 type_content: Literal['Курс', 'Урок'] = 'Курс',
                  ):
         super().__init__(date=date)
+        self.course_id = int(course_id)
+        self.ids_users = list(ids_users)
+        self.template = str(template)
+        self.type_content = str(type_content)
 
     def _unique_name(self,
-                     test_block_id: int,
+                     type_content: str,
+                     course_id: int,
                      ) -> str:
         """
         Получение уникального имени
         """
         time_cast = self._time_to_UNIX()
-        unique_name = f'EmailSend_{test_block_id}_{time_cast}'
+        unique_name = f'EmailSend_{course_id}_{type_content}_{time_cast}'
         return unique_name
 
     def _updated_settings(self, **kwargs):
         unique_name = self._unique_name(
-            test_block_id=self.test_block_id,
-            date=self.date,
+            type_content=self.type_content,
+            course_id=self.course_id,
         )
         set_kwargs = json.dumps(dict(
-            test_block_id=self.test_block_id,
+            course=self.course_id,
+            users=self.ids_users,
+            type_content=self.type_content,
+            template=self.template,
             ))
         self.update_settings(name=unique_name,
                              kwargs=set_kwargs,
