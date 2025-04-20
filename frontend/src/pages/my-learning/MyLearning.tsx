@@ -38,6 +38,7 @@ const MyLearningComp: React.FC = () => {
   const expiredCovers = useAppSelector(selectExpiredCovers)
   const favoriteCovers = useAppSelector(selectFavoriteCovers)
   const completedCovers = useAppSelector(selectCompletedCovers)
+  // const completedCovers = useAppSelector(selectCompletedCovers)
 
   const displayCurrentCourses = () => {
     if (mode === 'Все курсы') {
