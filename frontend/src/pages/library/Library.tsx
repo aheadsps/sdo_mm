@@ -64,15 +64,17 @@ const LibraryComp: React.FC = () => {
                     <Typography variant="body_1">{article.title}</Typography>
                   </div>
                   <div className={s.library__articleRight}>
-                    <Typography
-                      variant="body_2"
-                      className={clsx(s.library__category, categoryColors(article.category))}
-                    >
-                      {article.category}
-                    </Typography>
                     <Typography className={s.library__date} variant="body_2">
                       {article.date}
                     </Typography>
+                    {mode !== article.category && (
+                      <Typography
+                        variant="body_2"
+                        className={clsx(s.library__category, categoryColors(article.category))}
+                      >
+                        {article.category}
+                      </Typography>
+                    )}
                   </div>
                 </div>
               </div>
