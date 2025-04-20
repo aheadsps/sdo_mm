@@ -1,4 +1,4 @@
-import { Step } from '@services/api'
+import { StepView } from '@services/api'
 import { AddedMaterial, NewItem } from '@services/slices/constructor/constructor.types'
 import { addNewBlock, setActiveBlockId } from '@services/slices/constructor/constructorSlice'
 import { useAppDispatch } from '@services/store'
@@ -39,13 +39,14 @@ export const CMenu = ({
 
   const addNewItemModule = () => {
     const newBlockId = (lastBlockId ?? 0) + 1
-    const newItem: Step = {
+    const newItem: StepView = {
       id: newBlockId,
       title: '',
       serial: 1,
       attachments: [],
       content_text: '',
       blockItems: [],
+      teacher: 1,
       lesson: lessonId,
     }
     setLastBlockId(newBlockId)
