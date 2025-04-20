@@ -21,3 +21,7 @@ export const isNew = (date: string) => {
   const dt = new Date(year, month - 1, day)
   return (new Date().getTime() - dt.getTime()) / (1000 * 60 * 60 * 24) <= 7
 }
+
+export const formatDateString = (date: string): Date => {
+  return new Date(date.split('.').reverse().join('-'))
+}

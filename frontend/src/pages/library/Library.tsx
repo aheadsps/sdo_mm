@@ -5,7 +5,7 @@ import clsx from 'clsx'
 import { useState } from 'react'
 
 import s from './library.module.scss'
-import { isNew, categoryColors } from './libraryUtils'
+import { isNew, categoryColors, formatDateString } from './libraryUtils'
 import { articles } from './mockData'
 
 const buttons: string[] = [
@@ -19,6 +19,18 @@ const buttons: string[] = [
 
 const LibraryComp: React.FC = () => {
   const [mode, setMode] = useState<string>('Все')
+
+  const displayCurrentArticles = () => {
+    if (mode === 'Все') {
+      return [...articles].sort(
+        (a, b) => formatDateString(b.date).getTime() - formatDateString(a.date).getTime()
+      )
+    }
+    if (mode === 'Обновления') {
+      return articles.filter((article) => isNew(article.date))
+    }
+    return articles.filter((article) => article.category === mode)
+  }
 
   return (
     <>
@@ -38,8 +50,8 @@ const LibraryComp: React.FC = () => {
           </div>
         </div>
         <div className={s.library__articles}>
-          {articles?.length > 0 ? (
-            articles.map((article) => (
+          {displayCurrentArticles()?.length > 0 ? (
+            displayCurrentArticles().map((article) => (
               <div key={article.id}>
                 <div className={s.library__article}>
                   <div className={s.library__articleLeft}>
