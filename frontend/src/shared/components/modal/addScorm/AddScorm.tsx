@@ -1,5 +1,5 @@
 import { useCreateCourseMutation } from '@services/api/courses.api.ts'
-import { Button } from '@shared/components'
+import { Button, Input } from '@shared/components'
 import { ChangeEvent, useRef, useState } from 'react'
 
 import s from './addScorm.module.scss'
@@ -38,6 +38,7 @@ export const AddScorm = () => {
 
   return (
     <div className={s.box}>
+      <Input className={s.inputTitle} placeholder="Название курса" />
       <input type="file" ref={fileInputRef} onChange={handleFileChange} accept=".zip" hidden />
 
       {file && <div>Выбран файл: {file.name} </div>}
