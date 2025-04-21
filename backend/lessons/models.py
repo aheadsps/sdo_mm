@@ -388,6 +388,7 @@ class Question(models.Model):
                                      max_length=8,
                                      choices=settings.TYPE_QUESTION,
                                      help_text='Текущий тип данного вопроса',
+                                     default='test'
                                      )
     test_block = models.ForeignKey(TestBlock,
                                    verbose_name=_("тестовый блок"),
