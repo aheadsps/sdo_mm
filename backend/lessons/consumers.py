@@ -27,13 +27,11 @@ class AnswerCheckerConsumer(WebsocketConsumer):
                     'lesson__course').get(pk=self.block_id)
                 logger.debug(f'get test_block {self.test_block}')
 
-                if not Event.objects.filter(
+                if not EventCovered.objects.filter(
                         user=self.user,
-                        course_id=self.test_block.lesson.course_id).exists():
-                    self._close_with_error(
-                        "Доступ к тестовому блоку запрещен", 403
-                    )
-                    return
+                        event__course=self.test_block.lesson.course
+                ).exists():
+                    return self._close_with_error("Доступ запрещен", 403)
 
                 self._initialize_block_data()
                 self.accept()
@@ -181,16 +179,16 @@ class AnswerCheckerConsumer(WebsocketConsumer):
 
     def _complete_course(self, course, total_lessons, progress_percent):
         """Отмечаем курс как завершенный"""
-        event = Event.objects.get(user=self.user, course=course)
-        event.status = 'done'
-        event.done_lessons = total_lessons
-        event.save()
-
-        EventCovered.objects.update_or_create(
+        event_covered = EventCovered.objects.get(
             user=self.user,
-            event=event,
-            defaults={'procent': progress_percent}
+            event__course=course
         )
+        event_covered.event.status = 'done'
+        event_covered.event.done_lessons = total_lessons
+        event_covered.event.save()
+
+        event_covered.procent = progress_percent
+        event_covered.save()
 
     def _check_progress(self, progress_percent):
         """
@@ -229,16 +227,16 @@ class AnswerCheckerConsumer(WebsocketConsumer):
         logger.debug(f'Доступно уроков: {completed_lessons}')
 
         if completed_lessons >= total_lessons:
-            event = Event.objects.get(user=self.user, course=course)
-            event.status = 'done'
-            event.done_lessons = total_lessons
-            event.save()
-
-            EventCovered.objects.update_or_create(
+            event_covered = EventCovered.objects.get(
                 user=self.user,
-                event=event,
-                defaults={'procent': progress_percent}
+                event__course=course
             )
+            event_covered.event.status = 'done'
+            event_covered.event.done_lessons = total_lessons
+            event_covered.event.save()
+
+            event_covered.procent = progress_percent
+            event_covered.save()
 
     def _send_answer_result(self, answer):
         """

@@ -547,7 +547,7 @@ class AssessmentSubmission(models.Model):
                                 verbose_name=_("Учитель"),
                                 on_delete=models.CASCADE,
                                 validators=[MinValueValidator(1)],
-                                related_name="teacher_assessments",
+                                related_name="teacher_assessment",
                                 help_text="Учитель")
     test_block = models.ForeignKey(TestBlock,
                                    verbose_name=_("Тест блок"),
@@ -558,7 +558,7 @@ class AssessmentSubmission(models.Model):
     student = models.ForeignKey(get_user_model(),
                                 verbose_name=_("Студент"),
                                 on_delete=models.CASCADE,
-                                related_name="student_assessments",
+                                related_name="student_assessment",
                                 validators=[MinValueValidator(1)],
                                 help_text="Студент"
                                 )
