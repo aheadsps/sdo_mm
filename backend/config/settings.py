@@ -57,8 +57,10 @@ DEBUG = False
 
 
 if not DEBUG:
-    HOST = os.getenv("ALLOWED_HOSTS")
-    ALLOWED_HOSTS = [HOST if HOST else "localhost"]
+    HOST = os.getenv("ALLOWED_HOSTS", False)
+    ALLOWED_HOSTS = [[address for address in HOST.split(",")]
+                     if HOST
+                     else "localhost"]
 else:
     ALLOWED_HOSTS = ["*"]
 
