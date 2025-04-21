@@ -23,7 +23,6 @@ from users import serializers as user_serializers
 
 T = TypeVar("T")
 
-
 PROCESS = "process"
 EXPECTED = "expected"
 DONE = "done"
@@ -51,8 +50,8 @@ class CourseProgressSerializer(serializers.ModelSerializer):
 class UserStorySerializer(serializers.ModelSerializer):
     class Meta:
         model = models.UserStory
-        fields = ('id', 'user', 'answer', 'test_block', 'date_opened')
-        read_only_fields = ('id', 'user', 'date_opened')
+        fields = ["id", "user", "answer", "test_block", "date_opened"]
+        read_only_fields = ["id", "user", "date_opened"]
 
     def validate(self, data):
         validators.UserStoryValidator(
@@ -169,7 +168,6 @@ class ContentAttachmentSerializer(serializers.ModelSerializer):
 
 
 class MaterialsSerializer(serializers.ModelSerializer):
-
     files = ContentAttachmentSerializer(many=True, read_only=True)
 
     class Meta:
