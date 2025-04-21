@@ -3,7 +3,7 @@ import { useGetCoursesQuery } from '@services/api'
 import { selectCourses, setAllCourses } from '@services/slices'
 import { useAppDispatch, useAppSelector } from '@services/store'
 import { Title, CourseCard, Modal, Loader } from '@shared/components'
-import { AddMaterials } from '@shared/components'
+import { AddScorm } from '@shared/components/modal/addScorm'
 import { withLayout } from '@shared/HOC'
 import { useToggle } from '@shared/hooks'
 import { useEffect } from 'react'
@@ -48,8 +48,8 @@ const Training = () => {
       {isModalOpen && (
         <Modal
           close={closeModal}
-          title="Добавить материалы"
-          children={<AddMaterials />}
+          title="Загрузить SCORM-пакет"
+          children={<AddScorm />}
           titleStyle="header_2"
         />
       )}
