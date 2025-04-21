@@ -7,22 +7,30 @@ import s from './addScorm.module.scss'
 export const AddScorm = () => {
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [file, setFile] = useState<File | null>(null)
+  const [courseName, setCourseName] = useState<string>('')
   const [createCourse, { isLoading }] = useCreateCourseMutation()
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0]
     setFile(selectedFile || null)
   }
-
+  const handleNameChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const newCourseName = e.target.value
+    setCourseName(newCourseName)
+  }
   const handleSubmit = async () => {
     if (!file) {
       alert('Выберите файл')
       return
     }
+    if (!courseName) {
+      alert('Укажите название курса')
+      return
+    }
 
     const formData = new FormData()
 
-    formData.append('name', 'Default Course Name')
+    formData.append('name', courseName)
     formData.append('experiences', '2')
 
     try {
@@ -38,7 +46,7 @@ export const AddScorm = () => {
 
   return (
     <div className={s.box}>
-      <Input className={s.inputTitle} placeholder="Название курса" />
+      <Input className={s.inputTitle} placeholder="Название курса" onChange={handleNameChange} />
       <input type="file" ref={fileInputRef} onChange={handleFileChange} accept=".zip" hidden />
 
       {file && <div>Выбран файл: {file.name} </div>}
