@@ -1,38 +1,51 @@
 import { ArrowLeftIcon } from '@assets/icons'
 import { CourseMaterials } from '@features/course/course-materials'
-import { useGetCourseQuery } from '@services/api'
-import { selectCourse, setCourseById } from '@services/slices'
+import { StepView, useLazyGetLessonByIdQuery } from '@services/api'
+import { selectLessonById, setLessonById } from '@services/slices'
 import { useAppDispatch, useAppSelector } from '@services/store'
 import { AiComponent, Typography, Button, Title } from '@shared/components'
 import { withLayout } from '@shared/HOC'
 import { useToggle } from '@shared/hooks/useToggle'
+import { handleError } from '@shared/utils'
 import { useEffect, useState } from 'react'
 import { NavLink, useNavigate, useParams } from 'react-router-dom'
 
 import { LessonContent } from './lesson-content/LessonContent'
 import { LessonPlan } from './lesson-plan'
 import s from './lessonComponent.module.scss'
-import { lessonStepsData } from './lessonStepsData'
+// import { lessonStepsData } from './lessonStepsData'
 import { LessonTest } from './test/Tests'
 
-export type SelectedStep = {
-  id: number
-  title: string
-  description: string
-}
+// export type SelectedStep = {
+//   id: number
+//   title: string
+//   content_text: string
+// }
 const LessonComponent = () => {
   const { isOpen: isOffcanvasOpen, close: closeOffcanvas, toggle: toggleOffCanvas } = useToggle()
-  const [selectedStep, setSelectedStep] = useState(lessonStepsData[0])
-
   const [isMaterialsButtonClicked, setIsMaterialsButtonClicked] = useState(false)
+  const { id, lessonId } = useParams()
   const dispatch = useAppDispatch()
-  const { id } = useParams()
-  const { data: currentCourse } = useGetCourseQuery(Number(id))
+  // const { data: currentCourse } = useGetCourseQuery(Number(id))
+  // useEffect(() => {
+  //   if (currentCourse) dispatch(setCourseById(currentCourse))
+  // }, [currentCourse, dispatch])
+  // const course = useAppSelector(selectCourse)
+  const [isLoading, setIsLoading] = useState<boolean>(true)
+  const [getLessonById] = useLazyGetLessonByIdQuery()
   useEffect(() => {
-    if (currentCourse) dispatch(setCourseById(currentCourse))
-  }, [currentCourse, dispatch])
-  const course = useAppSelector(selectCourse)
-  const txt = 'English Check-Up: База и первые шаги'
+    getLessonById(Number(lessonId))
+      .unwrap()
+      .then((res) => {
+        dispatch(setLessonById(res))
+      })
+      .catch((error) => handleError(error))
+      .finally(() => setIsLoading(false))
+  }, [getLessonById, dispatch, lessonId])
+  const lesson = useAppSelector(selectLessonById)
+  const [selectedStep, setSelectedStep] = useState(lesson?.steps[0])
+  console.log(lesson)
+  const txt = lesson.name
   const btn1 = 'ИИ'
   const btn2 = 'Обсуждение урока'
   const navigate = useNavigate()
@@ -41,7 +54,7 @@ const LessonComponent = () => {
     await navigate(`/learning/course/${id}`)
   }
 
-  const onItemClick = (item: SelectedStep) => {
+  const onItemClick = (item: StepView) => {
     setSelectedStep(item)
 
     if (isMaterialsButtonClicked) {
@@ -60,26 +73,27 @@ const LessonComponent = () => {
 
       <Title txt={txt} btn1={btn1} btn2={btn2} fstBtn={toggleOffCanvas} />
       <Typography variant="body_2" className={s.desc}>
-        Цель урока: проверить словарный запас и научиться избегать ложных друзей переводчика.
+        {/* {lesson.description} */}
       </Typography>
       <div className={s.content}>
         <div className={s.leftBox}>
           <LessonPlan
+            lesson={lesson}
             setIsMaterialsButtonClicked={setIsMaterialsButtonClicked}
             onClick={onItemClick}
           />
         </div>
 
-        {isMaterialsButtonClicked ? (
+        {/* {isMaterialsButtonClicked ? (
           <div className={s.lessonMaterials}>
             <Button className={s.materialsButton}>Скачать все материалы урока</Button>
             <CourseMaterials />
           </div>
-        ) : selectedStep.id === lessonStepsData[lessonStepsData.length - 1].id ? (
+        ) : selectedStep.id === lesson.steps[lesson.steps.length - 1].id ? (
           <LessonTest />
         ) : (
           <LessonContent onClick={handleNavigate} selectedStep={selectedStep} />
-        )}
+        )} */}
       </div>
       <AiComponent isOpen={isOffcanvasOpen} close={closeOffcanvas} />
     </div>

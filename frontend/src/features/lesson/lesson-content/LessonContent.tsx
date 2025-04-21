@@ -1,13 +1,14 @@
 import { YouTubeLogo } from '@assets/icons'
+import { StepView } from '@services/api'
 import { Typography, Button } from '@shared/components'
 
-import { SelectedStep } from '../LessonComponent'
+// import { SelectedStep } from '../LessonComponent'
 
 import s from './lesson-content.module.scss'
 
 type Props = {
   onClick: () => void
-  selectedStep: SelectedStep
+  selectedStep: StepView
 }
 
 export const LessonContent = ({ onClick, selectedStep }: Props) => {
@@ -23,7 +24,7 @@ export const LessonContent = ({ onClick, selectedStep }: Props) => {
           </Typography>
         </div>
         <Typography variant="body_2" className={s.lessonDesc}>
-          {selectedStep.description}
+          {selectedStep.content_text}
         </Typography>
       </div>
       <div className={s.videoBox}>
@@ -31,7 +32,7 @@ export const LessonContent = ({ onClick, selectedStep }: Props) => {
       </div>
       <div className={s.hint}>
         <p className={s.hintTxt}>
-          Чтобы не запоминать слова неправильно, всегда проверяй их значение в контексте!
+          Чтобы в экстренной ситуации не растеряться - тренируйся в спокойной обстановке на манекене
         </p>
       </div>
       <div className={s.buttonBox}>

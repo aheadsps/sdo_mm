@@ -1,20 +1,23 @@
+import { Lesson, StepView } from '@services/api'
 import { DropdownCard, Button } from '@shared/components'
 import { useState } from 'react'
 
-import { SelectedStep } from '../LessonComponent'
-import { lessonStepsData } from '../lessonStepsData'
+// import { SelectedStep } from '../LessonComponent'
+// import { lessonStepsData } from '../lessonStepsData'
 
 import { LessonPlanItem } from './lesson-plan-item/LessonPlanItem'
 import s from './lesson-plan.module.scss'
 
 type Props = {
+  lesson: Lesson
   setIsMaterialsButtonClicked: (isMaterialsButtonClicked: boolean) => void
-  onClick: (item: SelectedStep) => void
+  onClick: (item: StepView) => void
 }
-export const LessonPlan = ({ setIsMaterialsButtonClicked, onClick }: Props) => {
-  const [completedSteps, setCompletedSteps] = useState<number[]>([lessonStepsData[0].id])
+export const LessonPlan = ({ lesson, setIsMaterialsButtonClicked, onClick }: Props) => {
+  console.log(lesson.steps)
+  const [completedSteps, setCompletedSteps] = useState<number[]>([lesson?.steps[0].id])
 
-  const onItemClick = (item: SelectedStep) => {
+  const onItemClick = (item: StepView) => {
     onClick(item)
     setCompletedSteps([...completedSteps, item.id])
   }
@@ -23,9 +26,22 @@ export const LessonPlan = ({ setIsMaterialsButtonClicked, onClick }: Props) => {
     setIsMaterialsButtonClicked(true)
   }
   return (
-    <DropdownCard title="План урока:" blocks="6 тем" className={s.drpdnContent}>
+    <DropdownCard
+      title="План урока:"
+      blocks={`${lesson.steps.length} темы`}
+      className={s.drpdnContent}
+    >
       <ul>
-        {lessonStepsData?.map((item) => (
+        {lesson.steps?.map((item) => (
+          <LessonPlanItem
+            key={item.id}
+            onClick={() => onItemClick(item)}
+            checked={completedSteps.includes(item.id)}
+          >
+            {item.title}
+          </LessonPlanItem>
+        ))}
+        {lesson.steps?.map((item) => (
           <LessonPlanItem
             key={item.id}
             onClick={() => onItemClick(item)}
