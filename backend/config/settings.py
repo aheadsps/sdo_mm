@@ -45,14 +45,14 @@ TYPE_CONTENTS = [
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = get_random_secret_key()
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True if os.getenv("DEBUG") else False
+DEBUG = False
 
 
 if not DEBUG:
-    HOST = os.getenv("DJANGO_ALLOWED_HOSTS")
+    HOST = os.getenv("ALLOWED_HOSTS")
     ALLOWED_HOSTS = [HOST if HOST else "example.com"]
 else:
     ALLOWED_HOSTS = ["*"]
