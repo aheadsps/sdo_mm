@@ -52,8 +52,10 @@ DEBUG = True if os.getenv("DEBUG") else False
 
 
 if not DEBUG:
-    HOST = os.getenv("DJANGO_ALLOWED_HOSTS")
-    ALLOWED_HOSTS = [HOST if HOST else "example.com"]
+    HOST = os.getenv("ALLOWED_HOSTS", False)
+    ALLOWED_HOSTS = [[address for address in HOST.split(",")]
+                     if HOST
+                     else "localhost"]
 else:
     ALLOWED_HOSTS = ["*"]
 
