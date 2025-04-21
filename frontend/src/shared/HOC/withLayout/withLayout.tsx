@@ -1,42 +1,38 @@
-import { useGetUserCurrentEventsQuery } from '@services/api'
-import { setCurrentEvents } from '@services/slices/events'
+import { useLazyGetCurrentCoversQuery } from '@services/api'
+import { setUserCovers } from '@services/slices'
 import { useAppDispatch } from '@services/store'
 import { Header, Loader, Sidebar } from '@shared/components'
 import { useScreenWidth } from '@shared/hooks'
-import { ComponentType, useEffect } from 'react'
-import { useLocation } from 'react-router-dom'
+import { handleError } from '@shared/utils'
+import { ComponentType, useEffect, useState } from 'react'
 
 import s from './layout.module.scss'
 
 export const withLayout = <T extends object>(Component: ComponentType<T>) => {
   return (props: T) => {
-    const path = useLocation()
+    const [isLoading, setisLoading] = useState<boolean>(true)
     const { isMobile } = useScreenWidth()
-
-    const { data: events, isLoading } = useGetUserCurrentEventsQuery()
     const dispatch = useAppDispatch()
 
+    const [getCurrentCovers] = useLazyGetCurrentCoversQuery()
     useEffect(() => {
-      if (events?.results) {
-        dispatch(setCurrentEvents(events?.results))
-      }
-    }, [events?.results, dispatch])
-
+      getCurrentCovers()
+        .unwrap()
+        .then((res) => {
+          dispatch(setUserCovers(res.results))
+        })
+        .catch((error) => handleError(error))
+        .finally(() => setisLoading(false))
+    }, [getCurrentCovers, dispatch])
     return (
       <>
         <Header />
-        {path.pathname.includes('/constructor') ? (
-          <div className={s.constructorWrapper}>
-            {isLoading ? <Loader /> : <Component {...props} />}
-          </div>
-        ) : (
-          <div className={s.appWrapper}>
-            {!isMobile && <Sidebar />}
-            <main>
-              <div className={s.main}>{isLoading ? <Loader /> : <Component {...props} />}</div>
-            </main>
-          </div>
-        )}
+        <div className={s.appWrapper}>
+          {!isMobile && <Sidebar />}
+          <main>
+            <div className={s.main}>{isLoading ? <Loader /> : <Component {...props} />}</div>
+          </main>
+        </div>
       </>
     )
   }

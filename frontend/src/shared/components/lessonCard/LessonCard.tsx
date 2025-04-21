@@ -1,8 +1,8 @@
 import { ClockIcon, LikeIcon, DislikeIcon, StickersIcon, HourglassIcon } from '@assets/icons'
 import { routes } from '@routes/routes'
-import { Event } from '@services/api'
+import { CoverCurrent } from '@services/api/types.api'
 import { getBackgroundColor, getDaysLeft } from '@shared/utils'
-import { useState } from 'react'
+// import { getDeadlineStatus } from '@shared/utils/getDeadlineStatus.ts'
 import { NavLink } from 'react-router-dom'
 
 import { Button } from '../button'
@@ -11,15 +11,24 @@ import { Typography } from '../typography'
 
 import s from './lessonCard.module.scss'
 
+// import noDataImg from '@/public/img/noDataImg.png'
+
 interface Props {
-  event: Event
+  cover: CoverCurrent
 }
 
-export const LessonCard: React.FC<Props> = ({ event }: Props) => {
-  const [isFav, setIsFav] = useState(false)
-  const daysLeft = getDaysLeft(event.end_date)
+export const LessonCard: React.FC<Props> = ({ cover }: Props) => {
+  const course = cover.event.course
+  const daysLeft = cover.event.end_date ? getDaysLeft(cover.event.end_date) : 10
   const deadlineColor = getBackgroundColor(daysLeft)
-
+  // const dispatch = useAppDispatch()
+  // console.log(cover)
+  const hendleClick = () => {
+    // dispatch(setIsScorms(isScorm))
+    // if (isScorm) dispatch(setCurrentScorms(scorms))
+    // else dispatch(setCurrentEventId(cover.event.id))
+    // dispatch(setEvent(cover.event))
+  }
   return (
     <div className={s.container}>
       <div className={s.container__top}>
@@ -29,16 +38,16 @@ export const LessonCard: React.FC<Props> = ({ event }: Props) => {
               Курс
             </Typography>
           </div>
-          <button className={s.container__like} onClick={() => setIsFav(!isFav)}>
-            {isFav ? <LikeIcon /> : <DislikeIcon />}
+          <button className={s.container__like}>
+            {cover.favorite ? <LikeIcon /> : <DislikeIcon />}
           </button>
         </div>
-        <ImageComponent src={event.course.image} alt="course" className={s.img} />
+        <ImageComponent src={course.image} alt="course" className={s.img} />
       </div>
       <div className={s.container__bottom}>
         <div className={s.container__card}>
           <Typography variant="header_2" className={s.container__title}>
-            {event.course.name}
+            {cover.event.course.name}
           </Typography>
           <div className={s.container__description}>
             <div className={s.container__dataBox}>
@@ -49,13 +58,17 @@ export const LessonCard: React.FC<Props> = ({ event }: Props) => {
                     style={{ backgroundColor: `${deadlineColor}` }}
                   ></div>
                   <Typography variant="body_2" className={s.container__paramTxt}>
-                    {event.status === 'process' ? `${daysLeft} дней` : 'Просрочен'}
+                    {course.beginner === true
+                      ? 'Бессрочно'
+                      : cover.status === 'process' && daysLeft > 0
+                        ? `${daysLeft} дней`
+                        : 'Просрочен'}
                   </Typography>
                 </div>
                 <div className={s.container__param}>
                   <StickersIcon />
                   <Typography variant="body_2" className={s.container__paramTxt}>
-                    {event.course.lessons.length}
+                    {cover.event.course.lessons.length}
                   </Typography>
                 </div>
                 <div className={s.container__param}>
@@ -67,13 +80,13 @@ export const LessonCard: React.FC<Props> = ({ event }: Props) => {
                 <div className={s.container__param}>
                   <ClockIcon />
                   <Typography variant="body_2" className={s.container__paramTxt}>
-                    50%
+                    {cover.procent} %
                   </Typography>
                 </div>
               </div>
             </div>
             <Typography variant="body_2" className={s.container__depiction}>
-              {event.course.description}
+              {cover.event.course.description}
             </Typography>
           </div>
         </div>
@@ -81,7 +94,8 @@ export const LessonCard: React.FC<Props> = ({ event }: Props) => {
           className={s.container__btn}
           children="Перейти к обучению"
           as={NavLink}
-          to={routes.course}
+          to={`${routes.course}/${cover.event.course.id}`}
+          onClick={() => hendleClick()}
         />
       </div>
     </div>

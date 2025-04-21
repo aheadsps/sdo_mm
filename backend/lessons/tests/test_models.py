@@ -19,7 +19,8 @@ class TestModels(APITestCase):
         image_path: Path = settings.TEST_IMAGE_PATH
         with image_path.open("rb") as image:
             question = Question._default_manager.create(
-                text="some_question", image=File(image)
+                text="some_question", image=File(image),
+                weight=1,
             )
         self.assertIn(
             "some_quest",

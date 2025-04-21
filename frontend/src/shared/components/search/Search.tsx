@@ -1,5 +1,5 @@
 import { SearchIcon } from '@assets/icons'
-import { studentType } from '@pages/trainingCenter/studentsList/data'
+import { studentType } from '@pages/trainingCenter/course/tabs/studentsList/data'
 import clsx from 'clsx'
 import { ComponentPropsWithRef, useState } from 'react'
 

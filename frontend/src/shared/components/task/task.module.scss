@@ -10,6 +10,7 @@
   transition: var(--transition-effect);
   max-width: 100%;
   min-height: 79px;
+  text-decoration: none;
 
   &:hover {
     transform: var(--transform-effect);

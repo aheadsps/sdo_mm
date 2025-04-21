@@ -1,47 +1,12 @@
-import { DropdownCard } from '@shared/components'
-import { Button, Typography } from '@shared/components'
-import { NavLink } from 'react-router-dom'
+import { selectCourse } from '@services/slices'
+import { useAppSelector } from '@services/store'
+import { useParams } from 'react-router-dom'
 
-import s from './course-content.module.scss'
+import { CourseDropdown } from './CourseDropDown'
 
 export const CourseContent = () => {
-  return (
-    <>
-      <DropdownCard title="Урок 1. Проверка стартового уровня" blocks="2 блока">
-        <div className={s.contentTitle}>
-          <Typography variant="body_2">
-            Цель урока: проверить словарный запас и научиться избегать ложных друзей переводчика.
-          </Typography>
-          <NavLink to={'/lesson'}>
-            <Button className={s.lessonButton}>Открыть урок</Button>
-          </NavLink>
-        </div>
-        <Typography variant="body_2">1. Введение: Почему мы путаем слова?</Typography>
-      </DropdownCard>
+  const { id } = useParams()
+  const course = useAppSelector(selectCourse)
 
-      <DropdownCard title="Урок 2. Проверка стартового уровня" blocks="2 блока">
-        <div className={s.contentTitle}>
-          <Typography variant="body_2">
-            Цель урока: проверить словарный запас и научиться избегать ложных друзей переводчика.
-          </Typography>
-          <NavLink to={'/lesson'}>
-            <Button className={s.lessonButton}>Открыть урок</Button>
-          </NavLink>
-        </div>
-        <Typography variant="body_2">1. Введение: Почему мы путаем слова?</Typography>
-      </DropdownCard>
-
-      <DropdownCard title="Урок 3. Проверка стартового уровня" blocks="2 блока">
-        <div className={s.contentTitle}>
-          <Typography variant="body_2">
-            Цель урока: проверить словарный запас и научиться избегать ложных друзей переводчика.
-          </Typography>
-          <NavLink to={'/lesson'}>
-            <Button className={s.lessonButton}>Открыть урок</Button>
-          </NavLink>
-        </div>
-        <Typography variant="body_2">1. Введение: Почему мы путаем слова?</Typography>
-      </DropdownCard>
-    </>
-  )
+  return course.lessons.map((lesson) => <CourseDropdown lesson={lesson} id={id} key={lesson.id} />)
 }

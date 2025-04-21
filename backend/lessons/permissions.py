@@ -35,6 +35,24 @@ class OwnerEventPermission(permissions.BasePermission):
         return request.user == obj.user
 
 
+class InCover(permissions.BasePermission):
+    """
+    Права доступа на покрытие
+    """
+    message = {
+        "forbidden": "Данное действие не доступно",
+    }
+    code = status.HTTP_403_FORBIDDEN
+
+    def has_object_permission(self, request, view, cover):
+        if not cover:
+            return
+        user = request.user
+        event = models.EventCovered.objects.filter(Q(user=user) &
+                                                   Q(pk=cover.pk))
+        return event.exists()
+
+
 class CanReadCourse(permissions.BasePermission):
     """
     Права доступа на чтение курса
@@ -49,8 +67,28 @@ class CanReadCourse(permissions.BasePermission):
         if not course:
             return
         user = request.user
-        event = models.Event.objects.filter(Q(user=user) & Q(course=course))
+        logger.debug(f'CanReadCourse get {user}')
+        logger.debug(f'CanReadCourse get {course}')
+        event = models.EventCovered.objects.filter(Q(user=user) &
+                                                   Q(event__course=course) &
+                                                   Q(event__status='started'))
+        logger.debug(f'CanReadCourse {event}')
         return event.exists()
+
+
+class CurrentTeacher(permissions.BasePermission):
+    """
+    Права доступа текущего учителя
+    """
+    message = {
+        'forbidden': 'Данный материал не доступен',
+    }
+    code = status.HTTP_403_FORBIDDEN
+
+    def has_object_permission(self, request, view, course):
+        if not course:
+            return
+        return course.teacher == request.user
 
 
 class CanReadLesson(permissions.BasePermission):
@@ -68,9 +106,10 @@ class CanReadLesson(permissions.BasePermission):
 
         user = request.user
 
-        event_exists = models.Event.objects.filter(
+        event_exists = models.EventCovered.objects.filter(
             Q(user=user) &
-            Q(course=lesson.course)
+            Q(event__course=lesson.course) &
+            Q(event__status='started')
         )
 
         return event_exists.exists()
@@ -91,9 +130,10 @@ class CanReadSCORM(permissions.BasePermission):
 
         user = request.user
 
-        event_exists = models.Event.objects.filter(
+        event_exists = models.EventCovered.objects.filter(
             Q(user=user) &
-            Q(course__scorm=scorm)
+            Q(event__course__scorm=scorm) &
+            Q(event__status='started')
         )
 
         return event_exists.exists()
@@ -115,9 +155,10 @@ class CanReadStep(permissions.BasePermission):
 
         user = request.user
 
-        event_exists = models.Event.objects.filter(
+        event_exists = models.EventCovered.objects.filter(
             Q(user=user) &
-            Q(course=step.lesson.course)
+            Q(event__course=step.lesson.course) &
+            Q(event__status='started')
         )
 
         return event_exists.exists()
@@ -139,12 +180,13 @@ class CanReadBlock(permissions.BasePermission):
 
         user = request.user
 
-        event_exists = models.Event.objects.filter(
+        event_exists = models.EventCovered.objects.filter(
             Q(user=user) &
-            Q(course=test_block.lesson.course)
-        )
-
-        return event_exists.exists()
+            Q(event__course=test_block.lesson.course) &
+            Q(event__status='started')
+        ).exists()
+        lesson_opened = test_block.lesson.started
+        return event_exists and lesson_opened
 
 
 class CanReadUserStory(permissions.BasePermission):
