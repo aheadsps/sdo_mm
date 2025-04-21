@@ -2,12 +2,13 @@ import { AddItemIcon, ArrowDownIcon, ArrowUpIcon } from '@assets/icons'
 import { selectCourse } from '@services/slices'
 import {
   addLesson,
+  addStep,
   selectCurrentLessons,
   setCurrentLessons,
 } from '@services/slices/constructor/constructorSlice'
 import { useAppDispatch, useAppSelector } from '@services/store'
 import { Button } from '@shared/components'
-import { useState, FC } from 'react'
+import { FC } from 'react'
 
 import { BlockHeader } from './block-header/BlockHeader'
 import { optionsFormat } from './data'
@@ -18,8 +19,6 @@ import styles from './program.module.scss'
 const columns = ['Уроки', 'Дата и время занятия', 'Формат']
 
 export const Program: FC = () => {
-  const [newTopicCount, setNewTopicCount] = useState<Record<number, number[]>>({})
-
   const currentCourse = useAppSelector(selectCourse)
   const lessons = useAppSelector(selectCurrentLessons)
 
@@ -36,10 +35,7 @@ export const Program: FC = () => {
   }
 
   const onAddNewTopic = (lessonId: number) => {
-    setNewTopicCount((prev) => {
-      const currentTopics = prev[lessonId] || []
-      return { ...prev, [lessonId]: [...currentTopics, currentTopics.length + 1] }
-    })
+    dispatch(addStep({ name: '', id: Date.now(), lessonId }))
   }
 
   return (
@@ -61,11 +57,6 @@ export const Program: FC = () => {
             {lesson && lesson.expanded && (
               <div className={styles.expandedContent}>
                 <ExpandedContent lessonId={lesson.id} steps={lesson.steps} />
-                {(newTopicCount[lesson.id] || []).map((topic) => (
-                  <div key={topic} className={styles.lessonItem}>
-                    <LessonContent isExpandableContent options={optionsFormat} />
-                  </div>
-                ))}
                 <button className={styles.addButton}>
                   <AddItemIcon
                     height={'12px'}

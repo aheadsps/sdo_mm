@@ -1,8 +1,8 @@
-import { selectCourse } from '@services/slices'
 import {
   selectCurrentLesson,
-  selectCurrentLessons,
+  selectCurrentStep,
   setCurrentLesson,
+  setCurrentStep,
 } from '@services/slices/constructor/constructorSlice'
 import { useAppDispatch, useAppSelector } from '@services/store'
 import { Input, Typography } from '@shared/components'
@@ -12,25 +12,27 @@ import s from './lesson-content.module.scss'
 
 type Props = {
   displayName: string
+  isStep?: boolean
 }
-export const EditableTitle = ({ displayName }: Props) => {
+export const EditableTitle = ({ displayName, isStep = false }: Props) => {
   const [name, setName] = useState(displayName)
   const [isEditing, setIsEditing] = useState(!displayName ? true : false)
 
-  const currentCourse = useAppSelector(selectCourse)
   const currentLesson = useAppSelector(selectCurrentLesson)
-  console.log(currentCourse)
+  const currentStep = useAppSelector(selectCurrentStep)
+
   const dispatch = useAppDispatch()
 
   const handleBlur = () => {
     setIsEditing(false)
-    if (currentLesson) {
+    if (currentLesson && !isStep) {
       dispatch(setCurrentLesson({ ...currentLesson, name: name }))
     }
-  }
 
-  const currentLessons = useAppSelector(selectCurrentLessons)
-  console.log(currentLessons, 'currentLessons')
+    if (currentStep && isStep) {
+      dispatch(setCurrentStep({ ...currentStep, title: name }))
+    }
+  }
 
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
@@ -50,6 +52,15 @@ export const EditableTitle = ({ displayName }: Props) => {
   return (
     <div className={s.title}>
       {isEditing ? (
+        <Input
+          placeholder="Введите тему"
+          value={name}
+          onChange={handleNameChange}
+          onBlur={handleBlur}
+          onKeyDown={handleKeyDown}
+          autoFocus
+        />
+      ) : !name ? (
         <Input
           placeholder="Введите тему"
           value={name}

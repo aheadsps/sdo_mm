@@ -1,6 +1,6 @@
 import type { PayloadAction } from '@reduxjs/toolkit'
 import { createSlice } from '@reduxjs/toolkit'
-import { LessonType, StepView } from '@services/api'
+import { Attachment, LessonType, StepView } from '@services/api'
 
 import { NewItem } from './constructor.types'
 
@@ -9,6 +9,7 @@ type InitialState = {
   currentLessons: LessonType[]
   currentLesson: LessonType | null
   currentSteps: StepView[]
+  currentStep: StepView | null
 }
 
 const initialState: InitialState = {
@@ -16,6 +17,7 @@ const initialState: InitialState = {
   currentLessons: [],
   currentLesson: null,
   currentSteps: [],
+  currentStep: null,
 }
 
 export const constructorSlice = createSlice({
@@ -61,6 +63,10 @@ export const constructorSlice = createSlice({
       state.currentSteps = action.payload.map((item) => ({ ...item, blockItems: [] }))
     },
 
+    setCurrentStep: (state, action: PayloadAction<StepView>) => {
+      state.currentStep = action.payload
+    },
+
     addLesson: (state, action: PayloadAction<{ name: string; id: number; courseId: number }>) => {
       const { name, id, courseId } = action.payload
 
@@ -82,12 +88,41 @@ export const constructorSlice = createSlice({
       state.currentLesson = newLesson
       state.currentLessons.push(newLesson)
     },
+
+    addStep: (state, action: PayloadAction<{ name: string; id: number; lessonId: number }>) => {
+      const { name, id, lessonId } = action.payload
+
+      const newStep: StepView = {
+        attachments: [] as Attachment[],
+        content_text: '',
+        id,
+        lesson: lessonId,
+        serial: 1,
+        teacher: 1,
+        title: name,
+        blockItems: [],
+      }
+
+      const lesson = state.currentLessons.find((lesson) => lesson.id === lessonId)
+
+      if (lesson) {
+        lesson.steps.push(newStep)
+      }
+
+      if (state.currentLesson?.id === lessonId) {
+        state.currentLesson.steps.push(newStep)
+      }
+
+      state.currentStep = newStep
+      state.currentSteps.push(newStep)
+    },
   },
   selectors: {
     selectActiveBlockId: (sliceState) => sliceState.activeBlockId,
     selectCurrentLessons: (sliceState) => sliceState.currentLessons,
     selectCurrentLesson: (sliceState) => sliceState.currentLesson,
     selectCurrentSteps: (sliceState) => sliceState.currentSteps,
+    selectCurrentStep: (sliceState) => sliceState.currentStep,
   },
 })
 
@@ -101,11 +136,14 @@ export const {
   setCurrentLesson,
   setCurrentSteps,
   addLesson,
+  addStep,
+  setCurrentStep,
 } = constructorSlice.actions
 export const {
   selectActiveBlockId,
   selectCurrentLessons,
   selectCurrentLesson,
   selectCurrentSteps,
+  selectCurrentStep,
 } = constructorSlice.selectors
 export const constructorSliceReducer = constructorSlice.reducer

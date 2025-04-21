@@ -19,6 +19,7 @@ type Props<T extends LessonType | StepView | Scorm> = {
   isExpandableContent?: boolean
   onClick?: () => void
   path?: string
+  isStep?: boolean
 }
 export const LessonContent = <T extends LessonType | StepView | Scorm>({
   lesson,
@@ -26,13 +27,14 @@ export const LessonContent = <T extends LessonType | StepView | Scorm>({
   isExpandableContent = false,
   path,
   onClick,
+  isStep = false,
 }: Props<T>) => {
   const { isOpen, toggle } = useToggle()
   const displayName = getDisplayName(lesson)
 
   return (
     <div className={s.lessonContent}>
-      <EditableTitle displayName={displayName} />
+      <EditableTitle displayName={displayName} isStep={isStep} />
       {isExpandableContent ? (
         <>
           <Select
