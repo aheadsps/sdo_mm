@@ -255,9 +255,10 @@ class IntervalValidator:
 
     requires_context = True
 
-    def __init__(self, beginner: str, interval: str) -> None:
+    def __init__(self, beginner: str, interval: str, scorm: str) -> None:
         self.beginner = str(beginner)
         self.interval = str(interval)
+        self.scorm = str(scorm)
 
     def _check(
         self,
@@ -278,12 +279,14 @@ class IntervalValidator:
         self.error_detail = dict()
         need_check = tigger_to_check(attrs, self.beginner, self.interval)
         if need_check:
+            scorm = attrs.get(self.scorm)
             beginner = get_value(self.beginner, attrs, serializer)
             interval = get_value(self.interval, attrs, serializer)
-            self._check(
-                beginner=beginner,
-                interval=interval,
-            )
+            if not scorm:
+                self._check(
+                    beginner=beginner,
+                    interval=interval,
+                )
 
 
 class RegistrationValidator:

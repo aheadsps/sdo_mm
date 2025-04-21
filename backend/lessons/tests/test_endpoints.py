@@ -564,6 +564,7 @@ class TestChain(APITestCase):
         self.assertEqual(response.status_code, 201)
         self.assertEqual(response.json(),
                          dict(
+                             id=response.json()['id'],
                              teacher=self.user.pk,
                              name='Первая помощь (часть 2)',
                              description=None,

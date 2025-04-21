@@ -293,7 +293,7 @@ class CourseViewSet(mixins.ListModelMixin,
 
     @action(detail=True, methods=['POST'], url_path='upload-materials')
     def upload_materials(self, request, course_id=None):
-        serializer = serializers.ContentAttachmentSerializer
+        self.serializer_class = serializers.ContentAttachmentSerializer
         self.kwargs.setdefault('context', self.get_serializer_context())
         course = self.get_object()
         if course.teacher != request.user:
@@ -301,7 +301,7 @@ class CourseViewSet(mixins.ListModelMixin,
         materials = models.Materials._default_manager.get(course=course)
         request.data.update(materials=materials.pk)
         logger.debug(f'request data to save materials {request.data}')
-        serializer = serializer(data=request.data)
+        serializer = self.serializer_class(data=request.data, context=dict(request=request))
         serializer.is_valid(raise_exception=True)
         serializer.save()
         headers = self.get_success_headers(serializer.data)
