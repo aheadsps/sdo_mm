@@ -2,6 +2,7 @@ import { ClockIcon, LikeIcon, DislikeIcon, StickersIcon, HourglassIcon } from '@
 import { routes } from '@routes/routes'
 import { CoverCurrent } from '@services/api/types.api'
 import { getBackgroundColor, getDaysLeft } from '@shared/utils'
+// import { getDeadlineStatus } from '@shared/utils/getDeadlineStatus.ts'
 import { NavLink } from 'react-router-dom'
 
 import { Button } from '../button'
@@ -9,6 +10,8 @@ import { ImageComponent } from '../image'
 import { Typography } from '../typography'
 
 import s from './lessonCard.module.scss'
+
+// import noDataImg from '@/public/img/noDataImg.png'
 
 interface Props {
   cover: CoverCurrent
