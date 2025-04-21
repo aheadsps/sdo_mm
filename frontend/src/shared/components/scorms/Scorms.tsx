@@ -1,5 +1,5 @@
 import { LessonTest } from '@features/lesson/test/Tests'
-import { Course } from '@services/api'
+import { Course, useGetTestsQuery } from '@services/api'
 
 import { Typography } from '../typography'
 
@@ -8,8 +8,9 @@ type Props = {
   course: Course
 }
 export const Scorm = ({ course }: Props) => {
-  
-  console.log(course.lessons[0])
+  // const [data: tests ] = useGetTestsQuery(course.lessons[0].test_block)
+  // console.log(console.log)
+  // console.log(course.lessons[0].test_block)
   return (
     <div className={s.scormBox}>
       <Typography variant="header_3" children={course.name} />
