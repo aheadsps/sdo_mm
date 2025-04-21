@@ -35,17 +35,41 @@ export const coursesApi = createApi({
       }),
       providesTags: () => ['Courses'],
     }),
-    createCourse: build.mutation<void, FormData>({
-      query: (formDate) =>({
+    /*  createCourse: build.mutation<void, FormData>({
+      query: (formDate) => ({
         url: '/courses',
         method: 'POST',
         headers: {
           Authorization: `Token ${getToken()}`,
         },
-        body: formDate
-      })
+        body: formDate,
+      }),
+    }), */
+    createCourse: build.mutation<Course, FormData | void>({
+      query: (formDate) => ({
+        url: '/courses',
+        method: 'POST',
+        headers: {
+          Authorization: `Token ${getToken()}`,
+        },
+        body: formDate,
+      }),
     }),
+    /* createNewCourse: build.mutation<void, FormData>({
+      query: () => ({
+        url: '/courses',
+        method: 'POST',
+        headers: {
+          Authorization: `Token ${getToken()}`,
+        },
+      }),
+    }), */
   }),
 })
 
-export const { useGetCoursesQuery, useGetCourseQuery, useLazyGetCoursesQuery, useCreateCourseMutation } = coursesApi
+export const {
+  useGetCoursesQuery,
+  useGetCourseQuery,
+  useLazyGetCoursesQuery,
+  useCreateCourseMutation,
+} = coursesApi

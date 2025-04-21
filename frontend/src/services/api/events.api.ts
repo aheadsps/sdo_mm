@@ -42,4 +42,9 @@ export const eventsApi = createApi({
   }),
 })
 
-export const { useGetEventsQuery, useGetEventQuery, useLazyGetUsersEventQuery } = eventsApi
+export const {
+  useGetEventsQuery,
+  useLazyGetEventsQuery,
+  useGetEventQuery,
+  useLazyGetUsersEventQuery,
+} = eventsApi

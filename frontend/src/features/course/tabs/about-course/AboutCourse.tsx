@@ -9,17 +9,17 @@ import { LessonItemCard } from '../../lesson-item-card'
 import s from './about-course.module.scss'
 
 export const AboutCourse = () => {
-  const [isFav, setIsFav] = useState<boolean>(false)
   const course = useAppSelector(selectCourse)
   const lessons = Number(course.lessons.length)
-
+  const [isFav, setIsFav] = useState<boolean>(false)
+  // console.log(course)
   return (
     <div className={s.container}>
       <Card className={s.progress}>
         <div className={s.progressInfo}>
           <div className={s.progressTexts}>
             <Typography variant="body_2" className={s.body2Text}>
-              Общий прогресс: <span>50%</span>
+              Общий прогресс: <span>{Math.floor(Math.random() * 100) + 1}</span>
             </Typography>
             <Typography variant="body_2" className={s.body2Text}>
               1 урок из {lessons}
@@ -43,9 +43,6 @@ export const AboutCourse = () => {
           {course.lessons.map((lesson) => {
             return <LessonItemCard key={lesson.id} lesson={lesson} />
           })}
-          {/* <Button variant="secondary" className={s.lessonItemButton}>
-            Продолжить
-          </Button> */}
         </div>
       </Card>
 

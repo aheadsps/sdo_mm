@@ -1,11 +1,6 @@
 import { routes } from '@routes/routes'
 import { useGetCourseQuery } from '@services/api'
-import {
-  selectCourse,
-  selectCurrentEventId,
-  selectCurrentScorms,
-  setCourseById,
-} from '@services/slices'
+import { selectCourse, setCourseById } from '@services/slices'
 import { useAppDispatch, useAppSelector } from '@services/store'
 import { Button, Tabs, Typography, AiComponent, BackToPage } from '@shared/components'
 import { useToggle } from '@shared/hooks/useToggle'
@@ -24,26 +19,11 @@ export const Course = () => {
     if (currentCourse) dispatch(setCourseById(currentCourse))
   }, [currentCourse, dispatch])
   const course = useAppSelector(selectCourse)
-  // const event = useAppSelector(selectEvent)
-  /* const isScorms = Boolean(course.scorms.length > 0) */
-  const isScorms = course.is_scorm
-  const currentCourseId = useAppSelector(selectCurrentEventId)
-  const currentScorms = useAppSelector(selectCurrentScorms)
-  // if (isScorms) const [getScormById] = useLazyGetScormByIdQuery(currentScorms[0])
-  // useEffect(() => {
-  //   getScormById()
-  //     .unwrap()
-  //     .then((res) => dispatch(setScormById(res.results)))
-  //     .catch((error) => handleError(error))
-  //     .finally(() => setisLoading(false))
-  // }, [getScormById, dispatch])
-  const currentId = isScorms ? currentScorms : currentCourseId
-  console.log(isScorms, currentId)
+  // console.log(course)
   return (
     <div className={s.courseContent}>
       <BackToPage to={routes.learning}>Вернуться к выбору курса</BackToPage>
       <div className={s.titleBlock}>
-        {/* separate reusable component */}
         <Typography variant="header_4" className={s.title}>
           {course.name}
         </Typography>
@@ -56,18 +36,10 @@ export const Course = () => {
           </Button>
         </div>
       </div>
-      {course.is_scorm ? (
-        <>
-          {course?.lessons.map((lesson) => {
-            return <iframe key={lesson.id} className={s.scorms} src={lesson.resource}></iframe>
-          })}
-        </>
-      ) : (
-        <>
-          <Tabs tabs={tabsData} variant="secondary" />
-          <AiComponent isOpen={isOffcanvasOpen} close={closeOffcanvas} />
-        </>
-      )}
+      <>
+        <Tabs tabs={tabsData} variant="secondary" />
+        <AiComponent isOpen={isOffcanvasOpen} close={closeOffcanvas} />
+      </>
     </div>
   )
 }

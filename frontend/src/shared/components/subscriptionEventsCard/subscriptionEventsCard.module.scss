@@ -1,0 +1,321 @@
+.container {
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+
+  &__top {
+    width: 483px;
+    height: 341px;
+  }
+
+  &__likeBox {
+    width: 161px;
+    height: fit-content;
+    padding: 0 10px;
+    border-radius: 10%;
+    position: absolute;
+    top: 10px;
+    left: 322px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 10px;
+    background-color: var(--color-bg-main);
+  }
+
+  &__courseBox {
+    width: 87px;
+    height: 34px;
+    border-radius: 100px;
+    padding: 2px 20px 6px;
+    background: var(--color-accent-red500);
+    display: flex;
+    align-items: center;
+  }
+
+  &__course {
+    width: 47px;
+    height: 26px;
+    font-family: var(--font-family-primary);
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 130%;
+    letter-spacing: 0.25px;
+    vertical-align: middle;
+    color: var(--color-text-button);
+  }
+
+  &__like {
+    all: unset;
+    width: 44px;
+    height: 44px;
+  }
+
+  &__bottom {
+    width: 483px;
+    height: 334px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding: 20px;
+    background: var(--color-bg-gray100);
+  }
+
+  &__card {
+    width: 443px;
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  &__title {
+    width: 443px;
+    height: 56px;
+    font-family: var(--font-family-primary);
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 130%;
+    letter-spacing: 0.25px;
+    vertical-align: middle;
+    color: var(--color-text-primary);
+  }
+
+  &__description {
+    width: 443px;
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  // &__dataBox {
+  //   width: 100%;
+  //   display: flex;
+  // }
+
+  // &__data {
+  //   width: 443px;
+  //   height: 24px;
+  //   display: flex;
+  //   justify-content: space-between;
+  // }
+
+  // &__param {
+  //   width: fit-content;
+  //   height: 24px;
+  //   display: flex;
+  //   gap: 8px;
+  //   align-items: center;
+  // }
+
+  // &__paramTxt {
+  //   color: var(--color-text-secondary);
+  // }
+
+  // &__circle {
+  //   width: 24px;
+  //   height: 24px;
+  //   border-radius: 50%;
+  // }
+
+  &__depiction {
+    width: 443px;
+    height: 110px;
+    font-family: var(--font-family-secondary);
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 140%;
+    letter-spacing: 0.25px;
+    vertical-align: middle;
+    color: var(--color-text-secondary);
+  }
+
+  &__btn {
+    width: 443px;
+    height: 40px;
+    border-radius: 8px;
+    padding: 13px 18px;
+  }
+}
+
+@media screen and (min-width: 768px) and (max-width: 1349px) {
+  .container {
+    width: 100%;
+    height: fit-content;
+    border-radius: 8px;
+
+    &__top {
+      width: 100%;
+      height: fit-content;
+    }
+
+    &__likeBox {
+      width: 33%;
+      height: 7%;
+      top: 0;
+      left: 67%;
+      margin-top: 5px;
+      padding-right: 0;
+    }
+
+    &__courseBox {
+      width: 94%;
+      min-height: 29px;
+      display: flex;
+      justify-content: center;
+      padding: 2px 20px 6px;
+    }
+
+    &__course {
+      width: fit-content;
+      height: 21px;
+      font-size: var(--font-size-m);
+    }
+
+    &__bottom {
+      width: 100%;
+      height: fit-content;
+      gap: 24px;
+    }
+
+    &__card {
+      width: 100%;
+      height: fit-content;
+      gap: 24px;
+    }
+
+    &__title {
+      width: 100%;
+      height: fit-content;
+      font-size: var(--font-size-s);
+    }
+
+    &__description {
+      width: 100%;
+      height: fit-content;
+      gap: 16px;
+    }
+
+    // &__data {
+    //   width: 100%;
+    //   height: 24px;
+    //   display: flex;
+    //   justify-content: space-between;
+    // }
+
+    // &__paramTxt {
+    //   font-size: var(--font-size-xs);
+    // }
+
+    &__depiction {
+      width: 100%;
+      font-size: var(--font-size-xs);
+    }
+
+    &__btn {
+      width: 100%;
+      height: fit-content;
+      padding: 11px 14px;
+    }
+  }
+}
+
+.img {
+  width: 100%;
+  height: fit-content;
+}
+
+@media screen and (max-width: 767px) {
+  .container {
+    width: 100%;
+    height: fit-content;
+    border-radius: 8px;
+
+    &__top {
+      width: 100%;
+      height: fit-content;
+    }
+
+    &__img {
+      width: 100%;
+      height: fit-content;
+    }
+
+    &__likeBox {
+      width: 40%;
+      height: fit-content;
+      top: 0;
+      left: 67%;
+      gap: 10px;
+    }
+
+    &__courseBox {
+      width: 49.6%;
+      height: 27px;
+      display: flex;
+      justify-content: center;
+      padding: 2px 12px 4px;
+    }
+
+    &__course {
+      width: fit-content;
+      height: 21px;
+      font-size: var(--font-size-s);
+    }
+
+    &__bottom {
+      width: 100%;
+      height: fit-content;
+      gap: 16px;
+    }
+
+    &__card {
+      width: 100%;
+      height: fit-content;
+      gap: 16px;
+    }
+
+    &__title {
+      width: 100%;
+      height: fit-content;
+      font-size: var(--font-size-s);
+    }
+
+    &__description {
+      width: 100%;
+      height: fit-content;
+      gap: 8px;
+    }
+
+    // &__dataBox {
+    //   justify-content: center;
+    // }
+
+    // &__data {
+    //   width: 220px;
+    //   height: fit-content;
+    //   flex-wrap: wrap;
+    //   gap: 8px 24px;
+    // }
+
+    &__depiction {
+      width: 280px;
+      height: fit-content;
+      font-family: var(--font-family-secondary);
+      font-weight: 300;
+      font-size: 16px;
+      line-height: 140%;
+      letter-spacing: 0.25px;
+      vertical-align: middle;
+      color: var(--color-text-secondary);
+    }
+
+    &__btn {
+      width: 100%;
+      height: fit-content;
+      padding: 10px 12px;
+    }
+  }
+}
