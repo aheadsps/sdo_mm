@@ -19,21 +19,21 @@
     },
     {
         "model": "lessons.event",
-        "pk": 17,
+        "pk": 19,
         "fields": {
-            "course": 4,
-            "start_date": "2025-04-21T09:46:00Z",
-            "end_date": "2025-05-12T09:46:00Z",
-            "status": "started"
+            "course": 18,
+            "start_date": "2025-04-21T17:30:00Z",
+            "end_date": "2025-05-05T17:30:00Z",
+            "status": "expected"
         }
     },
     {
         "model": "lessons.event",
-        "pk": 18,
+        "pk": 20,
         "fields": {
-            "course": 18,
-            "start_date": "2025-04-30T17:00:00Z",
-            "end_date": "2025-05-14T17:00:00Z",
+            "course": 4,
+            "start_date": "2025-04-30T15:00:00Z",
+            "end_date": "2025-05-21T15:00:00Z",
             "status": "expected"
         }
     },
@@ -72,10 +72,10 @@
     },
     {
         "model": "lessons.eventcovered",
-        "pk": 11,
+        "pk": 13,
         "fields": {
             "user": 2,
-            "event": 18,
+            "event": 19,
             "favorite": false,
             "procent": 0,
             "status": "expected"
@@ -95,7 +95,6 @@
             "image": "",
             "is_scorm": false,
             "profession": 2,
-            "status": "run",
             "status": "run",
             "experiences": [
                 2,
@@ -1386,8 +1385,8 @@
             "resourse": null,
             "course": 4,
             "started": false,
-            "start_date": "2025-04-18T23:00:00Z",
-            "end_date": null
+            "start_date": "2025-04-30T15:00:00Z",
+            "end_date": "2025-05-07T15:00:00Z"
         }
     },
     {
@@ -1401,8 +1400,8 @@
             "resourse": null,
             "course": 4,
             "started": false,
-            "start_date": "2025-04-25T23:00:00Z",
-            "end_date": null
+            "start_date": "2025-05-07T15:00:00Z",
+            "end_date": "2025-05-14T15:00:00Z"
         }
     },
     {
@@ -1416,8 +1415,8 @@
             "resourse": null,
             "course": 4,
             "started": false,
-            "start_date": "2025-05-02T23:00:00Z",
-            "end_date": null
+            "start_date": "2025-05-14T15:00:00Z",
+            "end_date": "2025-05-21T15:00:00Z"
         }
     },
     {
@@ -1446,8 +1445,8 @@
             "resourse": null,
             "course": 18,
             "started": false,
-            "start_date": "2025-04-18T17:00:00Z",
-            "end_date": null
+            "start_date": "2025-04-21T17:30:00Z",
+            "end_date": "2025-04-28T17:30:00Z"
         }
     },
     {
@@ -1461,8 +1460,8 @@
             "resourse": null,
             "course": 18,
             "started": false,
-            "start_date": "2025-04-25T17:00:00Z",
-            "end_date": null
+            "start_date": "2025-04-28T17:30:00Z",
+            "end_date": "2025-05-05T17:30:00Z"
         }
     },
     {
@@ -1669,8 +1668,8 @@
         "model": "lessons.testblock",
         "pk": 15,
         "fields": {
-            "end_date": null,
-            "max_score": null,
+            "end_date": "2025-04-28T17:30:00Z",
+            "max_score": 10.0,
             "lesson": 15
         }
     },
@@ -1797,7 +1796,7 @@
             "first_name": "Vasia",
             "last_name": "Petechkin",
             "date_joined": "2025-03-17T06:12:30.791Z",
-            "last_login": "2025-04-21T06:51:13.939Z",
+            "last_login": "2025-04-21T14:18:20.080Z",
             "date_commencement": "2024-01-01",
             "profession": 1,
             "groups": [],
@@ -1887,13 +1886,6 @@
         "pk": 4,
         "fields": {
             "years": 3
-        }
-    },
-    {
-        "model": "users.workexperience",
-        "pk": 5,
-        "fields": {
-            "years": 0
         }
     },
     {
@@ -2195,6 +2187,55 @@
         }
     },
     {
+        "model": "django_celery_beat.clockedschedule",
+        "pk": 39,
+        "fields": {
+            "clocked_time": "2025-04-21T14:30:00Z"
+        }
+    },
+    {
+        "model": "django_celery_beat.clockedschedule",
+        "pk": 40,
+        "fields": {
+            "clocked_time": "2025-04-28T14:30:00Z"
+        }
+    },
+    {
+        "model": "django_celery_beat.clockedschedule",
+        "pk": 41,
+        "fields": {
+            "clocked_time": "2025-05-05T14:30:00Z"
+        }
+    },
+    {
+        "model": "django_celery_beat.clockedschedule",
+        "pk": 42,
+        "fields": {
+            "clocked_time": "2025-04-30T12:00:00Z"
+        }
+    },
+    {
+        "model": "django_celery_beat.clockedschedule",
+        "pk": 43,
+        "fields": {
+            "clocked_time": "2025-05-07T12:00:00Z"
+        }
+    },
+    {
+        "model": "django_celery_beat.clockedschedule",
+        "pk": 44,
+        "fields": {
+            "clocked_time": "2025-05-14T12:00:00Z"
+        }
+    },
+    {
+        "model": "django_celery_beat.clockedschedule",
+        "pk": 45,
+        "fields": {
+            "clocked_time": "2025-05-21T12:00:00Z"
+        }
+    },
+    {
         "model": "django_celery_beat.crontabschedule",
         "pk": 1,
         "fields": {
@@ -2210,7 +2251,7 @@
         "model": "django_celery_beat.periodictasks",
         "pk": 1,
         "fields": {
-            "last_update": "2025-04-21T06:50:52.978Z"
+            "last_update": "2025-04-21T14:23:57.991Z"
         }
     },
     {
@@ -2243,72 +2284,16 @@
     },
     {
         "model": "django_celery_beat.periodictask",
-        "pk": 100,
+        "pk": 115,
         "fields": {
-            "name": "Event_17_start_1745228760000",
+            "name": "Event_19_start_1745256600000",
             "task": "lessons.tasks.event_switch_status",
             "interval": null,
             "crontab": null,
             "solar": null,
-            "clocked": 35,
+            "clocked": 39,
             "args": "[]",
-            "kwargs": "{\"event_id\": 17, \"started\": true}",
-            "queue": null,
-            "exchange": null,
-            "routing_key": null,
-            "headers": "{}",
-            "priority": null,
-            "expires": null,
-            "expire_seconds": 31536000,
-            "one_off": true,
-            "start_time": null,
-            "enabled": false,
-            "last_run_at": null,
-            "total_run_count": 0,
-            "date_changed": "2025-04-21T06:48:49.520Z",
-            "description": ""
-        }
-    },
-    {
-        "model": "django_celery_beat.periodictask",
-        "pk": 101,
-        "fields": {
-            "name": "Lesson_1_start_1745228760000",
-            "task": "lessons.tasks.lesson_switch_status",
-            "interval": null,
-            "crontab": null,
-            "solar": null,
-            "clocked": 35,
-            "args": "[]",
-            "kwargs": "{\"lesson_id\": 1, \"started\": true}",
-            "queue": null,
-            "exchange": null,
-            "routing_key": null,
-            "headers": "{}",
-            "priority": null,
-            "expires": null,
-            "expire_seconds": 31536000,
-            "one_off": true,
-            "start_time": null,
-            "enabled": false,
-            "last_run_at": null,
-            "total_run_count": 0,
-            "date_changed": "2025-04-21T06:48:49.527Z",
-            "description": ""
-        }
-    },
-    {
-        "model": "django_celery_beat.periodictask",
-        "pk": 102,
-        "fields": {
-            "name": "Lesson_1_finished_1745833560000",
-            "task": "lessons.tasks.lesson_switch_status",
-            "interval": null,
-            "crontab": null,
-            "solar": null,
-            "clocked": 36,
-            "args": "[]",
-            "kwargs": "{\"lesson_id\": 1, \"started\": false}",
+            "kwargs": "{\"event_id\": 19, \"started\": true}",
             "queue": null,
             "exchange": null,
             "routing_key": null,
@@ -2321,188 +2306,20 @@
             "enabled": true,
             "last_run_at": null,
             "total_run_count": 0,
-            "date_changed": "2025-04-21T06:44:47.612Z",
+            "date_changed": "2025-04-21T14:23:43.697Z",
             "description": ""
         }
     },
     {
         "model": "django_celery_beat.periodictask",
-        "pk": 103,
+        "pk": 116,
         "fields": {
-            "name": "Lesson_2_start_1745833560000",
+            "name": "Lesson_15_start_1745256600000",
             "task": "lessons.tasks.lesson_switch_status",
             "interval": null,
             "crontab": null,
             "solar": null,
-            "clocked": 36,
-            "args": "[]",
-            "kwargs": "{\"lesson_id\": 2, \"started\": true}",
-            "queue": null,
-            "exchange": null,
-            "routing_key": null,
-            "headers": "{}",
-            "priority": null,
-            "expires": null,
-            "expire_seconds": 31536000,
-            "one_off": true,
-            "start_time": null,
-            "enabled": true,
-            "last_run_at": null,
-            "total_run_count": 0,
-            "date_changed": "2025-04-21T06:44:47.612Z",
-            "description": ""
-        }
-    },
-    {
-        "model": "django_celery_beat.periodictask",
-        "pk": 104,
-        "fields": {
-            "name": "Lesson_2_finished_1746438360000",
-            "task": "lessons.tasks.lesson_switch_status",
-            "interval": null,
-            "crontab": null,
-            "solar": null,
-            "clocked": 37,
-            "args": "[]",
-            "kwargs": "{\"lesson_id\": 2, \"started\": false}",
-            "queue": null,
-            "exchange": null,
-            "routing_key": null,
-            "headers": "{}",
-            "priority": null,
-            "expires": null,
-            "expire_seconds": 31536000,
-            "one_off": true,
-            "start_time": null,
-            "enabled": true,
-            "last_run_at": null,
-            "total_run_count": 0,
-            "date_changed": "2025-04-21T06:44:47.612Z",
-            "description": ""
-        }
-    },
-    {
-        "model": "django_celery_beat.periodictask",
-        "pk": 105,
-        "fields": {
-            "name": "Lesson_3_start_1746438360000",
-            "task": "lessons.tasks.lesson_switch_status",
-            "interval": null,
-            "crontab": null,
-            "solar": null,
-            "clocked": 37,
-            "args": "[]",
-            "kwargs": "{\"lesson_id\": 3, \"started\": true}",
-            "queue": null,
-            "exchange": null,
-            "routing_key": null,
-            "headers": "{}",
-            "priority": null,
-            "expires": null,
-            "expire_seconds": 31536000,
-            "one_off": true,
-            "start_time": null,
-            "enabled": true,
-            "last_run_at": null,
-            "total_run_count": 0,
-            "date_changed": "2025-04-21T06:44:47.612Z",
-            "description": ""
-        }
-    },
-    {
-        "model": "django_celery_beat.periodictask",
-        "pk": 106,
-        "fields": {
-            "name": "Lesson_3_finished_1747043160000",
-            "task": "lessons.tasks.lesson_switch_status",
-            "interval": null,
-            "crontab": null,
-            "solar": null,
-            "clocked": 38,
-            "args": "[]",
-            "kwargs": "{\"lesson_id\": 3, \"started\": false}",
-            "queue": null,
-            "exchange": null,
-            "routing_key": null,
-            "headers": "{}",
-            "priority": null,
-            "expires": null,
-            "expire_seconds": 31536000,
-            "one_off": true,
-            "start_time": null,
-            "enabled": true,
-            "last_run_at": null,
-            "total_run_count": 0,
-            "date_changed": "2025-04-21T06:44:47.612Z",
-            "description": ""
-        }
-    },
-    {
-        "model": "django_celery_beat.periodictask",
-        "pk": 107,
-        "fields": {
-            "name": "Event_17_finished_1747043160000",
-            "task": "lessons.tasks.event_switch_status",
-            "interval": null,
-            "crontab": null,
-            "solar": null,
-            "clocked": 38,
-            "args": "[]",
-            "kwargs": "{\"event_id\": 17, \"started\": false}",
-            "queue": null,
-            "exchange": null,
-            "routing_key": null,
-            "headers": "{}",
-            "priority": null,
-            "expires": null,
-            "expire_seconds": 31536000,
-            "one_off": true,
-            "start_time": null,
-            "enabled": true,
-            "last_run_at": null,
-            "total_run_count": 0,
-            "date_changed": "2025-04-21T06:44:47.612Z",
-            "description": ""
-        }
-    },
-    {
-        "model": "django_celery_beat.periodictask",
-        "pk": 108,
-        "fields": {
-            "name": "Event_18_start_1746032400000",
-            "task": "lessons.tasks.event_switch_status",
-            "interval": null,
-            "crontab": null,
-            "solar": null,
-            "clocked": 28,
-            "args": "[]",
-            "kwargs": "{\"event_id\": 18, \"started\": true}",
-            "queue": null,
-            "exchange": null,
-            "routing_key": null,
-            "headers": "{}",
-            "priority": null,
-            "expires": null,
-            "expire_seconds": 31536000,
-            "one_off": true,
-            "start_time": null,
-            "enabled": true,
-            "last_run_at": null,
-            "total_run_count": 0,
-            "date_changed": "2025-04-21T06:45:01.966Z",
-            "description": ""
-        }
-    },
-    {
-        "model": "django_celery_beat.periodictask",
-        "pk": 109,
-        "fields": {
-            "name": "Lesson_15_start_1746032400000",
-            "task": "lessons.tasks.lesson_switch_status",
-            "interval": null,
-            "crontab": null,
-            "solar": null,
-            "clocked": 28,
+            "clocked": 39,
             "args": "[]",
             "kwargs": "{\"lesson_id\": 15, \"started\": true}",
             "queue": null,
@@ -2517,20 +2334,20 @@
             "enabled": true,
             "last_run_at": null,
             "total_run_count": 0,
-            "date_changed": "2025-04-21T06:45:01.966Z",
+            "date_changed": "2025-04-21T14:23:43.697Z",
             "description": ""
         }
     },
     {
         "model": "django_celery_beat.periodictask",
-        "pk": 110,
+        "pk": 117,
         "fields": {
-            "name": "Lesson_15_finished_1746637200000",
+            "name": "Lesson_15_finished_1745861400000",
             "task": "lessons.tasks.lesson_switch_status",
             "interval": null,
             "crontab": null,
             "solar": null,
-            "clocked": 29,
+            "clocked": 40,
             "args": "[]",
             "kwargs": "{\"lesson_id\": 15, \"started\": false}",
             "queue": null,
@@ -2545,20 +2362,20 @@
             "enabled": true,
             "last_run_at": null,
             "total_run_count": 0,
-            "date_changed": "2025-04-21T06:45:01.966Z",
+            "date_changed": "2025-04-21T14:23:43.697Z",
             "description": ""
         }
     },
     {
         "model": "django_celery_beat.periodictask",
-        "pk": 111,
+        "pk": 118,
         "fields": {
-            "name": "TestBlock_15_1746637200000",
+            "name": "TestBlock_15_1745861400000",
             "task": "lessons.tasks.test_block_process",
             "interval": null,
             "crontab": null,
             "solar": null,
-            "clocked": 29,
+            "clocked": 40,
             "args": "[]",
             "kwargs": "{\"test_block_id\": 15}",
             "queue": null,
@@ -2573,20 +2390,20 @@
             "enabled": true,
             "last_run_at": null,
             "total_run_count": 0,
-            "date_changed": "2025-04-21T06:45:01.966Z",
+            "date_changed": "2025-04-21T14:23:43.697Z",
             "description": ""
         }
     },
     {
         "model": "django_celery_beat.periodictask",
-        "pk": 112,
+        "pk": 119,
         "fields": {
-            "name": "Lesson_16_start_1746637200000",
+            "name": "Lesson_16_start_1745861400000",
             "task": "lessons.tasks.lesson_switch_status",
             "interval": null,
             "crontab": null,
             "solar": null,
-            "clocked": 29,
+            "clocked": 40,
             "args": "[]",
             "kwargs": "{\"lesson_id\": 16, \"started\": true}",
             "queue": null,
@@ -2601,20 +2418,20 @@
             "enabled": true,
             "last_run_at": null,
             "total_run_count": 0,
-            "date_changed": "2025-04-21T06:45:01.966Z",
+            "date_changed": "2025-04-21T14:23:43.697Z",
             "description": ""
         }
     },
     {
         "model": "django_celery_beat.periodictask",
-        "pk": 113,
+        "pk": 120,
         "fields": {
-            "name": "Lesson_16_finished_1747242000000",
+            "name": "Lesson_16_finished_1746466200000",
             "task": "lessons.tasks.lesson_switch_status",
             "interval": null,
             "crontab": null,
             "solar": null,
-            "clocked": 30,
+            "clocked": 41,
             "args": "[]",
             "kwargs": "{\"lesson_id\": 16, \"started\": false}",
             "queue": null,
@@ -2629,22 +2446,22 @@
             "enabled": true,
             "last_run_at": null,
             "total_run_count": 0,
-            "date_changed": "2025-04-21T06:45:01.966Z",
+            "date_changed": "2025-04-21T14:23:43.697Z",
             "description": ""
         }
     },
     {
         "model": "django_celery_beat.periodictask",
-        "pk": 114,
+        "pk": 121,
         "fields": {
-            "name": "Event_18_finished_1747242000000",
+            "name": "Event_19_finished_1746466200000",
             "task": "lessons.tasks.event_switch_status",
             "interval": null,
             "crontab": null,
             "solar": null,
-            "clocked": 30,
+            "clocked": 41,
             "args": "[]",
-            "kwargs": "{\"event_id\": 18, \"started\": false}",
+            "kwargs": "{\"event_id\": 19, \"started\": false}",
             "queue": null,
             "exchange": null,
             "routing_key": null,
@@ -2657,7 +2474,231 @@
             "enabled": true,
             "last_run_at": null,
             "total_run_count": 0,
-            "date_changed": "2025-04-21T06:45:01.966Z",
+            "date_changed": "2025-04-21T14:23:43.697Z",
+            "description": ""
+        }
+    },
+    {
+        "model": "django_celery_beat.periodictask",
+        "pk": 122,
+        "fields": {
+            "name": "Event_20_start_1746025200000",
+            "task": "lessons.tasks.event_switch_status",
+            "interval": null,
+            "crontab": null,
+            "solar": null,
+            "clocked": 42,
+            "args": "[]",
+            "kwargs": "{\"event_id\": 20, \"started\": true}",
+            "queue": null,
+            "exchange": null,
+            "routing_key": null,
+            "headers": "{}",
+            "priority": null,
+            "expires": null,
+            "expire_seconds": 31536000,
+            "one_off": true,
+            "start_time": null,
+            "enabled": true,
+            "last_run_at": null,
+            "total_run_count": 0,
+            "date_changed": "2025-04-21T14:23:57.994Z",
+            "description": ""
+        }
+    },
+    {
+        "model": "django_celery_beat.periodictask",
+        "pk": 123,
+        "fields": {
+            "name": "Lesson_1_start_1746025200000",
+            "task": "lessons.tasks.lesson_switch_status",
+            "interval": null,
+            "crontab": null,
+            "solar": null,
+            "clocked": 42,
+            "args": "[]",
+            "kwargs": "{\"lesson_id\": 1, \"started\": true}",
+            "queue": null,
+            "exchange": null,
+            "routing_key": null,
+            "headers": "{}",
+            "priority": null,
+            "expires": null,
+            "expire_seconds": 31536000,
+            "one_off": true,
+            "start_time": null,
+            "enabled": true,
+            "last_run_at": null,
+            "total_run_count": 0,
+            "date_changed": "2025-04-21T14:23:57.994Z",
+            "description": ""
+        }
+    },
+    {
+        "model": "django_celery_beat.periodictask",
+        "pk": 124,
+        "fields": {
+            "name": "Lesson_1_finished_1746630000000",
+            "task": "lessons.tasks.lesson_switch_status",
+            "interval": null,
+            "crontab": null,
+            "solar": null,
+            "clocked": 43,
+            "args": "[]",
+            "kwargs": "{\"lesson_id\": 1, \"started\": false}",
+            "queue": null,
+            "exchange": null,
+            "routing_key": null,
+            "headers": "{}",
+            "priority": null,
+            "expires": null,
+            "expire_seconds": 31536000,
+            "one_off": true,
+            "start_time": null,
+            "enabled": true,
+            "last_run_at": null,
+            "total_run_count": 0,
+            "date_changed": "2025-04-21T14:23:57.994Z",
+            "description": ""
+        }
+    },
+    {
+        "model": "django_celery_beat.periodictask",
+        "pk": 125,
+        "fields": {
+            "name": "Lesson_2_start_1746630000000",
+            "task": "lessons.tasks.lesson_switch_status",
+            "interval": null,
+            "crontab": null,
+            "solar": null,
+            "clocked": 43,
+            "args": "[]",
+            "kwargs": "{\"lesson_id\": 2, \"started\": true}",
+            "queue": null,
+            "exchange": null,
+            "routing_key": null,
+            "headers": "{}",
+            "priority": null,
+            "expires": null,
+            "expire_seconds": 31536000,
+            "one_off": true,
+            "start_time": null,
+            "enabled": true,
+            "last_run_at": null,
+            "total_run_count": 0,
+            "date_changed": "2025-04-21T14:23:57.994Z",
+            "description": ""
+        }
+    },
+    {
+        "model": "django_celery_beat.periodictask",
+        "pk": 126,
+        "fields": {
+            "name": "Lesson_2_finished_1747234800000",
+            "task": "lessons.tasks.lesson_switch_status",
+            "interval": null,
+            "crontab": null,
+            "solar": null,
+            "clocked": 44,
+            "args": "[]",
+            "kwargs": "{\"lesson_id\": 2, \"started\": false}",
+            "queue": null,
+            "exchange": null,
+            "routing_key": null,
+            "headers": "{}",
+            "priority": null,
+            "expires": null,
+            "expire_seconds": 31536000,
+            "one_off": true,
+            "start_time": null,
+            "enabled": true,
+            "last_run_at": null,
+            "total_run_count": 0,
+            "date_changed": "2025-04-21T14:23:57.994Z",
+            "description": ""
+        }
+    },
+    {
+        "model": "django_celery_beat.periodictask",
+        "pk": 127,
+        "fields": {
+            "name": "Lesson_3_start_1747234800000",
+            "task": "lessons.tasks.lesson_switch_status",
+            "interval": null,
+            "crontab": null,
+            "solar": null,
+            "clocked": 44,
+            "args": "[]",
+            "kwargs": "{\"lesson_id\": 3, \"started\": true}",
+            "queue": null,
+            "exchange": null,
+            "routing_key": null,
+            "headers": "{}",
+            "priority": null,
+            "expires": null,
+            "expire_seconds": 31536000,
+            "one_off": true,
+            "start_time": null,
+            "enabled": true,
+            "last_run_at": null,
+            "total_run_count": 0,
+            "date_changed": "2025-04-21T14:23:57.994Z",
+            "description": ""
+        }
+    },
+    {
+        "model": "django_celery_beat.periodictask",
+        "pk": 128,
+        "fields": {
+            "name": "Lesson_3_finished_1747839600000",
+            "task": "lessons.tasks.lesson_switch_status",
+            "interval": null,
+            "crontab": null,
+            "solar": null,
+            "clocked": 45,
+            "args": "[]",
+            "kwargs": "{\"lesson_id\": 3, \"started\": false}",
+            "queue": null,
+            "exchange": null,
+            "routing_key": null,
+            "headers": "{}",
+            "priority": null,
+            "expires": null,
+            "expire_seconds": 31536000,
+            "one_off": true,
+            "start_time": null,
+            "enabled": true,
+            "last_run_at": null,
+            "total_run_count": 0,
+            "date_changed": "2025-04-21T14:23:57.994Z",
+            "description": ""
+        }
+    },
+    {
+        "model": "django_celery_beat.periodictask",
+        "pk": 129,
+        "fields": {
+            "name": "Event_20_finished_1747839600000",
+            "task": "lessons.tasks.event_switch_status",
+            "interval": null,
+            "crontab": null,
+            "solar": null,
+            "clocked": 45,
+            "args": "[]",
+            "kwargs": "{\"event_id\": 20, \"started\": false}",
+            "queue": null,
+            "exchange": null,
+            "routing_key": null,
+            "headers": "{}",
+            "priority": null,
+            "expires": null,
+            "expire_seconds": 31536000,
+            "one_off": true,
+            "start_time": null,
+            "enabled": true,
+            "last_run_at": null,
+            "total_run_count": 0,
+            "date_changed": "2025-04-21T14:23:57.994Z",
             "description": ""
         }
     }
