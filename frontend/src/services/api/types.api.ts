@@ -253,7 +253,7 @@ export type Course = {
   profession: Profession
   scorms: Scorm[]
   experiences: Experience[]
-  status: string
+  status: string // string[]
   materials: Materials
   user: number
   is_scorm: boolean
