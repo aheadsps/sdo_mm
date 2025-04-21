@@ -24,16 +24,9 @@ import { LessonTest } from './test/Tests'
 const LessonComponent = () => {
   const { isOpen: isOffcanvasOpen, close: closeOffcanvas, toggle: toggleOffCanvas } = useToggle()
   const [isMaterialsButtonClicked, setIsMaterialsButtonClicked] = useState(false)
+  const [isLoading, setIsLoading] = useState<boolean>(true)
   const { id, lessonId } = useParams()
   const dispatch = useAppDispatch()
-
-  // const { data: currentCourse } = useGetCourseQuery(Number(id))
-  // useEffect(() => {
-  //   if (currentCourse) dispatch(setCourseById(currentCourse))
-  // }, [currentCourse, dispatch])
-  // const course = useAppSelector(selectCourse)
-  const [isLoading, setIsLoading] = useState<boolean>(true)
-  // const { data: lesson, isLoading } = useGetLessonByIdQuery(Number(lessonId))
   const [getLessonById] = useLazyGetLessonByIdQuery()
   useEffect(() => {
     getLessonById(Number(lessonId))
@@ -71,40 +64,43 @@ const LessonComponent = () => {
   ) : (
     <>
       {lesson?.steps.length !== undefined && (
-        <div className={s.container}>
-          <NavLink to={`/learning/course/${id}`} className={s.backToPage}>
-            <ArrowLeftIcon className={s.icon} />
-            <Typography variant="body_2" className={s.backText}>
-              Вернуться на общую страницу курса
+        <>
+          <div className={s.container}>
+            <NavLink to={`/learning/course/${id}`} className={s.backToPage}>
+              <ArrowLeftIcon className={s.icon} />
+              <Typography variant="body_2" className={s.backText}>
+                Вернуться на общую страницу курса
+              </Typography>
+            </NavLink>
+            <Title txt={txt} btn1={btn1} btn2={btn2} fstBtn={toggleOffCanvas} />
+            <Typography variant="body_2" className={s.desc}>
+              {/* {lesson.description} */}
             </Typography>
-          </NavLink>
-          <Title txt={txt} btn1={btn1} btn2={btn2} fstBtn={toggleOffCanvas} />
-          <Typography variant="body_2" className={s.desc}>
-            {/* {lesson.description} */}
-          </Typography>
 
-          <div className={s.content}>
-            <div className={s.leftBox}>
-              <LessonPlan
-                steps={lesson.steps}
-                setIsMaterialsButtonClicked={setIsMaterialsButtonClicked}
-                onClick={onItemClick}
-              />
+            <div className={s.content}>
+              <div className={s.leftBox}>
+                <LessonPlan
+                  steps={lesson.steps}
+                  setIsMaterialsButtonClicked={setIsMaterialsButtonClicked}
+                  onClick={onItemClick}
+                />
+              </div>
+              {/* <LessonContent onClick={handleNavigate} selectedStep={selectedStep} /> */}
+              {isMaterialsButtonClicked ? (
+                <div className={s.lessonMaterials}>
+                  <Button className={s.materialsButton}>Скачать все материалы урока</Button>
+                  <CourseMaterials />
+                </div>
+              ) : (
+                // : selectedStep.id === lesson.steps[lesson.steps.length - 1].id ? (
+                //   <LessonTest />)
+                <LessonContent onClick={handleNavigate} selectedStep={selectedStep} />
+              )}
             </div>
-            <LessonContent onClick={handleNavigate} selectedStep={selectedStep} />
-            {/* {isMaterialsButtonClicked ? (
-          <div className={s.lessonMaterials}>
-            <Button className={s.materialsButton}>Скачать все материалы урока</Button>
-            <CourseMaterials />
+            <AiComponent isOpen={isOffcanvasOpen} close={closeOffcanvas} />
           </div>
-        ) : selectedStep.id === lesson.steps[lesson.steps.length - 1].id ? (
           <LessonTest />
-        ) : (
-          <LessonContent onClick={handleNavigate} selectedStep={selectedStep} />
-        )} */}
-          </div>
-          <AiComponent isOpen={isOffcanvasOpen} close={closeOffcanvas} />
-        </div>
+        </>
       )}
     </>
   )

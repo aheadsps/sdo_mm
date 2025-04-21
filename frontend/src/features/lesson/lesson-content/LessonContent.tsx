@@ -1,5 +1,5 @@
 import { YouTubeLogo } from '@assets/icons'
-import { Lesson, StepView } from '@services/api'
+import { StepView } from '@services/api'
 import { Typography, Button } from '@shared/components'
 
 // import { SelectedStep } from '../LessonComponent'
@@ -13,7 +13,7 @@ type Props = {
 }
 
 export const LessonContent = ({ steps, onClick, selectedStep }: Props) => {
-  console.log(selectedStep)
+  console.log(selectedStep, steps)
   return (
     <div className={s.rightBox}>
       <div className={s.rightTop}>
