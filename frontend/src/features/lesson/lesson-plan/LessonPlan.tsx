@@ -1,4 +1,4 @@
-import { Lesson, StepView } from '@services/api'
+import { StepView } from '@services/api'
 import { DropdownCard, Button } from '@shared/components'
 import { useState } from 'react'
 

@@ -1,6 +1,6 @@
 import { ArrowLeftIcon } from '@assets/icons'
 import { CourseMaterials } from '@features/course/course-materials'
-import { StepView, useGetLessonByIdQuery, useLazyGetLessonByIdQuery } from '@services/api'
+import { StepView, useLazyGetLessonByIdQuery } from '@services/api'
 import { selectLessonById, setLessonById } from '@services/slices'
 import { useAppDispatch, useAppSelector } from '@services/store'
 import { AiComponent, Typography, Button, Title, Loader } from '@shared/components'
@@ -13,21 +13,17 @@ import { NavLink, useNavigate, useParams } from 'react-router-dom'
 import { LessonContent } from './lesson-content/LessonContent'
 import { LessonPlan } from './lesson-plan'
 import s from './lessonComponent.module.scss'
-// import { lessonStepsData } from './lessonStepsData'
 import { LessonTest } from './test/Tests'
 
-// export type SelectedStep = {
-//   id: number
-//   title: string
-//   content_text: string
-// }
 const LessonComponent = () => {
   const { isOpen: isOffcanvasOpen, close: closeOffcanvas, toggle: toggleOffCanvas } = useToggle()
   const [isMaterialsButtonClicked, setIsMaterialsButtonClicked] = useState(false)
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const { id, lessonId } = useParams()
   const dispatch = useAppDispatch()
+
   const [getLessonById] = useLazyGetLessonByIdQuery()
+
   useEffect(() => {
     getLessonById(Number(lessonId))
       .unwrap()
@@ -37,9 +33,11 @@ const LessonComponent = () => {
       .catch((error) => handleError(error))
       .finally(() => setIsLoading(false))
   }, [getLessonById, dispatch, lessonId])
+
   const lesson = useAppSelector(selectLessonById)
   const [selectedStep, setSelectedStep] = useState(lesson?.steps[0])
-  console.log(lesson)
+  // console.log(lesson)
+
   const txt = lesson?.name
   const btn1 = 'ИИ'
   const btn2 = 'Обсуждение урока'
