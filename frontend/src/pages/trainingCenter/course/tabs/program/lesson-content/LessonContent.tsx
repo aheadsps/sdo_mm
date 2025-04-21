@@ -1,10 +1,11 @@
 import { ArrowRightIcon, CalendarIcon } from '@assets/icons'
 import { LessonType, Scorm, StepView } from '@services/api'
-import { Button, InputWithIcon, Input, type Option, Select, Typography } from '@shared/components'
+import { Button, InputWithIcon, type Option, Select } from '@shared/components'
 import { useToggle } from '@shared/hooks'
 import clsx from 'clsx'
 import { NavLink } from 'react-router-dom'
 
+import { EditableTitle } from './EditableTitle'
 import s from './lesson-content.module.scss'
 
 const getDisplayName = (item?: LessonType | StepView | Scorm): string => {
@@ -31,13 +32,14 @@ export const LessonContent = <T extends LessonType | StepView | Scorm>({
 
   return (
     <div className={s.lessonContent}>
-      <div className={s.title}>
+      {/* <div className={s.title}>
         {!displayName ? (
           <Input placeholder="Введите тему" />
         ) : (
           <Typography variant="body_2">{lesson ? displayName : 'Введите тему'}</Typography>
         )}
-      </div>
+      </div> */}
+      <EditableTitle displayName={displayName} />
       {isExpandableContent ? (
         <>
           <Select
