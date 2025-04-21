@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.core.exceptions import ValidationError
 
-from backend.lessons.models import Lesson, Course
+from lessons.models import Lesson, Course
 
 class LessonModelTest(TestCase):
 
@@ -28,7 +28,7 @@ class LessonModelTest(TestCase):
         """Тест проверки максимальной длины названия"""
         with self.assertRaises(ValidationError):
             Lesson.objects.create(
-                name="a" * 257,
+                name="a" * 256,
                 serial=1,
                 course=self.course
             )

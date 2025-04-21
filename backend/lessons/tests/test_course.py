@@ -1,106 +1,144 @@
 
+from django.test import TestCase
+from django.core.files.uploadedfile import SimpleUploadedFile
+from django.utils import timezone
 
-from rest_framework.test import APITestCase
-from rest_framework import status
-from backend.lessons.models import Question, Answer
-from django.contrib.auth import get_user_model
-from rest_framework import serializers
+from lessons.models import Course
+from users.models import Profession, WorkExperience
+from lessons.models import SCORM
 
 
-class AnswerSerializerTest(APITestCase):
-    def test_answer_serializer(self):
-        """
-        Проверка сериализатора для ответа
-        """
-        answer_data = {
-            "text": "Ответ 1",
-            "correct": True
+class CourseModelTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        # Создаем тестовые данные
+        cls.profession = Profession.objects.create(name="Тестовая профессия")
+        cls.scorm = SCORM.objects.create(title="Тестовый SCORM")
+        cls.experience = WorkExperience.objects.create(years=1)
+
+        # Создаем тестовое изображение
+        cls.test_image = SimpleUploadedFile(
+            name='test_image.jpg',
+            content=b'\x47\x49\x46\x38\x39\x61\x01\x00\x01\x00',
+            content_type='image/jpeg'
+        )
+
+        # Основной тестовый курс
+        cls.course = Course.objects.create(
+            name="Тестовый курс",
+            description="Тестовое описание",
+            image=cls.test_image,
+            profession=cls.profession,
+            scorm=cls.scorm
+        )
+        cls.course.experiences.add(cls.experience)
+
+    def test_model_fields(self):
+        """Проверка корректности заполнения полей модели"""
+        course = self.course
+
+        self.assertEqual(course.name, "Тестовый курс")
+        self.assertEqual(course.description, "Тестовое описание")
+        self.assertTrue(course.image.name.startswith('courses/'))
+        self.assertEqual(course.profession, self.profession)
+        self.assertEqual(course.scorm, self.scorm)
+        self.assertIn(self.experience, course.experiences.all())
+
+    def test_auto_datetime_fields(self):
+        """Проверка автоматических полей даты/времени"""
+        now = timezone.now()
+
+        self.assertLessEqual(self.course.create_date, now)
+        self.assertLessEqual(self.course.update_date, now)
+
+    def test_beginer_default_value(self):
+        """Проверка значения по умолчанию для beginer"""
+        new_course = Course.objects.create(name="Новый курс")
+        self.assertFalse(new_course.beginer)
+
+    def test_update_date_auto_update(self):
+        """Проверка автообновления update_date"""
+        original_date = self.course.update_date
+        self.course.name = "Обновленное имя"
+        self.course.save()
+        self.assertGreater(self.course.update_date, original_date)
+
+    def test_foreign_key_relations(self):
+        """Проверка отношений ForeignKey"""
+        # Проверка SET_NULL для profession
+        self.profession.delete()
+        self.course.refresh_from_db()
+        self.assertIsNone(self.course.profession)
+
+        # Проверка SET_NULL для scorm
+        self.scorm.delete()
+        self.course.refresh_from_db()
+        self.assertIsNone(self.course.scorm)
+
+    def test_str_representation(self):
+        """Проверка строкового представления"""
+        self.assertEqual(str(self.course), "Тестовый курс")
+
+    def test_verbose_names(self):
+        """Проверка verbose names"""
+        self.assertEqual(Course._meta.verbose_name, "Course")
+        self.assertEqual(Course._meta.verbose_name_plural, "Courses")
+
+    def test_field_verbose_names(self):
+        """Проверка verbose names отдельных полей"""
+        field_verboses = {
+            'name': 'Название',
+            'description': 'Описание',
+            'beginer': 'Начинающий',
+            'create_date': 'Дата создания',
+            'update_date': 'Дата обновления',
+            'image': 'Превью',
+            'profession': 'профессия',
+            'scorm': 'SCORM',
+            'experiences': 'Стаж',
         }
-        serializer = Answer(data=answer_data)
-        self.assertTrue(serializer.is_valid())
-        answer = serializer.save()
 
-        # Проверка, что ответ сохранён в базе
-        self.assertEqual(answer.text, answer_data["text"])
-        self.assertEqual(answer.correct, answer_data["correct"])
+        for field, expected_value in field_verboses.items():
+            with self.subTest(field=field):
+                verbose_name = self.course._meta.get_field(field).verbose_name
+                self.assertEqual(verbose_name, expected_value)
 
-    def test_invalid_answer_serializer(self):
-        """
-        Проверка сериализатора для ответа с ошибками
-        """
-        invalid_answer_data = {
-            "text": "",
-            "correct": "invalid"  # неверный тип для correct
+    def test_help_texts(self):
+        """Проверка help texts"""
+        help_texts = {
+            'name': 'Название курса',
+            'description': 'Описание курса',
+            'beginer': 'Курс для начинающих',
+            'create_date': 'Дата создания курса',
+            'update_date': 'Дата обновления курса',
+            'experiences': 'На какие стажи расчитан курс',
         }
-        serializer = Answer(data=invalid_answer_data)
-        self.assertFalse(serializer.is_valid())
-        self.assertIn('text', serializer.errors)
-        self.assertIn('correct', serializer.errors)
 
+        for field, expected_value in help_texts.items():
+            with self.subTest(field=field):
+                help_text = self.course._meta.get_field(field).help_text
+                self.assertEqual(help_text, expected_value)
 
-class QuestionSerializerTest(APITestCase):
-    def test_question_serializer(self):
-        """
-        Проверка сериализатора для вопроса с ответами
-        """
-        question_data = {
-            "text": "Какой сегодня день?",
-            "answers": [
-                {"text": "Понедельник", "correct": True},
-                {"text": "Вторник", "correct": False}
-            ]
-        }
-        serializer = Question(data=question_data)
-        self.assertTrue(serializer.is_valid())
-        question = serializer.save()
+    def test_ordering(self):
+        """Проверка сортировки по умолчанию (если есть)"""
+        # Если в Meta есть ordering, добавить соответствующие проверки
+        pass
 
-        # Проверка сохранения вопроса и ответов
-        self.assertEqual(question.text, question_data["text"])
-        self.assertEqual(question.answers.count(), 2)
+    def test_m2m_relation(self):
+        """Проверка отношения ManyToMany"""
+        new_experience = WorkExperience.objects.create(years=3)
+        self.course.experiences.add(new_experience)
+        self.assertEqual(self.course.experiences.count(), 2)
 
-        # Проверка каждого ответа
-        answers = question.answers.all()
-        self.assertEqual(answers[0].text, "Понедельник")
-        self.assertEqual(answers[1].text, "Вторник")
+        self.course.experiences.remove(new_experience)
+        self.assertEqual(self.course.experiences.count(), 1)
 
-    def test_invalid_question_serializer(self):
-        """
-        Проверка сериализатора для вопроса с ошибками
-        """
-        invalid_question_data = {
-            "text": "",
-            "answers": [
-                {"text": "Ответ 1", "correct": True}
-            ]
-        }
-        serializer = Question(data=invalid_question_data)
-        self.assertFalse(serializer.is_valid())
-        self.assertIn('text', serializer.errors)
-
-    def test_create_question_with_answers(self):
-        """
-        Проверка метода create для вопроса с ответами
-        """
-        question_data = {
-            "text": "Какие есть курсы?",
-            "answers": [
-                {"text": "Машинист", "correct": True},
-                {"text": "Летчик", "correct": False}
-            ]
-        }
-        serializer = Question(data=question_data)
-        self.assertTrue(serializer.is_valid())
-        question = serializer.save()
-
-        # Проверка, что вопрос и ответы созданы
-        self.assertEqual(question.text, "Какие есть курсы?")
-        self.assertEqual(question.answers.count(), 2)
-
-        answer_texts = [answer.text for answer in question.answers.all()]
-        self.assertIn("Машинист", answer_texts)
-        self.assertIn("Летчик", answer_texts)
-
-
+    def test_image_upload_path(self):
+        """Проверка пути загрузки изображения"""
+        self.assertTrue(
+            self.course.image.name.startswith('courses/'),
+            msg=f"Неверный путь загрузки изображения: {self.course.image.name}"
+        )
 # class CourseModelTest(TestCase):
     # def setUp(self):
     #     self.profession = Profession.objects.create(name="Test Profession")
