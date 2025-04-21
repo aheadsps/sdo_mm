@@ -1,9 +1,9 @@
 import { ArrowLeftIcon } from '@assets/icons'
 import { CourseMaterials } from '@features/course/course-materials'
-import { StepView, useLazyGetLessonByIdQuery } from '@services/api'
+import { StepView, useGetLessonByIdQuery, useLazyGetLessonByIdQuery } from '@services/api'
 import { selectLessonById, setLessonById } from '@services/slices'
 import { useAppDispatch, useAppSelector } from '@services/store'
-import { AiComponent, Typography, Button, Title } from '@shared/components'
+import { AiComponent, Typography, Button, Title, Loader } from '@shared/components'
 import { withLayout } from '@shared/HOC'
 import { useToggle } from '@shared/hooks/useToggle'
 import { handleError } from '@shared/utils'
@@ -26,12 +26,14 @@ const LessonComponent = () => {
   const [isMaterialsButtonClicked, setIsMaterialsButtonClicked] = useState(false)
   const { id, lessonId } = useParams()
   const dispatch = useAppDispatch()
+
   // const { data: currentCourse } = useGetCourseQuery(Number(id))
   // useEffect(() => {
   //   if (currentCourse) dispatch(setCourseById(currentCourse))
   // }, [currentCourse, dispatch])
   // const course = useAppSelector(selectCourse)
   const [isLoading, setIsLoading] = useState<boolean>(true)
+  // const { data: lesson, isLoading } = useGetLessonByIdQuery(Number(lessonId))
   const [getLessonById] = useLazyGetLessonByIdQuery()
   useEffect(() => {
     getLessonById(Number(lessonId))
@@ -45,7 +47,7 @@ const LessonComponent = () => {
   const lesson = useAppSelector(selectLessonById)
   const [selectedStep, setSelectedStep] = useState(lesson?.steps[0])
   console.log(lesson)
-  const txt = lesson.name
+  const txt = lesson?.name
   const btn1 = 'ИИ'
   const btn2 = 'Обсуждение урока'
   const navigate = useNavigate()
@@ -61,30 +63,36 @@ const LessonComponent = () => {
       setIsMaterialsButtonClicked(false)
     }
   }
+  useEffect(() => {
+    if (lesson) setSelectedStep(lesson?.steps[0])
+  }, [lesson])
+  return isLoading ? (
+    <Loader />
+  ) : (
+    <>
+      {lesson?.steps.length !== undefined && (
+        <div className={s.container}>
+          <NavLink to={`/learning/course/${id}`} className={s.backToPage}>
+            <ArrowLeftIcon className={s.icon} />
+            <Typography variant="body_2" className={s.backText}>
+              Вернуться на общую страницу курса
+            </Typography>
+          </NavLink>
+          <Title txt={txt} btn1={btn1} btn2={btn2} fstBtn={toggleOffCanvas} />
+          <Typography variant="body_2" className={s.desc}>
+            {/* {lesson.description} */}
+          </Typography>
 
-  return (
-    <div className={s.container}>
-      <NavLink to={`/learning/course/${id}`} className={s.backToPage}>
-        <ArrowLeftIcon className={s.icon} />
-        <Typography variant="body_2" className={s.backText}>
-          Вернуться на общую страницу курса
-        </Typography>
-      </NavLink>
-
-      <Title txt={txt} btn1={btn1} btn2={btn2} fstBtn={toggleOffCanvas} />
-      <Typography variant="body_2" className={s.desc}>
-        {/* {lesson.description} */}
-      </Typography>
-      <div className={s.content}>
-        <div className={s.leftBox}>
-          <LessonPlan
-            lesson={lesson}
-            setIsMaterialsButtonClicked={setIsMaterialsButtonClicked}
-            onClick={onItemClick}
-          />
-        </div>
-
-        {/* {isMaterialsButtonClicked ? (
+          <div className={s.content}>
+            <div className={s.leftBox}>
+              <LessonPlan
+                steps={lesson.steps}
+                setIsMaterialsButtonClicked={setIsMaterialsButtonClicked}
+                onClick={onItemClick}
+              />
+            </div>
+            <LessonContent onClick={handleNavigate} selectedStep={selectedStep} />
+            {/* {isMaterialsButtonClicked ? (
           <div className={s.lessonMaterials}>
             <Button className={s.materialsButton}>Скачать все материалы урока</Button>
             <CourseMaterials />
@@ -94,9 +102,11 @@ const LessonComponent = () => {
         ) : (
           <LessonContent onClick={handleNavigate} selectedStep={selectedStep} />
         )} */}
-      </div>
-      <AiComponent isOpen={isOffcanvasOpen} close={closeOffcanvas} />
-    </div>
+          </div>
+          <AiComponent isOpen={isOffcanvasOpen} close={closeOffcanvas} />
+        </div>
+      )}
+    </>
   )
 }
 

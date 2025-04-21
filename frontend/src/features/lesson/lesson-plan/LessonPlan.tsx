@@ -9,13 +9,13 @@ import { LessonPlanItem } from './lesson-plan-item/LessonPlanItem'
 import s from './lesson-plan.module.scss'
 
 type Props = {
-  lesson: Lesson
+  steps: StepView[]
   setIsMaterialsButtonClicked: (isMaterialsButtonClicked: boolean) => void
   onClick: (item: StepView) => void
 }
-export const LessonPlan = ({ lesson, setIsMaterialsButtonClicked, onClick }: Props) => {
-  console.log(lesson.steps)
-  const [completedSteps, setCompletedSteps] = useState<number[]>([lesson?.steps[0].id])
+export const LessonPlan = ({ steps, setIsMaterialsButtonClicked, onClick }: Props) => {
+  console.log(steps)
+  const [completedSteps, setCompletedSteps] = useState<number[]>([steps[0].id])
 
   const onItemClick = (item: StepView) => {
     onClick(item)
@@ -26,13 +26,9 @@ export const LessonPlan = ({ lesson, setIsMaterialsButtonClicked, onClick }: Pro
     setIsMaterialsButtonClicked(true)
   }
   return (
-    <DropdownCard
-      title="План урока:"
-      blocks={`${lesson.steps.length} темы`}
-      className={s.drpdnContent}
-    >
+    <DropdownCard title="План урока:" blocks={`${steps.length} темы`} className={s.drpdnContent}>
       <ul>
-        {lesson.steps?.map((item) => (
+        {steps?.map((item) => (
           <LessonPlanItem
             key={item.id}
             onClick={() => onItemClick(item)}
@@ -41,7 +37,7 @@ export const LessonPlan = ({ lesson, setIsMaterialsButtonClicked, onClick }: Pro
             {item.title}
           </LessonPlanItem>
         ))}
-        {lesson.steps?.map((item) => (
+        {steps?.map((item) => (
           <LessonPlanItem
             key={item.id}
             onClick={() => onItemClick(item)}

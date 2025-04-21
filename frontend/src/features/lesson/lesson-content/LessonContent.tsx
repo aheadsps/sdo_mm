@@ -1,5 +1,5 @@
 import { YouTubeLogo } from '@assets/icons'
-import { StepView } from '@services/api'
+import { Lesson, StepView } from '@services/api'
 import { Typography, Button } from '@shared/components'
 
 // import { SelectedStep } from '../LessonComponent'
@@ -7,11 +7,13 @@ import { Typography, Button } from '@shared/components'
 import s from './lesson-content.module.scss'
 
 type Props = {
+  steps?: StepView[]
   onClick: () => void
   selectedStep: StepView
 }
 
-export const LessonContent = ({ onClick, selectedStep }: Props) => {
+export const LessonContent = ({ steps, onClick, selectedStep }: Props) => {
+  console.log(selectedStep)
   return (
     <div className={s.rightBox}>
       <div className={s.rightTop}>
@@ -32,7 +34,8 @@ export const LessonContent = ({ onClick, selectedStep }: Props) => {
       </div>
       <div className={s.hint}>
         <p className={s.hintTxt}>
-          Чтобы в экстренной ситуации не растеряться - тренируйся в спокойной обстановке на манекене
+          Чтобы в экстренной ситуации не растеряться - тренируйся в спокойной обстановке на
+          манекене.
         </p>
       </div>
       <div className={s.buttonBox}>
