@@ -15,7 +15,7 @@ export type LessonType = {
   course: number
   id: number
   name: string
-  resource: string | null //????
+  resourse: string | null //????
   serial: number
   start_date: string
   started: boolean
