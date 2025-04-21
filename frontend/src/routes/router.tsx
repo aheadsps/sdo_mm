@@ -6,6 +6,7 @@ import { Library } from '@pages/library'
 import { MainPage } from '@pages/main'
 import { MyLearning } from '@pages/my-learning/MyLearning'
 import { AssignmentsCheckLayout } from '@pages/trainingCenter/course'
+import { StudentAssignmentPage } from '@pages/trainingCenter/course/student-assignment/StudentAssignment'
 import { TrainingCenterCourse } from '@pages/trainingCenter/course/TrainingCenterCourse'
 import { TrainingCenter } from '@pages/trainingCenter/TrainingCenter'
 import { Role } from '@shared/components/sidebar/sidebar.types'
@@ -19,6 +20,10 @@ export const router = createBrowserRouter([
   {
     path: routes.auth,
     element: <AuthPage />,
+  },
+  {
+    path: '/user',
+    element: <StudentAssignmentPage />,
   },
 
   /* private routes */
@@ -46,6 +51,10 @@ export const router = createBrowserRouter([
       {
         path: `${routes.trainingCenterCourse}/:id/:assignmentId`,
         element: <AssignmentsCheckLayout />,
+      },
+      {
+        path: `${routes.trainingCenterCourse}/user`,
+        element: <StudentAssignmentPage />,
       },
       {
         path: `${routes.constructor}/:id`,

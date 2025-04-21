@@ -103,6 +103,7 @@ export type CoverShort = {
   procent: number
   favorite: boolean
   status: string
+  id: number
 }
 export type CoverCurrent = {
   id: number

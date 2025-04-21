@@ -1,5 +1,6 @@
 import { routes } from '@routes/routes'
 import { getToken } from '@services/api'
+import { Role } from '@shared/components/sidebar/sidebar.types'
 import { Navigate, Outlet } from 'react-router-dom'
 
 type ProtectedRouteProps = {
@@ -8,14 +9,16 @@ type ProtectedRouteProps = {
 
 export const ProtectedRoute = ({ allowedRoles }: ProtectedRouteProps) => {
   const isAuth = !!getToken()
-  const userRole = localStorage.getItem('role')
+  const userRole = Number(localStorage.getItem('role'))
 
   if (!isAuth) {
     return <Navigate to={routes.auth} replace />
   }
 
-  if (allowedRoles !== undefined && Number(userRole) !== allowedRoles) {
-    return <Navigate to={routes.main} replace />
+  if (allowedRoles !== undefined && userRole !== allowedRoles) {
+    const fallbackRoute = userRole === Role.methodologist ? routes.trainingCenter : routes.main
+
+    return <Navigate to={fallbackRoute} replace />
   }
 
   return <Outlet />

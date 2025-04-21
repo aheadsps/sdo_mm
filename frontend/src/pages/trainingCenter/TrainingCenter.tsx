@@ -1,6 +1,6 @@
 import { routes } from '@routes/routes'
-import { useGetCoursesQuery } from '@services/api'
-import { selectCourses, setAllCourses } from '@services/slices'
+import { useGetCoversQuery } from '@services/api'
+import { selectAllCovers, setAllCovers } from '@services/slices'
 import { useAppDispatch, useAppSelector } from '@services/store'
 import { Title, CourseCard, Modal, Loader } from '@shared/components'
 import { AddMaterials } from '@shared/components'
@@ -23,14 +23,16 @@ const Training = () => {
   const goToConstructor = () => {
     navigate(routes.constructor)
   }
-  const { data: courses, isLoading } = useGetCoursesQuery()
+
+  const { data: covers, isLoading } = useGetCoversQuery()
   const dispatch = useAppDispatch()
 
   useEffect(() => {
-    if (courses?.results) dispatch(setAllCourses(courses?.results))
-  }, [courses?.results, dispatch])
+    if (covers?.results) dispatch(setAllCovers(covers?.results))
+  }, [covers?.results, dispatch])
 
-  const allCourses = useAppSelector(selectCourses)
+  const allCovers = useAppSelector(selectAllCovers)
+
   return (
     <div className={s.container}>
       <Title txt={txt} btn1={btn1} btn2={btn2} fstBtn={openModal} scndBtn={goToConstructor} />
@@ -39,8 +41,8 @@ const Training = () => {
         {isLoading ? (
           <Loader />
         ) : (
-          allCourses.map((course, index) => {
-            return <CourseCard key={index} item={course} />
+          allCovers.map((cover, index) => {
+            return <CourseCard key={index} item={cover.event.course} />
           })
         )}
       </div>
