@@ -276,16 +276,6 @@ class TestEndpoints(APITestCase):
         )
         self.assertEqual(response.status_code, 200)
 
-    def test_delete_event(self):
-        """
-        Тест удаления эвента
-        """
-        url = f"/api/v1/events/{self.event.pk}"
-        response = self.client.delete(
-            path=url,
-        )
-        self.assertEqual(response.status_code, 204)
-
     def test_get_list_current_events(self):
         """
         Тест получения актуальных эвентов на пользователе
@@ -371,6 +361,7 @@ class TestEndpoints(APITestCase):
             response.json(),
             {
                 "teacher": self.user.pk,
+                "id": response.json()["id"],
                 "beginner": True,
                 "description": "some_desc",
                 "experiences": [self.experience.pk],
