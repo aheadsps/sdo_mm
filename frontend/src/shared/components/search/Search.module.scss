@@ -1,0 +1,117 @@
+.container {
+  width: 100%;
+  height: 64px;
+  border-radius: 8px;
+  padding: 12px 0;
+
+  @media screen and (min-width: 768px) and (max-width: 1349px) {
+    padding: 12px;
+  }
+}
+
+.box {
+  width: 100%;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  gap: 33px;
+  border-radius: 8px;
+  border-width: 1px 0 1px 1px;
+  border-style: solid;
+  border-color: var(--color-additional-border100);
+
+  @media screen and (min-width: 768px) and (max-width: 1349px) {
+    gap: 0;
+  }
+}
+
+.input {
+  all: unset;
+  position: relative;
+  width: calc(100% - 40px);
+  height: 40px;
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px;
+  padding: 9px 12px;
+  font-family: var(--font-family-secondary);
+  font-weight: 300;
+  font-size: var(--font-size-xs);
+  line-height: 143%;
+  letter-spacing: 0.25px;
+  color: var(--color-text-primary);
+
+  &::placeholder {
+    font-family: var(--font-family-secondary);
+    font-weight: 300;
+    font-size: var(--font-size-s);
+    line-height: 140%;
+    letter-spacing: 0.25px;
+    color: var(--color-text-secondary);
+  }
+}
+
+.list {
+  position: absolute;
+  z-index: 10;
+  width: 959px;
+  height: fit-content;
+  top: 298px;
+  padding: 8px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border-bottom-right-radius: 8px;
+  border-bottom-left-radius: 8px;
+  background: #f8f9fa33;
+  backdrop-filter: blur(60px);
+  border-width: 0, 1px, 1px, 1px;
+  border-style: solid;
+  border-color: #f8d7d9;
+
+  @media screen and (max-width: 1349px) {
+    top: 400px;
+    width: calc(100% - 58px);
+  }
+
+  @media screen and (max-width: 767px) {
+    top: 435px;
+    width: calc(100% - 58px);
+  }
+}
+
+.option {
+  width: 935px;
+  height: 30px;
+  border-radius: 4px;
+  padding: 4px;
+  font-family: var(--font-family-secondary);
+  font-weight: 300;
+  font-size: var(--font-size-s);
+  line-height: 140%;
+  letter-spacing: 0.25px;
+  color: #2c0b0f;
+  cursor: pointer;
+
+  @media screen and (max-width: 1349px) {
+    width: calc(100% - 58px);
+  }
+
+  &:active,
+  &:hover {
+    background: #dc3444;
+    color: #f8f9fa;
+    cursor: pointer;
+  }
+}
+
+.icon {
+  width: 40px;
+  height: 42px;
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+  cursor: pointer;
+
+  @media screen and (max-width: 1349px) {
+    height: 100%;
+  }
+}

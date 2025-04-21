@@ -1,0 +1,48 @@
+.toggleWrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 36px;
+  height: 20px;
+
+  input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  .slider {
+    position: absolute;
+    inset: 0;
+    background-color: white;
+    border: 2px solid var(--color-accent-red500);
+    border-radius: 34px;
+    transition: background-color 0.3s;
+
+    &::before {
+      position: absolute;
+      content: '';
+      height: 14px;
+      width: 14px;
+      left: 2px;
+      bottom: 1px;
+      background-color: var(--color-accent-red500);
+      transition: transform 0.3s, background-color 0.3s;
+      border-radius: 50%;
+    }
+  }
+
+  input:checked + .slider {
+    background-color: var(--color-accent-red500);
+
+    &::before {
+      transform: translateX(16px);
+      background-color: white;
+    }
+  }
+}

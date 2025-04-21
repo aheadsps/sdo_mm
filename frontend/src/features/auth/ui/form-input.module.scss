@@ -1,0 +1,29 @@
+.inputBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.authInput {
+  font-size: 16px;
+  position: relative;
+
+  @media (max-width: 768px) {
+    font-size: 14px;
+  }
+}
+
+.inputError {
+  color: var(--color-accent-red500);
+  border-bottom: 2px solid var(--color-accent-red500);
+}
+
+.error {
+  color: var(--color-accent-red500);
+  font-family: 'Moscow Sans', sans-serif;
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 130%;
+  letter-spacing: 0.25px;
+  padding: 0 12px;
+}

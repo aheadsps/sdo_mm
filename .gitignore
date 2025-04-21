@@ -1,12 +1,19 @@
 # Byte-compiled / optimized / DLL files
+
+docker-compose.yml_bkp
 __pycache__/
 *.py[cod]
 *$py.class
+*/static
 
 # C extensions
 *.so
-.42
+.42c
 .vscode
+.python-version
+*/migrations/
+media
+
 # Distribution / packaging
 .Python
 build/
@@ -123,7 +130,7 @@ celerybeat.pid
 *.sage.py
 
 # Environments
-.env
+backend/.env
 .venv
 env/
 venv/

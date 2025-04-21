@@ -1,0 +1,43 @@
+.sidebar {
+  min-width: 294px;
+  background-color: var(--color-bg-main);
+  height: calc(100vh - 103px);
+  position: relative;
+  top: 93px;
+  left: 0;
+  z-index: 999;
+
+  @media screen and (max-width: 767px) {
+    position: absolute;
+    height: 100vh;
+    top: 93px;
+    margin-right: 0;
+    padding-top: 0;
+    border-right: 1px solid var(--color-additional-border100);
+    transform: translateX(-100%);
+    transition: var(--transition-effect);
+  }
+}
+
+.sidebarContent {
+  position: absolute;
+}
+
+.container {
+  position: fixed;
+  height: calc(100vh - 103px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 20px;
+  width: 294px;
+
+  div {
+    width: 253px;
+  }
+
+  @media screen and (max-width: 767px) {
+    width: 100%;
+    border-right: 1px solid var(--color-additional-border100);
+  }
+}

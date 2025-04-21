@@ -1,0 +1,102 @@
+.container {
+  width: 100%;
+  height: fit-content;
+  top: 123px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+
+  @media screen and (min-width: 1350px) {
+    width: 997px;
+  }
+
+  @media screen and (max-width: 768px) {
+    gap: 0;
+  }
+}
+
+.cardsBlock {
+  width: 100%;
+  height: fit-content;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+
+  @media screen and (max-width: 1349px) {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+  }
+}
+
+.filtersContainer {
+  display: flex;
+  gap: 30px;
+  align-items: flex-end;
+
+  @media screen and (max-width: 1349px) {
+    flex-direction: column;
+  }
+}
+
+.filters {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 30px;
+  width: 100%;
+
+  > div:first-child {
+    margin-left: 0;
+    width: 100%;
+
+    input {
+      border-bottom: 1px solid var(--color-additional-border700);
+      border-radius: 0;
+    }
+  }
+
+  @media screen and (max-width: 1349px) {
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  @media screen and (max-width: 767px) {
+    flex-direction: column;
+  }
+}
+
+.filterItem {
+  min-width: 220px;
+
+  &::placeholder {
+    font-size: var(--font-size-s);
+    font-weight: var(--font-weight-light);
+    color: var(--color-text-secondary);
+  }
+
+  p {
+    font-size: var(--font-size-s);
+    font-weight: var(--font-weight-light);
+    color: var(--color-text-secondary);
+  }
+
+  @media screen and (max-width: 767px) {
+    width: 100%;
+  }
+}
+
+.search {
+  height: 100%;
+  padding: 0;
+
+  > div:last-child:focus-within {
+    input {
+      width: 100%;
+    }
+  }
+}
+
+.hidden {
+  display: none;
+}

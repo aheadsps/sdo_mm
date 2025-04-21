@@ -1,0 +1,2705 @@
+[
+    {
+        "model": "auth.group",
+        "pk": 1,
+        "fields": {
+            "name": "User",
+            "permissions": []
+        }
+    },
+    {
+        "model": "lessons.event",
+        "pk": 3,
+        "fields": {
+            "course": 17,
+            "start_date": null,
+            "end_date": null,
+            "status": "started"
+        }
+    },
+    {
+        "model": "lessons.event",
+        "pk": 19,
+        "fields": {
+            "course": 18,
+            "start_date": "2025-04-21T17:30:00Z",
+            "end_date": "2025-05-05T17:30:00Z",
+            "status": "expected"
+        }
+    },
+    {
+        "model": "lessons.event",
+        "pk": 20,
+        "fields": {
+            "course": 4,
+            "start_date": "2025-04-30T15:00:00Z",
+            "end_date": "2025-05-21T15:00:00Z",
+            "status": "expected"
+        }
+    },
+    {
+        "model": "lessons.eventcovered",
+        "pk": 4,
+        "fields": {
+            "user": 2,
+            "event": 3,
+            "favorite": false,
+            "procent": 0,
+            "status": "process"
+        }
+    },
+    {
+        "model": "lessons.eventcovered",
+        "pk": 5,
+        "fields": {
+            "user": 1,
+            "event": 3,
+            "favorite": false,
+            "procent": 0,
+            "status": "process"
+        }
+    },
+    {
+        "model": "lessons.eventcovered",
+        "pk": 6,
+        "fields": {
+            "user": 3,
+            "event": 3,
+            "favorite": false,
+            "procent": 0,
+            "status": "process"
+        }
+    },
+    {
+        "model": "lessons.eventcovered",
+        "pk": 13,
+        "fields": {
+            "user": 2,
+            "event": 19,
+            "favorite": false,
+            "procent": 0,
+            "status": "expected"
+        }
+    },
+    {
+        "model": "lessons.course",
+        "pk": 4,
+        "fields": {
+            "teacher": 1,
+            "name": "Работа с оборудованием",
+            "description": "Правила работы с оборудованием",
+            "interval": "7 00:00:00",
+            "beginner": false,
+            "create_date": "2025-04-14T09:21:00.577Z",
+            "update_date": "2025-04-14T09:21:00.577Z",
+            "image": "",
+            "is_scorm": false,
+            "profession": 2,
+            "status": "run",
+            "experiences": [
+                2,
+                3
+            ]
+        }
+    },
+    {
+        "model": "lessons.course",
+        "pk": 17,
+        "fields": {
+            "teacher": 1,
+            "name": "Первая помощь (часть 1)",
+            "description": "Вы научитесь как неоходимо проводить первую помочь людям при черезвычайных ситуациях",
+            "interval": null,
+            "beginner": true,
+            "create_date": "2025-04-17T17:11:57.807Z",
+            "update_date": "2025-04-17T17:42:08.909Z",
+            "image": "courses/Первая помощь (часть 1)/images.jpeg",
+            "is_scorm": true,
+            "profession": null,
+            "status": "run",
+            "experiences": []
+        }
+    },
+    {
+        "model": "lessons.course",
+        "pk": 18,
+        "fields": {
+            "teacher": 1,
+            "name": "Работа с рисками",
+            "description": "Вы научитесь как безопасно пользоваться оборудованием на вашем рабочем месте",
+            "interval": "7 00:00:00",
+            "beginner": false,
+            "create_date": "2025-04-17T17:23:03.390Z",
+            "update_date": "2025-04-17T17:24:22.582Z",
+            "image": "courses/Работа с рисками/standarty-upravleniya-riskami.jpg",
+            "is_scorm": false,
+            "profession": 2,
+            "status": "run",
+            "experiences": [
+                2,
+                3
+            ]
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1371,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/adlcp_v1p3.xsd"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1372,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/adlnav_v1p3.xsd"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1373,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/adlseq_v1p3.xsd"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1374,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/datatypes.dtd"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1375,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/imscp_v1p1.xsd"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1376,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/imsss_v1p0.xsd"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1377,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/imsss_v1p0auxresource.xsd"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1378,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/imsss_v1p0control.xsd"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1379,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/imsss_v1p0delivery.xsd"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1380,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/imsss_v1p0limit.xsd"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1381,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/imsss_v1p0objective.xsd"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1382,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/imsss_v1p0random.xsd"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1383,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/imsss_v1p0rollup.xsd"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1384,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/imsss_v1p0seqrule.xsd"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1385,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/imsss_v1p0util.xsd"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1386,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/lom.xsd"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1387,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/xml.xsd"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1388,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/XMLSchema.dtd"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1389,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/common/anyElement.xsd"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1390,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/common/dataTypes.xsd"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1391,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/common/elementNames.xsd"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1392,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/common/elementTypes.xsd"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1393,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/common/rootElement.xsd"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1394,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/common/vocabTypes.xsd"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1395,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/common/vocabValues.xsd"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1396,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/extend/strict.xsd"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1397,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/unique/strict.xsd"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1398,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/vocab/strict.xsd"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1399,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/lms.js"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1400,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/imsmanifest.xml"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1401,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/index.html"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1402,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/slide1.js"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1403,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/slide1.css"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1404,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/slide2.js"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1405,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/slide2.css"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1406,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/slide3.js"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1407,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/slide3.css"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1408,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/slide4.js"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1409,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/slide4.css"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1410,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/slide5.js"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1411,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/slide5.css"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1412,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/slide6.js"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1413,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/slide6.css"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1414,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/slide7.js"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1415,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/slide7.css"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1416,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/quiz1.js"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1417,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/quiz1/fonts/fnt0.woff"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1418,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/quiz1/fonts/fnt1.woff"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1419,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/quiz1/fonts/fnt2.woff"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1420,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/quiz1/images/b9dd-d17c-c88d-7440.png"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1421,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/quiz1/images/quiz_bg_0.png"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1422,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/slide9.js"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1423,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/slide9.css"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1424,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/slide10.js"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1425,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/slide10.css"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1426,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data.local-only/slide10.js"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1427,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/quiz2.js"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1428,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/quiz2/fonts/fnt0.woff"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1429,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/quiz2/fonts/fnt1.woff"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1430,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/quiz2/fonts/fnt2.woff"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1431,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/quiz2/fonts/fnt3.woff"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1432,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/quiz2/images/7c67-3ff7-dbb4-a64a.png"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1433,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/quiz2/images/quiz_bg_0.png"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1434,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/slide12.js"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1435,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/slide12.css"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1436,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/slide13.js"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1437,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/slide13.css"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1438,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/quiz3.js"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1439,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/quiz3/fonts/fnt0.woff"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1440,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/quiz3/fonts/fnt1.woff"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1441,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/quiz3/fonts/fnt2.woff"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1442,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/quiz3/fonts/fnt3.woff"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1443,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/quiz3/images/img-c7078e0c6c62802cf6e5a341995d182_Q7yBqDR.jpg"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1444,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/quiz3/images/quiz_bg_0.png"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1445,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/slide15.js"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1446,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/slide15.css"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1447,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/slide16.js"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1448,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/slide16.css"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1449,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/slide17.js"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1450,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/slide17.css"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1451,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/quiz4.js"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1452,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/quiz4/fonts/fnt0.woff"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1453,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/quiz4/fonts/fnt1.woff"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1454,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/quiz4/fonts/fnt2.woff"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1455,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/quiz4/fonts/fnt3.woff"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1456,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/quiz4/images/img-1ad098ca1bceeddcff6247526ca1e31_a2uHXTZ.jpg"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1457,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/quiz4/images/quiz_bg_0.png"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1458,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/slide19.js"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1459,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/slide19.css"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1460,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/quizplayer.js"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1461,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/player.js"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1462,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/eraser.cur"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1463,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/highlighter.cur"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1464,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/marker.cur"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1465,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/lock.cur"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1466,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/browsersupport.js"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1467,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/apple-touch-icon.png"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1468,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/favicon.ico"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1469,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/fnt0.woff"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1470,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/fnt1.woff"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1471,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/fnt10.woff"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1472,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/fnt2.woff"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1473,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/fnt3.woff"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1474,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/fnt4.woff"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1475,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/fnt5.woff"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1476,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/fnt6.woff"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1477,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/fnt7.woff"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1478,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/fnt8.woff"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1479,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/fnt9.woff"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1480,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/html5-unsupported.html"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1481,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/img0.jpg"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1482,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/img1.png"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1483,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/img10.png"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1484,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/img11.jpg"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1485,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/img12.jpg"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1486,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/img13.jpg"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1487,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/img14.jpg"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1488,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/img15.jpg"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1489,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/img16.png"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1490,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/img17.png"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1491,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/img18.png"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1492,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/img19.png"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1493,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/img2.gif"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1494,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/img20.png"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1495,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/img21.png"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1496,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/img22.png"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1497,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/img23.png"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1498,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/img24.png"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1499,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/img3.png"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1500,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/img4.png"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1501,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/img5.png"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1502,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/img6.png"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1503,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/img7.png"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1504,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/img8.png"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1505,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/img9.png"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1506,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/quiz_bg_0.png"
+        }
+    },
+    {
+        "model": "lessons.scormfile",
+        "pk": 1507,
+        "fields": {
+            "course": 17,
+            "name": "Первая помощь (часть 1)",
+            "file": "scorms/pervaya-pomosch-chast-1/res/data/goodbye.html"
+        }
+    },
+    {
+        "model": "lessons.lesson",
+        "pk": 1,
+        "fields": {
+            "teacher": 1,
+            "name": "Работа с оборудованием (1 часть)",
+            "version": null,
+            "serial": 1,
+            "resourse": null,
+            "course": 4,
+            "started": false,
+            "start_date": "2025-04-30T15:00:00Z",
+            "end_date": "2025-05-07T15:00:00Z"
+        }
+    },
+    {
+        "model": "lessons.lesson",
+        "pk": 2,
+        "fields": {
+            "teacher": 1,
+            "name": "Работа с оборудованием (2 часть)",
+            "version": null,
+            "serial": 2,
+            "resourse": null,
+            "course": 4,
+            "started": false,
+            "start_date": "2025-05-07T15:00:00Z",
+            "end_date": "2025-05-14T15:00:00Z"
+        }
+    },
+    {
+        "model": "lessons.lesson",
+        "pk": 3,
+        "fields": {
+            "teacher": 1,
+            "name": "Работа с оборудованием (3 часть)",
+            "version": null,
+            "serial": 3,
+            "resourse": null,
+            "course": 4,
+            "started": false,
+            "start_date": "2025-05-14T15:00:00Z",
+            "end_date": "2025-05-21T15:00:00Z"
+        }
+    },
+    {
+        "model": "lessons.lesson",
+        "pk": 14,
+        "fields": {
+            "teacher": 1,
+            "name": "Первая помощь (часть 1)",
+            "version": "2004 4th Edition",
+            "serial": 1,
+            "resourse": "/media/scorms/pervaya-pomosch-chast-1/res/index.html",
+            "course": 17,
+            "started": false,
+            "start_date": null,
+            "end_date": null
+        }
+    },
+    {
+        "model": "lessons.lesson",
+        "pk": 15,
+        "fields": {
+            "teacher": 1,
+            "name": "Первая помощь (1 часть)",
+            "version": null,
+            "serial": 1,
+            "resourse": null,
+            "course": 18,
+            "started": false,
+            "start_date": "2025-04-21T17:30:00Z",
+            "end_date": "2025-04-28T17:30:00Z"
+        }
+    },
+    {
+        "model": "lessons.lesson",
+        "pk": 16,
+        "fields": {
+            "teacher": 1,
+            "name": "Первая помощь (2 часть)",
+            "version": null,
+            "serial": 2,
+            "resourse": null,
+            "course": 18,
+            "started": false,
+            "start_date": "2025-04-28T17:30:00Z",
+            "end_date": "2025-05-05T17:30:00Z"
+        }
+    },
+    {
+        "model": "lessons.step",
+        "pk": 1,
+        "fields": {
+            "teacher": 1,
+            "title": "Дрель",
+            "content_text": "Как пользоваться дрелью",
+            "serial": 1,
+            "lesson": 1
+        }
+    },
+    {
+        "model": "lessons.step",
+        "pk": 2,
+        "fields": {
+            "teacher": 1,
+            "title": "Пила",
+            "content_text": "Как пользоваться пилой",
+            "serial": 2,
+            "lesson": 1
+        }
+    },
+    {
+        "model": "lessons.step",
+        "pk": 3,
+        "fields": {
+            "teacher": 1,
+            "title": "Бетономешалка",
+            "content_text": "Как пользоваться бетономешалкой",
+            "serial": 1,
+            "lesson": 2
+        }
+    },
+    {
+        "model": "lessons.step",
+        "pk": 4,
+        "fields": {
+            "teacher": 1,
+            "title": "Лопата",
+            "content_text": "Как пользоваться лопатой",
+            "serial": 2,
+            "lesson": 2
+        }
+    },
+    {
+        "model": "lessons.step",
+        "pk": 5,
+        "fields": {
+            "teacher": 1,
+            "title": "Тележка",
+            "content_text": "Как пользоваться тележкой",
+            "serial": 1,
+            "lesson": 3
+        }
+    },
+    {
+        "model": "lessons.step",
+        "pk": 6,
+        "fields": {
+            "teacher": 1,
+            "title": "Уровень",
+            "content_text": "Как пользоваться уровнем",
+            "serial": 2,
+            "lesson": 3
+        }
+    },
+    {
+        "model": "lessons.step",
+        "pk": 7,
+        "fields": {
+            "teacher": 1,
+            "title": "Исскуственное дыхание",
+            "content_text": "Как делать Исскуственное дыхание",
+            "serial": 1,
+            "lesson": 15
+        }
+    },
+    {
+        "model": "lessons.step",
+        "pk": 8,
+        "fields": {
+            "teacher": 1,
+            "title": "Перевязка",
+            "content_text": "Как делать Перевязку",
+            "serial": 2,
+            "lesson": 15
+        }
+    },
+    {
+        "model": "lessons.step",
+        "pk": 9,
+        "fields": {
+            "teacher": 1,
+            "title": "Переломы",
+            "content_text": "Как помочь при переломах",
+            "serial": 2,
+            "lesson": 16
+        }
+    },
+    {
+        "model": "lessons.step",
+        "pk": 10,
+        "fields": {
+            "teacher": 1,
+            "title": "Сотрясение",
+            "content_text": "Как помочь при Сотрясении",
+            "serial": 1,
+            "lesson": 16
+        }
+    },
+    {
+        "model": "lessons.materials",
+        "pk": 13,
+        "fields": {
+            "course": 17
+        }
+    },
+    {
+        "model": "lessons.materials",
+        "pk": 14,
+        "fields": {
+            "course": 18
+        }
+    },
+    {
+        "model": "lessons.contentattachment",
+        "pk": 1,
+        "fields": {
+            "file": "steps/Isskustvennoe_dyhanie/unnamed.jpg",
+            "file_type": "Image",
+            "materials": null,
+            "step": 7
+        }
+    },
+    {
+        "model": "lessons.contentattachment",
+        "pk": 2,
+        "fields": {
+            "file": "steps/Perevyazka/2-300x253.jpg",
+            "file_type": "Image",
+            "materials": null,
+            "step": 8
+        }
+    },
+    {
+        "model": "lessons.contentattachment",
+        "pk": 3,
+        "fields": {
+            "file": "steps/Perelomy/istockphoto-1741767116-612x612.jpg",
+            "file_type": "Image",
+            "materials": null,
+            "step": 9
+        }
+    },
+    {
+        "model": "lessons.contentattachment",
+        "pk": 4,
+        "fields": {
+            "file": "steps/Sotryasenie/a87443eaac890471ffbc56916926fea8.jpg",
+            "file_type": "Image",
+            "materials": null,
+            "step": 10
+        }
+    },
+    {
+        "model": "lessons.testblock",
+        "pk": 1,
+        "fields": {
+            "end_date": null,
+            "max_score": null,
+            "lesson": 1
+        }
+    },
+    {
+        "model": "lessons.testblock",
+        "pk": 2,
+        "fields": {
+            "end_date": null,
+            "max_score": null,
+            "lesson": 2
+        }
+    },
+    {
+        "model": "lessons.testblock",
+        "pk": 3,
+        "fields": {
+            "end_date": null,
+            "max_score": null,
+            "lesson": 3
+        }
+    },
+    {
+        "model": "lessons.testblock",
+        "pk": 14,
+        "fields": {
+            "end_date": null,
+            "max_score": null,
+            "lesson": 14
+        }
+    },
+    {
+        "model": "lessons.testblock",
+        "pk": 15,
+        "fields": {
+            "end_date": "2025-04-28T17:30:00Z",
+            "max_score": 10.0,
+            "lesson": 15
+        }
+    },
+    {
+        "model": "lessons.testblock",
+        "pk": 16,
+        "fields": {
+            "end_date": null,
+            "max_score": null,
+            "lesson": 16
+        }
+    },
+    {
+        "model": "lessons.question",
+        "pk": 1,
+        "fields": {
+            "teacher": 1,
+            "text": "Каких видов переломы бывают?",
+            "image": "",
+            "weight": 5,
+            "test_block": 15
+        }
+    },
+    {
+        "model": "lessons.question",
+        "pk": 2,
+        "fields": {
+            "teacher": 1,
+            "text": "Как остановить кровотечение?",
+            "image": "",
+            "weight": 5,
+            "test_block": 15
+        }
+    },
+    {
+        "model": "lessons.answer",
+        "pk": 1,
+        "fields": {
+            "text": "Открытые",
+            "correct": true,
+            "question": 1
+        }
+    },
+    {
+        "model": "lessons.answer",
+        "pk": 2,
+        "fields": {
+            "text": "Закрытые",
+            "correct": true,
+            "question": 1
+        }
+    },
+    {
+        "model": "lessons.answer",
+        "pk": 3,
+        "fields": {
+            "text": "Средние",
+            "correct": false,
+            "question": 1
+        }
+    },
+    {
+        "model": "lessons.answer",
+        "pk": 4,
+        "fields": {
+            "text": "Обычные",
+            "correct": false,
+            "question": 1
+        }
+    },
+    {
+        "model": "lessons.answer",
+        "pk": 5,
+        "fields": {
+            "text": "Пальцем",
+            "correct": false,
+            "question": 2
+        }
+    },
+    {
+        "model": "lessons.answer",
+        "pk": 6,
+        "fields": {
+            "text": "Бинт",
+            "correct": true,
+            "question": 2
+        }
+    },
+    {
+        "model": "lessons.answer",
+        "pk": 7,
+        "fields": {
+            "text": "Водой",
+            "correct": false,
+            "question": 2
+        }
+    },
+    {
+        "model": "users.profession",
+        "pk": 1,
+        "fields": {
+            "en_name": "admin",
+            "ru_name": "админ"
+        }
+    },
+    {
+        "model": "users.profession",
+        "pk": 2,
+        "fields": {
+            "en_name": "Builder",
+            "ru_name": "Строитель"
+        }
+    },
+    {
+        "model": "users.user",
+        "pk": 1,
+        "fields": {
+            "password": "pbkdf2_sha256$870000$ym4Yd9KuxflvCWseIl5YSv$fiCKYgkyTWdAyZ1m6tKzwPsL5bZxNxx01ROL94GW7Us=",
+            "is_superuser": true,
+            "email": "admin@admin.com",
+            "is_staff": true,
+            "is_active": true,
+            "is_verified": true,
+            "first_name": "Vasia",
+            "last_name": "Petechkin",
+            "date_joined": "2025-03-17T06:12:30.791Z",
+            "last_login": "2025-04-21T14:18:20.080Z",
+            "date_commencement": "2024-01-01",
+            "profession": 1,
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "users.user",
+        "pk": 2,
+        "fields": {
+            "password": "pbkdf2_sha256$870000$DonqVrVvapUROtVYqQARBu$54hlfk6iYSksSW5bwBKOTO+w/vjhvEGICsPiaU3UyGY=",
+            "is_superuser": false,
+            "email": "y@mail.ru",
+            "is_staff": false,
+            "is_active": true,
+            "is_verified": true,
+            "first_name": "Alex",
+            "last_name": "Martira",
+            "date_joined": "2025-03-21T17:51:25.332Z",
+            "last_login": "2025-04-21T06:52:44.881Z",
+            "date_commencement": "2023-03-21",
+            "profession": 2,
+            "groups": [
+                1
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "users.user",
+        "pk": 3,
+        "fields": {
+            "password": "pbkdf2_sha256$870000$W0qqYRhqmojHHSjWfrx6Ti$lrbG+49FYjbSzWLBwyr0NMk7mA2stkobLP4lr8SvSbs=",
+            "is_superuser": false,
+            "email": "some@yandex.ru",
+            "is_staff": false,
+            "is_active": true,
+            "is_verified": true,
+            "first_name": null,
+            "last_name": null,
+            "date_joined": "2025-04-17T19:16:19.126Z",
+            "last_login": "2025-04-17T19:18:30.260Z",
+            "date_commencement": "2023-02-15",
+            "profession": 2,
+            "groups": [
+                1
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "users.profile",
+        "pk": 1,
+        "fields": {
+            "user": 2,
+            "phone": null,
+            "image": "",
+            "date_birthday": null
+        }
+    },
+    {
+        "model": "users.profile",
+        "pk": 2,
+        "fields": {
+            "user": 3,
+            "phone": null,
+            "image": "",
+            "date_birthday": null
+        }
+    },
+    {
+        "model": "users.workexperience",
+        "pk": 2,
+        "fields": {
+            "years": 1
+        }
+    },
+    {
+        "model": "users.workexperience",
+        "pk": 3,
+        "fields": {
+            "years": 2
+        }
+    },
+    {
+        "model": "users.workexperience",
+        "pk": 4,
+        "fields": {
+            "years": 3
+        }
+    },
+    {
+        "model": "users.workexperience",
+        "pk": 5,
+        "fields": {
+            "years": 0
+        }
+    },
+    {
+        "model": "users.professiongroup",
+        "pk": 1,
+        "fields": {
+            "profession": 2,
+            "students": []
+        }
+    },
+    {
+        "model": "authtoken.token",
+        "pk": "429b7e151d1eadbd9e2f2e4bcf98b6d49989f35c",
+        "fields": {
+            "user": 2,
+            "created": "2025-04-18T18:53:42.043Z"
+        }
+    },
+    {
+        "model": "authtoken.token",
+        "pk": "4ab6240a1e055134c401b819714cf3f4bd9ec9e3",
+        "fields": {
+            "user": 3,
+            "created": "2025-04-18T15:50:28.097Z"
+        }
+    },
+    {
+        "model": "authtoken.token",
+        "pk": "b00a62aabcd1137c317ca88e6606d45125e7d466",
+        "fields": {
+            "user": 1,
+            "created": "2025-04-18T15:50:47.491Z"
+        }
+    },
+    {
+        "model": "django_celery_beat.clockedschedule",
+        "pk": 1,
+        "fields": {
+            "clocked_time": "2025-04-30T09:00:00Z"
+        }
+    },
+    {
+        "model": "django_celery_beat.clockedschedule",
+        "pk": 2,
+        "fields": {
+            "clocked_time": "2025-05-07T09:00:00Z"
+        }
+    },
+    {
+        "model": "django_celery_beat.clockedschedule",
+        "pk": 3,
+        "fields": {
+            "clocked_time": "2025-05-14T09:00:00Z"
+        }
+    },
+    {
+        "model": "django_celery_beat.clockedschedule",
+        "pk": 4,
+        "fields": {
+            "clocked_time": "2025-05-21T09:00:00Z"
+        }
+    },
+    {
+        "model": "django_celery_beat.clockedschedule",
+        "pk": 6,
+        "fields": {
+            "clocked_time": "2025-04-21T09:00:00Z"
+        }
+    },
+    {
+        "model": "django_celery_beat.clockedschedule",
+        "pk": 7,
+        "fields": {
+            "clocked_time": "2025-04-28T09:00:00Z"
+        }
+    },
+    {
+        "model": "django_celery_beat.clockedschedule",
+        "pk": 8,
+        "fields": {
+            "clocked_time": "2025-05-05T09:00:00Z"
+        }
+    },
+    {
+        "model": "django_celery_beat.clockedschedule",
+        "pk": 9,
+        "fields": {
+            "clocked_time": "2025-04-30T14:30:00Z"
+        }
+    },
+    {
+        "model": "django_celery_beat.clockedschedule",
+        "pk": 10,
+        "fields": {
+            "clocked_time": "2025-05-07T14:30:00Z"
+        }
+    },
+    {
+        "model": "django_celery_beat.clockedschedule",
+        "pk": 11,
+        "fields": {
+            "clocked_time": "2025-05-14T14:30:00Z"
+        }
+    },
+    {
+        "model": "django_celery_beat.clockedschedule",
+        "pk": 12,
+        "fields": {
+            "clocked_time": "2025-05-21T14:30:00Z"
+        }
+    },
+    {
+        "model": "django_celery_beat.clockedschedule",
+        "pk": 13,
+        "fields": {
+            "clocked_time": "2025-04-21T09:15:00Z"
+        }
+    },
+    {
+        "model": "django_celery_beat.clockedschedule",
+        "pk": 14,
+        "fields": {
+            "clocked_time": "2025-04-28T09:15:00Z"
+        }
+    },
+    {
+        "model": "django_celery_beat.clockedschedule",
+        "pk": 15,
+        "fields": {
+            "clocked_time": "2025-05-05T09:15:00Z"
+        }
+    },
+    {
+        "model": "django_celery_beat.clockedschedule",
+        "pk": 16,
+        "fields": {
+            "clocked_time": "2025-05-12T09:15:00Z"
+        }
+    },
+    {
+        "model": "django_celery_beat.clockedschedule",
+        "pk": 17,
+        "fields": {
+            "clocked_time": "2025-04-30T17:00:00Z"
+        }
+    },
+    {
+        "model": "django_celery_beat.clockedschedule",
+        "pk": 18,
+        "fields": {
+            "clocked_time": "2025-05-07T17:00:00Z"
+        }
+    },
+    {
+        "model": "django_celery_beat.clockedschedule",
+        "pk": 19,
+        "fields": {
+            "clocked_time": "2025-05-14T17:00:00Z"
+        }
+    },
+    {
+        "model": "django_celery_beat.clockedschedule",
+        "pk": 20,
+        "fields": {
+            "clocked_time": "2025-04-21T09:23:00Z"
+        }
+    },
+    {
+        "model": "django_celery_beat.clockedschedule",
+        "pk": 21,
+        "fields": {
+            "clocked_time": "2025-04-28T09:23:00Z"
+        }
+    },
+    {
+        "model": "django_celery_beat.clockedschedule",
+        "pk": 22,
+        "fields": {
+            "clocked_time": "2025-05-05T09:23:00Z"
+        }
+    },
+    {
+        "model": "django_celery_beat.clockedschedule",
+        "pk": 23,
+        "fields": {
+            "clocked_time": "2025-05-12T09:23:00Z"
+        }
+    },
+    {
+        "model": "django_celery_beat.clockedschedule",
+        "pk": 24,
+        "fields": {
+            "clocked_time": "2025-04-21T09:28:00Z"
+        }
+    },
+    {
+        "model": "django_celery_beat.clockedschedule",
+        "pk": 25,
+        "fields": {
+            "clocked_time": "2025-04-28T09:28:00Z"
+        }
+    },
+    {
+        "model": "django_celery_beat.clockedschedule",
+        "pk": 26,
+        "fields": {
+            "clocked_time": "2025-05-05T09:28:00Z"
+        }
+    },
+    {
+        "model": "django_celery_beat.clockedschedule",
+        "pk": 27,
+        "fields": {
+            "clocked_time": "2025-05-12T09:28:00Z"
+        }
+    },
+    {
+        "model": "django_celery_beat.clockedschedule",
+        "pk": 28,
+        "fields": {
+            "clocked_time": "2025-04-30T14:00:00Z"
+        }
+    },
+    {
+        "model": "django_celery_beat.clockedschedule",
+        "pk": 29,
+        "fields": {
+            "clocked_time": "2025-05-07T14:00:00Z"
+        }
+    },
+    {
+        "model": "django_celery_beat.clockedschedule",
+        "pk": 30,
+        "fields": {
+            "clocked_time": "2025-05-14T14:00:00Z"
+        }
+    },
+    {
+        "model": "django_celery_beat.clockedschedule",
+        "pk": 31,
+        "fields": {
+            "clocked_time": "2025-04-21T06:35:00Z"
+        }
+    },
+    {
+        "model": "django_celery_beat.clockedschedule",
+        "pk": 32,
+        "fields": {
+            "clocked_time": "2025-04-28T06:35:00Z"
+        }
+    },
+    {
+        "model": "django_celery_beat.clockedschedule",
+        "pk": 33,
+        "fields": {
+            "clocked_time": "2025-05-05T06:35:00Z"
+        }
+    },
+    {
+        "model": "django_celery_beat.clockedschedule",
+        "pk": 34,
+        "fields": {
+            "clocked_time": "2025-05-12T06:35:00Z"
+        }
+    },
+    {
+        "model": "django_celery_beat.clockedschedule",
+        "pk": 35,
+        "fields": {
+            "clocked_time": "2025-04-21T06:46:00Z"
+        }
+    },
+    {
+        "model": "django_celery_beat.clockedschedule",
+        "pk": 36,
+        "fields": {
+            "clocked_time": "2025-04-28T06:46:00Z"
+        }
+    },
+    {
+        "model": "django_celery_beat.clockedschedule",
+        "pk": 37,
+        "fields": {
+            "clocked_time": "2025-05-05T06:46:00Z"
+        }
+    },
+    {
+        "model": "django_celery_beat.clockedschedule",
+        "pk": 38,
+        "fields": {
+            "clocked_time": "2025-05-12T06:46:00Z"
+        }
+    },
+    {
+        "model": "django_celery_beat.clockedschedule",
+        "pk": 39,
+        "fields": {
+            "clocked_time": "2025-04-21T14:30:00Z"
+        }
+    },
+    {
+        "model": "django_celery_beat.clockedschedule",
+        "pk": 40,
+        "fields": {
+            "clocked_time": "2025-04-28T14:30:00Z"
+        }
+    },
+    {
+        "model": "django_celery_beat.clockedschedule",
+        "pk": 41,
+        "fields": {
+            "clocked_time": "2025-05-05T14:30:00Z"
+        }
+    },
+    {
+        "model": "django_celery_beat.clockedschedule",
+        "pk": 42,
+        "fields": {
+            "clocked_time": "2025-04-30T12:00:00Z"
+        }
+    },
+    {
+        "model": "django_celery_beat.clockedschedule",
+        "pk": 43,
+        "fields": {
+            "clocked_time": "2025-05-07T12:00:00Z"
+        }
+    },
+    {
+        "model": "django_celery_beat.clockedschedule",
+        "pk": 44,
+        "fields": {
+            "clocked_time": "2025-05-14T12:00:00Z"
+        }
+    },
+    {
+        "model": "django_celery_beat.clockedschedule",
+        "pk": 45,
+        "fields": {
+            "clocked_time": "2025-05-21T12:00:00Z"
+        }
+    },
+    {
+        "model": "django_celery_beat.crontabschedule",
+        "pk": 1,
+        "fields": {
+            "minute": "0",
+            "hour": "4",
+            "day_of_month": "*",
+            "month_of_year": "*",
+            "day_of_week": "*",
+            "timezone": "Europe/Moscow"
+        }
+    },
+    {
+        "model": "django_celery_beat.periodictasks",
+        "pk": 1,
+        "fields": {
+            "last_update": "2025-04-21T14:23:57.991Z"
+        }
+    },
+    {
+        "model": "django_celery_beat.periodictask",
+        "pk": 1,
+        "fields": {
+            "name": "celery.backend_cleanup",
+            "task": "celery.backend_cleanup",
+            "interval": null,
+            "crontab": 1,
+            "solar": null,
+            "clocked": null,
+            "args": "[]",
+            "kwargs": "{}",
+            "queue": null,
+            "exchange": null,
+            "routing_key": null,
+            "headers": "{}",
+            "priority": null,
+            "expires": null,
+            "expire_seconds": 43200,
+            "one_off": false,
+            "start_time": null,
+            "enabled": true,
+            "last_run_at": null,
+            "total_run_count": 0,
+            "date_changed": "2025-04-21T06:50:52.977Z",
+            "description": ""
+        }
+    },
+    {
+        "model": "django_celery_beat.periodictask",
+        "pk": 115,
+        "fields": {
+            "name": "Event_19_start_1745256600000",
+            "task": "lessons.tasks.event_switch_status",
+            "interval": null,
+            "crontab": null,
+            "solar": null,
+            "clocked": 39,
+            "args": "[]",
+            "kwargs": "{\"event_id\": 19, \"started\": true}",
+            "queue": null,
+            "exchange": null,
+            "routing_key": null,
+            "headers": "{}",
+            "priority": null,
+            "expires": null,
+            "expire_seconds": 31536000,
+            "one_off": true,
+            "start_time": null,
+            "enabled": true,
+            "last_run_at": null,
+            "total_run_count": 0,
+            "date_changed": "2025-04-21T14:23:43.697Z",
+            "description": ""
+        }
+    },
+    {
+        "model": "django_celery_beat.periodictask",
+        "pk": 116,
+        "fields": {
+            "name": "Lesson_15_start_1745256600000",
+            "task": "lessons.tasks.lesson_switch_status",
+            "interval": null,
+            "crontab": null,
+            "solar": null,
+            "clocked": 39,
+            "args": "[]",
+            "kwargs": "{\"lesson_id\": 15, \"started\": true}",
+            "queue": null,
+            "exchange": null,
+            "routing_key": null,
+            "headers": "{}",
+            "priority": null,
+            "expires": null,
+            "expire_seconds": 31536000,
+            "one_off": true,
+            "start_time": null,
+            "enabled": true,
+            "last_run_at": null,
+            "total_run_count": 0,
+            "date_changed": "2025-04-21T14:23:43.697Z",
+            "description": ""
+        }
+    },
+    {
+        "model": "django_celery_beat.periodictask",
+        "pk": 117,
+        "fields": {
+            "name": "Lesson_15_finished_1745861400000",
+            "task": "lessons.tasks.lesson_switch_status",
+            "interval": null,
+            "crontab": null,
+            "solar": null,
+            "clocked": 40,
+            "args": "[]",
+            "kwargs": "{\"lesson_id\": 15, \"started\": false}",
+            "queue": null,
+            "exchange": null,
+            "routing_key": null,
+            "headers": "{}",
+            "priority": null,
+            "expires": null,
+            "expire_seconds": 31536000,
+            "one_off": true,
+            "start_time": null,
+            "enabled": true,
+            "last_run_at": null,
+            "total_run_count": 0,
+            "date_changed": "2025-04-21T14:23:43.697Z",
+            "description": ""
+        }
+    },
+    {
+        "model": "django_celery_beat.periodictask",
+        "pk": 118,
+        "fields": {
+            "name": "TestBlock_15_1745861400000",
+            "task": "lessons.tasks.test_block_process",
+            "interval": null,
+            "crontab": null,
+            "solar": null,
+            "clocked": 40,
+            "args": "[]",
+            "kwargs": "{\"test_block_id\": 15}",
+            "queue": null,
+            "exchange": null,
+            "routing_key": null,
+            "headers": "{}",
+            "priority": null,
+            "expires": null,
+            "expire_seconds": 31536000,
+            "one_off": true,
+            "start_time": null,
+            "enabled": true,
+            "last_run_at": null,
+            "total_run_count": 0,
+            "date_changed": "2025-04-21T14:23:43.697Z",
+            "description": ""
+        }
+    },
+    {
+        "model": "django_celery_beat.periodictask",
+        "pk": 119,
+        "fields": {
+            "name": "Lesson_16_start_1745861400000",
+            "task": "lessons.tasks.lesson_switch_status",
+            "interval": null,
+            "crontab": null,
+            "solar": null,
+            "clocked": 40,
+            "args": "[]",
+            "kwargs": "{\"lesson_id\": 16, \"started\": true}",
+            "queue": null,
+            "exchange": null,
+            "routing_key": null,
+            "headers": "{}",
+            "priority": null,
+            "expires": null,
+            "expire_seconds": 31536000,
+            "one_off": true,
+            "start_time": null,
+            "enabled": true,
+            "last_run_at": null,
+            "total_run_count": 0,
+            "date_changed": "2025-04-21T14:23:43.697Z",
+            "description": ""
+        }
+    },
+    {
+        "model": "django_celery_beat.periodictask",
+        "pk": 120,
+        "fields": {
+            "name": "Lesson_16_finished_1746466200000",
+            "task": "lessons.tasks.lesson_switch_status",
+            "interval": null,
+            "crontab": null,
+            "solar": null,
+            "clocked": 41,
+            "args": "[]",
+            "kwargs": "{\"lesson_id\": 16, \"started\": false}",
+            "queue": null,
+            "exchange": null,
+            "routing_key": null,
+            "headers": "{}",
+            "priority": null,
+            "expires": null,
+            "expire_seconds": 31536000,
+            "one_off": true,
+            "start_time": null,
+            "enabled": true,
+            "last_run_at": null,
+            "total_run_count": 0,
+            "date_changed": "2025-04-21T14:23:43.697Z",
+            "description": ""
+        }
+    },
+    {
+        "model": "django_celery_beat.periodictask",
+        "pk": 121,
+        "fields": {
+            "name": "Event_19_finished_1746466200000",
+            "task": "lessons.tasks.event_switch_status",
+            "interval": null,
+            "crontab": null,
+            "solar": null,
+            "clocked": 41,
+            "args": "[]",
+            "kwargs": "{\"event_id\": 19, \"started\": false}",
+            "queue": null,
+            "exchange": null,
+            "routing_key": null,
+            "headers": "{}",
+            "priority": null,
+            "expires": null,
+            "expire_seconds": 31536000,
+            "one_off": true,
+            "start_time": null,
+            "enabled": true,
+            "last_run_at": null,
+            "total_run_count": 0,
+            "date_changed": "2025-04-21T14:23:43.697Z",
+            "description": ""
+        }
+    },
+    {
+        "model": "django_celery_beat.periodictask",
+        "pk": 122,
+        "fields": {
+            "name": "Event_20_start_1746025200000",
+            "task": "lessons.tasks.event_switch_status",
+            "interval": null,
+            "crontab": null,
+            "solar": null,
+            "clocked": 42,
+            "args": "[]",
+            "kwargs": "{\"event_id\": 20, \"started\": true}",
+            "queue": null,
+            "exchange": null,
+            "routing_key": null,
+            "headers": "{}",
+            "priority": null,
+            "expires": null,
+            "expire_seconds": 31536000,
+            "one_off": true,
+            "start_time": null,
+            "enabled": true,
+            "last_run_at": null,
+            "total_run_count": 0,
+            "date_changed": "2025-04-21T14:23:57.994Z",
+            "description": ""
+        }
+    },
+    {
+        "model": "django_celery_beat.periodictask",
+        "pk": 123,
+        "fields": {
+            "name": "Lesson_1_start_1746025200000",
+            "task": "lessons.tasks.lesson_switch_status",
+            "interval": null,
+            "crontab": null,
+            "solar": null,
+            "clocked": 42,
+            "args": "[]",
+            "kwargs": "{\"lesson_id\": 1, \"started\": true}",
+            "queue": null,
+            "exchange": null,
+            "routing_key": null,
+            "headers": "{}",
+            "priority": null,
+            "expires": null,
+            "expire_seconds": 31536000,
+            "one_off": true,
+            "start_time": null,
+            "enabled": true,
+            "last_run_at": null,
+            "total_run_count": 0,
+            "date_changed": "2025-04-21T14:23:57.994Z",
+            "description": ""
+        }
+    },
+    {
+        "model": "django_celery_beat.periodictask",
+        "pk": 124,
+        "fields": {
+            "name": "Lesson_1_finished_1746630000000",
+            "task": "lessons.tasks.lesson_switch_status",
+            "interval": null,
+            "crontab": null,
+            "solar": null,
+            "clocked": 43,
+            "args": "[]",
+            "kwargs": "{\"lesson_id\": 1, \"started\": false}",
+            "queue": null,
+            "exchange": null,
+            "routing_key": null,
+            "headers": "{}",
+            "priority": null,
+            "expires": null,
+            "expire_seconds": 31536000,
+            "one_off": true,
+            "start_time": null,
+            "enabled": true,
+            "last_run_at": null,
+            "total_run_count": 0,
+            "date_changed": "2025-04-21T14:23:57.994Z",
+            "description": ""
+        }
+    },
+    {
+        "model": "django_celery_beat.periodictask",
+        "pk": 125,
+        "fields": {
+            "name": "Lesson_2_start_1746630000000",
+            "task": "lessons.tasks.lesson_switch_status",
+            "interval": null,
+            "crontab": null,
+            "solar": null,
+            "clocked": 43,
+            "args": "[]",
+            "kwargs": "{\"lesson_id\": 2, \"started\": true}",
+            "queue": null,
+            "exchange": null,
+            "routing_key": null,
+            "headers": "{}",
+            "priority": null,
+            "expires": null,
+            "expire_seconds": 31536000,
+            "one_off": true,
+            "start_time": null,
+            "enabled": true,
+            "last_run_at": null,
+            "total_run_count": 0,
+            "date_changed": "2025-04-21T14:23:57.994Z",
+            "description": ""
+        }
+    },
+    {
+        "model": "django_celery_beat.periodictask",
+        "pk": 126,
+        "fields": {
+            "name": "Lesson_2_finished_1747234800000",
+            "task": "lessons.tasks.lesson_switch_status",
+            "interval": null,
+            "crontab": null,
+            "solar": null,
+            "clocked": 44,
+            "args": "[]",
+            "kwargs": "{\"lesson_id\": 2, \"started\": false}",
+            "queue": null,
+            "exchange": null,
+            "routing_key": null,
+            "headers": "{}",
+            "priority": null,
+            "expires": null,
+            "expire_seconds": 31536000,
+            "one_off": true,
+            "start_time": null,
+            "enabled": true,
+            "last_run_at": null,
+            "total_run_count": 0,
+            "date_changed": "2025-04-21T14:23:57.994Z",
+            "description": ""
+        }
+    },
+    {
+        "model": "django_celery_beat.periodictask",
+        "pk": 127,
+        "fields": {
+            "name": "Lesson_3_start_1747234800000",
+            "task": "lessons.tasks.lesson_switch_status",
+            "interval": null,
+            "crontab": null,
+            "solar": null,
+            "clocked": 44,
+            "args": "[]",
+            "kwargs": "{\"lesson_id\": 3, \"started\": true}",
+            "queue": null,
+            "exchange": null,
+            "routing_key": null,
+            "headers": "{}",
+            "priority": null,
+            "expires": null,
+            "expire_seconds": 31536000,
+            "one_off": true,
+            "start_time": null,
+            "enabled": true,
+            "last_run_at": null,
+            "total_run_count": 0,
+            "date_changed": "2025-04-21T14:23:57.994Z",
+            "description": ""
+        }
+    },
+    {
+        "model": "django_celery_beat.periodictask",
+        "pk": 128,
+        "fields": {
+            "name": "Lesson_3_finished_1747839600000",
+            "task": "lessons.tasks.lesson_switch_status",
+            "interval": null,
+            "crontab": null,
+            "solar": null,
+            "clocked": 45,
+            "args": "[]",
+            "kwargs": "{\"lesson_id\": 3, \"started\": false}",
+            "queue": null,
+            "exchange": null,
+            "routing_key": null,
+            "headers": "{}",
+            "priority": null,
+            "expires": null,
+            "expire_seconds": 31536000,
+            "one_off": true,
+            "start_time": null,
+            "enabled": true,
+            "last_run_at": null,
+            "total_run_count": 0,
+            "date_changed": "2025-04-21T14:23:57.994Z",
+            "description": ""
+        }
+    },
+    {
+        "model": "django_celery_beat.periodictask",
+        "pk": 129,
+        "fields": {
+            "name": "Event_20_finished_1747839600000",
+            "task": "lessons.tasks.event_switch_status",
+            "interval": null,
+            "crontab": null,
+            "solar": null,
+            "clocked": 45,
+            "args": "[]",
+            "kwargs": "{\"event_id\": 20, \"started\": false}",
+            "queue": null,
+            "exchange": null,
+            "routing_key": null,
+            "headers": "{}",
+            "priority": null,
+            "expires": null,
+            "expire_seconds": 31536000,
+            "one_off": true,
+            "start_time": null,
+            "enabled": true,
+            "last_run_at": null,
+            "total_run_count": 0,
+            "date_changed": "2025-04-21T14:23:57.994Z",
+            "description": ""
+        }
+    }
+]

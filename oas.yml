@@ -4,56 +4,1650 @@ info:
   title: MOS.METRO.SDO project
   description: Платформа удаленного обучения специалистов дорожных профессий
   version: 0.1.0
+  x-speakeasy-retries:
+    strategy: backoff
+    backoff:
+      initialInterval: 500
+      maxInterval: 60000
+      maxElapsedTime: 3600000
+      exponent: 1.5
+    statusCodes:
+      - 5XX
+    retryConnectionErrors: true
 
 servers:
   - url: https://localhost:8000/api/v1
     description: Адресс Производственного сервера
+  - url: ws://localhost:8080/
+    description: Адресс Веб Сокета
+
+tags:
+  - name: Profile
+    description: Профиль
+  - name: Password
+    description: Все что связанно с паролями
+  - name: Auth
+    description: Выход - выход
+  - name: Event
+    description: Эвенты для пользователей
+  - name: Course
+    description: Курсы
+  - name: Lesson
+    description: Уроки
+  - name: Step
+    description: Шаги
+  - name: TestBlock
+    description: Тестовый Блок
+  - name: Question
+    description: Вопросы
+  - name: Answer
+    description: Ответы
+  - name: Rate
+    description: Оценка
+  - name: WS
+    description: Веб Сокеты
 
 paths:
-
   /profile:
     get:
       operationId: api_profile_retrieve
       summary: Получение профиля пользователя
       tags:
         - Profile
+      security:
+        - Token: []
       responses:
-        '200':
-          description: 'JSON ответ сервера с данным профиля'
+        "200":
+          description: "JSON ответ сервера с данным профиля"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Profile'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '422':
-          $ref: '#/components/responses/UnprocessableEntity'
+                $ref: "#/components/schemas/Profile"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
     put:
       operationId: api_profile_update
       summary: Обновление данных о профиле
+      tags:
+        - Profile
+      security:
+        - Token: []
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Profile'
+              $ref: "#/components/schemas/Profile"
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/Profile'
+              $ref: "#/components/schemas/Profile"
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/Profile'
+              $ref: "#/components/schemas/Profile"
         required: true
       responses:
-        '200':
-          description: 'JSON ответ с подтверждением об Обновлении данных'
+        "200":
+          description: "JSON ответ с подтверждением об Обновлении данных"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Profile'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '422':
-          $ref: '#/components/responses/UnprocessableEntity'
+                $ref: "#/components/schemas/Profile"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+
+  /settings/password/change:
+    post:
+      operationId: api_settings_password
+      summary: Поменять пароль, в последствии отправляется уведомление об изменении на почту
+      tags:
+        - Password
+      security:
+        - Token: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                old_password:
+                  type: string
+                  minLength: 8
+                  maxLength: 128
+                new_password:
+                  type: string
+                  minLength: 8
+                  maxLength: 128
+      responses:
+        "200":
+          description: "JSON ответ с подтверждением об Обновлении данных"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detail:
+                    type: string
+                    default: Пароль был успешно изменен
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+
+  /login:
+    post:
+      operationId: api_authemail_login
+      summary: Выполнить вход в систему (сохранение токена сессии на данного пользователя)
+      tags:
+        - Auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  maxLength: 255
+                password:
+                  type: string
+                  minLength: 8
+                  maxLength: 128
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  maxLength: 255
+                password:
+                  type: string
+                  minLength: 8
+                  maxLength: 128
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  maxLength: 255
+                password:
+                  type: string
+                  minLength: 8
+                  maxLength: 128
+      responses:
+        "200":
+          description: JSON ответ с токеном
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    format: hex
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+
+  /logout:
+    post:
+      operationId: api_authemail_logout
+      summary: Выход из системы (поиск токена данного пользователя и в последствии - удаление)
+      tags:
+        - Auth
+      responses:
+        "200":
+          description: Выход из системы - успешно
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    default: User logged out.
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+
+  /files/{file_id}:
+    delete:
+      operationId: api_files_delete
+      summary: Удаление файла и системы
+      parameters:
+        - in: path
+          name: file_id
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+      tags:
+        - File
+      security:
+        - Token: []
+      responses:
+        '204':
+          description: Ответ об удалении
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+
+  /covers:
+    get:
+      operationId: api_covers_list
+      summary: Получение списка всех эвентов и пользователей
+      tags:
+        - Cover
+      security:
+        - Token: []
+      responses:
+        "200":
+          description: JSON ответ с деталями данного эвента
+          content:
+            application/json:
+              schema:
+                type: array
+                minItems: 1
+                items:
+                  $ref: "#/components/schemas/EventCovered"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+    post:
+      operationId: api_covers_create
+      summary: Создание Покрытия эвента на пользователе (для администрации или методиста)
+      tags:
+        - Cover
+      security:
+        - Token: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: "#/components/schemas/EventCoveredCreate"
+      responses:
+        "201":
+          description: JSON ответ с новыми данными
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/EventCreate"
+            application/x-www-form-urlencoded:
+              schema:
+                $ref: "#/components/schemas/EventCreate"
+            multipart/form-data:
+              schema:
+                $ref: "#/components/schemas/EventCreate"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+
+  /covers/{cover_id}:
+    delete:
+      operationId: api_covers_delete
+      summary: Удаление пользователя из эвента
+      tags:
+        - Cover
+      security:
+        - Token: []
+      responses:
+        '204':
+          description: Ответ об удалении
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+
+  /covers/currents:
+    get:
+      operationId: api_covers_list_currents
+      summary: Получение списка всех эвентов от текущего пользователя
+      tags:
+        - Cover
+      security:
+        - Token: []
+      responses:
+        "200":
+          description: JSON ответ с деталями данного эвента
+          content:
+            application/json:
+              schema:
+                type: array
+                minItems: 1
+                items:
+                  $ref: "#/components/schemas/EventCovered"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+
+  /covers/main:
+    get:
+      operationId: api_covers_main
+      summary: Получение списка всех актуальных задач
+      tags:
+        - Cover
+      security:
+        - Token: []
+      responses:
+        "200":
+          description: JSON ответ с деталями залач
+          content:
+            application/json:
+              schema:
+                type: array
+                minItems: 1
+                items:
+                  properties:
+                    id:
+                      type: integer
+                      minimum: 1
+                    url:
+                      type: string
+                      format: slug
+                    name:
+                      type: string
+                    end_date:
+                      type: string
+                      format: date-time
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+
+  /covers/calendar:
+    get:
+      operationId: api_covers_calendar
+      summary: Получение календаря предстоящих событий
+      tags:
+        - Cover
+      security:
+        - Token: []
+      responses:
+        "200":
+          description: JSON ответ с деталями данного эвента
+          content:
+            application/json:
+              schema:
+                type: array
+                minItems: 1
+                items:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    start_date:
+                      type: string
+                      format: date-time
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+
+  /covers/{cover_id}/toggle-favorite:
+    get:
+      operationId: api_covers_toggle-favorite
+      summary: Добавление или удаление из избранного
+      parameters:
+        - in: path
+          name: cover_id
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+      tags:
+        - Cover
+      security:
+        - Token: []
+      responses:
+        "200":
+          description: Эвент добавлен в избраное или удален
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  cover_id:
+                    type: integer
+                  favorite:
+                    type: boolean
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+
+
+  /events/{event_id}:
+    get:
+      operationId: api_events_retrieve
+      parameters:
+        - in: path
+          name: event_id
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+      summary: (Доступ только администрации или методисту)
+      tags:
+        - Event
+      security:
+        - Token: []
+      responses:
+        "200":
+          description: JSON ответ с деталями данного эвента
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/EventView"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+    patch:
+      operationId: api_events_patrial_update
+      parameters:
+        - in: path
+          name: event_id
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+      summary: Обновление эвента (для администрации или методиста)
+      tags:
+        - Event
+      security:
+        - Token: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: "#/components/schemas/EventUpdate"
+      responses:
+        "200":
+          description: JSON ответ с изменеными данными
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/EventUpdate"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+    delete:
+      operationId: api_events_destroy
+      summary: Удаление эвента (для администрации или методиста (возможно будет реализация только в админ панели))
+      parameters:
+        - in: path
+          name: event_id
+          required: true
+          schema:
+            type: integer
+      tags:
+        - Event
+      security:
+        - Token: []
+      responses:
+        "204":
+          description: Эвент удален успешно
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+
+  /events:
+    get:
+      operationId: api_events_list
+      summary: Получение всех активированных эвентов (для администрации и методиста)
+      tags:
+        - Event
+      security:
+        - Token: []
+      responses:
+        "200":
+          description: JSON ответ со списком всех эвентов
+          content:
+            application/json:
+              schema:
+                type: array
+                minItems: 0
+                items:
+                  $ref: "#/components/schemas/Event"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+    post:
+      operationId: api_events_create
+      summary: Создание Эвента (для администрации или методиста)
+      tags:
+        - Event
+      security:
+        - Token: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: "#/components/schemas/EventCreate"
+      responses:
+        "201":
+          description: JSON ответ с новыми данными
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/EventCreate"
+            application/x-www-form-urlencoded:
+              schema:
+                $ref: "#/components/schemas/EventCreate"
+            multipart/form-data:
+              schema:
+                $ref: "#/components/schemas/EventCreate"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+
+  /courses:
+    get:
+      operationId: api_courses_list
+      summary: Получение всех курсов (для администрации и методиста)
+      tags:
+        - Course
+      security:
+        - Token: []
+      responses:
+        "200":
+          description: JSON ответ со списком всех курсов
+          content:
+            application/json:
+              schema:
+                type: array
+                minItems: 0
+                items:
+                  $ref: "#/components/schemas/Сourse"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+    post:
+      operationId: api_courses_create
+      summary: Создание новых курсов (для администрации и методиста)
+      tags:
+        - Course
+      security:
+        - Token: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: "#/components/schemas/CourseCreate"
+      responses:
+        "201":
+          description: JSON ответ с новыми данными
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/CourseCreate"
+            application/x-www-form-urlencoded:
+              schema:
+                $ref: "#/components/schemas/CourseCreate"
+            multipart/form-data:
+              schema:
+                $ref: "#/components/schemas/CourseCreate"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+
+  /courses/{course_id}:
+    get:
+      summary: Получение конкретного курса по ID
+      parameters:
+        - in: path
+          name: course_id
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+      operationId: api_courses_retrieve
+      tags:
+        - Course
+      security:
+        - Token: []
+      responses:
+        "200":
+          description: JSON ответ с курсом
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/СourseView"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+    patch:
+      operationId: api_courses_patrial_update
+      parameters:
+        - in: path
+          name: course_id
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+      summary: Обновление курса (для администрации или методиста)
+      tags:
+        - Course
+      security:
+        - Token: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: "#/components/schemas/CourseCreate"
+      responses:
+        "200":
+          description: JSON ответ с изменеными данными
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/CourseCreate"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+    delete:
+      operationId: api_course_destroy
+      summary: Удаление урока (для администрации или методиста (возможно будет реализация только в админ панели))
+      parameters:
+        - in: path
+          name: course_id
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+      tags:
+        - Course
+      security:
+        - Token: []
+      responses:
+        "204":
+          description: Курс удален успешно
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+
+  /courses/{course_id}/upload-materials:
+    post:
+      operationId: api_course_upload
+      summary: Загрузка материалов
+      tags:
+        - Course
+      security:
+        - Token: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: "#/components/schemas/ContentAttachment"
+      responses:
+        "200":
+          description: JSON ответ с курсом
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/Materials"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+
+  /courses/{course_id}/users:
+    get:
+      summary: Вывод пользователей исходя из курса
+      parameters:
+        - in: path
+          name: course_id
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+      tags:
+        - Course
+      security:
+        - Token: []
+      responses:
+        "200":
+          description: JSON ответ с списком пользователей
+          content:
+            application/json:
+              schema:
+                type: array
+                minItems: 1
+                items:
+                  properties:
+                    user:
+                      type: object
+                      $ref: "#/components/schemas/User"
+                    procent:
+                      type: integer
+                      minimum: 0
+                      maximum: 100
+                    status:
+                      type: string
+                      enum:
+                        - done
+                        - failed
+                        - process
+                        - expected
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+
+  /courses/{course_id}/about:
+    get:
+      summary: Вывод деталей курса
+      parameters:
+        - in: path
+          name: course_id
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+      tags:
+        - Course
+      security:
+        - Token: []
+      responses:
+        "200":
+          description: JSON ответ с списком пользователей
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/CourseDetail"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+
+
+  /lessons:
+    get:
+      operationId: api_lessons_list
+      summary: Получение всех уроков (для администрации и методиста)
+      tags:
+        - Lesson
+      security:
+        - Token: []
+      responses:
+        "200":
+          description: JSON ответ со списком всех уроков
+          content:
+            application/json:
+              schema:
+                type: array
+                minItems: 0
+                items:
+                  $ref: "#/components/schemas/Lesson"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+    post:
+      operationId: api_lessons_create
+      summary: Создание новых уроков (для администрации и методиста)
+      tags:
+        - Lesson
+      security:
+        - Token: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: "#/components/schemas/LessonCreate"
+      responses:
+        "201":
+          description: JSON ответ с новыми данными
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/LessonCreate"
+            application/x-www-form-urlencoded:
+              schema:
+                $ref: "#/components/schemas/LessonCreate"
+            multipart/form-data:
+              schema:
+                $ref: "#/components/schemas/LessonCreate"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+
+  /lessons/{lesson_id}:
+    get:
+      summary: Получение конкретного урока по ID
+      parameters:
+        - in: path
+          name: lesson_id
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+      operationId: api_lessons_retrieve
+      tags:
+        - Lesson
+      security:
+        - Token: []
+      responses:
+        "200":
+          description: JSON ответ с уроком
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/LessonView"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+    put:
+      operationId: api_lessons_patrial_update
+      parameters:
+        - in: path
+          name: lesson_id
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+      summary: Обновление урока (для администрации или методиста)
+      tags:
+        - Lesson
+      security:
+        - Token: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: "#/components/schemas/LessonCreate"
+      responses:
+        "200":
+          description: JSON ответ с изменеными данными
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/LessonCreate"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+    delete:
+      operationId: api_lessons_destroy
+      summary: Удаление урока (для администрации или методиста (возможно будет реализация только в админ панели))
+      parameters:
+        - in: path
+          name: lesson_id
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+      tags:
+        - Lesson
+      security:
+        - Token: []
+      responses:
+        "204":
+          description: Урок удален успешно
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+
+  /step:
+    get:
+      operationId: api_steps_list
+      summary: Получение всего списка шагов (для администрации и методиста)
+      tags:
+        - Step
+      security:
+        - Token: []
+      responses:
+        "200":
+          description: JSON ответ со списком всех шагов из уроков
+          content:
+            application/json:
+              schema:
+                type: array
+                minItems: 0
+                items:
+                  $ref: "#/components/schemas/Step"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+    post:
+      operationId: api_steps_create
+      summary: Создание новых шагов (для администрации и методиста)
+      tags:
+        - Step
+      security:
+        - Token: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: "#/components/schemas/StepCreate"
+      responses:
+        "201":
+          description: JSON ответ с новыми данными
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/StepCreate"
+            application/x-www-form-urlencoded:
+              schema:
+                $ref: "#/components/schemas/StepCreate"
+            multipart/form-data:
+              schema:
+                $ref: "#/components/schemas/StepCreate"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+
+  /step/{step_id}:
+    get:
+      summary: Получение конкретного шага по ID
+      parameters:
+        - in: path
+          name: step_id
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+      operationId: api_steps_retrieve
+      tags:
+        - Step
+      security:
+        - Token: []
+      responses:
+        "200":
+          description: JSON ответ с шагом
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/StepView"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+    put:
+      operationId: api_step_patrial_update
+      parameters:
+        - in: path
+          name: step_id
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+      summary: Обновление шага (для администрации или методиста)
+      tags:
+        - Step
+      security:
+        - Token: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: "#/components/schemas/StepCreate"
+      responses:
+        "200":
+          description: JSON ответ с изменеными данными
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/StepCreate"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+    delete:
+      operationId: api_steps_destroy
+      summary: Удаление шага (для администрации или методиста (возможно будет реализация только в админ панели))
+      parameters:
+        - in: path
+          name: step_id
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+      tags:
+        - Step
+      security:
+        - Token: []
+      responses:
+        "204":
+          description: Шаг удален успешно
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+
+  /test-block/{block_id}:
+    get:
+      summary: Получение конкретного тестового блока по ID
+      parameters:
+        - in: path
+          name: block_id
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+      operationId: api_test-block_retrieve
+      tags:
+        - TestBlock
+      security:
+        - Token: []
+      responses:
+        "200":
+          description: JSON ответ с шагом
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/TestBlockView"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+
+  /test-block/{block_id}/submission:
+    post:
+      summary: Ответ на задание из тестового блока
+      parameters:
+        - in: path
+          name: block_id
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+      operationId: api_test-block_submission
+      tags:
+        - TestBlock
+      security:
+        - Token: []
+      responses:
+        "200":
+          description: JSON ответ с шагом
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/AssessmentSubmission"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+
+  /test-block/{block_id}/assessment:
+    post:
+      summary: Оценка задания из тестового блока
+      parameters:
+        - in: path
+          name: block_id
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+      operationId: api_test-block_assessment
+      tags:
+        - TestBlock
+      security:
+        - Token: []
+      responses:
+        "200":
+          description: JSON ответ с шагом
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/AssessmentSubmission"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+
+  /questions/{question_id}:
+    get:
+      summary: Получение конкретного вопроса по ID (для администрации или методиста)
+      parameters:
+        - in: path
+          name: question_id
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+      operationId: api_questions_retrieve
+      tags:
+        - Question
+      security:
+        - Token: []
+      responses:
+        "200":
+          description: JSON ответ с вопроса
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/Question"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+    put:
+      operationId: api_questions_patrial_update
+      parameters:
+        - in: path
+          name: question_id
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+      summary: Обновление вопроса (для администрации или методиста)
+      tags:
+        - Question
+      security:
+        - Token: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: "#/components/schemas/QuestionCreate"
+      responses:
+        "200":
+          description: JSON ответ с изменеными данными
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/QuestionCreate"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+    delete:
+      operationId: api_questions_destroy
+      summary: Удаление шага (для администрации или методиста (возможно будет реализация только в админ панели))
+      parameters:
+        - in: path
+          name: question_id
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+      tags:
+        - Question
+      security:
+        - Token: []
+      responses:
+        "204":
+          description: Вопрос удален успешно
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+
+  /questions:
+    get:
+      operationId: api_questions_list
+      summary: Получение всего списка вопросов (для администрации и методиста)
+      tags:
+        - Question
+      security:
+        - Token: []
+      responses:
+        "200":
+          description: JSON ответ со списком всех вопросов из уроков
+          content:
+            application/json:
+              schema:
+                type: array
+                minItems: 0
+                items:
+                  $ref: "#/components/schemas/Question"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+    post:
+      operationId: api_questions_create
+      summary: Создание новых вопросов (для администрации и методиста)
+      tags:
+        - Question
+      security:
+        - Token: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: "#/components/schemas/QuestionCreate"
+      responses:
+        "201":
+          description: JSON ответ с новыми данными
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/QuestionCreate"
+            application/x-www-form-urlencoded:
+              schema:
+                $ref: "#/components/schemas/QuestionCreate"
+            multipart/form-data:
+              schema:
+                $ref: "#/components/schemas/QuestionCreate"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+
+  /answers/{answer_id}:
+    get:
+      summary: Получение конкретного ответа по ID (для администрации или методиста)
+      parameters:
+        - in: path
+          name: answer_id
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+      operationId: api_answers_retrieve
+      tags:
+        - Answer
+      security:
+        - Token: []
+      responses:
+        "200":
+          description: JSON ответ с вопроса
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/Answer"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+    put:
+      operationId: api_answers_patrial_update
+      parameters:
+        - in: path
+          name: answer_id
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+      summary: Обновление ответа (для администрации или методиста)
+      tags:
+        - Answer
+      security:
+        - Token: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: "#/components/schemas/Answer"
+      responses:
+        "200":
+          description: JSON ответ с изменеными данными
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/Answer"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+    delete:
+      operationId: api_answers_destroy
+      summary: Удаление вопроса (для администрации или методиста (возможно будет реализация только в админ панели))
+      parameters:
+        - in: path
+          name: answer_id
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+      tags:
+        - Answer
+      security:
+        - Token: []
+      responses:
+        "204":
+          description: Ответ удален успешно
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+
+  /answers:
+    get:
+      operationId: api_answers_list
+      summary: Получение всего списка ответов (для администрации и методиста)
+      tags:
+        - Answer
+      security:
+        - Token: []
+      responses:
+        "200":
+          description: JSON ответ со списком всех ответов из уроков
+          content:
+            application/json:
+              schema:
+                type: array
+                minItems: 0
+                items:
+                  $ref: "#/components/schemas/Answer"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+    post:
+      operationId: api_answers_create
+      summary: Создание новых ответов (для администрации и методиста)
+      tags:
+        - Answer
+      security:
+        - Token: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: "#/components/schemas/Answer"
+      responses:
+        "201":
+          description: JSON ответ с новыми данными
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/Answer"
+            application/x-www-form-urlencoded:
+              schema:
+                $ref: "#/components/schemas/Answer"
+            multipart/form-data:
+              schema:
+                $ref: "#/components/schemas/Answer"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+
+  /rates/vote/{lesson_id}:
+    post:
+      summary: Поставить оценку уроку
+      parameters:
+        - in: path
+          name: lesson_id
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+      tags:
+        - Rate
+      security:
+        - Token: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: "#/components/schemas/Rate"
+      responses:
+        "200":
+          description: JSON ответ подверждение
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/Rate"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+
+  /ws/test-block/{block_id}:
+    post:
+      summary: WebSocket отправка данных (без /ws в начале url, костыль в силу не возможности документировать WebSocket)
+      parameters:
+        - in: path
+          name: block_id
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+      tags:
+        - WS
+      security:
+        - Token: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: "#/components/schemas/WSPull"
+      responses:
+        "200":
+          description: JSON ответ
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/WSAnswer"
+        "401":
+          $ref: "#/components/responses/WSUnauthorized"
+        "403":
+          $ref: "#/components/responses/WSForbidden"
+        "404":
+          $ref: "#/components/responses/WSNotFound"
+        "500":
+          $ref: "#/components/responses/WSInternalServerError"
 
 components:
   responses:
@@ -62,13 +1656,68 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Error'
+            $ref: "#/components/schemas/Error"
     UnprocessableEntity:
       description: Полезная нагрузка имеет не валидные данные
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Error'
+            $ref: "#/components/schemas/Error"
+    Unauthorized:
+      description: Пользователь не авторизован или не активный (бан) или логин - пароль не правильный
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    BadRequest:
+      description: Произошла ошибка при обработке данных
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    Forbidden:
+      description: Нет прав доступа
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+
+    WSNotFound:
+      description: Ресурс не был найден
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/WSError"
+    WSUnprocessableEntity:
+      description: Полезная нагрузка имеет не валидные данные
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/WSError"
+    WSUnauthorized:
+      description: Пользователь не авторизован или не активный (бан) или логин - пароль не правильный
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/WSError"
+    WSBadRequest:
+      description: Произошла ошибка при обработке данных
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/WSError"
+    WSForbidden:
+      description: Нет прав доступа
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/WSError"
+    WSInternalServerError:
+      description: Ошибка сервера
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/WSError"
 
   schemas:
     Error:
@@ -82,6 +1731,47 @@ components:
         - detail
       additionalProperties: false
 
+    WSError:
+      type: object
+      properties:
+        type:
+          type: string
+        message:
+          type: string
+      required:
+        - type
+        - message
+      additionalProperties: false
+
+    WSAnswer:
+      description: Сущность WebSocket
+      additionalProperties: false
+      type: object
+      properties:
+        answer_id:
+          type: integer
+          minimum: 1
+        correct:
+          type: boolean
+      required:
+        - answer_id
+        - correct
+
+    WSPull:
+      description: Сущность отправки в WS
+      additionalProperties: false
+      type: object
+      properties:
+        block_id:
+          type: integer
+          minimum: 1
+        answer_id:
+          type: integer
+          minimum: 1
+      required:
+        - block_id
+        - answer_id
+
     User:
       description: Сущность учетной записи
       additionalProperties: false
@@ -90,58 +1780,67 @@ components:
         id:
           type: integer
           readOnly: true
-        email:
+          minimum: 1
+        first_name:
           type: string
           readOnly: false
+          maxLength: 30
+          nullable: true
+        last_name:
+          type: string
+          readOnly: false
+          maxLength: 30
+          nullable: true
+        email:
+          type: string
+          readOnly: true
           nullable: false
           format: email
+          maxLength: 255
         password:
           type: string
           format: byte
           nullable: false
-          readOnly: false
+          readOnly: true
+          minLength: 8
           maxLength: 128
         is_staff:
           type: boolean
           default: false
           readOnly: true
-          nullable: false
           description: Указатель на права методиста
         is_active:
           type: boolean
           default: true
           readOnly: true
-          nullable: false
           description: Активность пользователя (возможность пользоваться сервисом)
         date_joined:
           type: string
           format: date-time
           nullable: false
           description: Дата регистрации
+          readOnly: true
         last_login:
           type: string
           format: date-time
           nullable: false
           description: Дата последнего входа
+          readOnly: true
         profession:
           type: object
-          $ref: '#/components/schemas/Profession'
-        profile:
-          type: object
-          $ref: '#/components/schemas/Profile'
+          $ref: "#/components/schemas/Profession"
+        date_commencement:
+          type: string
+          format: date
+          description: Дата начала работы (исходя из этого вычисляется динамически стаж работы)
           readOnly: true
-          nullable: true
-        events:
-          type: array
-          readOnly: false
-          nullable: true
-          items:
-            $ref: '#/components/schemas/Event'
-            description: Задачи которые получил пользователь
+          nullable: false
       required:
         - id
         - email
         - password
+        - profession
+        - date_commencement
 
     Profile:
       description: Сущность профиля
@@ -151,21 +1850,12 @@ components:
         id:
           type: integer
           readOnly: true
+          minimum: 1
         user:
           type: object
           $ref: "#/components/schemas/User"
           readOnly: true
           nullable: false
-        first_name:
-          type: string
-          readOnly: false
-          maxLength: 150
-          nullable: true
-        last_name:
-          type: string
-          readOnly: false
-          maxLength: 150
-          nullable: true
         phone:
           type: string
           readOnly: false
@@ -185,13 +1875,139 @@ components:
         - id
         - user
 
-    Сourse:
-      description: Сущность курса
+    AI:
+      description: Сущность AI
       additionalProperties: false
       type: object
       properties:
         id:
           type: integer
+          readOnly: true
+          minimum: 1
+        request_time:
+          type: string
+          format: date-time
+          nullable: false
+          readOnly: true
+        response_time:
+          type: string
+          format: date-time
+          nullable: false
+          readOnly: true
+        request_text:
+          type: string
+          description: Текст вопроса
+          nullable: false
+          maxLength: 500
+        response_text:
+          type: string
+          description: Текст ответа
+          nullable: false
+
+    EventCoveredCreate:
+      description: Сущность статистики курсов на пользователе создание
+      additionalProperties: false
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+          minimum: 1
+        event:
+          type: integer
+          minimum: 1
+        user:
+          type: integer
+          minimum: 1
+          readOnly: true
+        procent:
+          type: integer
+          readOnly: true
+          format: int32
+          minimum: 0
+          maximum: 100
+          default: 0
+        favorite:
+          type: boolean
+          description: Флаг избранного
+          default: false
+          readOnly: false
+        status:
+          type: string
+          enum:
+            - done
+            - failed
+            - process
+            - expected
+          readOnly: true
+          default:
+            expected
+
+    Materials:
+      description: Сущность материалов
+      additionalProperties: false
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+          minimum: 1
+        files:
+          type: array
+          items:
+            minItems: 0
+            $ref: "#/components/schemas/ContentAttachment"
+
+    EventCovered:
+      description: Сущность статистики курсов на пользователе
+      additionalProperties: false
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+          minimum: 1
+        event:
+          type: object
+          $ref: "#/components/schemas/Event"
+        user:
+          type: integer
+          readOnly: true
+          minimum: 1
+        procent:
+          type: integer
+          readOnly: true
+          format: int32
+          minimum: 0
+          maximum: 100
+          default: 0
+        favorite:
+          type: boolean
+          description: Флаг избранного
+          default: false
+          readOnly: false
+        status:
+          type: string
+          enum:
+            - done
+            - failed
+            - process
+            - expected
+          default:
+            expected
+
+    СourseView:
+      description: Сущность курса детальный
+      additionalProperties: false
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+          minimum: 1
+        teacher:
+          type: integer
+          minimum: 1
           readOnly: true
         name:
           type: string
@@ -202,6 +2018,21 @@ components:
           type: string
           readOnly: false
           nullable: true
+        interval:
+          type: string
+          format: date
+          description: Интервал времени по которому будут открывать уроки
+        lessons:
+          type: array
+          description: Уроки привязанные к данному курсу (для бэков - это поле только из сериализатора)
+          minItems: 1
+          items:
+            type: object
+            $ref: '#/components/schemas/LessonView'
+        beginer:
+          type: boolean
+          default: false
+          description: Является ли курс для начинающих?
         create_date:
           type: string
           format: date-time
@@ -217,18 +2048,338 @@ components:
           format: path
           readOnly: false
           nullable: true
+        profession:
+          type: object
+          description: Для какой профессии предназначен курс
+          nullable: false
+          $ref: "#/components/schemas/Profession"
+        experiences:
+          type: array
+          description: Список стажевых интервалов для которых подходит данный курс
+          minItems: 1
+          items:
+            $ref: "#/components/schemas/WorkExperience"
+        materials:
+          type: object
+          $ref: "#/components/schemas/Materials"
         status:
           type: string
-          nullable: false
           enum:
-            - expected
-            - started
-            - closed
+            - run
+            - end
+            - archive
+            - edit
+          default:
+            - archive
+
+    CourseCreate:
+      description: Сущность курса упрощеная
+      additionalProperties: false
+      type: object
+      properties:
+        id:
+          type: integer
+          minimum: 1
+          readOnly: true
+        teacher:
+          type: integer
+          minimum: 1
+          readOnly: true
+        name:
+          type: string
+          maxLength: 256
+          readOnly: false
+          nullable: false
+        description:
+          type: string
+          readOnly: false
+          nullable: true
+        interval:
+          type: string
+          format: date
+          description: Интервал времени по которому будут открывать уроки
+        beginer:
+          type: boolean
+          default: false
+          description: Является ли курс для начинающих?
+        image:
+          type: string
+          format: path
+          readOnly: false
+          nullable: true
+        profession:
+          type: integer
+          description: Для какой профессии предназначен курс
+          nullable: true
+          minimum: 1
+        scorm:
+          type: string
+          description: SCORM пакет (заменяет собой уроки)
+          nullable: true
+          format: byte
+        experiences:
+          type: array
+          description: Список стажевых интервалов для которых подходит данный курс
+          minItems: 1
+          items:
+            type: integer
+            minimum: 1
+        materials:
+          type: object
+          readOnly: true
+          $ref: "#/components/schemas/Materials"
+        status:
+          type: string
+          enum:
+            - archive
+            - edit
+          default:
+            - archive
       required:
         - id
         - name
-        - start_date
-        - end_date
+        - profession
+        - experiences
+
+    Сourse:
+      description: Сущность курса упрощеная
+      additionalProperties: false
+      type: object
+      properties:
+        id:
+          type: integer
+          minimum: 1
+          readOnly: true
+        teacher:
+          type: integer
+          minimum: 1
+          readOnly: true
+        name:
+          type: string
+          maxLength: 256
+          readOnly: false
+          nullable: false
+        description:
+          type: string
+          readOnly: false
+          nullable: true
+        interval:
+          type: string
+          format: date
+          description: Интервал времени по которому будут открывать уроки (пример ввода [DD] [HH:[MM:]] 07 00:00 - 7 дней)
+        lessons:
+          type: array
+          description: Уроки привязанные к данному курсу (для бэков - это поле только из сериализатора)
+          minItems: 1
+          items:
+            $ref: "#/components/schemas/Lesson"
+        beginer:
+          type: boolean
+          default: false
+          description: Является ли курс для начинающих?
+        image:
+          type: string
+          format: path
+          readOnly: false
+          nullable: true
+        profession:
+          type: integer
+          description: Для какой профессии предназначен курс
+          nullable: true
+          minimum: 1
+        scorms:
+          type: array
+          description: Список уроков из SCORM пакета
+          minItems: 1
+          items:
+            type: integer
+            minimum: 1
+        experiences:
+          type: array
+          description: Список стажевых интервалов для которых подходит данный курс
+          minItems: 1
+          items:
+            type: integer
+            minimum: 1
+        materials:
+          type: object
+          $ref: "#/components/schemas/Materials"
+        status:
+          type: string
+          enum:
+            - run
+            - end
+            - archive
+            - edit
+          default:
+            - archive
+      required:
+        - id
+        - name
+        - profession
+        - experiences
+
+    CourseDetail:
+      description: Сущность деталей текущего курса
+      additionalProperties: false
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        create_date:
+          type: string
+          format: date-time
+        end_date:
+          type: string
+          format: date-time
+        count_students:
+          type: integer
+          minimum: 0
+        status:
+          type: string
+          enum:
+            - run
+            - end
+            - archive
+            - edit
+        teacher:
+          type: object
+          $ref: "#/components/schemas/User"
+
+    Rate:
+      description: Сущность оценок по уроку
+      additionalProperties: false
+      type: object
+      properties:
+        id:
+          type: integer
+          minimum: 1
+          readOnly: true
+        user:
+          type: integer
+          minimum: 1
+          readOnly: true
+        lesson:
+          type: integer
+          minimum: 1
+          readOnly: true
+        rate:
+          type: integer
+          minimum: 1
+          maximum: 5
+          readOnly: false
+
+    LessonView:
+      description: Сущность урока детальный
+      additionalProperties: false
+      type: object
+      properties:
+        id:
+          type: integer
+          minimum: 1
+          readOnly: true
+        teacher:
+          type: integer
+          minimum: 1
+          readOnly: true
+        name:
+          type: string
+          maxLength: 256
+          readOnly: false
+          nullable: false
+        serial:
+          type: integer
+          description: Порядковый номер урока (1 урок всегда открыт)
+          minimum: 1
+          readOnly: false
+          nullable: false
+        version:
+          type: string
+          maxItems: 50
+          enum:
+            - SCORM 1.0
+            - SCORM 1.1
+            - SCORM 1.2
+            - 2004 1st Edition
+            - 2004 2nd Edition
+            - 2004 3rd Edition
+            - 2004 4th Edition
+        resource:
+          type: string
+          format: path
+        course:
+          type: integer
+          minimum: 1
+        start_date:
+          type: string
+          format: date-time
+        started:
+          type: boolean
+          default: false
+        steps:
+          type: array
+          description: Шаги урока
+          minItems: 0
+          items:
+            $ref: "#/components/schemas/StepView"
+        test_block:
+          type: object
+          description: Тестовый блок
+          $ref: '#/components/schemas/TestBlockView'
+
+    LessonCreate:
+      description: Сущность урока создание
+      additionalProperties: false
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+          minimum: 1
+        teacher:
+          type: integer
+          minimum: 1
+          readOnly: true
+        name:
+          type: string
+          maxLength: 256
+          readOnly: false
+          nullable: false
+        serial:
+          type: integer
+          description: Порядковый номер урока (1 урок всегда открыт)
+          minimum: 1
+          readOnly: false
+          nullable: false
+        start_date:
+          type: string
+          format: date-time
+          readOnly: true
+        version:
+          type: string
+          maxItems: 50
+          enum:
+            - SCORM 1.0
+            - SCORM 1.1
+            - SCORM 1.2
+            - 2004 1st Edition
+            - 2004 2nd Edition
+            - 2004 3rd Edition
+            - 2004 4th Edition
+        resource:
+          type: string
+          format: path
+        started:
+          type: boolean
+          default: false
+          readOnly: true
+        course:
+          type: integer
+          minimum: 1
+      required:
+        - name
 
     Lesson:
       description: Сущность урока
@@ -238,37 +2389,70 @@ components:
         id:
           type: integer
           readOnly: true
+          minimum: 1
+        teacher:
+          type: integer
+          minimum: 1
+          readOnly: true
         name:
           type: string
           maxLength: 256
           readOnly: false
           nullable: false
-        course:
-          type: object
+        serial:
+          type: integer
+          description: Порядковый номер урока (1 урок всегда открыт)
+          minimum: 1
           readOnly: false
           nullable: false
-          $ref: '#/components/schemas/Сourse'
-        create_date:
+        start_date:
           type: string
           format: date-time
-          readOnly: true
-          nullable: false
-        update_date:
+          description: Дата начала урока
+        started:
+          type: boolean
+          default: false
+        course:
+          type: integer
+          minimum: 1
+        version:
           type: string
-          format: date-time
-          readOnly: true
-          nullable: false
-        status:
-          description: Статус прохождения урока
-          nullable: false
+          maxItems: 50
           enum:
-            - done
-            - process
-            - failed
+            - SCORM 1.0
+            - SCORM 1.1
+            - SCORM 1.2
+            - 2004 1st Edition
+            - 2004 2nd Edition
+            - 2004 3rd Edition
+            - 2004 4th Edition
+        resource:
+          type: string
+          format: path
+        steps:
+          type: array
+          description: Шаги урока
+          minItems: 0
+          items:
+            type: object
+            minimum: 1
+            $ref: "#/components/schemas/Step"
+        test_block:
+          type: integer
+          description: Тестовый блок
+          minimum: 1
 
-    Step:
-      description: Шаги урока
+    StepCreate:
+      description: Шаги урока создание
       properties:
+        id:
+          type: integer
+          readOnly: true
+          minimum: 1
+        teacher:
+          type: integer
+          minimum: 1
+          readOnly: true
         title:
           type: string
           maxLength: 256
@@ -277,7 +2461,157 @@ components:
         content_text:
           type: string
           readOnly: false
+        serial:
+          type: integer
+          description: Порядковый номер шага (1 шаг всегда открыт)
+          minimum: 1
+          readOnly: false
+          nullable: false
+        lesson:
+          type: integer
+          minimum: 1
+
+    Step:
+      description: Шаги урока упрощеный
+      properties:
+        id:
+          type: integer
+          readOnly: true
+          minimum: 1
+        teacher:
+          type: integer
+          minimum: 1
+          readOnly: true
+        title:
+          type: string
+          maxLength: 256
+          readOnly: false
+          nullable: false
+        content_text:
+          type: string
+          readOnly: false
+        lesson:
+          type: integer
+          minimum: 1
+        serial:
+          type: integer
+          description: Порядковый номер шага (1 шаг всегда открыт)
+          minimum: 1
+          readOnly: false
+          nullable: false
+        attachments:
+          type: array
+          description: Медиа вложения. (Только в логике сериализатора, в модели не реализуем!)
           nullable: true
+          minItems: 0
+          items:
+            type: integer
+            minimum: 1
+
+    StepView:
+      description: Шаги урока детальный
+      properties:
+        title:
+          type: string
+          maxLength: 256
+          readOnly: false
+          nullable: false
+        teacher:
+          type: integer
+          minimum: 1
+          readOnly: true
+        content_text:
+          type: string
+          readOnly: false
+        serial:
+          type: integer
+          description: Порядковый номер шага (1 шаг всегда открыт)
+          minimum: 1
+          readOnly: false
+          nullable: false
+        lesson:
+          type: integer
+          minimum: 1
+        attachments:
+          type: array
+          description: Медиа вложения. (Только в логике сериализатора, в модели не реализуем!)
+          nullable: true
+          minItems: 0
+          items:
+            $ref: "#/components/schemas/ContentAttachment"
+
+    TestBlockView:
+      description: Блок с вопросами детальный
+      additionalProperties: false
+      type: object
+      properties:
+        id:
+          type: integer
+          minimum: 1
+          readOnly: true
+        end_date:
+          type: string
+          format: date-time
+          readOnly: true
+        lesson:
+          description: В модели делаем полноценную связь, в сериализаторе только id
+          type: integer
+          minimum: 1
+          readOnly: true
+        max_score:
+          description: Максимальный балл который может получить студент с данного тествого блока
+          type: number
+          format: float
+          readOnly: true
+        questions:
+          type: array
+          description: Вопросы для данного шага. (Только в логике сериализатора, в модели не реализуем!)
+          minItems: 0
+          items:
+            $ref: "#/components/schemas/Question"
+        user_story:
+          type: array
+          description: Список уже пройденых вопросов
+          nullable: true
+          minItems: 0
+          items:
+            $ref: "#/components/schemas/UserStory"
+
+    TestBlock:
+      description: Блок с вопросами упрощенный
+      additionalProperties: false
+      type: object
+      properties:
+        id:
+          type: integer
+          minimum: 1
+          readOnly: true
+        end_date:
+          type: string
+          format: date-time
+          readOnly: true
+        status:
+          type: string
+          enum:
+            - failed
+            - done
+        lesson:
+          description: В модели делаем полноценную связь, в сериализаторе только id
+          type: integer
+          minimum: 1
+          readOnly: true
+        max_score:
+          description: Максимальный балл который может получить студент с данного тествого блока
+          type: number
+          format: float
+          readOnly: true
+        questions:
+          type: array
+          description: Вопросы для данного шага. (Только в логике сериализатора, в модели не реализуем!)
+          minItems: 0
+          items:
+            type: integer
+            minimum: 1
 
     Question:
       description: Сущность тестов для урока
@@ -286,6 +2620,11 @@ components:
       properties:
         id:
           type: integer
+          readOnly: true
+          minimum: 1
+        teacher:
+          type: integer
+          minimum: 1
           readOnly: true
         text:
           type: string
@@ -297,12 +2636,129 @@ components:
           description: Изображения для тестового вопроса
           readOnly: false
           nullable: true
-        instance:
-          type: object
-          oneOf:
-            - $ref: '#/components/schemas/Lesson'
-            - $ref: '#/components/schemas/Сourse'
-          description: К сущности относится вопрос, если к Lesson - тогда это обычный вопрос, если к Course - финальный (экзаменационный)
+        test_block:
+          type: integer
+          minimum: 1
+        type_question:
+          type: string
+          enum:
+            - test
+            - task
+            - essay
+        check_automaty:
+          description: Автоматическая проверка (веб сокет)
+          type: boolean
+          default: false
+        answers:
+          type: array
+          description: Ответы на данный вопрос. (Только в логике сериализатора, в модели не реализуем!)
+          minItems: 0
+          items:
+            $ref: "#/components/schemas/Answer"
+
+    QuestionCreate:
+      description: Сущность тестов для урока создание
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: integer
+          readOnly: true
+          minimum: 1
+        teacher:
+          type: integer
+          minimum: 1
+          readOnly: true
+        text:
+          type: string
+          readOnly: false
+          nullable: false
+        image:
+          type: string
+          format: path
+          description: Изображения для тестового вопроса
+          readOnly: false
+          nullable: true
+        type_question:
+          type: string
+          enum:
+            - test
+            - task
+            - essay
+        test_block:
+          type: integer
+          minimum: 1
+      required:
+        - text
+        - test_block
+        - type_question
+
+    AssessmentSubmission:
+      description: Оценка преподавателя
+      type: object
+      additionalProperties: false
+      properties:
+        teacher:
+          type: integer
+          minimum: 1
+        test_block:
+          type: integer
+          minimum: 1
+        student:
+          type: integer
+          minimum: 1
+        score:
+          type: number
+          format: float
+          nullable: true
+        comment:
+          type: string
+          format: text
+          nullable: true
+        type_of:
+          type: string
+          enum:
+            - answer
+            - question
+        files:
+          type: array
+          minItems: 0
+          items:
+            $ref: "#/components/schemas/ContentAttachment"
+        date_assessment:
+          type: string
+          format: date-time
+          readOnly: true
+
+    CourseProgress:
+      description: Прогресс студента в определенной точке курса
+      additionalProperties: false
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+          minimum: 1
+        student:
+          type: integer
+          minimum: 1
+        test_block:
+          type: integer
+          minimum: 1
+        score:
+          type: number
+          format: float
+        data_assessment:
+          type: string
+          format: date-time
+        procent_compelete:
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 100
+        result:
+          type: number
+          format: float
 
     Answer:
       description: Сущность ответов на тесты
@@ -312,20 +2768,26 @@ components:
         id:
           type: integer
           readOnly: true
-        question:
-          type: object
-          nullable: false
-          $ref: '#/components/schemas/Question'
+          minimum: 1
         text:
           type: string
           nullable: false
           readOnly: false
         correct:
           type: boolean
+          readOnly: false
+        weight:
+          type: integer
+          format: int32
+          minimum: -2
+          maximum: 5
+        question:
+          type: integer
+          minimum: 1
       required:
-        - question
         - text
         - correct
+        - question
 
     ContentAttachment:
       description: Сущность для множественного присвоения мультимедийных файлов к урокам
@@ -335,6 +2797,7 @@ components:
         id:
           type: integer
           readOnly: true
+          minimum: 1
         file:
           type: string
           readOnly: false
@@ -347,16 +2810,12 @@ components:
           enum:
             - Image
             - Video
-        step:
-          type: object
-          $ref: '#/components/schemas/Step'
-          nullable: false
       required:
         - file
         - file_type
         - lesson
 
-    Group:
+    ProfessionGroup:
       description: Сущность группы (потока)
       additionalProperties: false
       type: object
@@ -364,26 +2823,26 @@ components:
         id:
           type: integer
           readOnly: true
+          minimum: 1
         profession:
-          ...
-        calendar:
-          ...
+          type: object
+          $ref: "#/components/schemas/Profession"
         students:
           type: array
-          minItems: 1
+          minItems: 0
           description: Все студенты в группе
           nullable: true
           items:
-            $ref: '#/components/schemas/User'
-
-    Calendar:
-      type: object
-      ...
+            $ref: "#/components/schemas/User"
 
     Profession:
       description: Профессии
       type: object
       properties:
+        id:
+          type: integer
+          readOnly: true
+          minimum: 1
         en_name:
           type: string
           maxLength: 256
@@ -393,19 +2852,112 @@ components:
           maxLength: 256
           nullable: false
 
-    Event:
-      description: Сущность задачи (курс) которая присваивается пользователю
-      additionalProperties: false
+    WorkExperience:
+      description: Стаж работы
       type: object
       properties:
         id:
           type: integer
           readOnly: true
-        course:
-          type: object
-          $ref: '#/components/schemas/Сourse'
-        done_lessons:
+          minimum: 1
+        years:
           type: integer
+          minimum: 0
+          maximum: 60
+          uniqueItems: true
+
+    UserStory:
+      description: История ответов на вопросы и открытия уроков (должно быть либо урок, либо вопрос - ответ)
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+          minimum: 1
+        user:
+          type: integer
+          readOnly: true
+          minimum: 1
+        lesson:
+          type: integer
+          readOnly: true
+          minimum: 1
+        date_opened:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: false
+        answer:
+          type: integer
+          description: Текущий ответ
+          nullable: true
+          minimum: 1
+
+    LessonStory:
+      description: История открытых уроков
+      additionalProperties: false
+      type: object
+      properties:
+        course:
+          type: integer
+          minimum: 1
+          readOnly: true
+          nullable: false
+        step:
+          type: integer
+          minimum: 1
+          readOnly: true
+          nullable: false
+        user:
+          type: integer
+          minimum: 1
+          readOnly: true
+          nullable: false
+        date_opened:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: false
+
+    EventCreate:
+      description: Сущность создания события
+      additionalProperties: false
+      type: object
+      properties:
+        course:
+          type: integer
+          minimum: 1
+        start_date:
+          type: string
+          format: date-time
+          readOnly: false
+          nullable: true
+        end_date:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        status:
+          description: Статус прохождения курса
+          enum:
+            - started
+            - started
+            - expected
+            - finished
+          readOnly: true
+          default: expected
+      required:
+        - course
+        - start_date
+
+    EventUpdate:
+      description: Сущность обновления события
+      additionalProperties: false
+      type: object
+      properties:
+        course:
+          type: integer
+          minimum: 1
           readOnly: true
         start_date:
           type: string
@@ -415,11 +2967,78 @@ components:
         end_date:
           type: string
           format: date-time
-          readOnly: false
+          description: Расчитывается исходя из интервала в курсе
+          readOnly: true
           nullable: true
         status:
           description: Статус прохождения курса
           enum:
-            - done
-            - process
-            - failed
+            - started
+            - started
+            - expected
+            - finished
+          readOnly: true
+          default: expected
+
+    EventView:
+      description: Сущность задачи (курс) которая присваивается пользователю
+      additionalProperties: false
+      type: object
+      properties:
+        course:
+          type: object
+          minimum: 1
+          $ref: "#/components/schemas/СourseView"
+        start_date:
+          type: string
+          format: date-time
+          nullable: true
+        end_date:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        status:
+          description: Статус прохождения курса
+          enum:
+            - started
+            - started
+            - expected
+            - finished
+          readOnly: true
+          default: expected
+
+    Event:
+      description: Сущность задачи (курс) упрощенная
+      additionalProperties: false
+      type: object
+      properties:
+        course:
+          type: object
+          minimum: 1
+          $ref: "#/components/schemas/Сourse"
+        start_date:
+          type: string
+          format: date-time
+          nullable: true
+        end_date:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        status:
+          description: Статус прохождения курса
+          enum:
+            - started
+            - started
+            - expected
+            - finished
+          readOnly: true
+          default: expected
+
+
+  securitySchemes:
+    Token:
+      type: apiKey
+      in: header
+      name: Authorization
