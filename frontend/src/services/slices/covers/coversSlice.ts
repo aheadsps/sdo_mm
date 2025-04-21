@@ -31,17 +31,13 @@ export const coversSlice = createSlice({
     },
     setUserCovers: (state, action: PayloadAction<CoverCurrent[]>) => {
       state.userCovers = action.payload
-      // console.log(state.userCovers)
       state.expiringCovers = action.payload.filter(
         (result) =>
           getDaysLeft(result.event.end_date) <= 2 && getDaysLeft(result.event.end_date) >= 0
       )
-      // console.log(state.expiringCovers)
       state.expiredCovers = action.payload.filter((result) => result.event.status === 'failed')
-      // console.log(state.expiredCovers)
       state.favoriteCovers = action.payload.filter((result) => result.favorite)
-      // console.log(state.favoriteCovers)
-      state.completedCovers = action.payload.filter((result) => result.procent === 100)
+      state.completedCovers = action.payload.filter((result) => result.event.status === 'done')
     },
 
     setCoverId: (state, action: PayloadAction<number>) => {

@@ -1,6 +1,7 @@
 import { ArrowRightIcon } from '@assets/icons'
 import { routes } from '@routes/routes'
 import { getBackgroundColor } from '@shared/utils'
+import { getDeadlineStatus } from '@shared/utils/getDeadlineStatus'
 import clsx from 'clsx'
 import { ComponentPropsWithRef, ReactNode } from 'react'
 import { NavLink } from 'react-router-dom'
@@ -27,12 +28,17 @@ export const Task = ({ daysLeft, children, className, courseId }: Props) => {
       </div>
       {daysLeft !== undefined && daysLeft > 0 && (
         <Typography variant="caption" className={s.subtitle}>
-          Осталось {daysLeft} дня
+          Осталось {getDeadlineStatus(daysLeft)}
         </Typography>
       )}
       {daysLeft !== undefined && daysLeft <= 0 && (
         <Typography variant="caption" className={s.subtitle}>
           Просрочен
+        </Typography>
+      )}
+      {daysLeft === undefined && (
+        <Typography variant="caption" className={s.subtitle}>
+          Бессрочно
         </Typography>
       )}
     </NavLink>

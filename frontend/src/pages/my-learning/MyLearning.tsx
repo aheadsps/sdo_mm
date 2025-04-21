@@ -37,7 +37,7 @@ const MyLearningComp: React.FC = () => {
   const subscriptionEvents = useAppSelector(selectAllEvents)
   // console.log(subscriptionEvents)
   const userCovers = useAppSelector(selectUserCovers)
-  // console.log(userCovers)
+  console.log(userCovers)
   const expiredCovers = useAppSelector(selectExpiredCovers)
   const favoriteCovers = useAppSelector(selectFavoriteCovers)
   const completedCovers = useAppSelector(selectCompletedCovers)
