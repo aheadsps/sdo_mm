@@ -36,7 +36,7 @@ const LibraryComp: React.FC = () => {
     <>
       <div className={s.library}>
         <Typography variant="header_4" className={s.library__title}>
-          Библиотека знаний
+          База знаний
         </Typography>
         <div className={s.library__tabs}>
           <TabsButtons tabs={buttons} activeTab={mode} setActiveTab={setMode} />
