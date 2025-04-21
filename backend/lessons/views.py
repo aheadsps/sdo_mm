@@ -13,6 +13,7 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.renderers import MultiPartRenderer, JSONRenderer
 from rest_framework.validators import ValidationError
+from rest_framework import filters
 from query_counter.decorators import queries_counter
 
 from lessons import models, serializers
@@ -48,7 +49,7 @@ class EventCoveredViewSet(mixins.ListModelMixin,
     lookup_field = "pk"
     lookup_url_kwarg = "cover_id"
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['status']
+    filterset_fields = ['status', 'favorite']
 
     def get_permissions(self):
         logger.debug(f"action is {self.action}")
@@ -240,6 +241,9 @@ class CourseViewSet(mixins.ListModelMixin,
     lookup_field = "pk"
     lookup_url_kwarg = "course_id"
     renderer_classes = [JSONRenderer, MultiPartRenderer]
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
+    filterset_fields = ['create_date', 'status']
+    search_fields = ['@name']
 
     def get_permissions(self):
         logger.debug(f"action is {self.action}")
