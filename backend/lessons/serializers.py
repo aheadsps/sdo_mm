@@ -193,31 +193,10 @@ class AssessmentSubmissionSerializer(serializers.ModelSerializer):
                   "date_assessment",
                   )
         validators = (
-            validators.TaskEssayQuestionValidator(),
-            validators.NoAnswerForTaskEssayValidator('answer'),
-            validators.AssessmentScoreValidator('score'),
-        )
-
-
-class AssessmentSubmissionSerializer(serializers.ModelSerializer):
-    """
-    Сериализатор представления оценок
-    """
-    files = ContentAttachmentSerializer(many=True, read_only=True)
-
-    class Meta:
-        model = models.AssessmentSubmission
-        fields = ("teacher",
-                  "test_block",
-                  "student",
-                  "score",
-                  "comment",
-                  "type_of",
-                  "files",
-                  "date_assessment",
-                  )
-        validators = (
-            validators.TaskEssayQuestionValidator(),
+            validators.TaskEssayQuestionValidator(
+                test_block_field='test_block',
+                question_type_field='type_of'
+            ),
             validators.NoAnswerForTaskEssayValidator('answer'),
             validators.AssessmentScoreValidator('score'),
         )

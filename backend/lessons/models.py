@@ -613,9 +613,9 @@ class CourseProgress(models.Model):
                                 default=0.00,
                                 help_text="Балл"
                                 )
-    data_assessment = models.DecimalField(_("Успеваемость на момент даты"),
-                                          auto_now_add=True,
-                                          help_text="Успеваемость на момент"
+    data_assessment = models.DateTimeField(_("Успеваемость на момент даты"),
+                                           auto_now_add=True,
+                                           help_text="Успеваемость на момент"
                                                     " даты"
                                           )
     procent_compelete = models.IntegerField(_("Процент Завершения"),
