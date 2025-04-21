@@ -1,10 +1,12 @@
-from config.settings import CELERY_BROKER_URL
-from celery import Celery
 import os
+
+from celery import Celery
+
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
 
-app = Celery(__name__, broker=CELERY_BROKER_URL)
+
+app = Celery(__name__)
 app.config_from_object('django.conf:settings', namespace='CELERY')
-app.autodiscover_tasks(['lessons'])
 app.conf.timezone = "Europe/Moscow"
+app.autodiscover_tasks()

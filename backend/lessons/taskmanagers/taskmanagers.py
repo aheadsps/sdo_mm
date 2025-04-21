@@ -134,7 +134,7 @@ class TaskManagerTestBlockSwitch(BaseTaskManager):
                              )
 
 
-class TaskManagerSendMain(BaseTaskManager):
+class TaskManagerSendMail(BaseTaskManager):
     """
     Созданиие таски для отправки email
     """
@@ -143,15 +143,15 @@ class TaskManagerSendMain(BaseTaskManager):
 
     def __init__(self,
                  date: datetime,
-                 course_id: int,
+                 course_id: int | None,
                  ids_users: list[int],
-                 template: str,
+                 template: str | None,
                  type_content: Literal['Курс', 'Урок'] = 'Курс',
                  ):
         super().__init__(date=date)
         self.course_id = int(course_id)
-        self.ids_users = list(ids_users)
-        self.template = str(template)
+        self.ids_users = ids_users
+        self.template = template
         self.type_content = str(type_content)
 
     def _unique_name(self,

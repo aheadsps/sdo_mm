@@ -17,6 +17,7 @@ from lessons.taskmanagers import (
     TaskManagerEventSwitch,
     TaskManagerLessonSwitch,
     TaskManagerTestBlockSwitch,
+    TaskManagerSendMail,
     )
 
 
@@ -113,6 +114,27 @@ class SetEventServise:
                                                              test_block.pk,
                                                              ).bulk_create())
         return test_block
+
+    def _set_email_send(self,
+                        date: datetime,
+                        event: models.Event,
+                        update: bool,
+                        ) -> None:
+        covers = models.EventCovered._default_manager.filter(event=event)
+        ids_users = [cover.user.pk for cover in covers]
+        template = 'lessons/start_event.html'
+        task_manager = TaskManagerSendMail(date, event.course.pk, ids_users, template, 'Курс')
+        if not update:
+            task_manager.create()
+        else:
+            task_manager.update(start_time=date)
+
+    def _delete_email_send(self,
+                           date: datetime,
+                           event: models.Event,
+                           ) -> None:
+        task_manager = TaskManagerSendMail(date, event.course.pk, None, None, 'Курс')
+        task_manager.delete()
 
     def _count_end_date(self,
                         instance: models.Event,
