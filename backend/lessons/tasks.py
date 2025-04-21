@@ -18,6 +18,15 @@ def event_switch_status(event_id: int, started: bool) -> str:
     course = event.course
     course.status = course_status
     course.save(update_fields=('status',))
+
+    if started:
+        covers = models.EventCovered._default_manager.filter(course=course).get_queryset()
+        updated_covers = []
+        for cover in covers:
+            cover.status = 'process'
+            updated_covers.append(cover)
+        covers.bulk_update(updated_covers, fields=('status',))
+
     start_email_send(course.name, course, template, 'Курс')
     return 'Done'
 
