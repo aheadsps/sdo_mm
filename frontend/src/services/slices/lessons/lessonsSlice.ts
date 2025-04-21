@@ -13,7 +13,7 @@ const initialState: InitialState = {
     course: 0,
     id: 0,
     name: '',
-    resource: '',
+    resourse: '',
     serial: 0,
     start_date: '',
     started: false,
@@ -40,6 +40,9 @@ export const lessonsSlice = createSlice({
     setAllLessons: (state, action: PayloadAction<LessonShort[]>) => {
       state.lessons = action.payload
     },
+    setLessonById: (state, action: PayloadAction<Lesson>) => {
+      state.lesson = action.payload
+    },
     setScormById: (state, action: PayloadAction<Scorm>) => {
       state.scorm = action.payload
     },
@@ -47,10 +50,11 @@ export const lessonsSlice = createSlice({
   selectors: {
     selectLessons: (state) => state.lessons,
     selectScormById: (state) => state.scorm,
+    selectLessonById: (state) => state.lesson,
   },
 })
 
-export const { setAllLessons, setScormById } = lessonsSlice.actions
-export const { selectLessons, selectScormById } = lessonsSlice.selectors
+export const { setAllLessons, setScormById, setLessonById } = lessonsSlice.actions
+export const { selectLessons, selectScormById, selectLessonById } = lessonsSlice.selectors
 
 export const lessonsSliceReducer = lessonsSlice.reducer

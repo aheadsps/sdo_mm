@@ -7,7 +7,6 @@ type InitialState = {
   covers: CoverShort[]
   coverId: number
   userCovers: CoverCurrent[]
-  currentCovers: CoverCurrent[]
   expiringCovers: CoverCurrent[]
   expiredCovers: CoverCurrent[]
   completedCovers: CoverCurrent[]
@@ -17,7 +16,6 @@ const initialState: InitialState = {
   covers: [],
   coverId: 0,
   userCovers: [],
-  currentCovers: [],
   expiringCovers: [],
   expiredCovers: [],
   completedCovers: [],
@@ -38,15 +36,14 @@ export const coversSlice = createSlice({
           getDaysLeft(result.event.end_date) <= 2 && getDaysLeft(result.event.end_date) >= 0
       )
       state.expiredCovers = action.payload.filter((result) => result.event.status === 'failed')
-
       state.favoriteCovers = action.payload.filter((result) => result.favorite)
+      state.completedCovers = action.payload.filter((result) => result.event.status === 'done')
     },
 
     setCoverId: (state, action: PayloadAction<number>) => {
       state.coverId = action.payload
     },
     clearUserCovers: (state) => {
-      state.currentCovers = []
       state.expiringCovers = []
       state.expiredCovers = []
       state.completedCovers = []
@@ -56,7 +53,6 @@ export const coversSlice = createSlice({
   selectors: {
     selectAllCovers: (state) => state.covers,
     selectUserCovers: (state) => state.userCovers,
-    selectCurrentCovers: (state) => state.currentCovers,
     selectExpiringCovers: (state) => state.expiringCovers,
     selectExpiredCovers: (state) => state.expiredCovers,
     selectCompletedCovers: (state) => state.completedCovers,
@@ -69,7 +65,6 @@ export const { setAllCovers, setUserCovers, clearUserCovers, setCoverId } = cove
 export const {
   selectAllCovers,
   selectUserCovers,
-  selectCurrentCovers,
   selectExpiringCovers,
   selectExpiredCovers,
   selectCompletedCovers,

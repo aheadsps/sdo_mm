@@ -18,9 +18,10 @@ export const coversApi = createApi({
       }),
       providesTags: () => ['Covers'],
     }),
-    getCurrentCovers: build.query<CurrentCoversResponse, void>({
-      query: () => ({
-        url: `/covers/currents?status=process`,
+    getCurrentCovers: build.query<CurrentCoversResponse, string>({
+      query: (param) => ({
+        //param ?status=process ?status=faild ?status=done ?status=expected selectCompletedCovers
+        url: `/covers/currents${param}`,
         method: 'GET',
         headers: {
           Authorization: `Token ${getToken()}`,

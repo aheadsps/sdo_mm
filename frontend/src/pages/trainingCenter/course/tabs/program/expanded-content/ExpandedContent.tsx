@@ -29,12 +29,13 @@ export const ExpandedContent = ({ lessonId, steps }: Props) => {
       <Card className={s.card}>
         {steps.map((step) => (
           <LessonContent
-            key={step.serial}
+            key={step.id}
             lesson={step}
             options={optionsAccess}
             isExpandableContent
             onClick={() => onStepClick(step.id)}
             path={`${routes.constructor}/${lessonId}`}
+            isStep
           />
         ))}
       </Card>

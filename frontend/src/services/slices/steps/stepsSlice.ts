@@ -1,10 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
-import { Step, StepShort } from '@services/api'
+import { StepShort, StepView } from '@services/api'
 
 type InitialState = {
   steps: StepShort[]
-  step: Step
+  step: StepView
 }
 const initialState: InitialState = {
   steps: [],
@@ -15,6 +15,8 @@ const initialState: InitialState = {
     serial: 0,
     lesson: 0,
     attachments: [],
+    id: 0,
+    blockItems: [],
   },
 }
 export const stepsSlice = createSlice({
@@ -24,7 +26,7 @@ export const stepsSlice = createSlice({
     setAllsteps: (state, action: PayloadAction<StepShort[]>) => {
       state.steps = action.payload
     },
-    setStepById: (state, action: PayloadAction<Step>) => {
+    setStepById: (state, action: PayloadAction<StepView>) => {
       state.step = action.payload
     },
   },

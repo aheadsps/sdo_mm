@@ -1,6 +1,6 @@
 import {
+  selectAllEvents,
   selectCompletedCovers,
-  selectCurrentCovers,
   selectExpiredCovers,
   selectFavoriteCovers,
   selectUserCovers,
@@ -14,6 +14,7 @@ import {
   LessonCard,
   Typography,
 } from '@shared/components'
+import { SubscriptionEventsCard } from '@shared/components/subscriptionEventsCard'
 import { withLayout } from '@shared/HOC'
 import { useToggle } from '@shared/hooks'
 import { useState } from 'react'
@@ -32,19 +33,15 @@ const MyLearningComp: React.FC = () => {
   const [mode, setMode] = useState<string>('Все курсы')
   const { isOpen: isTooltipeOpen, close: closeTooltipe } = useToggle(false)
   const { isOpen: isAIOpen, close: closeAI, toggle: toggleAI } = useToggle()
-
+  const subscriptionEvents = useAppSelector(selectAllEvents)
   const userCovers = useAppSelector(selectUserCovers)
-  const currentCovers = useAppSelector(selectCurrentCovers)
   const expiredCovers = useAppSelector(selectExpiredCovers)
   const favoriteCovers = useAppSelector(selectFavoriteCovers)
   const completedCovers = useAppSelector(selectCompletedCovers)
 
   const displayCurrentCourses = () => {
-    if (mode === 'Все курсы') {
-      return userCovers
-    }
     if (mode === 'Назначенные курсы') {
-      return currentCovers
+      return userCovers
     }
     if (mode === 'Просроченные курсы') {
       return expiredCovers
@@ -54,7 +51,6 @@ const MyLearningComp: React.FC = () => {
     }
     return completedCovers
   }
-
   return (
     <>
       <AiComponent isOpen={isAIOpen} close={closeAI} />
@@ -70,15 +66,27 @@ const MyLearningComp: React.FC = () => {
           <TabsButtons tabs={buttons} activeTab={mode} setActiveTab={setMode} />
           <Button children="ИИ" variant="secondary" onClick={toggleAI} />
         </div>
-        <div className={s.container__content}>
-          {displayCurrentCourses()?.length > 0 ? (
-            displayCurrentCourses().map((cover, index) => {
-              return <LessonCard cover={cover} key={index} />
-            })
-          ) : (
-            <Typography variant="body_1">В данном списке нет курсов</Typography>
-          )}
-        </div>
+        {mode === 'Все курсы' ? (
+          <div className={s.container__content}>
+            {subscriptionEvents?.length > 0 ? (
+              subscriptionEvents.map((event, index) => {
+                return <SubscriptionEventsCard event={event} key={index} />
+              })
+            ) : (
+              <Typography variant="body_1">В данном списке нет курсов</Typography>
+            )}
+          </div>
+        ) : (
+          <div className={s.container__content}>
+            {displayCurrentCourses()?.length > 0 ? (
+              displayCurrentCourses().map((cover, index) => {
+                return <LessonCard cover={cover} key={index} />
+              })
+            ) : (
+              <Typography variant="body_1">В данном списке нет курсов</Typography>
+            )}
+          </div>
+        )}
       </div>
     </>
   )
