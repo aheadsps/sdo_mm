@@ -1,6 +1,6 @@
 import { ArchiveIcon } from '@assets/icons'
 import { routes } from '@routes/routes'
-import { CourseShort } from '@services/api'
+import { CourseCovered } from '@services/api'
 import { setCurrentCourseId } from '@services/slices'
 import { useAppDispatch } from '@services/store'
 import { formatDate } from '@shared/utils'
@@ -12,7 +12,7 @@ import { Button } from '../button'
 import s from './courseCard.module.scss'
 
 type Props = {
-  item: CourseShort
+  item: CourseCovered
 } & ComponentPropsWithoutRef<'div'>
 
 export const CourseCard = ({ item }: Props) => {
@@ -20,7 +20,6 @@ export const CourseCard = ({ item }: Props) => {
   const hendleClick = () => {
     dispatch(setCurrentCourseId(item.id))
   }
-  // console.log(item)
   return (
     <div className={s.card}>
       <h6 className={s.title}>{item.name}</h6>

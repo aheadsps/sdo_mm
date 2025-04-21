@@ -74,6 +74,7 @@ export const sidebarItemsMethodologist: SidebarItem[] = [
     icon: <MainIcon width={24} height={24} />,
     text: 'Главная',
     path: routes.main,
+    disabled: true,
   },
   {
     id: 'trainingCenter',
