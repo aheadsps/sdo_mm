@@ -1,1 +1,1 @@
-export * from './Schedule'
+export { Schedule } from './Schedule'

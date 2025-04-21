@@ -102,9 +102,10 @@
 body {
   font-family: var(--font-family-primary);
   background: var(--color-bg-main);
+
   /* -webkit-inner-spin-button;
   -webkit-calender-picker-indicator; */
-  input[type=date]::-webkit-calendar-picker-indicator {
+  input[type='date']::-webkit-calendar-picker-indicator {
     opacity: 0;
   }
 }

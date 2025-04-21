@@ -1,4 +1,5 @@
 export * from './aboutCourse'
+export * from './assignments-check'
 export * from './assignments-grades'
 export * from './program'
 export * from './studentsList'

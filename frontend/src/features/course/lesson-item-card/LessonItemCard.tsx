@@ -13,7 +13,7 @@ type Props = {
 } & ComponentPropsWithoutRef<'div'>
 
 export const LessonItemCard = ({ children, lesson }: Props) => {
-  console.log(lesson)
+  // console.log(lesson)
   return (
     <div className={s.lessonItemCard}>
       <LessonItemTitle title={lesson.name} blocks={`${lesson.serial} блок`}>

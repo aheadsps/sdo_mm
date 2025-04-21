@@ -96,6 +96,7 @@
             "is_scorm": false,
             "profession": 2,
             "status": "run",
+            "status": "run",
             "experiences": [
                 2,
                 3
@@ -1385,7 +1386,7 @@
             "resourse": null,
             "course": 4,
             "started": false,
-            "start_date": null,
+            "start_date": "2025-04-18T23:00:00Z",
             "end_date": null
         }
     },
@@ -1400,7 +1401,7 @@
             "resourse": null,
             "course": 4,
             "started": false,
-            "start_date": null,
+            "start_date": "2025-04-25T23:00:00Z",
             "end_date": null
         }
     },
@@ -1415,7 +1416,7 @@
             "resourse": null,
             "course": 4,
             "started": false,
-            "start_date": null,
+            "start_date": "2025-05-02T23:00:00Z",
             "end_date": null
         }
     },
@@ -1886,6 +1887,13 @@
         "pk": 4,
         "fields": {
             "years": 3
+        }
+    },
+    {
+        "model": "users.workexperience",
+        "pk": 5,
+        "fields": {
+            "years": 0
         }
     },
     {

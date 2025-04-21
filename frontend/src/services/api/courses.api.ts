@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
-import { CoursesResponse, CourseVeiw } from './types'
+import { CoursesResponse, Course } from './types.api'
 import { baseUrl, getToken } from './variables'
 
 export const coursesApi = createApi({
@@ -18,7 +18,7 @@ export const coursesApi = createApi({
       }),
       providesTags: () => ['Courses'],
     }),
-    getCourse: build.query<CourseVeiw, number>({
+    getCourse: build.query<Course, number>({
       query: (courseId: number) => ({
         url: `/courses/${courseId}`,
         method: 'GET',
@@ -26,9 +26,26 @@ export const coursesApi = createApi({
           Authorization: `Token ${getToken()}`,
         },
       }),
+      transformResponse: (response: Course): Course => ({
+        ...response,
+        lessons: response.lessons.map((lesson) => ({
+          ...lesson,
+          expanded: false,
+        })),
+      }),
       providesTags: () => ['Courses'],
+    }),
+    createCourse: build.mutation<void, FormData>({
+      query: (formDate) =>({
+        url: '/courses',
+        method: 'POST',
+        headers: {
+          Authorization: `Token ${getToken()}`,
+        },
+        body: formDate
+      })
     }),
   }),
 })
 
-export const { useGetCoursesQuery, useGetCourseQuery, useLazyGetCoursesQuery } = coursesApi
+export const { useGetCoursesQuery, useGetCourseQuery, useLazyGetCoursesQuery, useCreateCourseMutation } = coursesApi

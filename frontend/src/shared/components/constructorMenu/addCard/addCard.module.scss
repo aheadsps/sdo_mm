@@ -1,18 +1,20 @@
 .card {
-   width: 300px;
-   min-height: 40px;
-   border-radius: 8px;
-   display: flex;
-   align-items: center;
- }
- .title {
-   width: 220px;
-   height: 22px;
-   font-family: var(--font-family-secondary);
-   font-weight: 300;
-   font-size: 16px;
-   line-height: 140%;
-   letter-spacing: 0.25px;
-   vertical-align: middle;
-   color: #2c0b0f;
- }
+  width: 300px;
+  min-height: 40px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.title {
+  width: 220px;
+  height: 22px;
+  font-family: var(--font-family-secondary);
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 140%;
+  letter-spacing: 0.25px;
+  vertical-align: middle;
+  color: #2c0b0f;
+}

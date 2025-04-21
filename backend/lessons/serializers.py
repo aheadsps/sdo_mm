@@ -45,7 +45,7 @@ class UserStorySerializer(serializers.ModelSerializer):
 class LessonStorySerializer(serializers.ModelSerializer):
     class Meta:
         model = models.LessonStory
-        fields = ["course", "lesson", "user", "date_opened"]
+        fields = ["id", "course", "lesson", "user", "date_opened"]
         read_only_fields = ["user", "date_opened"]
 
     def validate(self, data):
@@ -84,6 +84,12 @@ class QuestionSerializer(serializers.ModelSerializer):
         model = models.Question
         fields = ("id", "teacher", "text", "image", "weight", "answers")
 
+    def to_representation(self, instance):
+        response = super().to_representation(instance)
+        if instance.image:
+            response['image'] = self.context['request'].build_absolute_uri(instance.image.url)
+        return response
+
     # def create(self, validated_data: dict[str, str]):
     #     """
     #     Получение возможности создавать вопрос сразу с ответами
@@ -118,7 +124,7 @@ class ContentAttachmentSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         response = super().to_representation(instance)
         if instance.file:
-            response['file'] = instance.file.url
+            response['file'] = self.context['request'].build_absolute_uri(instance.file.url)
         return response
 
 
@@ -128,7 +134,7 @@ class MaterialsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Materials
-        fields = ('files',)
+        fields = ("id", 'files',)
 
 
 class StepSerializer(serializers.ModelSerializer):
@@ -344,7 +350,14 @@ class LessonSerializer(serializers.ModelSerializer):
 
     def get_steps(self, obj):
         steps = models.Step._default_manager.filter(lesson=obj)
-        return StepSerializer(steps, many=True).data
+        return StepSerializer(steps, many=True, context=self.context).data
+
+    def to_representation(self, instance):
+        logger.debug(self.context)
+        response = super().to_representation(instance)
+        if instance.resourse:
+            response['resourse'] = self.context['request'].build_absolute_uri(instance.resourse)
+        return response
 
 
 class LessonViewSerializer(serializers.ModelSerializer):
@@ -373,7 +386,14 @@ class LessonViewSerializer(serializers.ModelSerializer):
 
     def get_steps(self, obj):
         steps = models.Step._default_manager.filter(lesson=obj)
-        return StepViewSerializer(steps, many=True).data
+        return StepViewSerializer(steps, many=True, context=self.context).data
+
+    def to_representation(self, instance):
+        logger.debug(self.context)
+        response = super().to_representation(instance)
+        if instance.resourse:
+            response['resourse'] = self.context['request'].build_absolute_uri(instance.resourse)
+        return response
 
 
 class ZIPFileField(serializers.FileField):
@@ -409,6 +429,7 @@ class CreateCourseSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Course
         fields = (
+            "id",
             "teacher",
             "name",
             "description",
@@ -459,7 +480,7 @@ class CreateCourseSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         response = super().to_representation(instance)
         if instance.image:
-            response['image'] = instance.image.url
+            response['image'] = self.context['request'].build_absolute_uri(instance.image.url)
         return response
 
 
@@ -493,7 +514,7 @@ class CourseSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         response = super().to_representation(instance)
         if instance.image:
-            response['image'] = instance.image.url
+            response['image'] = self.context['request'].build_absolute_uri(instance.image.url)
         return response
 
 
@@ -529,12 +550,12 @@ class ViewCourseSerializer(serializers.ModelSerializer):
 
     def get_lessons(self, obj):
         lessons = models.Lesson._default_manager.filter(course=obj)
-        return LessonSerializer(lessons, many=True).data
+        return LessonSerializer(lessons, many=True, context=self.context).data
 
     def to_representation(self, instance):
         response = super().to_representation(instance)
         if instance.image:
-            response['image'] = instance.image.url
+            response['image'] = self.context['request'].build_absolute_uri(instance.image.url)
         return response
 
 
@@ -700,6 +721,7 @@ class EventCoveredSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.EventCovered
         fields = (
+            "id",
             "user",
             "event",
             "favorite",
@@ -717,6 +739,7 @@ class EventCoveredViewSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.EventCovered
         fields = (
+            "id",
             "user",
             "event",
             "favorite",
@@ -774,13 +797,14 @@ class EventCoveredCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.EventCovered
         fields = (
+            "id",
             "user",
             "event",
             "favorite",
             "procent",
             "status",
         )
-        read_only_fields = ["procent", "status"]
+        read_only_fields = ["id", "procent", "status"]
         validators = (
             validators.PassRegistationsValidator("event", "user"),
             validators.RegistrationValidator("user", "event"),

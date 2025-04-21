@@ -1,6 +1,8 @@
 import { EditIcon } from '@assets/icons'
+import { routes } from '@routes/routes'
 import { useGetCourseQuery } from '@services/api'
 import { selectCourse, setCourseById } from '@services/slices'
+import { setCurrentLessons } from '@services/slices/constructor/constructorSlice'
 import { useAppDispatch, useAppSelector } from '@services/store'
 import {
   Button,
@@ -10,6 +12,7 @@ import {
   Loader,
   AddMaterials,
   EditableText,
+  BackToPage,
 } from '@shared/components'
 import { withLayout } from '@shared/HOC'
 import { useToggle } from '@shared/hooks'
@@ -51,6 +54,7 @@ const Course = () => {
   useEffect(() => {
     if (course) {
       dispatch(setCourseById(course))
+      dispatch(setCurrentLessons({ lessons: course.lessons, id: course.id }))
     }
 
     if (course?.name) {
@@ -75,6 +79,7 @@ const Course = () => {
         <Loader />
       ) : (
         <>
+          <BackToPage to={routes.trainingCenter}>Вернуться к списку курсов</BackToPage>
           <div className={s.titleBlock}>
             <div className={s.title}>
               <EditIcon width={'15px'} height={'15px'} onClick={toggleEditClick} />

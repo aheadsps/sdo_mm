@@ -5,7 +5,7 @@ import { useState } from 'react'
 
 import { Typography } from '../typography'
 
-import styles from './Select.module.scss'
+import styles from './select.module.scss'
 
 export type Option = {
   id: number

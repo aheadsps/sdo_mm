@@ -1,6 +1,5 @@
 import { ArrowRightIcon, CalendarIcon } from '@assets/icons'
-import { routes } from '@routes/routes'
-import { LessonType, Scorm, Step } from '@services/api'
+import { LessonType, Scorm, StepView } from '@services/api'
 import { Button, InputWithIcon, Input, type Option, Select, Typography } from '@shared/components'
 import { useToggle } from '@shared/hooks'
 import clsx from 'clsx'
@@ -8,20 +7,24 @@ import { NavLink } from 'react-router-dom'
 
 import s from './lesson-content.module.scss'
 
-const getDisplayName = (item?: LessonType | Step | Scorm): string => {
+const getDisplayName = (item?: LessonType | StepView | Scorm): string => {
   if (!item) return ''
   return 'name' in item ? item.name : item.title
 }
 
-type Props<T extends LessonType | Step | Scorm> = {
+type Props<T extends LessonType | StepView | Scorm> = {
   lesson?: T
   options?: Option[]
   isExpandableContent?: boolean
+  onClick?: () => void
+  path?: string
 }
-export const LessonContent = <T extends LessonType | Step | Scorm>({
+export const LessonContent = <T extends LessonType | StepView | Scorm>({
   lesson,
   options,
   isExpandableContent = false,
+  path,
+  onClick,
 }: Props<T>) => {
   const { isOpen, toggle } = useToggle()
   const displayName = getDisplayName(lesson)
@@ -46,7 +49,8 @@ export const LessonContent = <T extends LessonType | Step | Scorm>({
             variant="secondary"
             className={s.constructorBtn}
             as={NavLink}
-            to={routes.constructor}
+            to={path as string}
+            onClick={onClick}
           >
             <ArrowRightIcon width={'12px'} height={'12px'} />
           </Button>

@@ -2,6 +2,17 @@ import { ComponentPropsWithoutRef } from 'react'
 
 type Props = ComponentPropsWithoutRef<'input'>
 
-export const InputRadio = ({ checked, disabled, onChange, ...props }: Props) => {
-  return <input type="radio" checked={checked} onChange={onChange} disabled={disabled} {...props} />
+import s from './input-radio.module.scss'
+
+export const InputRadio = ({ checked, disabled, onChange, type = 'radio', ...props }: Props) => {
+  return (
+    <input
+      type={type}
+      checked={checked}
+      onChange={onChange}
+      disabled={disabled}
+      className={s.input}
+      {...props}
+    />
+  )
 }

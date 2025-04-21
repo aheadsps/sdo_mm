@@ -20,7 +20,7 @@ export default defineConfig({
     cssCodeSplit: true,
   },
   server: {
-    allowedHosts: ['sdo-metro.ru'],
+    allowedHosts: ['edu.sdo-metro.ru, sdo-metro.ru'],
     host: true,
   },
 })

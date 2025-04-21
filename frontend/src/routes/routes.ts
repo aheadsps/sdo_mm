@@ -7,7 +7,7 @@ export const routes = {
   news: '/news',
   auth: '/auth',
   trainingCenter: '/training-center',
-  constructor: '/constructor',
+  constructor: '/constructor/lesson',
   trainingCenterCourse: '/training-center/course',
   tbd: '/tbd',
 } as const
