@@ -160,7 +160,7 @@ class Course(models.Model):
         verbose_name_plural = _("Courses")
 
     def __str__(self):
-        return self.name or self.pk
+        return self.name or str(self.pk)
 
 
 class SCORMFile(models.Model):
