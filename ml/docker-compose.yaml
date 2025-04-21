@@ -1,0 +1,42 @@
+#version: '3.8'
+
+services:
+  os01:
+    image: opensearchproject/opensearch:2.11.0
+    container_name: os01
+    environment:
+      - cluster.name=opensearch-cluster
+      - node.name=os01
+      - discovery.seed_hosts=os01
+      #- cluster.initial_cluster_manager_nodes=os01
+      - discovery.type=single-node  # одиночный режим
+      - bootstrap.memory_lock=true
+      - "OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m"
+      
+      # Настройки watermark'ов — СНИЖАЮТ ШАНС БЛОКИРОВОК
+      - cluster.routing.allocation.disk.watermark.low=85%
+      - cluster.routing.allocation.disk.watermark.high=90%
+      - cluster.routing.allocation.disk.watermark.flood_stage=95%
+      - cluster.info.update.interval=1m
+
+      # Разрешить создание индексов
+      - action.auto_create_index=true
+
+      # Отключение безопасности
+      - plugins.security.disabled=true
+
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
+
+    volumes:
+      - C:\Users\New\Downloads\birds-eye-view\opensearch.yml:/usr/share/opensearch/config/opensearch.yml:ro
+      - C:\Users\New\Downloads\birds-eye-view\volumes\os01\data:/usr/share/opensearch/data
+
+    ports:
+      - "127.0.0.1:9200:9200"
+      # - "127.0.0.1:9600:9600" # метрики, можно включить при необходимости
