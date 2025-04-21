@@ -1,5 +1,4 @@
 import { selectUserCovers } from '@services/slices'
-// import { selectCurrentCovers } from '@services/slices'
 import { useAppSelector } from '@services/store'
 import { Typography, Task } from '@shared/components'
 import { getDaysLeft } from '@shared/utils'
@@ -7,7 +6,6 @@ import { getDaysLeft } from '@shared/utils'
 import s from '../main.module.scss'
 
 export const CurrentTasks = () => {
-  // const currentEvents = useAppSelector(selectCurrentCovers)
   const currentEvents = useAppSelector(selectUserCovers)
   // console.log(currentEvents)
   return (

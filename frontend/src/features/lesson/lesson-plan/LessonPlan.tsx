@@ -1,22 +1,22 @@
+import { StepView } from '@services/api'
 import { DropdownCard, Button } from '@shared/components'
 import { useToggle } from '@shared/hooks'
 import { useState } from 'react'
-
-import { SelectedStep } from '../LessonComponent'
-import { lessonStepsData } from '../lessonStepsData'
 
 import { LessonPlanItem } from './lesson-plan-item/LessonPlanItem'
 import s from './lesson-plan.module.scss'
 
 type Props = {
+  steps: StepView[]
   setIsMaterialsButtonClicked: (isMaterialsButtonClicked: boolean) => void
-  onClick: (item: SelectedStep) => void
+  onClick: (item: StepView) => void
 }
-export const LessonPlan = ({ setIsMaterialsButtonClicked, onClick }: Props) => {
-  const [completedSteps, setCompletedSteps] = useState<number[]>([lessonStepsData[0].id])
+export const LessonPlan = ({ steps, setIsMaterialsButtonClicked, onClick }: Props) => {
+  console.log(steps)
+  const [completedSteps, setCompletedSteps] = useState<number[]>([steps[0].id])
   const { isOpen, toggle } = useToggle()
 
-  const onItemClick = (item: SelectedStep) => {
+  const onItemClick = (item: StepView) => {
     onClick(item)
     setCompletedSteps([...completedSteps, item.id])
   }
@@ -27,13 +27,13 @@ export const LessonPlan = ({ setIsMaterialsButtonClicked, onClick }: Props) => {
   return (
     <DropdownCard
       title="План урока:"
-      blocks="6 тем"
+      blocks={`${steps.length} темы`}
       className={s.drpdnContent}
       isOpen={isOpen}
       toggle={toggle}
     >
       <ul>
-        {lessonStepsData?.map((item) => (
+        {steps?.map((item) => (
           <LessonPlanItem
             key={item.id}
             onClick={() => onItemClick(item)}

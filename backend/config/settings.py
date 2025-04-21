@@ -57,8 +57,10 @@ DEBUG = False
 
 
 if not DEBUG:
-    HOST = os.getenv("ALLOWED_HOSTS")
-    ALLOWED_HOSTS = [HOST if HOST else "localhost"]
+    HOST = os.getenv("ALLOWED_HOSTS", False)
+    ALLOWED_HOSTS = [[address for address in HOST.split(",")]
+                     if HOST
+                     else "localhost"]
 else:
     ALLOWED_HOSTS = ["*"]
 
@@ -308,6 +310,21 @@ VERSIONS_SCORM = [
     ),
 ]
 
+TYPE_QUESTION = [
+    (
+        "test",
+        "тест",
+    ),
+    (
+        "task",
+        "задание",
+    ),
+    (
+        "essay",
+        "эссе"
+    ),
+]
+
 TYPE_LESSON = [
     (
         "free",
@@ -316,8 +333,30 @@ TYPE_LESSON = [
     (
         "linearly ",
         "линейный",
-    )
+    ),
 ]
+TYPE_OF_ASSESSMENT = [
+    (
+        "answer",
+        "ответ"
+    ),
+    (
+        "question",
+        "вопрос"
+    ),
+]
+TYPE_TEST_BLOCK = [
+    (
+        "failed",
+        "Провалено"
+    ),
+    (
+        "done",
+        "Завершено"
+    ),
+]
+
+
 
 EVENT_SWITCH_STATUS = 'lessons.tasks.event_switch_status'
 LESSON_SWITCH_STATUS = 'lessons.tasks.lesson_switch_status'
@@ -325,6 +364,8 @@ TESTBLOCK_SWITCH_STATUS = 'lessons.tasks.test_block_process'
 SEND_MAIL_TASK = 'lessons.tasks.send_mail_users'
 
 SUBJECT_PATH = 'lessons/subject.txt'
+
+
 
 EMAIL_FROM = os.getenv("DEFAULT_EMAIL_FROM")
 EMAIL_BCC = os.getenv("DEFAULT_EMAIL_BCC")

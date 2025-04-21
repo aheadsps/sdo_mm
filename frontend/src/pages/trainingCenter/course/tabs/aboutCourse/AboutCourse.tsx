@@ -43,7 +43,7 @@ export const AboutCourse = () => {
         <InputWithIcon
           children={'Здесь будет календарь'}
           className={s.select}
-          placeholder={formatDate(currentCourse.create_date)}
+          placeholder={formatDate(currentCourse.create_date) ?? 'Дата начала'}
           isOpen={isOpenStart}
           icon={<CalendarIcon />}
           onClick={toggleStart}

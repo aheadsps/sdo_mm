@@ -19,11 +19,10 @@ import { useToggle } from '@shared/hooks'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 
-import { StudentsList } from './tabs/studentsList'
-
 import { AboutCourse } from './tabs/aboutCourse'
 import { AssignmentsGrades } from './tabs/assignments-grades'
 import { Program } from './tabs/program/Program'
+import { StudentsList } from './tabs/studentsList'
 import s from './training-course.module.scss'
 
 const tabsData: Tab[] = [

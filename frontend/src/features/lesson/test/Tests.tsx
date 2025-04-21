@@ -10,7 +10,8 @@ export const LessonTest = () => {
     <div className={s.lessonTest}>
       <div className={s.headerBlock}>
         <Typography variant="header_6" className={s.header}>
-          <span>7. Тестирование</span> <span className={s.spanGrey}>7/7</span>
+          <span>Тестирование</span>
+          {/* <span className={s.spanGrey}>7/7</span> */}
         </Typography>
         <Typography variant="body_2" className={s.subtitle}>
           Давай потренируемся!

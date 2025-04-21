@@ -6,7 +6,7 @@ export const articles: Article[] = [
     id: 1,
     title: 'Как начать курс',
     category: Category.STUDY,
-    date: '14.04.2025',
+    date: '20.04.2025',
   },
   {
     id: 2,

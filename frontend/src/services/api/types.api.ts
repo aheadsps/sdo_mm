@@ -15,7 +15,7 @@ export type LessonType = {
   course: number
   id: number
   name: string
-  resource: string | null //????
+  resourse: string | null //????
   serial: number
   start_date: string
   started: boolean
@@ -215,29 +215,11 @@ export type Step = {
   lesson: number
   attachments: Attachment[]
 }
-/* export type Lesson = {
-  course: number
-  id: number
-  name: string
-  resource: string
-  serial: number
-  start_date: string
-  started: boolean
-  steps: Step[]
-  teacher: number
-  test_block: number
-  version: string
-} & {
-  //! Приписан временно для вкладки Программа (методист)
-  //! В новом api этого поля больше нет на бэке ?!
-  expanded: boolean
-} */
-
 export type Lesson = {
   course: number
   id: number
   name: string
-  resource: string
+  resourse: string
   serial: number
   start_date: string
   started: boolean
@@ -246,8 +228,6 @@ export type Lesson = {
   test_block: number
   version: string
 } & {
-  //! Приписан временно для вкладки Программа (методист)
-  //! В новом api этого поля больше нет на бэке ?!
   expanded: boolean
 }
 
@@ -273,7 +253,7 @@ export type Course = {
   profession: Profession
   scorms: Scorm[]
   experiences: Experience[]
-  status: string
+  status: string // string[]
   materials: Materials
   user: number
   is_scorm: boolean
