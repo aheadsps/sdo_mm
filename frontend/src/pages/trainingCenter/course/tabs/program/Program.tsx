@@ -1,6 +1,7 @@
 import { AddItemIcon, ArrowDownIcon, ArrowUpIcon } from '@assets/icons'
 import { selectCourse } from '@services/slices'
 import {
+  addLesson,
   selectCurrentLessons,
   setCurrentLessons,
 } from '@services/slices/constructor/constructorSlice'
@@ -17,7 +18,6 @@ import styles from './program.module.scss'
 const columns = ['Уроки', 'Дата и время занятия', 'Формат']
 
 export const Program: FC = () => {
-  const [newLessonCount, setNewLessonCount] = useState<number[]>([])
   const [newTopicCount, setNewTopicCount] = useState<Record<number, number[]>>({})
 
   const currentCourse = useAppSelector(selectCourse)
@@ -32,7 +32,7 @@ export const Program: FC = () => {
   }
 
   const onAddNewLesson = () => {
-    setNewLessonCount((prev) => [...prev, prev.length + 1])
+    dispatch(addLesson({ name: '', id: Date.now(), courseId: currentCourse.id }))
   }
 
   const onAddNewTopic = (lessonId: number) => {
@@ -75,11 +75,6 @@ export const Program: FC = () => {
                 </button>
               </div>
             )}
-          </div>
-        ))}
-        {newLessonCount.map((item) => (
-          <div key={item} className={styles.lessonItem}>
-            <LessonContent options={optionsFormat} />
           </div>
         ))}
       </div>

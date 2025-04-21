@@ -1,12 +1,12 @@
 import type { PayloadAction } from '@reduxjs/toolkit'
 import { createSlice } from '@reduxjs/toolkit'
-import { Lesson, LessonType, StepView } from '@services/api'
+import { LessonType, StepView } from '@services/api'
 
 import { NewItem } from './constructor.types'
 
 type InitialState = {
   activeBlockId: number | null
-  currentLessons: Lesson[]
+  currentLessons: LessonType[]
   currentLesson: LessonType | null
   currentSteps: StepView[]
 }
@@ -49,7 +49,7 @@ export const constructorSlice = createSlice({
         }
       })
     },
-    setCurrentLessons: (state, action: PayloadAction<{ lessons: Lesson[]; id: number }>) => {
+    setCurrentLessons: (state, action: PayloadAction<{ lessons: LessonType[]; id: number }>) => {
       state.currentLessons = action.payload.lessons.map((lesson) =>
         lesson.id === action.payload.id ? { ...lesson, expanded: !lesson.expanded } : lesson
       )
@@ -59,6 +59,28 @@ export const constructorSlice = createSlice({
     },
     setCurrentSteps: (state, action: PayloadAction<StepView[]>) => {
       state.currentSteps = action.payload.map((item) => ({ ...item, blockItems: [] }))
+    },
+
+    addLesson: (state, action: PayloadAction<{ name: string; id: number; courseId: number }>) => {
+      const { name, id, courseId } = action.payload
+
+      const newLesson: LessonType = {
+        id,
+        name,
+        course: courseId,
+        resource: null,
+        serial: 1,
+        start_date: new Date().toISOString(),
+        started: false,
+        steps: [],
+        teacher: 1,
+        test_block: 0,
+        version: null,
+        expanded: false,
+      }
+
+      state.currentLesson = newLesson
+      state.currentLessons.push(newLesson)
     },
   },
   selectors: {
@@ -78,6 +100,7 @@ export const {
   setCurrentLessons,
   setCurrentLesson,
   setCurrentSteps,
+  addLesson,
 } = constructorSlice.actions
 export const {
   selectActiveBlockId,

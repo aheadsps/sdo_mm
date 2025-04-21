@@ -1,3 +1,10 @@
+import { selectCourse } from '@services/slices'
+import {
+  selectCurrentLesson,
+  selectCurrentLessons,
+  setCurrentLesson,
+} from '@services/slices/constructor/constructorSlice'
+import { useAppDispatch, useAppSelector } from '@services/store'
 import { Input, Typography } from '@shared/components'
 import { ChangeEvent, useState, KeyboardEvent, MouseEvent } from 'react'
 
@@ -10,9 +17,20 @@ export const EditableTitle = ({ displayName }: Props) => {
   const [name, setName] = useState(displayName)
   const [isEditing, setIsEditing] = useState(!displayName ? true : false)
 
+  const currentCourse = useAppSelector(selectCourse)
+  const currentLesson = useAppSelector(selectCurrentLesson)
+  console.log(currentCourse)
+  const dispatch = useAppDispatch()
+
   const handleBlur = () => {
     setIsEditing(false)
+    if (currentLesson) {
+      dispatch(setCurrentLesson({ ...currentLesson, name: name }))
+    }
   }
+
+  const currentLessons = useAppSelector(selectCurrentLessons)
+  console.log(currentLessons, 'currentLessons')
 
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {

@@ -32,13 +32,6 @@ export const LessonContent = <T extends LessonType | StepView | Scorm>({
 
   return (
     <div className={s.lessonContent}>
-      {/* <div className={s.title}>
-        {!displayName ? (
-          <Input placeholder="Введите тему" />
-        ) : (
-          <Typography variant="body_2">{lesson ? displayName : 'Введите тему'}</Typography>
-        )}
-      </div> */}
       <EditableTitle displayName={displayName} />
       {isExpandableContent ? (
         <>
