@@ -18,6 +18,12 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+CSRF_COOKIE_SECURE = True if os.getenv('CSRF_COOKIE_SECURE') else False
+SESSION_COOKIE_SECURE = True if os.getenv('SESSION_COOKIE_SECURE') else False
+SECURE_HSTS_SECONDS = os.getenv('SECURE_HSTS_SECONDS', 0)
+SECURE_PROXY_SSL_HEADER = (os.getenv('SECURE_PROXY_SSL_HEADER', None), "https")
+SECURE_SSL_REDIRECT = os.getenv('SECURE_SSL_REDIRECT', False)
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
