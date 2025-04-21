@@ -22,8 +22,6 @@ export const AboutCourse = () => {
   //     .catch((error) => handleError(error))
   //     .finally(() => setIsLoading(false))
   // }, [getLessonById, dispatch, id])
-  //as={NavLink}
-  //to={`${routes.course}/${cover.event.course.id}`}
   const course = useAppSelector(selectCourse)
   const lessons = Number(course.lessons.length)
   const [isFav, setIsFav] = useState<boolean>(false)

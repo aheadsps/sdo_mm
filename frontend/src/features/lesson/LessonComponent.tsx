@@ -1,9 +1,12 @@
 import { ArrowLeftIcon } from '@assets/icons'
 import { CourseMaterials } from '@features/course/course-materials'
+import { useGetCourseQuery } from '@services/api'
+import { selectCourse, setCourseById } from '@services/slices'
+import { useAppDispatch, useAppSelector } from '@services/store'
 import { AiComponent, Typography, Button, Title } from '@shared/components'
 import { withLayout } from '@shared/HOC'
 import { useToggle } from '@shared/hooks/useToggle'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { NavLink, useNavigate, useParams } from 'react-router-dom'
 
 import { LessonContent } from './lesson-content/LessonContent'
@@ -22,17 +25,17 @@ const LessonComponent = () => {
   const [selectedStep, setSelectedStep] = useState(lessonStepsData[0])
 
   const [isMaterialsButtonClicked, setIsMaterialsButtonClicked] = useState(false)
-  // const { id } = useParams()
-  // const { data: currentCourse } = useGetCourseQuery(Number(id))
-  // useEffect(() => {
-  //   if (currentCourse) dispatch(setCourseById(currentCourse))
-  // }, [currentCourse, dispatch])
-  // const course = useAppSelector(selectCourse)
+  const dispatch = useAppDispatch()
+  const { id } = useParams()
+  const { data: currentCourse } = useGetCourseQuery(Number(id))
+  useEffect(() => {
+    if (currentCourse) dispatch(setCourseById(currentCourse))
+  }, [currentCourse, dispatch])
+  const course = useAppSelector(selectCourse)
   const txt = 'English Check-Up: База и первые шаги'
   const btn1 = 'ИИ'
   const btn2 = 'Обсуждение урока'
   const navigate = useNavigate()
-  const { id } = useParams()
 
   const handleNavigate = async () => {
     await navigate(`/learning/course/${id}`)
