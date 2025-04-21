@@ -74,7 +74,7 @@ export const constructorSlice = createSlice({
         id,
         name,
         course: courseId,
-        resource: null,
+        resourse: null,
         serial: 1,
         start_date: new Date().toISOString(),
         started: false,

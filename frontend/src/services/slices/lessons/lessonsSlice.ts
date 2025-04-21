@@ -13,7 +13,7 @@ const initialState: InitialState = {
     course: 0,
     id: 0,
     name: '',
-    resource: '',
+    resourse: '',
     serial: 0,
     start_date: '',
     started: false,

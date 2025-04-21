@@ -1,8 +1,6 @@
 import { LikeIcon, DislikeIcon } from '@assets/icons'
-import { routes } from '@routes/routes'
 import { EventShort } from '@services/api/types.api'
 import { useState } from 'react'
-import { NavLink } from 'react-router-dom'
 
 import { Button } from '../button'
 import { ImageComponent } from '../image'
