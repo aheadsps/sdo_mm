@@ -89,6 +89,7 @@ THIRD_PARTY_APPS = [
     "phonenumbers",
     "corsheaders",
     "channels",
+    "django_celery_beat",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + PROJECT_APPS + THIRD_PARTY_APPS
@@ -237,7 +238,7 @@ STATUS_COURSE = [
 STATUS_EVENTS = [
     (
         "finished",
-        "Закончек",
+        "Закончен",
     ),
     (
         "started",
@@ -310,6 +311,13 @@ TYPE_LESSON = [
     )
 ]
 
+EVENT_SWITCH_STATUS = 'lessons.tasks.event_switch_status'
+LESSON_SWITCH_STATUS = 'lessons.tasks.lesson_switch_status'
+TESTBLOCK_SWITCH_STATUS = 'lessons.tasks.test_block_process'
+SEND_MAIL_TASK = 'lessons.tasks.send_mail_users'
+
+SUBJECT_PATH = 'lessons/subject.txt'
+
 EMAIL_FROM = os.getenv("DEFAULT_EMAIL_FROM")
 EMAIL_BCC = os.getenv("DEFAULT_EMAIL_BCC")
 
@@ -338,3 +346,22 @@ CHANNELS_ALLOWED_WS_ORIGINS = [
     "ws://localhost:5173",
     "ws://edu.sdo-metro.ru"
 ]
+
+# RABBIT
+RABBITMQ_DEFAULT_USER = os.getenv("RABBITMQ_DEFAULT_USER")
+RABBITMQ_DEFAULT_PASS = os.getenv("RABBITMQ_DEFAULT_PASS")
+RMQ_HOST = os.getenv("RMQ_HOST")
+RMQ_PORT = os.getenv("RMQ_PORT")
+
+# CELERY
+CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
+CELERY_RESULT_EXTENDED = True
+CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
+
+CELERY_BROKER_URL = f'amqp://{RABBITMQ_DEFAULT_USER}:{RABBITMQ_DEFAULT_PASS}@{RMQ_HOST}:{RMQ_PORT}//'
+
+CELERY_RESULT_EXTENDED = True
+CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
+CELERY_ENABLE_UTC = False
+
+CELERY_EXPIRE_SECONDS = (((60 * 60) * 24) * 365)

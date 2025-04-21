@@ -5,6 +5,7 @@ from loguru import logger
 from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.db.models import Q, QuerySet
+from django.db.transaction import atomic
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import permissions, status, mixins, viewsets
 from rest_framework.decorators import action
@@ -12,11 +13,13 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.renderers import MultiPartRenderer, JSONRenderer
 from rest_framework.validators import ValidationError
+from rest_framework import filters
 from query_counter.decorators import queries_counter
 
 from lessons import models, serializers
 from lessons import viewsets as own_viewsets
 from lessons.scorm import SCORMLoader
+from lessons.servises import SetEventServise
 from lessons.permissions import (
     IsAdminOrIsStaff,
     CanReadCourse,
@@ -46,7 +49,7 @@ class EventCoveredViewSet(mixins.ListModelMixin,
     lookup_field = "pk"
     lookup_url_kwarg = "cover_id"
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['status']
+    filterset_fields = ['status', 'favorite']
 
     def get_permissions(self):
         logger.debug(f"action is {self.action}")
@@ -194,6 +197,13 @@ class EventViewSet(mixins.ListModelMixin,
         self.queryset = self.queryset.select_related('course')
         return super().retrieve(request, *args, **kwargs)
 
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        with atomic():
+            SetEventServise(instance).delete_event_settings()
+            self.perform_destroy(instance)
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
     def list(self, request, *args, **kwargs):
         if self.request.user.is_staff or self.request.user.is_superuser:
             self.queryset = self.queryset.select_related('course')
@@ -231,6 +241,9 @@ class CourseViewSet(mixins.ListModelMixin,
     lookup_field = "pk"
     lookup_url_kwarg = "course_id"
     renderer_classes = [JSONRenderer, MultiPartRenderer]
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
+    filterset_fields = ['create_date', 'status']
+    search_fields = ['@name']
 
     def get_permissions(self):
         logger.debug(f"action is {self.action}")
@@ -284,7 +297,7 @@ class CourseViewSet(mixins.ListModelMixin,
 
     @action(detail=True, methods=['POST'], url_path='upload-materials')
     def upload_materials(self, request, course_id=None):
-        serializer = serializers.ContentAttachmentSerializer
+        self.serializer_class = serializers.ContentAttachmentSerializer
         self.kwargs.setdefault('context', self.get_serializer_context())
         course = self.get_object()
         if course.teacher != request.user:
@@ -292,7 +305,7 @@ class CourseViewSet(mixins.ListModelMixin,
         materials = models.Materials._default_manager.get(course=course)
         request.data.update(materials=materials.pk)
         logger.debug(f'request data to save materials {request.data}')
-        serializer = serializer(data=request.data)
+        serializer = self.serializer_class(data=request.data, context=dict(request=request))
         serializer.is_valid(raise_exception=True)
         serializer.save()
         headers = self.get_success_headers(serializer.data)
