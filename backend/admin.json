@@ -24,7 +24,7 @@
             "course": 18,
             "start_date": "2025-04-21T17:30:00Z",
             "end_date": "2025-05-05T17:30:00Z",
-            "status": "expected"
+            "status": "started"
         }
     },
     {
@@ -78,7 +78,7 @@
             "event": 19,
             "favorite": false,
             "procent": 0,
-            "status": "expected"
+            "status": "process"
         }
     },
     {
@@ -1444,7 +1444,7 @@
             "serial": 1,
             "resourse": null,
             "course": 18,
-            "started": false,
+            "started": true,
             "start_date": "2025-04-21T17:30:00Z",
             "end_date": "2025-04-28T17:30:00Z"
         }
@@ -1796,7 +1796,7 @@
             "first_name": "Vasia",
             "last_name": "Petechkin",
             "date_joined": "2025-03-17T06:12:30.791Z",
-            "last_login": "2025-04-21T14:18:20.080Z",
+            "last_login": "2025-04-21T17:47:46.857Z",
             "date_commencement": "2024-01-01",
             "profession": 1,
             "groups": [],
@@ -1901,30 +1901,6 @@
         "fields": {
             "profession": 2,
             "students": []
-        }
-    },
-    {
-        "model": "authtoken.token",
-        "pk": "429b7e151d1eadbd9e2f2e4bcf98b6d49989f35c",
-        "fields": {
-            "user": 2,
-            "created": "2025-04-18T18:53:42.043Z"
-        }
-    },
-    {
-        "model": "authtoken.token",
-        "pk": "4ab6240a1e055134c401b819714cf3f4bd9ec9e3",
-        "fields": {
-            "user": 3,
-            "created": "2025-04-18T15:50:28.097Z"
-        }
-    },
-    {
-        "model": "authtoken.token",
-        "pk": "b00a62aabcd1137c317ca88e6606d45125e7d466",
-        "fields": {
-            "user": 1,
-            "created": "2025-04-18T15:50:47.491Z"
         }
     },
     {
@@ -2251,7 +2227,7 @@
         "model": "django_celery_beat.periodictasks",
         "pk": 1,
         "fields": {
-            "last_update": "2025-04-21T14:23:57.991Z"
+            "last_update": "2025-04-21T17:55:47.736Z"
         }
     },
     {
@@ -2303,10 +2279,10 @@
             "expire_seconds": 31536000,
             "one_off": true,
             "start_time": null,
-            "enabled": true,
+            "enabled": false,
             "last_run_at": null,
             "total_run_count": 0,
-            "date_changed": "2025-04-21T14:23:43.697Z",
+            "date_changed": "2025-04-21T17:47:32.176Z",
             "description": ""
         }
     },
@@ -2331,10 +2307,10 @@
             "expire_seconds": 31536000,
             "one_off": true,
             "start_time": null,
-            "enabled": true,
+            "enabled": false,
             "last_run_at": null,
             "total_run_count": 0,
-            "date_changed": "2025-04-21T14:23:43.697Z",
+            "date_changed": "2025-04-21T17:47:31.968Z",
             "description": ""
         }
     },
