@@ -31,7 +31,7 @@ export const coversSlice = createSlice({
     },
     setUserCovers: (state, action: PayloadAction<CoverCurrent[]>) => {
       state.userCovers = action.payload
-      console.log(state.userCovers)
+      // console.log(state.userCovers)
       state.expiringCovers = action.payload.filter(
         (result) =>
           getDaysLeft(result.event.end_date) <= 2 && getDaysLeft(result.event.end_date) >= 0

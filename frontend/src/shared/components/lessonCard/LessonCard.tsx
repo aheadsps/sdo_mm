@@ -2,7 +2,8 @@ import { ClockIcon, LikeIcon, DislikeIcon, StickersIcon, HourglassIcon } from '@
 import { routes } from '@routes/routes'
 import { CoverCurrent } from '@services/api/types.api'
 import { getBackgroundColor, getDaysLeft } from '@shared/utils'
-// import { getDeadlineStatus } from '@shared/utils/getDeadlineStatus.ts'
+import { getDeadlineStatus } from '@shared/utils/getDeadlineStatus.ts'
+import { useState } from 'react'
 import { NavLink } from 'react-router-dom'
 
 import { Button } from '../button'
@@ -18,11 +19,12 @@ interface Props {
 }
 
 export const LessonCard: React.FC<Props> = ({ cover }: Props) => {
+  const [isFav, setIsFav] = useState<boolean>(false)
   const course = cover.event.course
   const daysLeft = course.beginner === true ? undefined : getDaysLeft(cover.event.end_date)
   const deadlineColor = getBackgroundColor(daysLeft)
   // const dispatch = useAppDispatch()
-  const hendleClick = () => {}
+  // const hendleClick = () => {}
   return (
     <div className={s.container}>
       <div className={s.container__top}>
@@ -32,8 +34,8 @@ export const LessonCard: React.FC<Props> = ({ cover }: Props) => {
               Курс
             </Typography>
           </div>
-          <button className={s.container__like} onClick={() => hendleClick()}>
-            {cover.favorite ? <LikeIcon /> : <DislikeIcon />}
+          <button className={s.container__like} onClick={() => setIsFav(!isFav)}>
+            {isFav ? <LikeIcon /> : <DislikeIcon />}
           </button>
         </div>
         <ImageComponent
@@ -58,8 +60,8 @@ export const LessonCard: React.FC<Props> = ({ cover }: Props) => {
                   <Typography variant="body_2" className={s.container__paramTxt}>
                     {daysLeft === undefined
                       ? 'Бессрочно'
-                      : cover.status === 'process' && daysLeft > 0
-                        ? `${daysLeft} дней`
+                      : cover.status !== 'failed' && daysLeft > 0
+                        ? getDeadlineStatus(daysLeft)
                         : 'Просрочен'}
                   </Typography>
                 </div>
@@ -72,7 +74,7 @@ export const LessonCard: React.FC<Props> = ({ cover }: Props) => {
                 <div className={s.container__param}>
                   <HourglassIcon />
                   <Typography variant="body_2" className={s.container__paramTxt}>
-                    120
+                    {Math.floor(Math.random() * 200) + 1}
                   </Typography>
                 </div>
                 <div className={s.container__param}>
@@ -89,9 +91,9 @@ export const LessonCard: React.FC<Props> = ({ cover }: Props) => {
           </div>
         </div>
         <Button
-          variant={cover.status === 'expected' ? 'secondary' : 'primary'}
+          variant="primary"
           className={s.container__btn}
-          children={cover.status === 'expected' ? 'Записаться на курс' : 'Перейти к обучению'}
+          children="Перейти к обучению"
           as={NavLink}
           to={`${routes.course}/${cover.event.course.id}`}
         />

@@ -9,9 +9,24 @@ import { LessonItemCard } from '../../lesson-item-card'
 import s from './about-course.module.scss'
 
 export const AboutCourse = () => {
-  const [isFav, setIsFav] = useState<boolean>(false)
+  // const [isLoading, setIsLoading] = useState<boolean>(true)
+  // const { id } = useParams()
+  // const dispatch = useAppDispatch()
+  // const [getLessonById] = useLazyGetLessonByIdQuery()
+  // useEffect(() => {
+  //   getLessonById(id)
+  //     .unwrap()
+  //     .then((res) => {
+  //       dispatch(setLessonById(res))
+  //     })
+  //     .catch((error) => handleError(error))
+  //     .finally(() => setIsLoading(false))
+  // }, [getLessonById, dispatch, id])
+  //as={NavLink}
+  //to={`${routes.course}/${cover.event.course.id}`}
   const course = useAppSelector(selectCourse)
   const lessons = Number(course.lessons.length)
+  const [isFav, setIsFav] = useState<boolean>(false)
 
   return (
     <div className={s.container}>
@@ -43,9 +58,6 @@ export const AboutCourse = () => {
           {course.lessons.map((lesson) => {
             return <LessonItemCard key={lesson.id} lesson={lesson} />
           })}
-          {/* <Button variant="secondary" className={s.lessonItemButton}>
-            Продолжить
-          </Button> */}
         </div>
       </Card>
 

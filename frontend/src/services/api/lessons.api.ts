@@ -18,7 +18,7 @@ export const lessonsApi = createApi({
       }),
       providesTags: ['Lessons'],
     }),
-    getLessonById: build.query<Lesson, void>({
+    getLessonById: build.query<Lesson, number>({
       query: (lesson_id) => ({
         url: `/lessons/${lesson_id}`,
         method: 'GET',
@@ -54,6 +54,7 @@ export const lessonsApi = createApi({
 export const {
   useGetLessonsQuery,
   useGetLessonByIdQuery,
+  useLazyGetLessonByIdQuery,
   useLazyGetScormByIdQuery,
   useGetLessonQuery,
 } = lessonsApi

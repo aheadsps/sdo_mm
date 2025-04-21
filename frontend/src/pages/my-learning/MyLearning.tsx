@@ -43,9 +43,6 @@ const MyLearningComp: React.FC = () => {
   const completedCovers = useAppSelector(selectCompletedCovers)
 
   const displayCurrentCourses = () => {
-    // if (mode === 'Все курсы') {
-    //   return subscriptionEvents
-    // }
     if (mode === 'Назначенные курсы') {
       return userCovers
     }

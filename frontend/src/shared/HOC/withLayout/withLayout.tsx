@@ -10,7 +10,7 @@ import s from './layout.module.scss'
 
 export const withLayout = <T extends object>(Component: ComponentType<T>) => {
   return (props: T) => {
-    const [isLoading, setisLoading] = useState<boolean>(true)
+    const [isLoading, setIsLoading] = useState<boolean>(true)
     const { isMobile } = useScreenWidth()
     const dispatch = useAppDispatch()
     const [getEvents] = useLazyGetEventsQuery()
@@ -22,7 +22,7 @@ export const withLayout = <T extends object>(Component: ComponentType<T>) => {
           dispatch(setAllEvents(res.results))
         })
         .catch((error) => handleError(error))
-        .finally(() => setisLoading(false))
+        .finally(() => setIsLoading(false))
     }, [getEvents, dispatch])
 
     const [getCurrentCovers] = useLazyGetCurrentCoversQuery()
@@ -33,7 +33,7 @@ export const withLayout = <T extends object>(Component: ComponentType<T>) => {
           dispatch(setUserCovers(res.results))
         })
         .catch((error) => handleError(error))
-        .finally(() => setisLoading(false))
+        .finally(() => setIsLoading(false))
     }, [getCurrentCovers, dispatch])
     return (
       <>
