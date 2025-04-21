@@ -1,3 +1,4 @@
+import { Course } from '@services/api'
 import { selectCourse } from '@services/slices'
 import { useAppSelector } from '@services/store'
 import { Scorm } from '@shared/components'
@@ -7,7 +8,7 @@ import { CourseDropdown } from './CourseDropDown'
 
 export const CourseContent = () => {
   const { id } = useParams()
-  const course = useAppSelector(selectCourse) //className={s.scorms}
+  const course: Course = useAppSelector(selectCourse)
 
   return course.is_scorm === true
     ? course.lessons.map((lesson) => <Scorm course={course} key={lesson.id} />)

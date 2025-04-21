@@ -1,4 +1,4 @@
-import { LessonType } from '@services/api'
+import { Lesson, LessonType } from '@services/api'
 import { DropdownCard, Typography, Button } from '@shared/components'
 import { useToggle } from '@shared/hooks'
 import { NavLink } from 'react-router-dom'
@@ -6,7 +6,7 @@ import { NavLink } from 'react-router-dom'
 import s from './course-content.module.scss'
 
 type Props = {
-  lesson: LessonType
+  lesson: LessonType | Lesson
   id?: string
 }
 export const CourseDropdown = ({ lesson, id }: Props) => {

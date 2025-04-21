@@ -12,7 +12,7 @@ export const AboutCourse = () => {
   const course = useAppSelector(selectCourse)
   const lessons = Number(course.lessons.length)
   const [isFav, setIsFav] = useState<boolean>(false)
-  console.log(course)
+  // console.log(course)
   return (
     <div className={s.container}>
       <Card className={s.progress}>
