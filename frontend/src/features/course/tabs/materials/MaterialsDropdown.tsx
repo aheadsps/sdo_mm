@@ -1,15 +1,18 @@
 import { CourseMaterials } from '@features/course/course-materials'
+import { Lesson } from '@services/api'
 import { DropdownCard, Button } from '@shared/components'
 import { useToggle } from '@shared/hooks'
 
 import s from './materials.module.scss'
-
-export const MaterialsDropdown = () => {
+type Props = {
+  lesson: Lesson
+}
+export const MaterialsDropdown = ({ lesson }: Props) => {
   const { isOpen, toggle } = useToggle()
   return (
     <DropdownCard
-      title="Урок 1. Проверка стартового уровня"
-      blocks="2 блока"
+      title={lesson.name}
+      blocks={`${lesson.serial} блок`}
       isOpen={isOpen}
       toggle={toggle}
     >

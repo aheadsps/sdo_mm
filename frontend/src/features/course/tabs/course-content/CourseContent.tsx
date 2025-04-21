@@ -7,6 +7,7 @@ import { CourseDropdown } from './CourseDropDown'
 export const CourseContent = () => {
   const { id } = useParams()
   const course = useAppSelector(selectCourse)
+  console.log(id, course.id)
 
   return course.lessons.map((lesson) => <CourseDropdown lesson={lesson} id={id} key={lesson.id} />)
 }

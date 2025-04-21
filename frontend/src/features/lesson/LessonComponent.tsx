@@ -22,7 +22,12 @@ const LessonComponent = () => {
   const [selectedStep, setSelectedStep] = useState(lessonStepsData[0])
 
   const [isMaterialsButtonClicked, setIsMaterialsButtonClicked] = useState(false)
-
+  // const { id } = useParams()
+  // const { data: currentCourse } = useGetCourseQuery(Number(id))
+  // useEffect(() => {
+  //   if (currentCourse) dispatch(setCourseById(currentCourse))
+  // }, [currentCourse, dispatch])
+  // const course = useAppSelector(selectCourse)
   const txt = 'English Check-Up: База и первые шаги'
   const btn1 = 'ИИ'
   const btn2 = 'Обсуждение урока'

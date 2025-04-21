@@ -33,7 +33,7 @@ export const Course = () => {
   //     .finally(() => setisLoading(false))
   // }, [getScormById, dispatch])
   // const currentId = isScorms ? currentScorms : currentCourseId
-  console.log(course)
+  // console.log(course)
   return (
     <div className={s.courseContent}>
       <BackToPage to={routes.learning}>Вернуться к выбору курса</BackToPage>
