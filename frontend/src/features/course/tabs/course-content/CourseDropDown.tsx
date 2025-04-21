@@ -21,14 +21,14 @@ export const CourseDropdown = ({ lesson, id }: Props) => {
     >
       <div className={s.contentTitle}>
         <Typography variant="body_2">{lesson.name}</Typography>
-        <NavLink to={`/learning/course/${id}/lesson`}>
+        <NavLink to={`/learning/course/${id}/lesson/${lesson.id}`}>
           <Button className={s.lessonButton}>Открыть урок</Button>
         </NavLink>
       </div>
       {lesson.steps.map((step) => {
         return (
           <div key={step.id} className={s.step}>
-            <Typography variant="body_2">{step.title}</Typography>
+            <Typography variant="header_6">{step.title}</Typography>
             <Typography variant="body_2">{step.content_text}</Typography>
           </div>
         )
