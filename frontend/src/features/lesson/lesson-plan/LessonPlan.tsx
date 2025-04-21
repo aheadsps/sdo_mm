@@ -3,9 +3,6 @@ import { DropdownCard, Button } from '@shared/components'
 import { useToggle } from '@shared/hooks'
 import { useState } from 'react'
 
-// import { SelectedStep } from '../LessonComponent'
-// import { lessonStepsData } from '../lessonStepsData'
-
 import { LessonPlanItem } from './lesson-plan-item/LessonPlanItem'
 import s from './lesson-plan.module.scss'
 
@@ -36,15 +33,6 @@ export const LessonPlan = ({ steps, setIsMaterialsButtonClicked, onClick }: Prop
       toggle={toggle}
     >
       <ul>
-        {steps?.map((item) => (
-          <LessonPlanItem
-            key={item.id}
-            onClick={() => onItemClick(item)}
-            checked={completedSteps.includes(item.id)}
-          >
-            {item.title}
-          </LessonPlanItem>
-        ))}
         {steps?.map((item) => (
           <LessonPlanItem
             key={item.id}

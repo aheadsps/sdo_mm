@@ -36,7 +36,7 @@ const LessonComponent = () => {
 
   const lesson = useAppSelector(selectLessonById)
   const [selectedStep, setSelectedStep] = useState(lesson?.steps[0])
-  // console.log(lesson)
+  console.log(lesson)
 
   const txt = lesson?.name
   const btn1 = 'ИИ'
@@ -90,8 +90,6 @@ const LessonComponent = () => {
                   <CourseMaterials />
                 </div>
               ) : (
-                // : selectedStep.id === lesson.steps[lesson.steps.length - 1].id ? (
-                //   <LessonTest />)
                 <LessonContent onClick={handleNavigate} selectedStep={selectedStep} />
               )}
             </div>

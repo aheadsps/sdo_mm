@@ -24,7 +24,6 @@ export const Course = () => {
     <div className={s.courseContent}>
       <BackToPage to={routes.learning}>Вернуться к выбору курса</BackToPage>
       <div className={s.titleBlock}>
-        {/* separate reusable component */}
         <Typography variant="header_4" className={s.title}>
           {course.name}
         </Typography>

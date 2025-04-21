@@ -1,19 +1,15 @@
-import { YouTubeLogo } from '@assets/icons'
 import { StepView } from '@services/api'
 import { Typography, Button } from '@shared/components'
-
-// import { SelectedStep } from '../LessonComponent'
 
 import s from './lesson-content.module.scss'
 
 type Props = {
-  steps?: StepView[]
   onClick: () => void
   selectedStep: StepView
 }
 
-export const LessonContent = ({ steps, onClick, selectedStep }: Props) => {
-  console.log(selectedStep, steps)
+export const LessonContent = ({ onClick, selectedStep }: Props) => {
+  console.log(selectedStep)
   return (
     <div className={s.rightBox}>
       <div className={s.rightTop}>
@@ -22,16 +18,20 @@ export const LessonContent = ({ steps, onClick, selectedStep }: Props) => {
             {selectedStep.title}
           </Typography>
           <Typography variant="header_6" className={s.countLessons}>
-            {selectedStep.id}/6
+            {/* {selectedStep.id}/6 */}
           </Typography>
         </div>
         <Typography variant="body_2" className={s.lessonDesc}>
           {selectedStep.content_text}
         </Typography>
       </div>
-      <div className={s.videoBox}>
+      {selectedStep.attachments.map((file) => {
+        if (file.file_type === 'Image') return <img key={file.id} src={file.file} />
+        if (file.file_type === 'video') return <video key={file.id}></video>
+      })}
+      {/* <div className={s.videoBox}>
         <YouTubeLogo />
-      </div>
+      </div> */}
       <div className={s.hint}>
         <p className={s.hintTxt}>
           Чтобы в экстренной ситуации не растеряться - тренируйся в спокойной обстановке на
