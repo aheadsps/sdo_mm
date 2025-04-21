@@ -20,7 +20,7 @@ def event_switch_status(event_id: int, started: bool) -> str:
     course.save(update_fields=('status',))
 
     if started:
-        covers = models.EventCovered._default_manager.filter(course=course).get_queryset()
+        covers = models.EventCovered._default_manager.filter(event__course=course)
         updated_covers = []
         for cover in covers:
             cover.status = 'process'
@@ -57,7 +57,7 @@ def send_mail_users(course: str,
                     template: str,
                     ) -> str:
     qfilter = Q(*[Q(id=user_id) for user_id in users])
-    users = get_user_model()._default_manager.filter(qfilter).get_queryset()
+    users = get_user_model()._default_manager.filter(qfilter)
     send_mails(
         course=course,
         type_content=type_content,
@@ -75,8 +75,7 @@ def start_email_send(name_content: str,
     covers = (models.
               EventCovered.
               _default_manager.
-              filter(event__course=course).
-              get_queryset())
+              filter(event__course=course))
     users = [cover.user.pk for cover in covers]
     send_mail_users(name_content,
                     users,

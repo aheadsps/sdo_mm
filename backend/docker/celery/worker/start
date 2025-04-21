@@ -3,8 +3,6 @@
 set -o errexit
 set -o nounset
 
-celery -A config.celery.app \
+celery -A config \
   --broker=amqp://"${RABBITMQ_DEFAULT_USER}":"${RABBITMQ_DEFAULT_PASS}"@"${RMQ_HOST}":"${RMQ_PORT}" \
-  worker \
-  --loglevel=INFO
-
+  worker -l INFO

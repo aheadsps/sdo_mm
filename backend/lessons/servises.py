@@ -106,7 +106,7 @@ class SetEventServise:
             if update:
                 TaskManagerTestBlockSwitch(test_block.end_date,
                                            test_block.pk,
-                                           ).update(start_time=end_date)
+                                           ).update(clocked=end_date)
                 test_block.end_date = end_date
             else:
                 test_block.end_date = end_date
@@ -127,7 +127,7 @@ class SetEventServise:
         if not update:
             task_manager.create()
         else:
-            task_manager.update(start_time=date)
+            task_manager.update(clocked=date)
 
     def _delete_email_send(self,
                            date: datetime,

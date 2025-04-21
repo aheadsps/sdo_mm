@@ -5,6 +5,7 @@ from loguru import logger
 
 from django_celery_beat.models import ClockedSchedule, PeriodicTask
 from django.conf import settings
+from django.utils import timezone
 
 from .abc import AbstractTaskManager
 from .exceptions import (DateTimeTypeError,
@@ -41,7 +42,7 @@ class BaseTaskManager(AbstractTaskManager):
             task=self.TASK,
             expire_seconds=self._expire_seconds,
             one_off=self._one_of,
-            start_time=self.date,
+            clocked=self.schedule,
         )
         return settings
 
@@ -67,12 +68,34 @@ class BaseTaskManager(AbstractTaskManager):
         """
         raise UpdateSettingsNotSet('Необходимо установить логику переопределения настроек')
 
+    def _handle_datetime_to_task(self,
+                                 date: datetime,
+                                 ) -> datetime:
+        """Перерабатывает date в datatime время
+        """
+        year = date.year
+        month = date.month
+        day = date.day
+        hour = date.hour
+        minute = date.minute
+
+        date_to_task = datetime(
+            year=year,
+            month=month,
+            day=day,
+            hour=hour,
+            minute=minute,
+            tzinfo=timezone.get_current_timezone()
+        )
+        return date_to_task
+
     def _clocked_schedule(self, data_clocked):
         """
         Назначаем шедулер или берем старый если есть
         """
+        clocked_time = self._handle_datetime_to_task(data_clocked)
         schedule, _ = ClockedSchedule._default_manager.get_or_create(
-            clocked_time=data_clocked
+            clocked_time=clocked_time
         )
         return schedule
 

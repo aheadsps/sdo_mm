@@ -3,7 +3,8 @@
 set -o errexit
 set -o nounset
 
-celery -A config.celery.app \
+rm -f './celerybeat.pid'
+
+celery -A config \
   --broker=amqp://"${RABBITMQ_DEFAULT_USER}":"${RABBITMQ_DEFAULT_PASS}"@"${RMQ_HOST}":"${RMQ_PORT}" \
-  beat \
-  --loglevel=info
+  beat -l INFO

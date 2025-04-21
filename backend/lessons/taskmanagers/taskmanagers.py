@@ -40,6 +40,8 @@ class TaskManagerEventSwitch(BaseTaskManager):
         """
         Обновление настроек по верх стандартных
         """
+        if 'clocked' in kwargs:
+            kwargs['clocked'] = self._clocked_schedule(kwargs['clocked'])
         unique_name = self._unique_name(
             event_id=self.event_id,
             started=self.started,
@@ -83,6 +85,8 @@ class TaskManagerLessonSwitch(BaseTaskManager):
         return unique_name
 
     def _updated_settings(self, **kwargs):
+        if 'clocked' in kwargs:
+            kwargs['clocked'] = self._clocked_schedule(kwargs['clocked'])
         unique_name = self._unique_name(
             lesson_id=self.lesson_id,
             started=self.started,
@@ -122,6 +126,8 @@ class TaskManagerTestBlockSwitch(BaseTaskManager):
         return unique_name
 
     def _updated_settings(self, **kwargs):
+        if 'clocked' in kwargs:
+            kwargs['clocked'] = self._clocked_schedule(kwargs['clocked'])
         unique_name = self._unique_name(
             test_block_id=self.test_block_id,
         )
@@ -166,6 +172,8 @@ class TaskManagerSendMail(BaseTaskManager):
         return unique_name
 
     def _updated_settings(self, **kwargs):
+        if 'clocked' in kwargs:
+            kwargs['clocked'] = self._clocked_schedule(kwargs['clocked'])
         unique_name = self._unique_name(
             type_content=self.type_content,
             course_id=self.course_id,
