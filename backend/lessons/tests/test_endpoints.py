@@ -619,6 +619,7 @@ class TestChain(APITestCase):
             text='question',
             weight=4,
             test_block=lesson.test_block.pk,
+            type_question='test',
         )
         response = self.client.post(
             path=url,
@@ -640,6 +641,7 @@ class TestChain(APITestCase):
             text='question_b',
             weight=10,
             test_block=lesson_beginner.test_block.pk,
+            type_question='test',
         )
         response = self.client.post(
             path=url,
