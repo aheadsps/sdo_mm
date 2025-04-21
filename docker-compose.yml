@@ -58,6 +58,58 @@ services:
     networks:
       - backend
 
+  celery_worker:
+    build:
+      context: .
+      dockerfile: ./backend/docker/django/Dockerfile
+    command: /start-celeryworker
+    volumes:
+      - ./backend/:/app
+    env_file:
+      - backend/.env
+    networks:
+      - backend
+    depends_on:
+      - rabbitmq
+      - db
+      - django
+      - celery_beat
+
+  celery_beat:
+    build:
+      context: .
+      dockerfile: ./backend/docker/django/Dockerfile
+    command: /start-celerybeat
+    volumes:
+      - ./backend/:/app
+    env_file:
+      - backend/.env
+    networks:
+      - backend
+    depends_on:
+      - rabbitmq
+      - db
+      - django
+
+  dashboard:
+    build:
+      context: .
+      dockerfile: ./backend/docker/django/Dockerfile
+    command: /start-flower
+    volumes:
+      - ./backend/:/app
+    ports:
+      - 5555:5555
+    env_file:
+      - backend/.env
+    depends_on:
+      - celery_worker
+      - rabbitmq
+      - db
+      - django
+    networks:
+      - backend
+
 volumes:
   postgres_data:
 

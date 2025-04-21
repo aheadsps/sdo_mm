@@ -446,7 +446,7 @@ class CreateCourseSerializer(serializers.ModelSerializer):
         )
         validators = (
             validators.CourseScormValidator("scorm"),
-            validators.IntervalValidator("beginner", "interval"),
+            validators.IntervalValidator("beginner", "interval", 'scorm'),
         )
         read_only_fields = ("teacher", "status", "lessons",)
 

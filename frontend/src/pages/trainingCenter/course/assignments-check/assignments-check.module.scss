@@ -74,10 +74,17 @@
     gap: 12px;
     justify-content: space-between;
     padding: 12px;
+    cursor: pointer;
+    color: var(--color-text-primary);
+    text-decoration: none;
 
     &:hover {
       box-shadow: 0 0 15px 0 rgba(44, 11, 15, 0.06);
       border-radius: 0px 8px 8px 0;
+    }
+
+    &:visited {
+      color: var(--color-text-primary);
     }
   }
 
