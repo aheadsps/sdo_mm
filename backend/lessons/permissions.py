@@ -184,9 +184,9 @@ class CanReadBlock(permissions.BasePermission):
             Q(user=user) &
             Q(event__course=test_block.lesson.course) &
             Q(event__status='started')
-        )
-
-        return event_exists.exists()
+        ).exists()
+        lesson_opened = test_block.lesson.started
+        return event_exists and lesson_opened
 
 
 class CanReadUserStory(permissions.BasePermission):
