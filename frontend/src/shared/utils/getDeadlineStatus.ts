@@ -1,6 +1,10 @@
 export const getDeadlineStatus = (days: number): string => {
+  console.log(days)
   if (days < 0) {
     return 'Просрочен'
+  }
+  if (days === undefined) {
+    return 'Бессрочно'
   }
   const lastDigit = days % 10
   const lastTwoDigits = days % 100

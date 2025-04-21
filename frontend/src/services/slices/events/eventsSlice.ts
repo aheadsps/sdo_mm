@@ -89,7 +89,7 @@ export const eventsSlice = createSlice({
   },
 })
 
-export const { setCurrentEvents, clearCurrentEvents, setEvent } = eventsSlice.actions
+export const { setCurrentEvents, clearCurrentEvents, setEvent, setAllEvents } = eventsSlice.actions
 export const {
   selectAllEvents,
   selectCurrentEvents,

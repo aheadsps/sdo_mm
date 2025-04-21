@@ -5,7 +5,7 @@ import { Course, useCreateCourseMutation, useGetCoversQuery } from '@services/ap
 import { selectAllCovers, setAllCovers } from '@services/slices'
 import { useAppDispatch, useAppSelector } from '@services/store'
 import { Title, CourseCard, Modal, Loader } from '@shared/components'
-import { AddMaterials } from '@shared/components'
+import { AddScorm } from '@shared/components/modal/addScorm'
 import { withLayout } from '@shared/HOC'
 import { useToggle } from '@shared/hooks'
 import { handleError } from '@shared/utils'
@@ -65,8 +65,8 @@ const Training = () => {
       {isModalOpen && (
         <Modal
           close={closeModal}
-          title="Добавить материалы"
-          children={<AddMaterials />}
+          title="Загрузить SCORM-пакет"
+          children={<AddScorm />}
           titleStyle="header_2"
         />
       )}
