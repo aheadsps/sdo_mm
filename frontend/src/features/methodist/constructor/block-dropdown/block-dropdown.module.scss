@@ -1,0 +1,22 @@
+.dropdownHeader {
+  min-height: 80px;
+}
+
+.dropdownContent {
+  border: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 20px;
+}
+
+.newTextFields {
+  display: flex;
+  flex-direction: column;
+}
+
+.icon {
+  display: block;
+  margin: 0 auto;
+  cursor: pointer;
+}
