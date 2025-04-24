@@ -343,6 +343,11 @@ class TestBlock(models.Model):
                                   null=True,
                                   blank=True,
                                   )
+    status = models.CharField(_("Статус"),
+                              max_length=10,
+                              choices=settings.TYPE_TEST_BLOCK,
+                              help_text="Статус"
+                              )
     lesson = models.OneToOneField(Lesson,
                                   on_delete=models.CASCADE,
                                   related_name="test_block",
@@ -379,6 +384,11 @@ class Question(models.Model):
     weight = models.SmallIntegerField(_("вес вопроса"),
                                       validators=[MinValueValidator(1)],
                                       )
+    type_question = models.CharField(verbose_name=_('Тип вопроса'),
+                                     max_length=8,
+                                     choices=settings.TYPE_QUESTION,
+                                     help_text='Текущий тип данного вопроса',
+                                     )
     test_block = models.ForeignKey(TestBlock,
                                    verbose_name=_("тестовый блок"),
                                    on_delete=models.CASCADE,
@@ -386,6 +396,15 @@ class Question(models.Model):
                                    null=True,
                                    blank=True,
                                    )
+    check_automaty = models.BooleanField(_("Автоматическая проверка"),
+                                         default=False,
+                                         help_text="Автоматическая проверка"
+                                         )
+
+    def save(self, *args, **kwargs):
+        if self.type_question == 'test':
+            self.check_automaty = True
+        super().save(*args, **kwargs)
 
     class Meta:
         verbose_name = _("Question")
@@ -498,8 +517,9 @@ class LessonStory(models.Model):
                              related_name='lesson_story',
                              help_text='Пользователь'
                              )
-    date_opened = models.DateTimeField(auto_now_add=True,
-                                       verbose_name=_('Дата открытия')
+    date_opened = models.DateTimeField(_("Дата открытия"),
+                                       auto_now_add=True,
+                                       help_text="Дата открытия"
                                        )
 
     def clean(self):
@@ -517,3 +537,104 @@ class LessonStory(models.Model):
     def __str__(self):
         return (f"{self.user.email} открыл {self.course.title}"
                 f" / Урок {self.lesson.id}")
+
+
+class AssessmentSubmission(models.Model):
+    """
+    Модель представления оценки преподавателя
+    """
+    teacher = models.ForeignKey(get_user_model(),
+                                verbose_name=_("Учитель"),
+                                on_delete=models.CASCADE,
+                                validators=[MinValueValidator(1)],
+                                related_name="teacher_assessment",
+                                help_text="Учитель")
+    test_block = models.ForeignKey(TestBlock,
+                                   verbose_name=_("Тест блок"),
+                                   on_delete=models.CASCADE,
+                                   validators=[MinValueValidator(1)],
+                                   help_text="Тест блок"
+                                   )
+    student = models.ForeignKey(get_user_model(),
+                                verbose_name=_("Студент"),
+                                on_delete=models.CASCADE,
+                                related_name="student_assessment",
+                                validators=[MinValueValidator(1)],
+                                help_text="Студент"
+                                )
+    score = models.DecimalField(_("Оценка"),
+                                max_digits=5,
+                                decimal_places=2,
+                                null=True,
+                                blank=True,
+                                help_text="Введите оценку")
+    comment = models.TextField(_("Комментарий"),
+                               null=True,
+                               blank=True,
+                               help_text="Добавить комментарий")
+    type_of = models.CharField(_("Выбор типа"),
+                               max_length=8,
+                               choices=settings.TYPE_OF_ASSESSMENT,
+                               help_text="Выбор типа"
+                               )
+    date_assessment = models.DateTimeField(_("Дата оценки"),
+                                           auto_now_add=True,
+                                           help_text="Дата оценки")
+
+    class Meta:
+        verbose_name = "Оценка преподавателя"
+        verbose_name_plural = "Оценки преподавателей"
+
+    def __str__(self):
+        return f"Оценка {self.teacher} для {self.student}"
+
+
+class CourseProgress(models.Model):
+    """
+    Модель представления прогресса студента в определенной точке курса
+    """
+    student = models.ForeignKey(get_user_model(),
+                                verbose_name=_("Студент"),
+                                on_delete=models.CASCADE,
+                                validators=[MinValueValidator(1)],
+                                related_name="course_progress",
+                                help_text="Студент"
+                                )
+    test_block = models.ForeignKey(TestBlock,
+                                   verbose_name=_("Тест блок"),
+                                   on_delete=models.CASCADE,
+                                   validators=[MinValueValidator(1)],
+                                   related_name="course_progress",
+                                   help_text="Тест блок"
+                                   )
+    score = models.DecimalField(_("Балл"),
+                                max_digits=5,
+                                decimal_places=2,
+                                default=0.00,
+                                help_text="Балл"
+                                )
+    data_assessment = models.DateTimeField(_("Успеваемость на момент даты"),
+                                           auto_now_add=True,
+                                           help_text="Успеваемость на момент"
+                                                    " даты"
+                                          )
+    procent_compelete = models.IntegerField(_("Процент Завершения"),
+                                            validators=[MinValueValidator(0),
+                                                        MaxValueValidator(100)
+                                                        ],
+                                            default=0,
+                                            help_text="Процент завершения"
+                                            )
+    result = models.DecimalField(_("Результат"),
+                                 max_digits=5,
+                                 decimal_places=2,
+                                 default=0.00,
+                                 help_text="Результат"
+                                 )
+
+    class Meta:
+        verbose_name = "Прогресс курса"
+        verbose_name_plural = "Прогресс курсов"
+
+    def __str__(self):
+        return f"Прогресс {self.student} - {self.procent_compelete}%"

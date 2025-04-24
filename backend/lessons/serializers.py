@@ -16,17 +16,35 @@ from lessons.patrials import set_status
 from lessons.scorm import SCORMLoader
 from lessons.utils import parse_exeption_error
 from lessons.servises import SetEventServise
-from lessons.scorm.engine.exceptions import SCORMExtractError, ManifestNotSetupError
+from lessons.scorm.engine.exceptions import SCORMExtractError, \
+    ManifestNotSetupError
 from users import serializers as user_serializers
 
 
 T = TypeVar("T")
 
-
 PROCESS = "process"
 EXPECTED = "expected"
 DONE = "done"
 FAILED = "failed"
+
+
+class CourseProgressSerializer(serializers.ModelSerializer):
+    """
+    Сериализатор прогресса студента в определенной точке курса
+    """
+
+    class Meta:
+        model = models.CourseProgress
+        fields = ("id",
+                  "student",
+                  "test_block",
+                  "score",
+                  "data_assessment",
+                  "procent_compelete",
+                  "result",
+                  )
+        readline = ("id",)
 
 
 class UserStorySerializer(serializers.ModelSerializer):
@@ -50,14 +68,19 @@ class LessonStorySerializer(serializers.ModelSerializer):
 
     def validate(self, data):
         validators.LessonStoryValidator(
-            course=data.get("course"), lesson=data.get("lesson")
-        )()
+            course=data.get("course"), step=data.get("step"))()
         return data
+    # def validate(self, data):
+    #     validators.LessonStoryValidator(
+    #         course=data.get('course'),
+    #         lesson=data.get('lesson')
+    #     )()
+    #     return data
 
 
 class AnswerSerializer(serializers.ModelSerializer):
     """
-    Сериализатор Answer
+    Сериализатор создания и обновления Answer
     """
 
     correct = serializers.BooleanField(write_only=True)
@@ -70,6 +93,7 @@ class AnswerSerializer(serializers.ModelSerializer):
             "correct",
             "question",
         )
+        validators = (validators.QuestionTypeValidator('question'),)
 
 
 class QuestionSerializer(serializers.ModelSerializer):
@@ -82,7 +106,15 @@ class QuestionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Question
-        fields = ("id", "teacher", "text", "image", "weight", "answers")
+        fields = ("id",
+                  "teacher",
+                  "text",
+                  "image",
+                  "test_block",
+                  "type_question",
+                  "weight",
+                  "answers"
+                  )
 
     def to_representation(self, instance):
         response = super().to_representation(instance)
@@ -111,7 +143,14 @@ class QuestionCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Question
-        fields = ("id", "teacher", "text", "image", "weight", "test_block")
+        fields = ("id",
+                  "teacher",
+                  "text",
+                  "image",
+                  "weight",
+                  "type_question",
+                  "test_block"
+                  )
         read_only_fields = ("id", 'teacher',)
 
 
@@ -129,12 +168,38 @@ class ContentAttachmentSerializer(serializers.ModelSerializer):
 
 
 class MaterialsSerializer(serializers.ModelSerializer):
-
     files = ContentAttachmentSerializer(many=True, read_only=True)
 
     class Meta:
         model = models.Materials
         fields = ("id", 'files',)
+
+
+class AssessmentSubmissionSerializer(serializers.ModelSerializer):
+    """
+    Сериализатор представления оценок
+    """
+    files = ContentAttachmentSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = models.AssessmentSubmission
+        fields = ("teacher",
+                  "test_block",
+                  "student",
+                  "score",
+                  "comment",
+                  "type_of",
+                  "files",
+                  "date_assessment",
+                  )
+        validators = (
+            validators.TaskEssayQuestionValidator(
+                test_block_field='test_block',
+                question_type_field='type_of'
+            ),
+            validators.NoAnswerForTaskEssayValidator('answer'),
+            validators.AssessmentScoreValidator('score'),
+        )
 
 
 class StepSerializer(serializers.ModelSerializer):
@@ -320,7 +385,7 @@ class LessonCreateSerializer(serializers.ModelSerializer):
         )
         read_only_fields = ("id", "teacher", "started", "start_date")
         validators = (validators.LessonScormValidator("course"),
-                      validators.LessonSerialValidator('serial', 'course',),
+                      validators.LessonSerialValidator('serial', 'course', ),
                       )
 
 
@@ -709,6 +774,44 @@ class EventSerializerUpdate(serializers.ModelSerializer):
         SetEventServise(instance=event, update=True).set_event_settings()
         instance.refresh_from_db()
         return instance
+
+    """Оставил, может пригодиться прошлая логика)))"""
+    # def _create_lesson_stories(self, user, course):
+    #     """
+    #     Создает LessonStory для всех free-уроков и урока с serial=1
+    #     """
+    #     try:
+    #         lesson_ids = set(
+    #             models.Lesson.objects.filter(
+    #                 Q(course=course) & (Q(type_lesson="free") | Q(serial=1))
+    #             ).values_list('id', flat=True)
+    #         )
+    #
+    #         logger.debug(
+    #             f'Нашлось {len(lesson_ids)} открытых на данный момент'
+    #             f' уроков в курсе {course.id}')
+    #
+    #         if lesson_ids:
+    #             models.LessonStory.objects.bulk_create([
+    #                 models.LessonStory(user=user, lesson_id=lesson_id,
+    #                                    course=course)
+    #                 for lesson_id in lesson_ids
+    #             ], ignore_conflicts=True)
+    #
+    #             logger.success(
+    #                 f'Создано {len(lesson_ids)} открытых уроков  в LessonStory')
+    #
+    #     except Exception as e:
+    #         logger.error(f"Ошибка создания LessonStory: {str(e)}")
+    #         raise
+    #
+    # def create(self, validated_data):
+    #     event = super().create(validated_data)
+    #     self._create_lesson_stories(
+    #         user=validated_data["user"],
+    #         course=validated_data["course"]
+    #     )
+    #     return event
 
 
 class EventCoveredSerializer(serializers.ModelSerializer):
