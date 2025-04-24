@@ -9,6 +9,7 @@ import {
 } from '@shared/components'
 import { withLayout } from '@shared/HOC'
 import { useToggle } from '@shared/hooks'
+import { NavLink } from 'react-router-dom'
 
 import { AssignmentGradeModal } from './AssignmentGradeModal'
 import { CommentContent } from './CommentContent'
@@ -28,7 +29,9 @@ export const StudentAssignment = () => {
             Задание: Правила использования электроинструментов
           </Typography>
         </div>
-        <Button className={s.button}>К следующему студенту</Button>
+        <Button className={s.button} as={NavLink} to={'#'} disabled isIcon>
+          К следующему студенту
+        </Button>
       </div>
       <div className={s.mainBlock}>
         <div className={s.contentBlock}>
@@ -87,8 +90,10 @@ export const StudentAssignment = () => {
           </div>
         </div>
         <div className={s.assignmentButtons}>
-          <Button variant="secondary">Отправить на доработку</Button>
-          <Button variant="primary" onClick={openModal}>
+          <Button variant="secondary" disabled isIcon>
+            Отправить на доработку
+          </Button>
+          <Button variant="primary" onClick={openModal} disabled isIcon>
             Принять работу
           </Button>
         </div>
