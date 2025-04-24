@@ -48,7 +48,7 @@ export const AssignmentsGrades = () => {
                 Список учеников
               </Button>
             </Link>
-            <Button variant="secondary" className={s.button}>
+            <Button variant="secondary" className={s.button} disabled>
               <EditIcon width={'10px'} height={'10px'} />
             </Button>
           </div>

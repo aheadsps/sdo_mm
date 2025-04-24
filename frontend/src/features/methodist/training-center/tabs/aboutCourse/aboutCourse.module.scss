@@ -56,9 +56,6 @@
       filter: invert(1);
     }
 
-    // ::-webkit-calendar-picker-indicator {
-    //   opacity: 0;
-    // }
     width: 100%;
     border-bottom: 1px solid #f8d7d9;
   }
@@ -135,7 +132,7 @@
     }
 
     .button {
-      width: 300px;
+      /* width: 300px; */
 
       @media screen and (max-width: 1349px) {
         width: 100%;

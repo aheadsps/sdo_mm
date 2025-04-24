@@ -49,7 +49,7 @@ export const LessonContent = <T extends LessonType | StepView | Scorm>({
             to={path as string}
             onClick={onClick}
           >
-            <ArrowRightIcon width={'12px'} height={'12px'} />
+            <ArrowRightIcon />
           </Button>
         </>
       ) : (

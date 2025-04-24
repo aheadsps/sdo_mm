@@ -35,13 +35,14 @@ export const StudentBlock = <T extends studentType>({ student, onClick, openModa
       </div>
 
       <div className={s.btns}>
-        <Button variant="secondary" className={student ? s.btn : s.btn_disPrymary}>
-          <BasketIcon width={'40px'} height={'40px'} fill={buttonColor} />
+        <Button variant="secondary" className={student ? s.btn : s.btn_disPrymary} disabled>
+          <BasketIcon width={'12px'} height={'12px'} fill={buttonColor} />
         </Button>
         <Button
           variant="primary"
           className={student ? s.btn : s.btn_disSecondary}
           onClick={onClick}
+          disabled
         >
           <WebinarAndSupportIcon width={'24px'} height={'24px'} fill={buttonColor} />
         </Button>

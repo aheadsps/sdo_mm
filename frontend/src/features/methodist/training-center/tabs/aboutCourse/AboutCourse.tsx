@@ -5,6 +5,7 @@ import { Button, EditableText, InputWithIcon, Select, Typography } from '@shared
 import { useToggle } from '@shared/hooks'
 import { formatDate } from '@shared/utils'
 import { useState } from 'react'
+import { NavLink } from 'react-router-dom'
 
 import s from './aboutCourse.module.scss'
 
@@ -87,8 +88,18 @@ export const AboutCourse = () => {
             variant="secondary"
             children="Посмотреть список учебных материалов"
             className={s.button}
+            disabled
+            isIcon
           />
-          <Button variant="primary" children="Перейти к проверке работ" className={s.button} />
+          <Button
+            variant="primary"
+            children="Перейти к проверке работ"
+            className={s.button}
+            as={NavLink}
+            to={'#'}
+            disabled
+            isIcon
+          />
         </div>
       </div>
     </div>
