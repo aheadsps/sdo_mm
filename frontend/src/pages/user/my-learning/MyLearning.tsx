@@ -1,3 +1,4 @@
+import { AiIcon } from '@assets/icons'
 import {
   selectAllEvents,
   selectCompletedCovers,
@@ -6,14 +7,7 @@ import {
   selectUserCovers,
 } from '@services/slices'
 import { useAppSelector } from '@services/store'
-import {
-  AiComponent,
-  Tooltipe,
-  TabsButtons,
-  Button,
-  LessonCard,
-  Typography,
-} from '@shared/components'
+import { AiComponent, Tooltipe, TabsButtons, LessonCard, Typography } from '@shared/components'
 import { SubscriptionEventsCard } from '@shared/components/subscriptionEventsCard'
 import { withLayout } from '@shared/HOC'
 import { useToggle } from '@shared/hooks'
@@ -64,7 +58,7 @@ const MyLearningComp: React.FC = () => {
       <div className={s.container}>
         <div className={s.container__headBox}>
           <TabsButtons tabs={buttons} activeTab={mode} setActiveTab={setMode} />
-          <Button children="ИИ" variant="secondary" onClick={toggleAI} />
+          <AiIcon onClick={toggleAI} className={s.ai} />
         </div>
         {mode === 'Все курсы' ? (
           <div className={s.container__content}>
