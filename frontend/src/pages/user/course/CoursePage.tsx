@@ -3,7 +3,7 @@ import { routes } from '@routes/routes'
 import { useGetCourseQuery } from '@services/api'
 import { selectCourse, setCourseById } from '@services/slices'
 import { useAppDispatch, useAppSelector } from '@services/store'
-import { Button, Tabs, Typography, AiComponent, BackToPage } from '@shared/components'
+import { Button, Tabs, Typography, AiComponent, BackToPage, Title } from '@shared/components'
 import { withLayout } from '@shared/HOC'
 import { useToggle } from '@shared/hooks/useToggle'
 import { useEffect } from 'react'
@@ -22,10 +22,14 @@ export const Course = () => {
   }, [currentCourse, dispatch])
   const course = useAppSelector(selectCourse)
 
+  const txt = course?.name
+  const btn1 = <AiIcon onClick={toggleOffCanvas} className={s.ai} />
+  const btn2 = 'Обсуждение урока'
   return (
     <div className={s.courseContent}>
       <BackToPage to={routes.learning}>Вернуться к выбору курса</BackToPage>
-      <div className={s.titleBlock}>
+      <Title txt={txt} btn1={btn1} btn2={btn2} fstBtn={toggleOffCanvas} />
+      {/* <div className={s.titleBlock}>
         <Typography variant="header_4" className={s.title}>
           {course.name}
         </Typography>
@@ -35,7 +39,7 @@ export const Course = () => {
             Обсуждение урока
           </Button>
         </div>
-      </div>
+      </div> */}
       <>
         <Tabs tabs={tabsData} variant="secondary" />
         <AiComponent isOpen={isOffcanvasOpen} close={closeOffcanvas} />

@@ -9,7 +9,7 @@ import s from './title.module.scss'
 interface Props {
   txt: string
   btn0?: string | ReactNode
-  btn1: string
+  btn1: string | ReactNode
   btn2: string
   nullBtn?: () => void
   fstBtn?: () => void
@@ -49,6 +49,7 @@ export const Title = ({
           onClick={fstBtn}
           disabled={disabled}
           isIcon
+          border={false}
         >
           {btn1}
         </Button>

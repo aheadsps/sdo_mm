@@ -39,7 +39,7 @@ const LessonComponent = () => {
   console.log(lesson)
 
   const txt = lesson?.name
-  const btn1 = 'ИИ'
+  const btn1 = false
   const btn2 = 'Обсуждение урока'
   const navigate = useNavigate()
 

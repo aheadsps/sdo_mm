@@ -12,6 +12,7 @@ type Props<T extends ElementType = 'button'> = {
   as?: T
   disabled?: boolean
   isIcon?: boolean
+  border?: boolean
 } & ComponentPropsWithRef<T>
 
 export const Button = <T extends ElementType = 'button'>({
@@ -22,16 +23,24 @@ export const Button = <T extends ElementType = 'button'>({
   disabled = false,
   onClick,
   isIcon = false,
+  border = true,
   ...restProps
 }: Props<T>) => {
   const chosenButton = variant === 'secondary' ? s.secondary : s.primary
   const isButton = Component === 'button'
   const isLink = Component === NavLink
   const disabledLink = variant === 'secondary' ? s.disabledSecondary : s.disabledPrimary
+  const isBorder = border === true ? '' : s.text
 
   return (
     <Component
-      className={clsx(s.button, chosenButton, className, isLink && disabled && disabledLink)}
+      className={clsx(
+        s.button,
+        chosenButton,
+        isBorder,
+        className,
+        isLink && disabled && disabledLink
+      )}
       onClick={onClick}
       {...(isButton && { disabled })}
       {...restProps}
