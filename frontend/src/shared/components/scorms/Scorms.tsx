@@ -1,4 +1,4 @@
-import { LessonTest } from '@features/lesson/test/Tests'
+import { LessonTest } from '@features/user/lesson/test/Tests'
 import { Course } from '@services/api'
 
 import { Typography } from '../typography'

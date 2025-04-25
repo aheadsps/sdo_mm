@@ -1,8 +1,8 @@
 import { ArrowDownIcon, ArrowUpIcon } from '@assets/icons'
+import { LessonItemTitle } from '@features/user/course'
 import clsx from 'clsx'
 import { ComponentPropsWithoutRef, Fragment, ReactNode, ChangeEvent } from 'react'
 
-import { LessonItemTitle } from '../../../features/course/lesson-item-title/LessonItemTitle'
 import { Input } from '../text-field'
 
 import s from './dropdown-card.module.scss'
