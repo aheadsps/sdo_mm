@@ -37,21 +37,8 @@ export const Course = () => {
         disabledAi={false}
         isIconAi={false}
       />
-      {/* <div className={s.titleBlock}>
-        <Typography variant="header_4" className={s.title}>
-          {course.name}
-        </Typography>
-        <div className={s.buttonsBlock}>
-          <AiIcon onClick={toggleOffCanvas} className={s.ai} />
-          <Button variant="primary" className={s.button} disabled isIcon>
-            Обсуждение урока
-          </Button>
-        </div>
-      </div> */}
-      <>
-        <Tabs tabs={tabsData} variant="secondary" />
-        <AiComponent isOpen={isOffcanvasOpen} close={closeOffcanvas} />
-      </>
+      <Tabs tabs={tabsData} variant="secondary" />
+      <AiComponent isOpen={isOffcanvasOpen} close={closeOffcanvas} />
     </div>
   )
 }
