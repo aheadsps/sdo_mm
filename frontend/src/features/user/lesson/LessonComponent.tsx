@@ -1,13 +1,12 @@
-import { ArrowLeftIcon } from '@assets/icons'
 import { StepView, useLazyGetLessonByIdQuery } from '@services/api'
 import { selectLessonById, setLessonById } from '@services/slices'
 import { useAppDispatch, useAppSelector } from '@services/store'
-import { AiComponent, Typography, Button, Title, Loader } from '@shared/components'
+import { AiComponent, Typography, Button, Title, Loader, BackToPage } from '@shared/components'
 import { withLayout } from '@shared/HOC'
 import { useToggle } from '@shared/hooks/useToggle'
 import { handleError } from '@shared/utils'
 import { useEffect, useState } from 'react'
-import { NavLink, useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 import { CourseMaterials } from '../course/course-materials'
 
@@ -65,12 +64,7 @@ const LessonComponent = () => {
       {lesson?.steps.length !== undefined && (
         <>
           <div className={s.container}>
-            <NavLink to={`/learning/course/${id}`} className={s.backToPage}>
-              <ArrowLeftIcon className={s.icon} />
-              <Typography variant="body_2" className={s.backText}>
-                Вернуться на общую страницу курса
-              </Typography>
-            </NavLink>
+            <BackToPage>Вернуться на общую страницу курса</BackToPage>
             <Title txt={txt} btn1={btn1} btn2={btn2} fstBtn={toggleOffCanvas} />
             <Typography variant="body_2" className={s.desc}>
               {/* {lesson.description} */}
@@ -84,10 +78,11 @@ const LessonComponent = () => {
                   onClick={onItemClick}
                 />
               </div>
-              {/* <LessonContent onClick={handleNavigate} selectedStep={selectedStep} /> */}
               {isMaterialsButtonClicked ? (
                 <div className={s.lessonMaterials}>
-                  <Button className={s.materialsButton}>Скачать все материалы урока</Button>
+                  <Button className={s.materialsButton} disabled isIcon>
+                    Скачать все материалы урока
+                  </Button>
                   <CourseMaterials />
                 </div>
               ) : (

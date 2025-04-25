@@ -19,7 +19,7 @@ export const AboutCourse = () => {
         <div className={s.progressInfo}>
           <div className={s.progressTexts}>
             <Typography variant="body_2" className={s.body2Text}>
-              Общий прогресс: <span>{Math.floor(Math.random() * 100) + 1}</span>
+              Общий прогресс: <span>30 %</span>
             </Typography>
             <Typography variant="body_2" className={s.body2Text}>
               1 урок из {lessons}

@@ -1,3 +1,4 @@
+import { AiIcon } from '@assets/icons'
 import { routes } from '@routes/routes'
 import { useGetCourseQuery } from '@services/api'
 import { selectCourse, setCourseById } from '@services/slices'
@@ -29,10 +30,8 @@ export const Course = () => {
           {course.name}
         </Typography>
         <div className={s.buttonsBlock}>
-          <Button variant="secondary" className={s.button} onClick={toggleOffCanvas}>
-            ИИ
-          </Button>
-          <Button variant="primary" className={s.button}>
+          <AiIcon onClick={toggleOffCanvas} className={s.ai} />
+          <Button variant="primary" className={s.button} disabled isIcon>
             Обсуждение урока
           </Button>
         </div>
