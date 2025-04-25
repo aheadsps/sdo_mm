@@ -76,6 +76,7 @@ export const ConstructorPage: React.FC = () => {
             btn1="Предпросмотр"
             btn2="Опубликовать"
             className={s.visible}
+            disabled
           />
           <div className={s.container}>
             <CMenu

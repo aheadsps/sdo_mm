@@ -16,21 +16,43 @@ interface Props {
   scndBtn?: () => void
   children?: ReactNode
   className?: string
+  disabled?: boolean
 }
-export const Title = ({ txt, btn0, btn1, btn2, nullBtn, fstBtn, scndBtn, className }: Props) => {
+export const Title = ({
+  txt,
+  btn0,
+  btn1,
+  btn2,
+  nullBtn,
+  fstBtn,
+  scndBtn,
+  className,
+  disabled,
+}: Props) => {
   return (
     <div className={s.titleBlock}>
       <Typography variant="header_4" className={s.title}>
         {txt}
       </Typography>
       <div className={s.buttonsBlock}>
-        <Button variant="secondary" className={clsx(s.hidden, className)} onClick={nullBtn}>
+        <Button
+          variant="secondary"
+          className={clsx(s.hidden, className)}
+          onClick={nullBtn}
+          disabled={disabled}
+        >
           {btn0}
         </Button>
-        <Button variant="secondary" className={s.button} onClick={fstBtn}>
+        <Button
+          variant="secondary"
+          className={s.button}
+          onClick={fstBtn}
+          disabled={disabled}
+          isIcon
+        >
           {btn1}
         </Button>
-        <Button variant="primary" className={s.button} onClick={scndBtn}>
+        <Button variant="primary" className={s.button} onClick={scndBtn} disabled={disabled} isIcon>
           {btn2}
         </Button>
       </div>

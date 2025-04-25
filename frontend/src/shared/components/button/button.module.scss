@@ -14,6 +14,14 @@
   }
 }
 
+/* styles for disabled button/link */
+.buttonsSpan {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+}
+
 .primary {
   background-color: var(--color-accent-red500);
   color: var(--color-text-button);
@@ -57,4 +65,18 @@
   &:hover {
     background: var(--color-bg-1);
   }
+}
+
+.disabledPrimary,
+.disabledPrimary:hover,
+.disabledPrimary:visited {
+  background-color: var(--color-bg-gray200);
+  color: var(--color-text-disabled);
+}
+
+.disabledSecondary,
+.disabledSecondary:hover,
+.disabledSecondary:visited {
+  border-color: var(--color-bg-gray200);
+  color: var(--color-text-disabled);
 }
