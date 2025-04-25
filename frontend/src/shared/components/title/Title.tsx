@@ -17,6 +17,8 @@ interface Props {
   children?: ReactNode
   className?: string
   disabled?: boolean
+  disabledAi?: boolean
+  isIconAi?: boolean
 }
 export const Title = ({
   txt,
@@ -28,6 +30,8 @@ export const Title = ({
   scndBtn,
   className,
   disabled,
+  disabledAi,
+  isIconAi,
 }: Props) => {
   return (
     <div className={s.titleBlock}>
@@ -47,8 +51,8 @@ export const Title = ({
           variant="secondary"
           className={s.button}
           onClick={fstBtn}
-          disabled={disabled}
-          isIcon
+          disabled={disabledAi}
+          isIcon={isIconAi}
           border={false}
         >
           {btn1}

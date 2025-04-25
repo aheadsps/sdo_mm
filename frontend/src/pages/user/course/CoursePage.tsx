@@ -23,12 +23,20 @@ export const Course = () => {
   const course = useAppSelector(selectCourse)
 
   const txt = course?.name
-  const btn1 = <AiIcon onClick={toggleOffCanvas} className={s.ai} />
+  const btn1 = <AiIcon />
   const btn2 = 'Обсуждение урока'
   return (
     <div className={s.courseContent}>
       <BackToPage to={routes.learning}>Вернуться к выбору курса</BackToPage>
-      <Title txt={txt} btn1={btn1} btn2={btn2} fstBtn={toggleOffCanvas} />
+      <Title
+        txt={txt}
+        btn1={btn1}
+        btn2={btn2}
+        fstBtn={toggleOffCanvas}
+        disabled={true}
+        disabledAi={false}
+        isIconAi={false}
+      />
       {/* <div className={s.titleBlock}>
         <Typography variant="header_4" className={s.title}>
           {course.name}

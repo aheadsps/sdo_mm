@@ -1,3 +1,4 @@
+import { AiIcon } from '@assets/icons'
 import { StepView, useLazyGetLessonByIdQuery } from '@services/api'
 import { selectLessonById, setLessonById } from '@services/slices'
 import { useAppDispatch, useAppSelector } from '@services/store'
@@ -39,7 +40,7 @@ const LessonComponent = () => {
   console.log(lesson)
 
   const txt = lesson?.name
-  const btn1 = false
+  const btn1 = <AiIcon />
   const btn2 = 'Обсуждение урока'
   const navigate = useNavigate()
 
@@ -65,10 +66,16 @@ const LessonComponent = () => {
         <>
           <div className={s.container}>
             <BackToPage>Вернуться на общую страницу курса</BackToPage>
-            <Title txt={txt} btn1={btn1} btn2={btn2} fstBtn={toggleOffCanvas} />
-            <Typography variant="body_2" className={s.desc}>
-              {/* {lesson.description} */}
-            </Typography>
+            <Title
+              txt={txt}
+              btn1={btn1}
+              btn2={btn2}
+              fstBtn={toggleOffCanvas}
+              disabled={true}
+              disabledAi={false}
+              isIconAi={false}
+            />
+            <Typography variant="body_2" className={s.desc}></Typography>
 
             <div className={s.content}>
               <div className={s.leftBox}>
