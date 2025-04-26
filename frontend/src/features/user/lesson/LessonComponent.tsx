@@ -17,7 +17,7 @@ import s from './lessonComponent.module.scss'
 import { LessonTest } from './test/Tests'
 
 const LessonComponent = () => {
-  const { isOpen: isOffcanvasOpen, close: closeOffcanvas, toggle: toggleOffCanvas } = useToggle()
+  const { isOpen: isOffcanvasOpen, close: closeOffcanvas, open: openOffCanvas } = useToggle()
   const [isMaterialsButtonClicked, setIsMaterialsButtonClicked] = useState(false)
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const { id, lessonId } = useParams()
@@ -40,8 +40,8 @@ const LessonComponent = () => {
   console.log(lesson)
 
   const txt = lesson?.name
-  const btn1 = <AiIcon />
-  const btn2 = 'Обсуждение урока'
+  /*   const btn1 = <AiIcon />
+  const btn2 = 'Обсуждение урока' */
   const navigate = useNavigate()
 
   const handleNavigate = async () => {
@@ -68,12 +68,12 @@ const LessonComponent = () => {
             <BackToPage>Вернуться на общую страницу курса</BackToPage>
             <Title
               txt={txt}
-              btn1={btn1}
-              btn2={btn2}
-              fstBtn={toggleOffCanvas}
-              disabled={true}
+              btn1={<AiIcon />}
+              btn2="Обсуждение урока"
+              fstBtn={openOffCanvas}
               disabledAi={false}
-              isIconAi={false}
+              disabled={true}
+              isIconAi={true}
             />
             <Typography variant="body_2" className={s.desc}></Typography>
 

@@ -53,7 +53,7 @@ export const Title = ({
           variant="secondary"
           className={s.button}
           onClick={fstBtn}
-          disabled={disabledAi || disabled}
+          disabled={isIconAi ? disabledAi : disabled}
           isIcon={isIconAi}
           border={border}
         >

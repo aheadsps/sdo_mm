@@ -1,14 +1,12 @@
 import { LogOutIcon } from '@assets/icons'
 import { routes } from '@routes/routes'
-import { useLogoutMutation } from '@services/api'
-import { useGetProfileQuery } from '@services/api'
-import { clearUser } from '@services/slices'
-import { setUser } from '@services/slices'
+import { useLogoutMutation, useGetProfileQuery } from '@services/api'
+import { clearUser, setUser } from '@services/slices'
 import { useAppDispatch } from '@services/store'
+import { Loader } from '@shared/components'
 import { handleError } from '@shared/utils'
 import { useEffect } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
-import { Loader } from 'rsuite'
 
 import { Typography } from '../../typography'
 
