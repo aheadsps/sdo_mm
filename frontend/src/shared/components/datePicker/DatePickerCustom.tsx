@@ -12,8 +12,6 @@ interface DatePickerCustomProps {
   className?: string
   value?: Date | null
   onChange?: (date: Date | null) => void
-  format?: string
-  disabled?: boolean
 }
 
 export const DatePickerCustom: React.FC<DatePickerCustomProps> = ({
