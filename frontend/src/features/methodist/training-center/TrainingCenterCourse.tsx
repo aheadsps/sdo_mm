@@ -1,9 +1,9 @@
 import { EditIcon } from '@assets/icons'
 import { routes } from '@routes/routes'
 import { useGetCourseQuery } from '@services/api'
-import { selectCourse, setCourseById } from '@services/slices'
+import { setCourseById } from '@services/slices'
 import { setCurrentLessons } from '@services/slices/constructor/constructorSlice'
-import { useAppDispatch, useAppSelector } from '@services/store'
+import { useAppDispatch } from '@services/store'
 import {
   Button,
   Tabs,
@@ -47,6 +47,7 @@ const tabsData: Tab[] = [
 const Course = () => {
   const dispatch = useAppDispatch()
   const { id } = useParams()
+  const [title, setTitle] = useState('')
 
   const { data: course, isLoading } = useGetCourseQuery(Number(id))
 
@@ -59,12 +60,9 @@ const Course = () => {
     if (course?.name) {
       setTitle(course.name)
     }
-  }, [dispatch, course])
-
-  const currentCourse = useAppSelector(selectCourse)
+  }, [dispatch, course, course?.name])
 
   const [isEditMode, setIsEditMode] = useState(false)
-  const [title, setTitle] = useState(currentCourse.name)
 
   const { isOpen: isModalOpen, close: closeModal, open: openModal } = useToggle()
 

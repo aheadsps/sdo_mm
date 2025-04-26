@@ -4,7 +4,7 @@ import { useAppSelector } from '@services/store'
 import { Button, EditableText, InputWithIcon, Select, Typography } from '@shared/components'
 import { useToggle } from '@shared/hooks'
 import { formatDate } from '@shared/utils'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { NavLink } from 'react-router-dom'
 
 import s from './aboutCourse.module.scss'
@@ -31,11 +31,19 @@ export const AboutCourse = () => {
   const { isOpen: isOpenStart, toggle: toggleStart } = useToggle()
   const { isOpen: isOpenEnd, toggle: toggleEnd } = useToggle()
 
-  const currentCourse = useAppSelector(selectCourse)
-  const [description, setDescription] = useState(currentCourse.description)
+  const [description, setDescription] = useState('')
   const [isEditMode, setIsEditMode] = useState(false)
+  const currentCourse = useAppSelector(selectCourse)
+
+  useEffect(() => {
+    if (currentCourse) {
+      setDescription(currentCourse.description)
+    }
+  }, [currentCourse])
 
   const toggleEditMode = () => setIsEditMode((prev) => !prev)
+
+  console.log(currentCourse, 'currentCourse')
 
   return (
     <div className={s.container}>

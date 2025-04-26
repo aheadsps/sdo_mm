@@ -28,7 +28,6 @@ const Training = () => {
   const onCreateCourse = async () => {
     try {
       const res: Course = await createCourse().unwrap()
-      console.log(res)
 
       if (res) {
         navigate(`${routes.trainingCenterCourse}/${res.id}`)

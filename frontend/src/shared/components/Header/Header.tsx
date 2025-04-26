@@ -2,7 +2,7 @@ import { LogoIcon, MobileVersionHeaderIcon } from '@assets/icons'
 import { selectIsAuth } from '@services/slices'
 import { useAppSelector } from '@services/store'
 import { useScreenWidth } from '@shared/hooks'
-import React, { useState } from 'react'
+import { useState } from 'react'
 
 import '@fontsource/manrope/600.css'
 import { Sidebar } from '../sidebar'
@@ -11,7 +11,10 @@ import { Typography } from '../typography'
 import styles from './header.module.scss'
 import { HeaderAvatar } from './HeaderAvatar'
 
-const Header: React.FC = () => {
+type Props = {
+  isLoading?: boolean
+}
+const Header = ({ isLoading }: Props) => {
   const isAuth = useAppSelector(selectIsAuth)
   const { isMobile } = useScreenWidth()
 
@@ -43,7 +46,9 @@ const Header: React.FC = () => {
           onClick={onToggleMobileSidebar}
         />
       </div>
-      {isMobile && <Sidebar className={isMobileSidebarOpen ? styles.open : ''} />}
+      {isMobile && (
+        <Sidebar className={isMobileSidebarOpen ? styles.open : ''} isLoading={isLoading} />
+      )}
     </header>
   )
 }

@@ -13,10 +13,9 @@ interface Props {
 }
 
 export const SubscriptionEventsCard: React.FC<Props> = ({ event }: Props) => {
-  const course = event.course
+  const course = event?.course
   const [isFav, setIsFav] = useState<boolean>(false)
-  // const dispatch = useAppDispatch()
-  // const hendleClick = () => {}  onClick={() => hendleClick()}
+
   return (
     <div className={s.container}>
       <div className={s.container__top}>
@@ -31,7 +30,9 @@ export const SubscriptionEventsCard: React.FC<Props> = ({ event }: Props) => {
           </button>
         </div>
         <ImageComponent
-          src={course.image !== null ? course.image : 'img/svg/lesson-02.svg'}
+          src={
+            event.course && event.course.image !== null ? course.image : '/img/svg/lesson-02.svg'
+          }
           alt="course"
           className={s.img}
         />
@@ -40,11 +41,11 @@ export const SubscriptionEventsCard: React.FC<Props> = ({ event }: Props) => {
       <div className={s.container__bottom}>
         <div className={s.container__card}>
           <Typography variant="header_2" className={s.container__title}>
-            {course.name}
+            {event?.course?.name}
           </Typography>
           <div className={s.container__description}>
             <Typography variant="body_2" className={s.container__depiction}>
-              {course.description}
+              {event?.course?.description}
             </Typography>
           </div>
         </div>
