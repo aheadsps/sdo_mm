@@ -1,23 +1,39 @@
-import { useGetCurrentCoversQuery, useGetEventsQuery } from '@services/api'
-import { Role } from '@shared/components/sidebar/sidebar.types'
+import { useLazyGetCurrentCoversQuery, useLazyGetEventsQuery } from '@services/api'
+import { setAllEvents, setUserCovers } from '@services/slices'
+import { useAppDispatch } from '@services/store'
+import { useScreenWidth } from '@shared/hooks'
+import { handleError } from '@shared/utils'
+import { useState, useEffect } from 'react'
 
-export const useFetchData = (role: Role | null) => {
-  const isStudent = role === Role.student
+export const useFetchData = () => {
+  const [isLoading, setIsLoading] = useState<boolean>(true)
+  const { isMobile } = useScreenWidth()
+  const dispatch = useAppDispatch()
+  const [getEvents] = useLazyGetEventsQuery()
+  const [getCurrentCovers] = useLazyGetCurrentCoversQuery()
 
-  const { data: events, isLoading: isEventsLoading, error: eventsError } = useGetEventsQuery()
+  useEffect(() => {
+    getEvents()
+      .unwrap()
+      .then((res) => {
+        dispatch(setAllEvents(res.results))
+      })
+      .catch((error) => handleError(error))
+      .finally(() => setIsLoading(false))
+  }, [getEvents, dispatch])
 
-  const {
-    data: currentCovers,
-    isLoading: isCurrentCoversLoading,
-    error: currentCoversError,
-  } = useGetCurrentCoversQuery('', {
-    skip: !isStudent,
-  })
+  useEffect(() => {
+    getCurrentCovers('')
+      .unwrap()
+      .then((res) => {
+        dispatch(setUserCovers(res.results))
+      })
+      .catch((error) => handleError(error))
+      .finally(() => setIsLoading(false))
+  }, [getCurrentCovers, dispatch])
 
   return {
-    events,
-    currentCovers,
-    isLoading: isStudent ? isCurrentCoversLoading : isEventsLoading,
-    error: isStudent ? currentCoversError : eventsError,
+    isMobile,
+    isLoading,
   }
 }

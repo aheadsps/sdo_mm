@@ -7,7 +7,6 @@ import s from '../main.module.scss'
 
 export const CurrentTasks = () => {
   const currentEvents = useAppSelector(selectUserCovers)
-  // console.log(currentEvents)
   return (
     <div>
       <Typography variant="header_4" className={s.title}>

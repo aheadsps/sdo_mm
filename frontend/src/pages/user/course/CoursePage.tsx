@@ -8,6 +8,7 @@ import { withLayout } from '@shared/HOC'
 import { useToggle } from '@shared/hooks/useToggle'
 import { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
+import { Loader } from 'rsuite'
 
 import s from './course.module.scss'
 import { tabsData } from './tabsData'
@@ -16,15 +17,19 @@ export const Course = () => {
   const { isOpen: isOffcanvasOpen, close: closeOffcanvas, toggle: toggleOffCanvas } = useToggle()
   const dispatch = useAppDispatch()
   const { id } = useParams()
-  const { data: currentCourse } = useGetCourseQuery(Number(id))
+  const { data: currentCourse, isLoading } = useGetCourseQuery(Number(id))
   useEffect(() => {
     if (currentCourse) dispatch(setCourseById(currentCourse))
   }, [currentCourse, dispatch])
   const course = useAppSelector(selectCourse)
-
   const txt = course?.name
   const btn1 = <AiIcon />
   const btn2 = 'Обсуждение урока'
+
+  if (isLoading) {
+    return <Loader />
+  }
+
   return (
     <div className={s.courseContent}>
       <BackToPage to={routes.learning}>Вернуться к выбору курса</BackToPage>
