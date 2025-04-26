@@ -1,14 +1,13 @@
+import {
+  AssignmentsCheckLayout,
+  StudentAssignmentPage,
+  TrainingCenterCourse,
+} from '@features/methodist'
 import { Lesson } from '@features/user/lesson'
 import { AuthPage } from '@pages/auth'
-import { ConstructorPage } from '@pages/methodist/constructor'
-import { CoursePage } from '@pages/user/course/CoursePage'
-import { Library } from '@pages/user/library'
 import { MainPage } from '@pages/main'
-import { MyLearning } from '@pages/user/my-learning/MyLearning'
-import { AssignmentsCheckLayout } from '@features/methodist/training-center'
-import { StudentAssignmentPage } from '@features/methodist/training-center/student-assignment/StudentAssignment'
-import { TrainingCenterCourse } from '@features/methodist/training-center/TrainingCenterCourse'
-import { TrainingCenter } from '@pages/methodist/trainingCenter/TrainingCenter'
+import { TrainingCenter, ConstructorPage } from '@pages/methodist'
+import { CoursePage, Library, MyLearning } from '@pages/user'
 import { Role } from '@shared/components/sidebar/sidebar.types'
 import { createBrowserRouter } from 'react-router-dom'
 

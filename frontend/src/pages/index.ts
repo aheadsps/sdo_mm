@@ -1,5 +1,4 @@
 export * from './auth'
-export * from './user/course'
 export * from './main'
-export * from './user/my-learning'
-export * from './user/library'
+export * from './user'
+export * from './methodist'
