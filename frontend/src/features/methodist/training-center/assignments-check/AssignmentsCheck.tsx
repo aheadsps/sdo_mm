@@ -26,8 +26,8 @@ export const AssignmentsCheck = () => {
         Проверка заданий по курсу
       </Typography>
       <div className={s.cards}>
-        {Object.entries(statusGroups).map(([status, students]) => (
-          <Card className={s.card}>
+        {Object.entries(statusGroups).map(([status, students], index) => (
+          <Card className={s.card} key={`${status}-${index}`}>
             <div key={status} className={s.card__content}>
               <div className={clsx(s.card__status, statusColors(status as Status))}>
                 {statusIcon(status as Status)}

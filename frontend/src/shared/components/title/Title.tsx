@@ -19,6 +19,7 @@ interface Props {
   disabled?: boolean
   disabledAi?: boolean
   isIconAi?: boolean
+  border?: boolean
 }
 export const Title = ({
   txt,
@@ -32,6 +33,7 @@ export const Title = ({
   disabled,
   disabledAi,
   isIconAi,
+  border = false,
 }: Props) => {
   return (
     <div className={s.titleBlock}>
@@ -53,7 +55,7 @@ export const Title = ({
           onClick={fstBtn}
           disabled={disabledAi}
           isIcon={isIconAi}
-          border={false}
+          border={border}
         >
           {btn1}
         </Button>
