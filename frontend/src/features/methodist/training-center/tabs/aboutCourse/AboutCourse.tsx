@@ -30,17 +30,16 @@ export const AboutCourse = () => {
   const currentCourse = useAppSelector(selectCourse)
   const [description, setDescription] = useState('')
   const [isEditMode, setIsEditMode] = useState(false)
-  const [date, setDate] = useState<Date | null>(new Date(currentCourse.create_date))
+  const [date, setDate] = useState<Date | null>(null)
 
   useEffect(() => {
     if (currentCourse) {
       setDescription(currentCourse.description)
+      setDate(new Date(currentCourse.create_date))
     }
   }, [currentCourse])
 
   const toggleEditMode = () => setIsEditMode((prev) => !prev)
-
-  console.log(currentCourse, 'currentCourse')
 
   return (
     <div className={s.container}>
