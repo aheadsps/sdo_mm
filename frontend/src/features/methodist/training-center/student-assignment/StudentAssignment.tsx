@@ -5,7 +5,7 @@ import {
   Button,
   CourseMaterialItem,
   DropdownCard,
-  Textarea,
+  Input,
 } from '@shared/components'
 import { withLayout } from '@shared/HOC'
 import { useToggle } from '@shared/hooks'
@@ -57,11 +57,11 @@ export const StudentAssignment = () => {
           </div>
           <div className={s.inputs}>
             <div className={s.inputBlock}>
-              <Textarea placeholder="Отправить комментарий" />
+              <Input className={s.inputComment} placeholder="Отправить комментарий студенту" />
               <SendIcon />
             </div>
             <div className={s.inputBlock}>
-              <Textarea placeholder="Оставить внутренний комментарий" />
+              <Input className={s.inputComment} placeholder="Оставить внутренний комментарий" />
               <SendIcon />
             </div>
           </div>
