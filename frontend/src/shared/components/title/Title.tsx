@@ -9,7 +9,7 @@ import s from './title.module.scss'
 interface Props {
   txt: string
   btn0?: string | ReactNode
-  btn1: string
+  btn1: string | ReactNode
   btn2: string
   nullBtn?: () => void
   fstBtn?: () => void
@@ -17,6 +17,9 @@ interface Props {
   children?: ReactNode
   className?: string
   disabled?: boolean
+  disabledAi?: boolean
+  isIconAi?: boolean
+  border?: boolean
 }
 export const Title = ({
   txt,
@@ -28,6 +31,9 @@ export const Title = ({
   scndBtn,
   className,
   disabled,
+  disabledAi,
+  isIconAi,
+  border = false,
 }: Props) => {
   return (
     <div className={s.titleBlock}>
@@ -47,8 +53,9 @@ export const Title = ({
           variant="secondary"
           className={s.button}
           onClick={fstBtn}
-          disabled={disabled}
-          isIcon
+          disabled={disabledAi}
+          isIcon={isIconAi}
+          border={border}
         >
           {btn1}
         </Button>

@@ -17,7 +17,9 @@ export const MaterialsDropdown = ({ lesson }: Props) => {
       isOpen={isOpen}
       toggle={toggle}
     >
-      <Button className={s.materialsButton}>Скачать все материалы урока</Button>
+      <Button className={s.materialsButton} disabled isIcon>
+        Скачать все материалы урока
+      </Button>
       <CourseMaterials />
     </DropdownCard>
   )
