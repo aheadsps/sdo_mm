@@ -197,7 +197,7 @@ paths:
           $ref: "#/components/responses/UnprocessableEntity"
 
   /logout:
-    get:
+    post:
       operationId: api_authemail_logout
       summary: Выход из системы (поиск токена данного пользователя и в последствии - удаление)
       tags:
@@ -215,6 +215,242 @@ paths:
                     default: User logged out.
         "422":
           $ref: "#/components/responses/UnprocessableEntity"
+
+  /files/{file_id}:
+    delete:
+      operationId: api_files_delete
+      summary: Удаление файла и системы
+      parameters:
+        - in: path
+          name: file_id
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+      tags:
+        - File
+      security:
+        - Token: []
+      responses:
+        '204':
+          description: Ответ об удалении
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+
+  /covers:
+    get:
+      operationId: api_covers_list
+      summary: Получение списка всех эвентов и пользователей
+      tags:
+        - Cover
+      security:
+        - Token: []
+      responses:
+        "200":
+          description: JSON ответ с деталями данного эвента
+          content:
+            application/json:
+              schema:
+                type: array
+                minItems: 1
+                items:
+                  $ref: "#/components/schemas/EventCovered"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+    post:
+      operationId: api_covers_create
+      summary: Создание Покрытия эвента на пользователе (для администрации или методиста)
+      tags:
+        - Cover
+      security:
+        - Token: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: "#/components/schemas/EventCoveredCreate"
+      responses:
+        "201":
+          description: JSON ответ с новыми данными
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/EventCreate"
+            application/x-www-form-urlencoded:
+              schema:
+                $ref: "#/components/schemas/EventCreate"
+            multipart/form-data:
+              schema:
+                $ref: "#/components/schemas/EventCreate"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+
+  /covers/{cover_id}:
+    delete:
+      operationId: api_covers_delete
+      summary: Удаление пользователя из эвента
+      tags:
+        - Cover
+      security:
+        - Token: []
+      responses:
+        '204':
+          description: Ответ об удалении
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+
+  /covers/currents:
+    get:
+      operationId: api_covers_list_currents
+      summary: Получение списка всех эвентов от текущего пользователя
+      tags:
+        - Cover
+      security:
+        - Token: []
+      responses:
+        "200":
+          description: JSON ответ с деталями данного эвента
+          content:
+            application/json:
+              schema:
+                type: array
+                minItems: 1
+                items:
+                  $ref: "#/components/schemas/EventCovered"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+
+  /covers/main:
+    get:
+      operationId: api_covers_main
+      summary: Получение списка всех актуальных задач
+      tags:
+        - Cover
+      security:
+        - Token: []
+      responses:
+        "200":
+          description: JSON ответ с деталями залач
+          content:
+            application/json:
+              schema:
+                type: array
+                minItems: 1
+                items:
+                  properties:
+                    id:
+                      type: integer
+                      minimum: 1
+                    url:
+                      type: string
+                      format: slug
+                    name:
+                      type: string
+                    end_date:
+                      type: string
+                      format: date-time
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+
+  /covers/calendar:
+    get:
+      operationId: api_covers_calendar
+      summary: Получение календаря предстоящих событий
+      tags:
+        - Cover
+      security:
+        - Token: []
+      responses:
+        "200":
+          description: JSON ответ с деталями данного эвента
+          content:
+            application/json:
+              schema:
+                type: array
+                minItems: 1
+                items:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    start_date:
+                      type: string
+                      format: date-time
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+
+  /covers/{cover_id}/toggle-favorite:
+    get:
+      operationId: api_covers_toggle-favorite
+      summary: Добавление или удаление из избранного
+      parameters:
+        - in: path
+          name: cover_id
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+      tags:
+        - Cover
+      security:
+        - Token: []
+      responses:
+        "200":
+          description: Эвент добавлен в избраное или удален
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  cover_id:
+                    type: integer
+                  favorite:
+                    type: boolean
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+
 
   /events/{event_id}:
     get:
@@ -307,105 +543,6 @@ paths:
           $ref: "#/components/responses/NotFound"
         "422":
           $ref: "#/components/responses/UnprocessableEntity"
-
-  /events/{event_id}/toggle-favorite:
-    get:
-      operationId: api_events_toggle-favorite
-      summary: Добавление ивента или удаление из избранного
-      parameters:
-        - in: path
-          name: event_id
-          required: true
-          schema:
-            type: integer
-            minimum: 1
-      tags:
-        - Event
-      security:
-        - Token: []
-      responses:
-        "200":
-          description: Эвент добавлен в избраное или удален
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  event_id:
-                    type: integer
-                  favorite:
-                    type: boolean
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "422":
-          $ref: "#/components/responses/UnprocessableEntity"
-
-  /events/{event_id}/users:
-    get:
-      summary: Вывод пользователей исходя из эвента
-      parameters:
-        - in: path
-          name: event_id
-          required: true
-          schema:
-            type: integer
-            minimum: 1
-      tags:
-        - Event
-      security:
-        - Token: []
-      responses:
-        "200":
-          description: Эвент добавлен в избраное или удален
-          content:
-            application/json:
-              schema:
-                type: array
-                minItems: 1
-                items:
-                  $ref: "#/components/schemas/UserStat"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "422":
-          $ref: "#/components/responses/UnprocessableEntity"
-  /events/currents:
-    get:
-      operationId: api_events_get_current
-      summary: Получение актуальных эвента назначенных текущему пользователю (по user_id)
-      tags:
-        - Event
-      security:
-        - Token: []
-      responses:
-        "200":
-          description: Получение JSON ответа с текущими событиями, курсом, уроками.
-          content:
-            application/json:
-              schema:
-                type: array
-                minItems: 0
-                items:
-                  $ref: "#/components/schemas/Event"
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "422":
-          $ref: "#/components/responses/UnprocessableEntity"
-
-  # /events/main:
-  #   get:
-  #   ...
 
   /events:
     get:
@@ -618,21 +755,28 @@ paths:
         "422":
           $ref: "#/components/responses/UnprocessableEntity"
 
-  /scorms/{scorm_id}:
-    get:
-      operationId: api_scorms_retrieve
-      summary: Вывод Scorm пакета
+  /courses/{course_id}/upload-materials:
+    post:
+      operationId: api_course_upload
+      summary: Загрузка материалов
       tags:
-        - SCORM
+        - Course
       security:
         - Token: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: "#/components/schemas/ContentAttachment"
       responses:
-        '200':
-          description: JSON ответ с деталями SCORM пакета
+        "200":
+          description: JSON ответ с курсом
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/SCORM"
+                type: object
+                $ref: "#/components/schemas/Materials"
         "401":
           $ref: "#/components/responses/Unauthorized"
         "403":
@@ -641,6 +785,85 @@ paths:
           $ref: "#/components/responses/NotFound"
         "422":
           $ref: "#/components/responses/UnprocessableEntity"
+
+  /courses/{course_id}/users:
+    get:
+      summary: Вывод пользователей исходя из курса
+      parameters:
+        - in: path
+          name: course_id
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+      tags:
+        - Course
+      security:
+        - Token: []
+      responses:
+        "200":
+          description: JSON ответ с списком пользователей
+          content:
+            application/json:
+              schema:
+                type: array
+                minItems: 1
+                items:
+                  properties:
+                    user:
+                      type: object
+                      $ref: "#/components/schemas/User"
+                    procent:
+                      type: integer
+                      minimum: 0
+                      maximum: 100
+                    status:
+                      type: string
+                      enum:
+                        - done
+                        - failed
+                        - process
+                        - expected
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+
+  /courses/{course_id}/about:
+    get:
+      summary: Вывод деталей курса
+      parameters:
+        - in: path
+          name: course_id
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+      tags:
+        - Course
+      security:
+        - Token: []
+      responses:
+        "200":
+          description: JSON ответ с списком пользователей
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/CourseDetail"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+
 
   /lessons:
     get:
@@ -980,9 +1203,9 @@ paths:
         "422":
           $ref: "#/components/responses/UnprocessableEntity"
 
-  /test-block/{block_id}/reset:
-    delete:
-      summary: Сброс ответов под данный урок
+  /test-block/{block_id}/submission:
+    post:
+      summary: Ответ на задание из тестового блока
       parameters:
         - in: path
           name: block_id
@@ -990,13 +1213,51 @@ paths:
           schema:
             type: integer
             minimum: 1
+      operationId: api_test-block_submission
       tags:
         - TestBlock
       security:
         - Token: []
       responses:
-        "204":
-          description: Успешно обнулен
+        "200":
+          description: JSON ответ с шагом
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/AssessmentSubmission"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+
+  /test-block/{block_id}/assessment:
+    post:
+      summary: Оценка задания из тестового блока
+      parameters:
+        - in: path
+          name: block_id
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+      operationId: api_test-block_assessment
+      tags:
+        - TestBlock
+      security:
+        - Token: []
+      responses:
+        "200":
+          description: JSON ответ с шагом
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/AssessmentSubmission"
         "401":
           $ref: "#/components/responses/Unauthorized"
         "403":
@@ -1643,17 +1904,97 @@ components:
           description: Текст ответа
           nullable: false
 
-    UserStat:
-      description: Сущность пользотателей от курса
+    EventCoveredCreate:
+      description: Сущность статистики курсов на пользователе создание
       additionalProperties: false
       type: object
       properties:
-        user:
-          type: object
-          $ref: "#/components/schemas/User"
-        progress:
+        id:
           type: integer
+          readOnly: true
+          minimum: 1
+        event:
+          type: integer
+          minimum: 1
+        user:
+          type: integer
+          minimum: 1
+          readOnly: true
+        procent:
+          type: integer
+          readOnly: true
           format: int32
+          minimum: 0
+          maximum: 100
+          default: 0
+        favorite:
+          type: boolean
+          description: Флаг избранного
+          default: false
+          readOnly: false
+        status:
+          type: string
+          enum:
+            - done
+            - failed
+            - process
+            - expected
+          readOnly: true
+          default:
+            expected
+
+    Materials:
+      description: Сущность материалов
+      additionalProperties: false
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+          minimum: 1
+        files:
+          type: array
+          items:
+            minItems: 0
+            $ref: "#/components/schemas/ContentAttachment"
+
+    EventCovered:
+      description: Сущность статистики курсов на пользователе
+      additionalProperties: false
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+          minimum: 1
+        event:
+          type: object
+          $ref: "#/components/schemas/Event"
+        user:
+          type: integer
+          readOnly: true
+          minimum: 1
+        procent:
+          type: integer
+          readOnly: true
+          format: int32
+          minimum: 0
+          maximum: 100
+          default: 0
+        favorite:
+          type: boolean
+          description: Флаг избранного
+          default: false
+          readOnly: false
+        status:
+          type: string
+          enum:
+            - done
+            - failed
+            - process
+            - expected
+          default:
+            expected
 
     СourseView:
       description: Сущность курса детальный
@@ -1664,6 +2005,10 @@ components:
           type: integer
           readOnly: true
           minimum: 1
+        teacher:
+          type: integer
+          minimum: 1
+          readOnly: true
         name:
           type: string
           maxLength: 256
@@ -1673,6 +2018,10 @@ components:
           type: string
           readOnly: false
           nullable: true
+        interval:
+          type: string
+          format: date
+          description: Интервал времени по которому будут открывать уроки
         lessons:
           type: array
           description: Уроки привязанные к данному курсу (для бэков - это поле только из сериализатора)
@@ -1704,32 +2053,38 @@ components:
           description: Для какой профессии предназначен курс
           nullable: false
           $ref: "#/components/schemas/Profession"
-        scorms:
-          type: array
-          description: Список уроков из SCORM пакета
-          minItems: 1
-          items:
-            type: integer
-            minimum: 1
-            $ref: "#/components/schemas/SCORM"
         experiences:
           type: array
           description: Список стажевых интервалов для которых подходит данный курс
           minItems: 1
           items:
             $ref: "#/components/schemas/WorkExperience"
-        lesson_story:
-          type: array
-          description: Уроки которые открыл пользователь
-          minItems: 0
-          items:
-            $ref: "#/components/schemas/LessonStory"
+        materials:
+          type: object
+          $ref: "#/components/schemas/Materials"
+        status:
+          type: string
+          enum:
+            - run
+            - end
+            - archive
+            - edit
+          default:
+            - archive
 
     CourseCreate:
       description: Сущность курса упрощеная
       additionalProperties: false
       type: object
       properties:
+        id:
+          type: integer
+          minimum: 1
+          readOnly: true
+        teacher:
+          type: integer
+          minimum: 1
+          readOnly: true
         name:
           type: string
           maxLength: 256
@@ -1739,6 +2094,10 @@ components:
           type: string
           readOnly: false
           nullable: true
+        interval:
+          type: string
+          format: date
+          description: Интервал времени по которому будут открывать уроки
         beginer:
           type: boolean
           default: false
@@ -1765,6 +2124,17 @@ components:
           items:
             type: integer
             minimum: 1
+        materials:
+          type: object
+          readOnly: true
+          $ref: "#/components/schemas/Materials"
+        status:
+          type: string
+          enum:
+            - archive
+            - edit
+          default:
+            - archive
       required:
         - id
         - name
@@ -1776,6 +2146,14 @@ components:
       additionalProperties: false
       type: object
       properties:
+        id:
+          type: integer
+          minimum: 1
+          readOnly: true
+        teacher:
+          type: integer
+          minimum: 1
+          readOnly: true
         name:
           type: string
           maxLength: 256
@@ -1785,6 +2163,10 @@ components:
           type: string
           readOnly: false
           nullable: true
+        interval:
+          type: string
+          format: date
+          description: Интервал времени по которому будут открывать уроки (пример ввода [DD] [HH:[MM:]] 07 00:00 - 7 дней)
         lessons:
           type: array
           description: Уроки привязанные к данному курсу (для бэков - это поле только из сериализатора)
@@ -1819,11 +2201,52 @@ components:
           items:
             type: integer
             minimum: 1
+        materials:
+          type: object
+          $ref: "#/components/schemas/Materials"
+        status:
+          type: string
+          enum:
+            - run
+            - end
+            - archive
+            - edit
+          default:
+            - archive
       required:
         - id
         - name
         - profession
         - experiences
+
+    CourseDetail:
+      description: Сущность деталей текущего курса
+      additionalProperties: false
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        create_date:
+          type: string
+          format: date-time
+        end_date:
+          type: string
+          format: date-time
+        count_students:
+          type: integer
+          minimum: 0
+        status:
+          type: string
+          enum:
+            - run
+            - end
+            - archive
+            - edit
+        teacher:
+          type: object
+          $ref: "#/components/schemas/User"
 
     Rate:
       description: Сущность оценок по уроку
@@ -1857,6 +2280,10 @@ components:
           type: integer
           minimum: 1
           readOnly: true
+        teacher:
+          type: integer
+          minimum: 1
+          readOnly: true
         name:
           type: string
           maxLength: 256
@@ -1868,16 +2295,36 @@ components:
           minimum: 1
           readOnly: false
           nullable: false
+        version:
+          type: string
+          maxItems: 50
+          enum:
+            - SCORM 1.0
+            - SCORM 1.1
+            - SCORM 1.2
+            - 2004 1st Edition
+            - 2004 2nd Edition
+            - 2004 3rd Edition
+            - 2004 4th Edition
+        resource:
+          type: string
+          format: path
         course:
           type: integer
           minimum: 1
+        start_date:
+          type: string
+          format: date-time
+        started:
+          type: boolean
+          default: false
         steps:
           type: array
           description: Шаги урока
           minItems: 0
           items:
             $ref: "#/components/schemas/StepView"
-        test-block:
+        test_block:
           type: object
           description: Тестовый блок
           $ref: '#/components/schemas/TestBlockView'
@@ -1891,6 +2338,10 @@ components:
           type: integer
           readOnly: true
           minimum: 1
+        teacher:
+          type: integer
+          minimum: 1
+          readOnly: true
         name:
           type: string
           maxLength: 256
@@ -1902,6 +2353,28 @@ components:
           minimum: 1
           readOnly: false
           nullable: false
+        start_date:
+          type: string
+          format: date-time
+          readOnly: true
+        version:
+          type: string
+          maxItems: 50
+          enum:
+            - SCORM 1.0
+            - SCORM 1.1
+            - SCORM 1.2
+            - 2004 1st Edition
+            - 2004 2nd Edition
+            - 2004 3rd Edition
+            - 2004 4th Edition
+        resource:
+          type: string
+          format: path
+        started:
+          type: boolean
+          default: false
+          readOnly: true
         course:
           type: integer
           minimum: 1
@@ -1917,6 +2390,10 @@ components:
           type: integer
           readOnly: true
           minimum: 1
+        teacher:
+          type: integer
+          minimum: 1
+          readOnly: true
         name:
           type: string
           maxLength: 256
@@ -1928,38 +2405,16 @@ components:
           minimum: 1
           readOnly: false
           nullable: false
-        course:
-          type: integer
-          minimum: 1
-        steps:
-          type: array
-          description: Шаги урока
-          minItems: 0
-          items:
-            type: object
-            minimum: 1
-            $ref: "#/components/schemas/Step"
-        test_block:
-          type: integer
-          description: Тестовый блок
-          minimum: 1
-
-    SCORM:
-      description: SCORM пакет
-      additionalProperties: false
-      type: object
-      properties:
-        id:
-          type: integer
-          minimum: 1
-        name:
+        start_date:
           type: string
-          maxLength: 256
-          nullable: false
+          format: date-time
+          description: Дата начала урока
+        started:
+          type: boolean
+          default: false
         course:
           type: integer
           minimum: 1
-          nullable: true
         version:
           type: string
           maxItems: 50
@@ -1974,6 +2429,18 @@ components:
         resource:
           type: string
           format: path
+        steps:
+          type: array
+          description: Шаги урока
+          minItems: 0
+          items:
+            type: object
+            minimum: 1
+            $ref: "#/components/schemas/Step"
+        test_block:
+          type: integer
+          description: Тестовый блок
+          minimum: 1
 
     StepCreate:
       description: Шаги урока создание
@@ -1982,6 +2449,10 @@ components:
           type: integer
           readOnly: true
           minimum: 1
+        teacher:
+          type: integer
+          minimum: 1
+          readOnly: true
         title:
           type: string
           maxLength: 256
@@ -2007,6 +2478,10 @@ components:
           type: integer
           readOnly: true
           minimum: 1
+        teacher:
+          type: integer
+          minimum: 1
+          readOnly: true
         title:
           type: string
           maxLength: 256
@@ -2041,6 +2516,10 @@ components:
           maxLength: 256
           readOnly: false
           nullable: false
+        teacher:
+          type: integer
+          minimum: 1
+          readOnly: true
         content_text:
           type: string
           readOnly: false
@@ -2070,10 +2549,19 @@ components:
           type: integer
           minimum: 1
           readOnly: true
+        end_date:
+          type: string
+          format: date-time
+          readOnly: true
         lesson:
           description: В модели делаем полноценную связь, в сериализаторе только id
           type: integer
           minimum: 1
+          readOnly: true
+        max_score:
+          description: Максимальный балл который может получить студент с данного тествого блока
+          type: number
+          format: float
           readOnly: true
         questions:
           type: array
@@ -2098,10 +2586,24 @@ components:
           type: integer
           minimum: 1
           readOnly: true
+        end_date:
+          type: string
+          format: date-time
+          readOnly: true
+        status:
+          type: string
+          enum:
+            - failed
+            - done
         lesson:
           description: В модели делаем полноценную связь, в сериализаторе только id
           type: integer
           minimum: 1
+          readOnly: true
+        max_score:
+          description: Максимальный балл который может получить студент с данного тествого блока
+          type: number
+          format: float
           readOnly: true
         questions:
           type: array
@@ -2120,6 +2622,10 @@ components:
           type: integer
           readOnly: true
           minimum: 1
+        teacher:
+          type: integer
+          minimum: 1
+          readOnly: true
         text:
           type: string
           readOnly: false
@@ -2133,6 +2639,16 @@ components:
         test_block:
           type: integer
           minimum: 1
+        type_question:
+          type: string
+          enum:
+            - test
+            - task
+            - essay
+        check_automaty:
+          description: Автоматическая проверка (веб сокет)
+          type: boolean
+          default: false
         answers:
           type: array
           description: Ответы на данный вопрос. (Только в логике сериализатора, в модели не реализуем!)
@@ -2149,6 +2665,10 @@ components:
           type: integer
           readOnly: true
           minimum: 1
+        teacher:
+          type: integer
+          minimum: 1
+          readOnly: true
         text:
           type: string
           readOnly: false
@@ -2159,12 +2679,86 @@ components:
           description: Изображения для тестового вопроса
           readOnly: false
           nullable: true
+        type_question:
+          type: string
+          enum:
+            - test
+            - task
+            - essay
         test_block:
           type: integer
           minimum: 1
       required:
         - text
         - test_block
+        - type_question
+
+    AssessmentSubmission:
+      description: Оценка преподавателя
+      type: object
+      additionalProperties: false
+      properties:
+        teacher:
+          type: integer
+          minimum: 1
+        test_block:
+          type: integer
+          minimum: 1
+        student:
+          type: integer
+          minimum: 1
+        score:
+          type: number
+          format: float
+          nullable: true
+        comment:
+          type: string
+          format: text
+          nullable: true
+        type_of:
+          type: string
+          enum:
+            - answer
+            - question
+        files:
+          type: array
+          minItems: 0
+          items:
+            $ref: "#/components/schemas/ContentAttachment"
+        date_assessment:
+          type: string
+          format: date-time
+          readOnly: true
+
+    CourseProgress:
+      description: Прогресс студента в определенной точке курса
+      additionalProperties: false
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+          minimum: 1
+        student:
+          type: integer
+          minimum: 1
+        test_block:
+          type: integer
+          minimum: 1
+        score:
+          type: number
+          format: float
+        data_assessment:
+          type: string
+          format: date-time
+        procent_compelete:
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 100
+        result:
+          type: number
+          format: float
 
     Answer:
       description: Сущность ответов на тесты
@@ -2182,6 +2776,11 @@ components:
         correct:
           type: boolean
           readOnly: false
+        weight:
+          type: integer
+          format: int32
+          minimum: -2
+          maximum: 5
         question:
           type: integer
           minimum: 1
@@ -2304,7 +2903,7 @@ components:
           minimum: 1
           readOnly: true
           nullable: false
-        lesson:
+        step:
           type: integer
           minimum: 1
           readOnly: true
@@ -2325,15 +2924,9 @@ components:
       additionalProperties: false
       type: object
       properties:
-        user:
-          type: integer
-          minimum: 1
         course:
           type: integer
           minimum: 1
-        done_lessons:
-          type: integer
-          default: 0
         start_date:
           type: string
           format: date-time
@@ -2342,61 +2935,48 @@ components:
         end_date:
           type: string
           format: date-time
-          readOnly: false
+          readOnly: true
           nullable: true
-        favorite:
-          type: boolean
-          description: Флаг избранного
-          default: false
-          readOnly: false
         status:
           description: Статус прохождения курса
           enum:
-            - done
-            - process
-            - failed
+            - started
+            - started
             - expected
+            - finished
           readOnly: true
           default: expected
+      required:
+        - course
+        - start_date
 
     EventUpdate:
       description: Сущность обновления события
       additionalProperties: false
       type: object
       properties:
-        user:
-          type: integer
-          minimum: 1
-          readOnly: true
         course:
           type: integer
           minimum: 1
           readOnly: true
-        done_lessons:
-          type: integer
-          default: 0
         start_date:
           type: string
           format: date-time
-          readOnly: true
+          readOnly: false
           nullable: true
         end_date:
           type: string
           format: date-time
-          readOnly: false
+          description: Расчитывается исходя из интервала в курсе
+          readOnly: true
           nullable: true
-        favorite:
-          type: boolean
-          description: Флаг избранного
-          default: false
-          readOnly: false
         status:
           description: Статус прохождения курса
           enum:
-            - done
-            - process
-            - failed
+            - started
+            - started
             - expected
+            - finished
           readOnly: true
           default: expected
 
@@ -2405,40 +2985,26 @@ components:
       additionalProperties: false
       type: object
       properties:
-        user:
-          type: integer
-          minimum: 1
         course:
           type: object
-          readOnly: false
           minimum: 1
           $ref: "#/components/schemas/СourseView"
-        done_lessons:
-          type: integer
-          readOnly: true
-          default: 0
         start_date:
           type: string
           format: date-time
-          readOnly: false
           nullable: true
         end_date:
           type: string
           format: date-time
-          readOnly: false
+          readOnly: true
           nullable: true
-        favorite:
-          type: boolean
-          description: Флаг избранного
-          default: false
-          readOnly: false
         status:
           description: Статус прохождения курса
           enum:
-            - done
-            - process
-            - failed
+            - started
+            - started
             - expected
+            - finished
           readOnly: true
           default: expected
 
@@ -2447,42 +3013,29 @@ components:
       additionalProperties: false
       type: object
       properties:
-        user:
-          type: integer
-          minimum: 1
         course:
           type: object
-          readOnly: false
           minimum: 1
           $ref: "#/components/schemas/Сourse"
-        done_lessons:
-          type: integer
-          readOnly: true
-          default: 0
         start_date:
           type: string
           format: date-time
-          readOnly: false
           nullable: true
         end_date:
           type: string
           format: date-time
-          readOnly: false
+          readOnly: true
           nullable: true
-        favorite:
-          type: boolean
-          description: Флаг избранного
-          default: false
-          readOnly: false
         status:
           description: Статус прохождения курса
           enum:
-            - done
-            - process
-            - failed
+            - started
+            - started
             - expected
+            - finished
           readOnly: true
           default: expected
+
 
   securitySchemes:
     Token:

@@ -5,12 +5,18 @@
   gap: 40px;
   align-items: center;
 }
+
+.flex {
+  display: flex;
+  gap: 40px;
+}
 .action {
   width: 100%;
   height: fit-content;
   display: flex;
   flex-direction: column;
   gap: 25px;
+
   // @media screen and (max-width: 767px) {
   // }
   .inputTitle {
@@ -30,6 +36,7 @@
     padding: 10px 12px;
     border-bottom-width: 1px;
   }
+
   .selectStyle {
     border-bottom: 1px solid var(--color-additional-border100);
     font-family: var(--font-family-secondary);
@@ -40,6 +47,7 @@
     vertical-align: middle;
   }
 }
+
 .btn {
   width: 140px;
   height: 40px;
@@ -49,6 +57,7 @@
   font-size: var(--font-size-xs);
   line-height: 100%;
   letter-spacing: 0.25px;
+
   @media screen and (max-width: 1349px) {
     width: 132px;
     height: 36px;
@@ -56,27 +65,30 @@
     padding: 11px 14px;
   }
 }
+
 .content {
   width: 540px;
   height: fit-content;
   display: flex;
   flex-direction: column;
   align-items: center;
-  @media screen  and (max-width: 1349px) {
+
+  @media screen and (max-width: 1349px) {
     width: 100%;
   }
- 
+
   .txt {
     font-family: var(--font-family-secondary);
     font-weight: 300;
-    font-size:var(--font-size-xs);
+    font-size: var(--font-size-xs);
     line-height: 130%;
     letter-spacing: 0.25px;
     text-align: center;
     vertical-align: middle;
     color: var(--color-text-primary);
   }
+
   .span {
-    color: #6C757D;
+    color: #6c757d;
   }
 }

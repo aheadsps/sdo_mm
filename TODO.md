@@ -55,10 +55,15 @@ python manage.py test
 
 email: <admin@admin.com>
 
-password: 2101
+password: adminpassword
 
 ### User
 
 email: <y@mail.ru>
 
 password: 12345678
+
+
+email: <some@yandex.ru>
+
+password: someuser

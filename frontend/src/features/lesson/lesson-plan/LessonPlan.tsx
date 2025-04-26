@@ -1,4 +1,5 @@
 import { DropdownCard, Button } from '@shared/components'
+import { useToggle } from '@shared/hooks'
 import { useState } from 'react'
 
 import { SelectedStep } from '../LessonComponent'
@@ -13,6 +14,7 @@ type Props = {
 }
 export const LessonPlan = ({ setIsMaterialsButtonClicked, onClick }: Props) => {
   const [completedSteps, setCompletedSteps] = useState<number[]>([lessonStepsData[0].id])
+  const { isOpen, toggle } = useToggle()
 
   const onItemClick = (item: SelectedStep) => {
     onClick(item)
@@ -23,7 +25,13 @@ export const LessonPlan = ({ setIsMaterialsButtonClicked, onClick }: Props) => {
     setIsMaterialsButtonClicked(true)
   }
   return (
-    <DropdownCard title="План урока:" blocks="6 тем" className={s.drpdnContent}>
+    <DropdownCard
+      title="План урока:"
+      blocks="6 тем"
+      className={s.drpdnContent}
+      isOpen={isOpen}
+      toggle={toggle}
+    >
       <ul>
         {lessonStepsData?.map((item) => (
           <LessonPlanItem

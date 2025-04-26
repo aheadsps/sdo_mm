@@ -26,7 +26,7 @@ TEST_IMAGE_PATH = BASE_DIR.joinpath(*("lessons", "tests", "image.png"))
 TEST_IMAGE_PATH_2 = BASE_DIR.joinpath(*("lessons", "tests", "image2.png"))
 
 
-TEST_SCORM_PATH = BASE_DIR.joinpath(*("lessons", "scorm", "tests", "SCORM.zip"))
+TEST_SCORM_PATH = BASE_DIR.joinpath(*("lessons", "scorm", "tests", "SCORM_test.zip"))
 
 
 SCORM_MANIFEST_NAME = 'imsmanifest.xml'
@@ -79,6 +79,8 @@ PROJECT_APPS = [
 
 # Приложения из вне.
 THIRD_PARTY_APPS = [
+    "django_extensions",
+    "django_filters",
     "drf_yasg",
     "drf_spectacular",
     "rest_framework",
@@ -87,6 +89,7 @@ THIRD_PARTY_APPS = [
     "phonenumbers",
     "corsheaders",
     "channels",
+    "django_celery_beat",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + PROJECT_APPS + THIRD_PARTY_APPS
@@ -213,24 +216,57 @@ SPECTACULAR_SETTINGS = {
     "SERVE_INCLUDE_SCHEMA": False,
 }
 
+STATUS_COURSE = [
+    (
+        'run',
+        'Запущен',
+    ),
+    (
+        'end',
+        'Окончен',
+    ),
+    (
+        'archive',
+        'Архив',
+    ),
+    (
+        'edit',
+        'Черновик',
+    ),
+]
 
 STATUS_EVENTS = [
     (
+        "finished",
+        "Закончен",
+    ),
+    (
+        "started",
+        "Начат",
+    ),
+    (
+        "expected",
+        "Ожидает начало",
+    ),
+]
+
+STATUS_COVERED = [
+    (
         "done",
         "Успешно",
+    ),
+    (
+        "failed",
+        "Проваленно",
     ),
     (
         "process",
         "В процессе",
     ),
     (
-        "failed",
-        "Провалено",
-    ),
-    (
         "expected",
-        "Ожидает начало",
-    ),
+        "Ожидает",
+    )
 ]
 
 VERSIONS_SCORM = [
@@ -264,6 +300,24 @@ VERSIONS_SCORM = [
     ),
 ]
 
+TYPE_LESSON = [
+    (
+        "free",
+        "свободный",
+    ),
+    (
+        "linearly ",
+        "линейный",
+    )
+]
+
+EVENT_SWITCH_STATUS = 'lessons.tasks.event_switch_status'
+LESSON_SWITCH_STATUS = 'lessons.tasks.lesson_switch_status'
+TESTBLOCK_SWITCH_STATUS = 'lessons.tasks.test_block_process'
+SEND_MAIL_TASK = 'lessons.tasks.send_mail_users'
+
+SUBJECT_PATH = 'lessons/subject.txt'
+
 EMAIL_FROM = os.getenv("DEFAULT_EMAIL_FROM")
 EMAIL_BCC = os.getenv("DEFAULT_EMAIL_BCC")
 
@@ -281,11 +335,33 @@ EMAIL_USE_SSL = False
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:8000",
     "http://localhost:5173",
+    "https://edu.sdo-metro.ru",
 ]
 
 CHANNELS_ALLOWED_WS_ORIGINS = [
     "http://localhost:8000",
     "http://localhost:5173",
+    "https://edu.sdo-metro.ru",
     "ws://localhost:8000",
     "ws://localhost:5173",
+    "ws://edu.sdo-metro.ru"
 ]
+
+# RABBIT
+RABBITMQ_DEFAULT_USER = os.getenv("RABBITMQ_DEFAULT_USER")
+RABBITMQ_DEFAULT_PASS = os.getenv("RABBITMQ_DEFAULT_PASS")
+RMQ_HOST = os.getenv("RMQ_HOST")
+RMQ_PORT = os.getenv("RMQ_PORT")
+
+# CELERY
+CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
+CELERY_RESULT_EXTENDED = True
+CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
+
+CELERY_BROKER_URL = f'amqp://{RABBITMQ_DEFAULT_USER}:{RABBITMQ_DEFAULT_PASS}@{RMQ_HOST}:{RMQ_PORT}//'
+
+CELERY_RESULT_EXTENDED = True
+CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
+CELERY_ENABLE_UTC = False
+
+CELERY_EXPIRE_SECONDS = (((60 * 60) * 24) * 365)

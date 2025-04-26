@@ -1,4 +1,5 @@
-import { selectCurrentEvents } from '@services/slices/events'
+import { selectUserCovers } from '@services/slices'
+// import { selectCurrentCovers } from '@services/slices'
 import { useAppSelector } from '@services/store'
 import { Typography, Task } from '@shared/components'
 import { getDaysLeft } from '@shared/utils'
@@ -6,7 +7,9 @@ import { getDaysLeft } from '@shared/utils'
 import s from '../main.module.scss'
 
 export const CurrentTasks = () => {
-  const currentEvents = useAppSelector(selectCurrentEvents)
+  // const currentEvents = useAppSelector(selectCurrentCovers)
+  const currentEvents = useAppSelector(selectUserCovers)
+  // console.log(currentEvents)
   return (
     <div>
       <Typography variant="header_4" className={s.title}>
@@ -15,8 +18,12 @@ export const CurrentTasks = () => {
 
       {currentEvents?.length ? (
         currentEvents.map((result) => (
-          <Task key={result.id} daysLeft={getDaysLeft(result.end_date)}>
-            {result.course.name}
+          <Task
+            key={result.event.course.id}
+            daysLeft={getDaysLeft(result.event.end_date)}
+            courseId={result.event.course.id}
+          >
+            {result.event.course.name}
           </Task>
         ))
       ) : (

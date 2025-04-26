@@ -1,14 +1,28 @@
 import { EditIcon } from '@assets/icons'
-import { Typography, Button, Input, Tabs, Textarea, type Tab } from '@shared/components'
+import { routes } from '@routes/routes'
+import { useGetCourseQuery } from '@services/api'
+import { selectCourse, setCourseById } from '@services/slices'
+import { setCurrentLessons } from '@services/slices/constructor/constructorSlice'
+import { useAppDispatch, useAppSelector } from '@services/store'
+import {
+  Button,
+  Tabs,
+  type Tab,
+  Modal,
+  Loader,
+  AddMaterials,
+  EditableText,
+  BackToPage,
+} from '@shared/components'
 import { withLayout } from '@shared/HOC'
-import { useScreenWidth } from '@shared/hooks'
-import { useState } from 'react'
+import { useToggle } from '@shared/hooks'
+import { useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom'
 
-import { StudentsList } from '../course/studentsList'
-
-import { AboutCourse } from './aboutCourse'
-import { AssignmentsGrades } from './assignments-grades'
-import { Program } from './program/Program'
+import { AboutCourse } from './tabs/aboutCourse'
+import { AssignmentsGrades } from './tabs/assignments-grades'
+import { Program } from './tabs/program/Program'
+import { StudentsList } from './tabs/studentsList'
 import s from './training-course.module.scss'
 
 const tabsData: Tab[] = [
@@ -31,10 +45,28 @@ const tabsData: Tab[] = [
 ]
 
 const Course = () => {
+  const dispatch = useAppDispatch()
+  const { id } = useParams()
+
+  const { data: course, isLoading } = useGetCourseQuery(Number(id))
+
+  useEffect(() => {
+    if (course) {
+      dispatch(setCourseById(course))
+      dispatch(setCurrentLessons({ lessons: course.lessons, id: course.id }))
+    }
+
+    if (course?.name) {
+      setTitle(course.name)
+    }
+  }, [dispatch, course])
+
+  const currentCourse = useAppSelector(selectCourse)
+
   const [isEditMode, setIsEditMode] = useState(false)
-  const initialValue = 'Безопасность при работе с электроинструментом'
-  const [title, setTitle] = useState(initialValue)
-  const { isTablet } = useScreenWidth()
+  const [title, setTitle] = useState(currentCourse.name)
+
+  const { isOpen: isModalOpen, close: closeModal, open: openModal } = useToggle()
 
   const toggleEditClick = () => {
     setIsEditMode(!isEditMode)
@@ -42,26 +74,31 @@ const Course = () => {
 
   return (
     <>
-      <div className={s.titleBlock}>
-        <div className={s.title}>
-          <EditIcon width={'15px'} height={'15px'} onClick={toggleEditClick} />
-          {isEditMode ? (
-            isTablet ? (
-              <Textarea value={title} onChange={(e) => setTitle(e.currentTarget.value)} />
-            ) : (
-              <Input value={title} onChange={(e) => setTitle(e.currentTarget.value)} />
-            )
-          ) : (
-            <Typography variant="header_2">
-              Безопасность при работе с электроинструментом
-            </Typography>
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <>
+          <BackToPage to={routes.trainingCenter}>Вернуться к списку курсов</BackToPage>
+          <div className={s.titleBlock}>
+            <div className={s.title}>
+              <EditIcon width={'15px'} height={'15px'} onClick={toggleEditClick} />
+              <EditableText isEditMode={isEditMode} title={title} setTitle={setTitle} />
+            </div>
+            <Button onClick={openModal}>Добавить материал</Button>
+          </div>
+          <div className={s.container}>
+            <Tabs tabs={tabsData} variant="secondary" className={s.tabs} />
+          </div>
+          {isModalOpen && (
+            <Modal
+              close={closeModal}
+              title="Добавить материалы"
+              children={<AddMaterials />}
+              titleStyle="header_2"
+            />
           )}
-        </div>
-        <Button>Добавить материал</Button>
-      </div>
-      <div className={s.container}>
-        <Tabs tabs={tabsData} variant="secondary" className={s.tabs} />
-      </div>
+        </>
+      )}
     </>
   )
 }

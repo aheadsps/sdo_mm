@@ -20,6 +20,7 @@ export const UserInfo = () => {
 
   useEffect(() => {
     if (profile) {
+      localStorage.setItem('role', JSON.stringify(profile.profession))
       dispatch(setUser(profile))
     }
   }, [dispatch, profile])
@@ -27,6 +28,7 @@ export const UserInfo = () => {
   const onLogout = async () => {
     await logout().unwrap()
     dispatch(clearUser())
+    localStorage.removeItem('role')
     navigate(routes.auth, { replace: true })
   }
 
