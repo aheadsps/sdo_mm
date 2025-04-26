@@ -1,4 +1,4 @@
-.button {
+/* .button {
   padding: 13px 18px;
   border-radius: 8px;
   color: var(--color-text-primary);
@@ -7,14 +7,35 @@
 
   &:hover {
     cursor: pointer;
+    text-decoration: none;
   }
 
   &:disabled {
     color: var(--color-text-disabled);
   }
+} */
+
+.button {
+  padding: 13px 18px;
+  border-radius: 8px;
+  color: var(--color-text-primary);
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+
+  &:hover,
+  &:focus,
+  &:visited {
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  &:disabled {
+    color: var(--color-text-disabled);
+    pointer-events: none;
+  }
 }
 
-/* styles for disabled button/link */
 .buttonsSpan {
   display: flex;
   justify-content: center;
@@ -29,6 +50,7 @@
 
   &:hover {
     background-color: var(--color-bg-red700);
+    color: var(--color-text-button);
   }
 
   &:focus {
@@ -48,6 +70,7 @@
 
   &:hover {
     border-color: var(--color-bg-red700);
+    color: var(--color-text-primary);
   }
 
   &:focus {
@@ -61,9 +84,7 @@
     border: none;
   }
 }
-// .borderNone {
-//   border: none;
-// }
+
 .text {
   border: none;
 
