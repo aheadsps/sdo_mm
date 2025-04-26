@@ -1,7 +1,7 @@
-import { ArrowRightIcon, CalendarIcon } from '@assets/icons'
+import { ArrowRightIcon } from '@assets/icons'
 import { LessonType, Scorm, StepView } from '@services/api'
-import { Button, InputWithIcon, type Option, Select } from '@shared/components'
-import { useToggle } from '@shared/hooks'
+import { Button, type Option, Select } from '@shared/components'
+import { DatePickerCustom } from '@shared/components/datePicker/DatePickerCustom'
 import clsx from 'clsx'
 import { NavLink } from 'react-router-dom'
 
@@ -29,7 +29,6 @@ export const LessonContent = <T extends LessonType | StepView | Scorm>({
   onClick,
   isStep = false,
 }: Props<T>) => {
-  const { isOpen, toggle } = useToggle()
   const displayName = getDisplayName(lesson)
 
   return (
@@ -54,16 +53,7 @@ export const LessonContent = <T extends LessonType | StepView | Scorm>({
         </>
       ) : (
         <>
-          <InputWithIcon
-            className={s.formInput}
-            placeholder={'Введите дату урока'}
-            content={'Здесь будет календарь'}
-            onClick={toggle}
-            icon={<CalendarIcon />}
-            isOpen={isOpen}
-          >
-            Здесь будет календарь
-          </InputWithIcon>
+          <DatePickerCustom className={s.formInput} placeholder={'Введите дату урока'} />
           <Select className={s.format} placeholder={'Формат'} options={options} />
         </>
       )}

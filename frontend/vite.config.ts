@@ -23,4 +23,7 @@ export default defineConfig({
     allowedHosts: ['edu.sdo-metro.ru, sdo-metro.ru'],
     host: true,
   },
+  optimizeDeps: {
+    include: ['rsuite'],
+  },
 })

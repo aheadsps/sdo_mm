@@ -1,9 +1,8 @@
-import { CalendarIcon, EditIcon } from '@assets/icons'
+import { EditIcon } from '@assets/icons'
 import { selectCourse } from '@services/slices'
 import { useAppSelector } from '@services/store'
-import { Button, EditableText, InputWithIcon, Select, Typography } from '@shared/components'
-import { useToggle } from '@shared/hooks'
-import { formatDate } from '@shared/utils'
+import { Button, EditableText, Select, Typography } from '@shared/components'
+import { DatePickerCustom } from '@shared/components/datePicker/DatePickerCustom'
 import { useState } from 'react'
 import { NavLink } from 'react-router-dom'
 
@@ -28,41 +27,28 @@ const teachers: Option[] = [
 ]
 
 export const AboutCourse = () => {
-  const { isOpen: isOpenStart, toggle: toggleStart } = useToggle()
-  const { isOpen: isOpenEnd, toggle: toggleEnd } = useToggle()
-
   const currentCourse = useAppSelector(selectCourse)
   const [description, setDescription] = useState(currentCourse.description)
   const [isEditMode, setIsEditMode] = useState(false)
-
+  const [date, setDate] = useState<Date | null>(new Date(currentCourse.create_date))
   const toggleEditMode = () => setIsEditMode((prev) => !prev)
 
   return (
     <div className={s.container}>
       <div className={s.leftBlock}>
         <h3 className={s.title}>Основная информация</h3>
-        <InputWithIcon
-          children={'Здесь будет календарь'}
+
+        <DatePickerCustom
+          placeholder={'Дата создания'}
           className={s.select}
-          placeholder={formatDate(currentCourse.create_date) ?? 'Дата начала'}
-          isOpen={isOpenStart}
-          icon={<CalendarIcon />}
-          onClick={toggleStart}
-          // type="date"
+          value={date}
+          onChange={(newDate) => setDate(newDate)}
         />
-        <InputWithIcon
-          className={s.select}
-          placeholder="Дата окончания"
-          children={'Здесь будет календарь'}
-          onClick={toggleEnd}
-          icon={<CalendarIcon />}
-          isOpen={isOpenEnd}
-          // type="date"
-        />
-        <h6 className={s.subtitle}>
-          <p className={s.sutitleLeft}>Количество студентов:</p>
-          <p className={s.sutitleRight}> {Math.floor(Math.random() * 1500) + 1}</p>
-        </h6>
+        <DatePickerCustom placeholder={'Дата окончания'} className={s.select} />
+        <div className={s.subtitle}>
+          <span className={s.sutitleLeft}>Количество студентов:</span>
+          <span className={s.sutitleRight}>456</span>
+        </div>
         <Select options={courseStatuses} placeholder="Статус курса" className={s.select} />
         <Select options={teachers} placeholder="Преподаватель" className={s.select} />
       </div>
