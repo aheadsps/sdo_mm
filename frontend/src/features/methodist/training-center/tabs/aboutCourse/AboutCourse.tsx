@@ -30,7 +30,7 @@ export const AboutCourse = () => {
   const currentCourse = useAppSelector(selectCourse)
   const [description, setDescription] = useState(currentCourse.description)
   const [isEditMode, setIsEditMode] = useState(false)
-
+  const [date, setDate] = useState<Date | null>(new Date(currentCourse.create_date))
   const toggleEditMode = () => setIsEditMode((prev) => !prev)
 
   return (
@@ -38,12 +38,17 @@ export const AboutCourse = () => {
       <div className={s.leftBlock}>
         <h3 className={s.title}>Основная информация</h3>
 
-        <DatePickerCustom placeholder={'Дата создания'} className={s.select} />
+        <DatePickerCustom
+          placeholder={'Дата создания'}
+          className={s.select}
+          value={date}
+          onChange={(newDate) => setDate(newDate)}
+        />
         <DatePickerCustom placeholder={'Дата окончания'} className={s.select} />
-        <h6 className={s.subtitle}>
-          <p className={s.sutitleLeft}>Количество студентов:</p>
-          <p className={s.sutitleRight}>456</p>
-        </h6>
+        <div className={s.subtitle}>
+          <span className={s.sutitleLeft}>Количество студентов:</span>
+          <span className={s.sutitleRight}>456</span>
+        </div>
         <Select options={courseStatuses} placeholder="Статус курса" className={s.select} />
         <Select options={teachers} placeholder="Преподаватель" className={s.select} />
       </div>

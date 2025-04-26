@@ -10,12 +10,18 @@ interface DatePickerCustomProps {
   placeholder: string
   appearance?: 'default' | 'subtle'
   className?: string
+  value?: Date | null
+  onChange?: (date: Date | null) => void
+  format?: string
+  disabled?: boolean
 }
 
 export const DatePickerCustom: React.FC<DatePickerCustomProps> = ({
   placeholder,
   appearance = 'subtle',
   className,
+  value,
+  onChange,
   ...rest
 }) => {
   return (
@@ -25,6 +31,8 @@ export const DatePickerCustom: React.FC<DatePickerCustomProps> = ({
         placeholder={placeholder}
         appearance={appearance}
         caretAs={CalendarIcon}
+        value={value}
+        onChange={onChange}
         {...rest}
       />
     </CustomProvider>
