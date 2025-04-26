@@ -15,7 +15,9 @@ export const CourseMaterialItem = ({ title, fileExtension, children, className }
     <div className={clsx(s.item, className)}>
       <Typography variant="caption">{title}</Typography>
       {children}
-      <Button variant="secondary">Скачать {fileExtension}</Button>
+      <Button variant="secondary" disabled isIcon>
+        Скачать {fileExtension}
+      </Button>
     </div>
   )
 }
