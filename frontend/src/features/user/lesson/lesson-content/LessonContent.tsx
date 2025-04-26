@@ -43,7 +43,9 @@ export const LessonContent = ({ onClick, selectedStep }: Props) => {
           Выйти из урока
         </Button>
 
-        <Button variant="primary">Перейти к следующей теме</Button>
+        <Button variant="primary" disabled={true} isIcon>
+          Перейти к следующей теме
+        </Button>
       </div>
     </div>
   )

@@ -57,8 +57,13 @@
   &:disabled {
     border-color: var(--color-bg-gray200);
   }
+  .borderNone {
+    border: none;
+  }
 }
-
+// .borderNone {
+//   border: none;
+// }
 .text {
   border: none;
 

@@ -9,8 +9,8 @@ import { CourseDropdown } from './CourseDropDown'
 export const CourseContent = () => {
   const { id } = useParams()
   const course: Course = useAppSelector(selectCourse)
-
-  return course.is_scorm === true
+  const isScorm = course.is_scorm
+  return isScorm === true
     ? course.lessons.map((lesson) => <Scorm course={course} key={lesson.id} />)
     : course.lessons.map((lesson) => <CourseDropdown lesson={lesson} id={id} key={lesson.id} />)
 }

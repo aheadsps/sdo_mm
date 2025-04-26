@@ -16,8 +16,11 @@
     display: flex;
     gap: 14px;
     z-index: 5;
+    align-items: center;
   }
-
+  .ai {
+    cursor: pointer;
+  }
   &__content {
     width: 997px;
     height: 675px;

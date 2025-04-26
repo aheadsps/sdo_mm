@@ -49,7 +49,7 @@ const Training = () => {
 
   return (
     <div className={s.container}>
-      <Title txt={txt} btn1={btn1} btn2={btn2} fstBtn={openModal} scndBtn={onCreateCourse} />
+      <Title txt={txt} btn1={btn1} btn2={btn2} fstBtn={openModal} scndBtn={onCreateCourse} border />
       <Filters />
       <div className={s.cardsBlock}>
         {isLoading ? (
