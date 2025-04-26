@@ -48,17 +48,19 @@ const StudentAssignment = () => {
 
   const onAddNewComment = () => {
     const text = studentComment || internalComment
-    const newComment: CommentData = {
-      id: Date.now(),
-      text,
-      isInternal: studentComment ? false : true,
-    }
-    setAllComments((prev) => [...prev, newComment])
-    if (studentComment) {
-      setStudentComment('')
-    } else {
-      setInternalComment('')
-      setShowPlaceholder(true)
+    if (text) {
+      const newComment: CommentData = {
+        id: Date.now(),
+        text,
+        isInternal: studentComment ? false : true,
+      }
+      setAllComments((prev) => [...prev, newComment])
+      if (studentComment) {
+        setStudentComment('')
+      } else {
+        setInternalComment('')
+        setShowPlaceholder(true)
+      }
     }
   }
 
@@ -143,7 +145,7 @@ const StudentAssignment = () => {
                   </CommentContent>
                 ))
               ) : (
-                <Typography variant="body_1">Зжесь пока нет комментариев</Typography>
+                <Typography variant="body_1">Здесь пока нет комментариев</Typography>
               )}
             </DropdownCard>
           </div>

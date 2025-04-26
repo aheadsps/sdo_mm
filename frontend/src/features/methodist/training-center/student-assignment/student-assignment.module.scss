@@ -171,11 +171,9 @@
 .showPlaceholder {
   position: absolute;
   top: 50%;
-  left: 12px;
   transform: translateY(-50%);
   color: var(--color-text-secondary);
   z-index: 1;
   display: flex;
-  gap: 4px;
-  align-items: center;
+  gap: 5px;
 }
