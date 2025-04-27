@@ -5,7 +5,7 @@ import { clearUser, setUser } from '@services/slices'
 import { useAppDispatch } from '@services/store'
 import { Loader } from '@shared/components'
 import { handleError } from '@shared/utils'
-import { useEffect } from 'react'
+import { useCallback, useEffect } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 
 import { Typography } from '../../typography'
@@ -17,21 +17,28 @@ export const UserInfo = () => {
 
   const { data: profile, isLoading: isProfileLoading, error: profileError } = useGetProfileQuery()
   const dispatch = useAppDispatch()
+  const navigate = useNavigate()
+
+  const navigateToAuth = useCallback(() => {
+    localStorage.removeItem('role')
+    dispatch(clearUser())
+    navigate(routes.auth, { replace: true })
+  }, [dispatch, navigate])
 
   useEffect(() => {
     if (profile) {
       localStorage.setItem('role', JSON.stringify(profile.profession))
       dispatch(setUser(profile))
     }
-  }, [dispatch, profile])
 
-  const navigate = useNavigate()
+    if (profileError && 'status' in profileError && profileError.status === 401) {
+      navigateToAuth()
+    }
+  }, [dispatch, profile, profileError, navigateToAuth])
 
   const onLogout = async () => {
     await logout().unwrap()
-    dispatch(clearUser())
-    localStorage.removeItem('role')
-    navigate(routes.auth, { replace: true })
+    navigateToAuth()
   }
 
   if (isProfileLoading) {

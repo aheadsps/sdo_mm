@@ -40,8 +40,6 @@ const LessonComponent = () => {
   const [selectedStep, setSelectedStep] = useState(lesson?.steps[0])
 
   const txt = lesson?.name
-  /*   const btn1 = <AiIcon />
-  const btn2 = 'Обсуждение урока' */
   const navigate = useNavigate()
 
   const handleNavigate = async () => {
