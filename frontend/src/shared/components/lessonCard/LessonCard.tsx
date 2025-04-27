@@ -23,8 +23,7 @@ export const LessonCard: React.FC<Props> = ({ cover }: Props) => {
   const course = cover.event.course
   const daysLeft = course.beginner === true ? undefined : getDaysLeft(cover.event.end_date)
   const deadlineColor = getBackgroundColor(daysLeft)
-  // const dispatch = useAppDispatch()
-  // const hendleClick = () => {}
+
   return (
     <div className={s.container}>
       <div className={s.container__top}>

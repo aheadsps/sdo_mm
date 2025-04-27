@@ -36,7 +36,7 @@ export const Scorm = ({ lesson }: Props) => {
       <Typography variant="header_3" children={lesson.name} />
       <img className={s.scorms} src={course.image} />
       <AiComponent isOpen={isOffcanvasOpen} close={closeOffcanvas} />
-      {lesson.test_block.questions.length === 0 ? '' : <LessonTest />}
+      <LessonTest />
     </div>
   )
 }
