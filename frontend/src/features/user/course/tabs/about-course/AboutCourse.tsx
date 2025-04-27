@@ -3,6 +3,7 @@ import { selectCourse } from '@services/slices'
 import { useAppSelector } from '@services/store'
 import { Card, Typography, ProgressBar } from '@shared/components'
 import { useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
 
 import { LessonItemCard } from '../../lesson-item-card'
 
@@ -12,6 +13,15 @@ export const AboutCourse = () => {
   const course = useAppSelector(selectCourse)
   const lessons = Number(course.lessons.length)
   const [isFav, setIsFav] = useState<boolean>(false)
+  const { id } = useParams()
+  const navigate = useNavigate()
+  const isScorm = course.is_scorm
+
+  const hendleClick = async (id: number, lessonId: number, isScorm: boolean) => {
+    if (isScorm === true) return
+    else await navigate(`/learning/course/${id}/lesson/${lessonId}`)
+  }
+
   // console.log(course)
   return (
     <div className={s.container}>
@@ -41,7 +51,13 @@ export const AboutCourse = () => {
         </Typography>
         <div className={s.lessonItems}>
           {course.lessons.map((lesson) => {
-            return <LessonItemCard key={lesson.id} lesson={lesson} />
+            return (
+              <LessonItemCard
+                key={lesson.id}
+                lesson={lesson}
+                onClick={() => hendleClick(Number(id), Number(lesson.id), isScorm)}
+              />
+            )
           })}
         </div>
       </Card>
