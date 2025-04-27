@@ -1,6 +1,6 @@
 import SettingsIcon from '@assets/icons/SettingsIcon'
 import { BlockDropdown } from '@features/methodist/constructor/block-dropdown/BlockDropdown'
-import { useGetLessonQuery } from '@services/api'
+import { LessonType, useGetLessonQuery } from '@services/api'
 import { NewItem } from '@services/slices/constructor/constructor.types'
 import {
   addNewBlockItem,
@@ -30,6 +30,10 @@ export const ConstructorPage: React.FC = () => {
     if (lesson) {
       dispatch(setCurrentLesson(lesson))
       dispatch(setCurrentSteps(lesson.steps))
+    } else {
+      /* temporary, for creating a new course while there are no requests to the server*/
+      dispatch(setCurrentLesson({} as LessonType))
+      dispatch(setCurrentSteps([]))
     }
   }, [dispatch, lesson])
 
@@ -88,7 +92,7 @@ export const ConstructorPage: React.FC = () => {
               lessonId={Number(id)}
             />
             <main className={s.main}>
-              {steps.map((item) => (
+              {steps?.map((item) => (
                 <BlockDropdown
                   key={item.id}
                   blockId={item.id}
