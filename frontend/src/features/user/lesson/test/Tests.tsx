@@ -32,10 +32,11 @@ export const LessonTest = () => {
           return <PictureCard key={card.id} title={card.title} answers={card.answers} />
         })}
       </div>
-
       <div className={s.buttons}>
         <Button variant="primary">Выйти из урока</Button>
-        <Button variant="secondary">Перейти к следующей теме</Button>
+        <Button variant="secondary" disabled={true} isIcon>
+          Перейти к следующей теме
+        </Button>
       </div>
     </div>
   )

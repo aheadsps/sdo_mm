@@ -225,7 +225,7 @@ export type Lesson = {
   started: boolean
   steps: StepView[]
   teacher: number
-  test_block: number
+  test_block: Test
   version: string
 } & {
   expanded: boolean

@@ -14,7 +14,6 @@ type Props = {
 } & ComponentPropsWithoutRef<'div'>
 
 export const LessonItemCard = ({ children, lesson, onClick }: Props) => {
-  // console.log(lesson)
   return (
     <div className={s.lessonItemCard} onClick={onClick}>
       <LessonItemTitle title={lesson.name} blocks={`${lesson.serial} блок`}>

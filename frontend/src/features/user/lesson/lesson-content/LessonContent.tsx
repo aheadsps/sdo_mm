@@ -29,9 +29,6 @@ export const LessonContent = ({ onClick, selectedStep }: Props) => {
         if (file.file_type === 'Image') return <img key={file.id} src={file.file} />
         if (file.file_type === 'video') return <video key={file.id}></video>
       })}
-      {/* <div className={s.videoBox}>
-        <YouTubeLogo />
-      </div> */}
       <div className={s.hint}>
         <p className={s.hintTxt}>
           Чтобы в экстренной ситуации не растеряться - тренируйся в спокойной обстановке на

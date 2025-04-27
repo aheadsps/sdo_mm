@@ -12,7 +12,6 @@ import { Typography } from '../typography'
 
 import s from './scorms.module.scss'
 type Props = {
-  // course: Course
   lesson: Lesson
 }
 export const Scorm = ({ lesson }: Props) => {
@@ -21,9 +20,7 @@ export const Scorm = ({ lesson }: Props) => {
   const txt = lesson.name
   const btn1 = <AiIcon />
   const btn2 = 'Обсуждение урока'
-  // const [data: tests ] = useGetTestsQuery(course.lessons[0].test_block)
-  // console.log(tests)
-  console.log(lesson.test_block)
+
   return (
     <div className={s.scormBox}>
       <BackToPage>Вернуться на общую страницу курса</BackToPage>
@@ -37,15 +34,9 @@ export const Scorm = ({ lesson }: Props) => {
         isIconAi={false}
       />
       <Typography variant="header_3" children={lesson.name} />
-      {/* {course?.lessons.map((lesson, index) => {
-        return (
-          <> */}
       <img className={s.scorms} src={course.image} />
       <AiComponent isOpen={isOffcanvasOpen} close={closeOffcanvas} />
-      <LessonTest />
-      {/* </>
-        )
-      })} */}
+      {lesson.test_block.questions.length === 0 ? '' : <LessonTest />}
     </div>
   )
 }
