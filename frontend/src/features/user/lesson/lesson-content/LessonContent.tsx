@@ -16,9 +16,9 @@ export const LessonContent = ({ onClick, selectedStep }: Props) => {
           <Typography variant="header_3" className={s.titleLesson}>
             {selectedStep.title}
           </Typography>
-          <Typography variant="header_6" className={s.countLessons}>
-            {/* {selectedStep.id}/6 */}
-          </Typography>
+          {/*           <Typography variant="header_6" className={s.countLessons}>
+            {selectedStep.id}/6
+          </Typography> */}
         </div>
         <Typography variant="body_2" className={s.lessonDesc}>
           {selectedStep.content_text}
