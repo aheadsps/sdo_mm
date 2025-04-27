@@ -2,7 +2,7 @@ import { AiIcon } from '@assets/icons'
 import { StepView, useLazyGetLessonByIdQuery } from '@services/api'
 import { selectLessonById, setLessonById } from '@services/slices'
 import { useAppDispatch, useAppSelector } from '@services/store'
-import { AiComponent, Typography, Button, Title, Loader, BackToPage } from '@shared/components'
+import { AiComponent, Button, Title, Loader, BackToPage, Scorm } from '@shared/components'
 import { withLayout } from '@shared/HOC'
 import { useToggle } from '@shared/hooks/useToggle'
 import { handleError } from '@shared/utils'
@@ -19,6 +19,7 @@ import { LessonTest } from './test/Tests'
 const LessonComponent = () => {
   const { isOpen: isOffcanvasOpen, close: closeOffcanvas, toggle: toggleOffCanvas } = useToggle()
   const [isMaterialsButtonClicked, setIsMaterialsButtonClicked] = useState(false)
+  const [isTest, setIsTest] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const { id, lessonId } = useParams()
   const dispatch = useAppDispatch()
@@ -37,7 +38,6 @@ const LessonComponent = () => {
 
   const lesson = useAppSelector(selectLessonById)
   const [selectedStep, setSelectedStep] = useState(lesson?.steps[0])
-  console.log(lesson)
 
   const txt = lesson?.name
   const btn1 = <AiIcon />
@@ -55,14 +55,22 @@ const LessonComponent = () => {
       setIsMaterialsButtonClicked(false)
     }
   }
+  const hendleVisibleTests = (arg: boolean) => {
+    setIsTest(arg)
+  }
   useEffect(() => {
     if (lesson) setSelectedStep(lesson?.steps[0])
   }, [lesson])
+
+  console.log(lesson)
+
   return isLoading ? (
     <Loader />
   ) : (
     <>
-      {lesson?.steps.length !== undefined && (
+      {lesson?.steps.length === 0 && <Scorm lesson={lesson} />}
+
+      {lesson?.steps.length !== undefined && lesson?.steps.length !== 0 && (
         <>
           <div className={s.container}>
             <BackToPage>Вернуться на общую страницу курса</BackToPage>
@@ -75,14 +83,14 @@ const LessonComponent = () => {
               disabledAi={false}
               isIconAi={false}
             />
-            <Typography variant="body_2" className={s.desc}></Typography>
-
             <div className={s.content}>
               <div className={s.leftBox}>
                 <LessonPlan
                   steps={lesson.steps}
+                  tests={lesson.test_block}
                   setIsMaterialsButtonClicked={setIsMaterialsButtonClicked}
                   onClick={onItemClick}
+                  onTestClick={hendleVisibleTests}
                 />
               </div>
               {isMaterialsButtonClicked ? (
@@ -93,12 +101,17 @@ const LessonComponent = () => {
                   <CourseMaterials />
                 </div>
               ) : (
-                <LessonContent onClick={handleNavigate} selectedStep={selectedStep} />
+                <>
+                  {isTest ? (
+                    <LessonTest />
+                  ) : (
+                    <LessonContent onClick={handleNavigate} selectedStep={selectedStep} />
+                  )}
+                </>
               )}
             </div>
             <AiComponent isOpen={isOffcanvasOpen} close={closeOffcanvas} />
           </div>
-          <LessonTest />
         </>
       )}
     </>

@@ -1,3 +1,4 @@
+import { CoverCurrent } from '@services/api'
 import { selectUserCovers } from '@services/slices'
 import { useAppSelector } from '@services/store'
 import { Typography, Task } from '@shared/components'
@@ -7,7 +8,12 @@ import s from '../main.module.scss'
 
 export const CurrentTasks = () => {
   const currentEvents = useAppSelector(selectUserCovers)
-  // console.log(currentEvents)
+  console.log(currentEvents)
+  const calcDaysLeft = (item: CoverCurrent) => {
+    const daysLeft = item.event.end_date
+    if (daysLeft === null || undefined) return undefined
+    else return getDaysLeft(daysLeft)
+  }
   return (
     <div>
       <Typography variant="header_4" className={s.title}>
@@ -15,15 +21,19 @@ export const CurrentTasks = () => {
       </Typography>
 
       {currentEvents?.length ? (
-        currentEvents.map((result) => (
-          <Task
-            key={result.event.course.id}
-            daysLeft={getDaysLeft(result.event.end_date)}
-            courseId={result.event.course.id}
-          >
-            {result.event.course.name}
-          </Task>
-        ))
+        currentEvents.map((result) => {
+          const daysLeft = getDaysLeft(result.event.end_date)
+          console.log(daysLeft)
+          return (
+            <Task
+              key={result.event.course.id}
+              daysLeft={calcDaysLeft(result)}
+              courseId={result.event.course.id}
+            >
+              {result.event.course.name}
+            </Task>
+          )
+        })
       ) : (
         <Typography variant="body_1" className={s.noTasksText}>
           Пока у вас нет актуальных задач. Как только появятся, они отобразятся здесь.

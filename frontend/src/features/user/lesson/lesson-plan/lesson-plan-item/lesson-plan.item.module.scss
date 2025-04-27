@@ -4,8 +4,6 @@
   display: flex;
   padding: 8px 12px 8px 0;
   align-items: center;
-
-  // padding-left: 0;
 }
 
 .checkboxContainer {
@@ -16,15 +14,12 @@
 }
 
 .checkbox {
-  // all: unset;
   appearance: none;
   width: 18px;
   height: 18px;
   cursor: pointer;
   background-color: var(--color-additional-border100);
 
-  // &:active,
-  // &:focus,
   &:checked {
     background-color: var(--color-accent-red500);
     border-color: var(--color-accent-red500);

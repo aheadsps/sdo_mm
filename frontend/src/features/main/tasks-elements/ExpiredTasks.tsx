@@ -7,7 +7,6 @@ import s from '../main.module.scss'
 
 export const ExpiredTasks = () => {
   const failedEvents = useAppSelector(selectExpiredCovers)
-  // console.log(failedEvents)
   return (
     <div className={s.expiredTasks}>
       <Typography variant="header_4" className={s.title}>

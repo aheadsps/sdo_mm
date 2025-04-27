@@ -10,11 +10,13 @@ export const Materials = () => {
   console.log(course.materials)
   return (
     <div className={s.courseMaterials}>
-      {isScorm
-        ? 'Дополнительные материалы не предусмотрены в данном курсе'
-        : course.lessons.map((lesson) => {
-            return <MaterialsDropdown key={lesson.id} lesson={lesson} />
-          })}
+      {isScorm ? (
+        <p className={s.message}>Дополнительные материалы не предусмотрены в данном курсе</p>
+      ) : (
+        course.lessons.map((lesson) => {
+          return <MaterialsDropdown key={lesson.id} lesson={lesson} />
+        })
+      )}
     </div>
   )
 }

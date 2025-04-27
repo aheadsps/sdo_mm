@@ -4,7 +4,13 @@
   justify-content: center;
   gap: 30px;
 }
-
+.message {
+  padding-left: 20px;
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-m);
+  font-size: var(--font-size-h6);
+  font-family: var(--font-family-secondary);
+}
 .materialsButton {
   margin-bottom: 30px;
   margin-left: auto;
