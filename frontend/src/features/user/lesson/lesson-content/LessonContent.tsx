@@ -9,7 +9,6 @@ type Props = {
 }
 
 export const LessonContent = ({ onClick, selectedStep }: Props) => {
-  console.log(selectedStep)
   return (
     <div className={s.rightBox}>
       <div className={s.rightTop}>

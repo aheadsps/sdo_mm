@@ -20,7 +20,7 @@ export const LessonItemCard = ({ children, lesson, onClick }: Props) => {
         <ArrowUpRightIcon className={s.icon} />
       </LessonItemTitle>
       <Typography variant="caption" className={s.lessonProgress}>
-        Прогресс: <span className={s.lessonProgressSuccess}>120 %</span>
+        Прогресс: <span className={s.lessonProgressSuccess}>30 %</span>
       </Typography>
       {children}
     </div>

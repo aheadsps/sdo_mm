@@ -74,7 +74,7 @@ export const LessonCard: React.FC<Props> = ({ cover }: Props) => {
                 <div className={s.container__param}>
                   <HourglassIcon />
                   <Typography variant="body_2" className={s.container__paramTxt}>
-                    {Math.floor(Math.random() * 200) + 1}
+                    80
                   </Typography>
                 </div>
                 <div className={s.container__param}>

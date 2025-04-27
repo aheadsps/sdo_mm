@@ -27,6 +27,7 @@ import { LessonTest } from './test/Tests'
 const LessonComponent = () => {
   const { isOpen: isOffcanvasOpen, close: closeOffcanvas, toggle: toggleOffCanvas } = useToggle()
   const [isMaterialsButtonClicked, setIsMaterialsButtonClicked] = useState(false)
+  const [isTest, setIsTest] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const { id, lessonId } = useParams()
   const dispatch = useAppDispatch()
@@ -45,7 +46,6 @@ const LessonComponent = () => {
 
   const lesson = useAppSelector(selectLessonById)
   const [selectedStep, setSelectedStep] = useState(lesson?.steps[0])
-  console.log(lesson)
 
   const txt = lesson?.name
   const btn1 = <AiIcon />
@@ -63,9 +63,13 @@ const LessonComponent = () => {
       setIsMaterialsButtonClicked(false)
     }
   }
+  const hendleVisibleTests = (arg: boolean) => {
+    setIsTest(arg)
+  }
   useEffect(() => {
     if (lesson) setSelectedStep(lesson?.steps[0])
   }, [lesson])
+
   return isLoading ? (
     <Loader />
   ) : (
@@ -91,8 +95,10 @@ const LessonComponent = () => {
               <div className={s.leftBox}>
                 <LessonPlan
                   steps={lesson.steps}
+                  tests={lesson.test_block}
                   setIsMaterialsButtonClicked={setIsMaterialsButtonClicked}
                   onClick={onItemClick}
+                  onTestClick={hendleVisibleTests}
                 />
               </div>
               {isMaterialsButtonClicked ? (
@@ -103,12 +109,17 @@ const LessonComponent = () => {
                   <CourseMaterials />
                 </div>
               ) : (
-                <LessonContent onClick={handleNavigate} selectedStep={selectedStep} />
+                <>
+                  {isTest ? (
+                    <LessonTest />
+                  ) : (
+                    <LessonContent onClick={handleNavigate} selectedStep={selectedStep} />
+                  )}
+                </>
               )}
             </div>
             <AiComponent isOpen={isOffcanvasOpen} close={closeOffcanvas} />
           </div>
-          <LessonTest />
         </>
       )}
     </>
