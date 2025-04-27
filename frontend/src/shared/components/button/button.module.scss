@@ -1,27 +1,11 @@
-/* .button {
-  padding: 13px 18px;
-  border-radius: 8px;
-  color: var(--color-text-primary);
-  text-align: center;
-  text-decoration: none;
-
-  &:hover {
-    cursor: pointer;
-    text-decoration: none;
-  }
-
-  &:disabled {
-    color: var(--color-text-disabled);
-  }
-} */
-
 .button {
   padding: 13px 18px;
   border-radius: 8px;
   color: var(--color-text-primary);
   text-align: center;
   text-decoration: none;
-  display: inline-block;
+  display: flex;
+  justify-content: center;
 
   &:hover,
   &:focus,
