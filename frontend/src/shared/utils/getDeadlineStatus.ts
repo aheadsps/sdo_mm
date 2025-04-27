@@ -1,5 +1,4 @@
 export const getDeadlineStatus = (days: number): string => {
-  console.log(days)
   if (days < 0) {
     return 'Просрочен'
   }

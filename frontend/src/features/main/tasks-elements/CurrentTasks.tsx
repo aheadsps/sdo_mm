@@ -8,7 +8,6 @@ import s from '../main.module.scss'
 
 export const CurrentTasks = () => {
   const currentEvents = useAppSelector(selectUserCovers)
-  console.log(currentEvents)
   const calcDaysLeft = (item: CoverCurrent) => {
     const daysLeft = item.event.end_date
     if (daysLeft === null || undefined) return undefined
@@ -22,8 +21,6 @@ export const CurrentTasks = () => {
 
       {currentEvents?.length ? (
         currentEvents.map((result) => {
-          const daysLeft = getDaysLeft(result.event.end_date)
-          console.log(daysLeft)
           return (
             <Task
               key={result.event.course.id}
