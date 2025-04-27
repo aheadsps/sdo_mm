@@ -13,13 +13,12 @@ export const AboutCourse = () => {
   const course = useAppSelector(selectCourse)
   const lessons = Number(course.lessons.length)
   const [isFav, setIsFav] = useState<boolean>(false)
-  const { id } = useParams()
+  // const { id } = useParams()
   const navigate = useNavigate()
-  const isScorm = course.is_scorm
+  // const isScorm = course.is_scorm
 
-  const hendleClick = async (id: number, lessonId: number, isScorm: boolean) => {
-    if (isScorm === true) return
-    else await navigate(`/learning/course/${id}/lesson/${lessonId}`)
+  const hendleClick = async (id: number, lessonId: number) => {
+    await navigate(`/learning/course/${id}/lesson/${lessonId}`)
   }
 
   // console.log(course)
@@ -55,7 +54,7 @@ export const AboutCourse = () => {
               <LessonItemCard
                 key={lesson.id}
                 lesson={lesson}
-                onClick={() => hendleClick(Number(id), Number(lesson.id), isScorm)}
+                onClick={() => hendleClick(Number(course.id), Number(lesson.id))}
               />
             )
           })}

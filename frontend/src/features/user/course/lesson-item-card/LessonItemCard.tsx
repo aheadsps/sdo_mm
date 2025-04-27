@@ -10,7 +10,7 @@ import s from './lesson-item-card.module.scss'
 type Props = {
   lesson: Lesson
   children?: ReactNode
-  onClick?: (arg1: string, arg2: string, arg3: boolean) => void
+  onClick?: (arg1: string, arg2: string) => void
 } & ComponentPropsWithoutRef<'div'>
 
 export const LessonItemCard = ({ children, lesson, onClick }: Props) => {

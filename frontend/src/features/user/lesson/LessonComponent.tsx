@@ -2,7 +2,15 @@ import { AiIcon } from '@assets/icons'
 import { StepView, useLazyGetLessonByIdQuery } from '@services/api'
 import { selectLessonById, setLessonById } from '@services/slices'
 import { useAppDispatch, useAppSelector } from '@services/store'
-import { AiComponent, Typography, Button, Title, Loader, BackToPage } from '@shared/components'
+import {
+  AiComponent,
+  Typography,
+  Button,
+  Title,
+  Loader,
+  BackToPage,
+  Scorm,
+} from '@shared/components'
 import { withLayout } from '@shared/HOC'
 import { useToggle } from '@shared/hooks/useToggle'
 import { handleError } from '@shared/utils'
@@ -62,7 +70,9 @@ const LessonComponent = () => {
     <Loader />
   ) : (
     <>
-      {lesson?.steps.length !== undefined && (
+      {lesson?.steps.length === 0 && <Scorm lesson={lesson} />}
+
+      {lesson?.steps.length !== undefined && lesson?.steps.length !== 0 && (
         <>
           <div className={s.container}>
             <BackToPage>Вернуться на общую страницу курса</BackToPage>
