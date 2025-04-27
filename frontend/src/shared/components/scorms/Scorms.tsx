@@ -16,27 +16,24 @@ type Props = {
 export const Scorm = ({ lesson }: Props) => {
   const { id } = useParams()
   const { data: course } = useGetCourseQuery(Number(id))
-  const { isOpen: isOffcanvasOpen, close: closeOffcanvas, toggle: toggleOffCanvas } = useToggle()
-  const txt = lesson.name
-  const btn1 = <AiIcon />
-  const btn2 = 'Обсуждение урока'
+  const { isOpen: isOffcanvasOpen, close: closeOffcanvas, open: openOffCanvas } = useToggle()
 
   return (
     <div className={s.scormBox}>
       <BackToPage>Вернуться на общую страницу курса</BackToPage>
       <Title
-        txt={txt}
-        btn1={btn1}
-        btn2={btn2}
-        fstBtn={toggleOffCanvas}
-        disabled={true}
+        txt={lesson.name}
+        btn1={<AiIcon />}
+        btn2="Обсуждение урока"
+        fstBtn={openOffCanvas}
         disabledAi={false}
-        isIconAi={false}
+        disabled={true}
+        isIconAi={true}
       />
       <Typography variant="header_3" children={lesson.name} />
       {course && <img className={s.scorms} src={course.image} />}
-      <AiComponent isOpen={isOffcanvasOpen} close={closeOffcanvas} />
       <LessonTest />
+      <AiComponent isOpen={isOffcanvasOpen} close={closeOffcanvas} />
     </div>
   )
 }
