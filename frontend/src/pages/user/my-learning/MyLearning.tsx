@@ -33,6 +33,8 @@ const MyLearningComp: React.FC = () => {
   const favoriteCovers = useAppSelector(selectFavoriteCovers)
   const completedCovers = useAppSelector(selectCompletedCovers)
 
+  console.log(subscriptionEvents)
+
   const displayCurrentCourses = () => {
     if (mode === 'Назначенные курсы') {
       return userCovers
@@ -63,8 +65,10 @@ const MyLearningComp: React.FC = () => {
         {mode === 'Все курсы' ? (
           <div className={s.container__content}>
             {subscriptionEvents?.length > 0 ? (
-              subscriptionEvents.map((event, index) => {
-                return <SubscriptionEventsCard event={event} key={index} />
+              subscriptionEvents?.map((event, index) => {
+                if (event) {
+                  return <SubscriptionEventsCard event={event} key={index} />
+                }
               })
             ) : (
               <Typography variant="body_1">В данном списке нет курсов</Typography>

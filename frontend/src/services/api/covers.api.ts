@@ -5,7 +5,7 @@ import { baseUrl, getToken } from './variables'
 
 export const coversApi = createApi({
   reducerPath: 'coversApi',
-  tagTypes: ['Profile', 'Covers'],
+  tagTypes: ['Profile', 'Covers', 'Covers'],
   baseQuery: fetchBaseQuery({ baseUrl }),
   endpoints: (build) => ({
     getCovers: build.query<CoversResponse, void>({

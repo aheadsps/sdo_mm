@@ -9,15 +9,60 @@ import {
 } from '@shared/components'
 import { withLayout } from '@shared/HOC'
 import { useToggle } from '@shared/hooks'
+import { ChangeEvent, useState } from 'react'
 import { NavLink } from 'react-router-dom'
 
 import { AssignmentGradeModal } from './AssignmentGradeModal'
 import { CommentContent } from './CommentContent'
 import s from './student-assignment.module.scss'
 
-export const StudentAssignment = () => {
+type CommentData = {
+  id: number
+  text: string
+  isInternal: boolean
+}
+
+const StudentAssignment = () => {
   const { isOpen: isOpenDropdown, toggle: toggleDropdown } = useToggle()
   const { isOpen: isOpenModal, open: openModal, close: closeModal } = useToggle()
+
+  const [showPlaceholder, setShowPlaceholder] = useState(true)
+  const [internalComment, setInternalComment] = useState('')
+  const [studentComment, setStudentComment] = useState('')
+  const [allComments, setAllComments] = useState<CommentData[]>([])
+
+  const onChangeInternalComment = (e: ChangeEvent<HTMLInputElement>) => {
+    const value = e.currentTarget.value
+    if (value === '' && !showPlaceholder) {
+      setShowPlaceholder(true)
+    } else if (value !== '' && showPlaceholder) {
+      setShowPlaceholder(false)
+    }
+
+    setInternalComment(value)
+  }
+
+  const onChangeStudentComment = (e: ChangeEvent<HTMLInputElement>) => {
+    setStudentComment(e.currentTarget.value)
+  }
+
+  const onAddNewComment = () => {
+    const text = studentComment || internalComment
+    if (text) {
+      const newComment: CommentData = {
+        id: Date.now(),
+        text,
+        isInternal: studentComment ? false : true,
+      }
+      setAllComments((prev) => [...prev, newComment])
+      if (studentComment) {
+        setStudentComment('')
+      } else {
+        setInternalComment('')
+        setShowPlaceholder(true)
+      }
+    }
+  }
 
   return (
     <div>
@@ -57,12 +102,32 @@ export const StudentAssignment = () => {
           </div>
           <div className={s.inputs}>
             <div className={s.inputBlock}>
-              <Input className={s.inputComment} placeholder="Отправить комментарий студенту" />
-              <SendIcon />
+              <Input
+                className={s.inputComment}
+                placeholder="Отправить комментарий студенту"
+                onChange={onChangeStudentComment}
+                value={studentComment}
+              />
+              <SendIcon onClick={onAddNewComment} />
             </div>
-            <div className={s.inputBlock}>
-              <Input className={s.inputComment} placeholder="Оставить внутренний комментарий" />
-              <SendIcon />
+            <div className={s.inputBlock} style={{ position: 'relative' }}>
+              <Input
+                className={s.inputComment}
+                placeholder=""
+                style={{ position: 'relative', zIndex: 2, backgroundColor: 'transparent' }}
+                onChange={onChangeInternalComment}
+                value={internalComment}
+              />
+
+              {showPlaceholder && (
+                <div className={s.showPlaceholder}>
+                  <span>Оставить</span>
+                  <span style={{ color: 'red' }}>внутренний</span>
+                  <span>комментарий</span>
+                </div>
+              )}
+
+              <SendIcon onClick={onAddNewComment} />
             </div>
           </div>
           <div>
@@ -73,19 +138,15 @@ export const StudentAssignment = () => {
               wrapperClassName={s.dropdownWrapper}
               className={s.dropdownContent}
             >
-              <>
-                <CommentContent isInternalComment>
-                  Конспект можно использовать для других потоков
-                </CommentContent>
-                <CommentContent>
-                  Конспект получился отличным — структурированным и информативным! Хорошо выделены
-                  ключевые правила использования электроинструментов. Однако визуализация требует
-                  доработки: • Не хватает чёткости в передаче основных принципов безопасности. •
-                  Можно добавить более наглядные схемы / иллюстрации с пояснениями. • Текст на
-                  изображениях, проверь, чтобы он был легко читаемым. Возвращаю работу на доработку.
-                  Попробуй доработать визуализацию и отправь заново! 😊
-                </CommentContent>
-              </>
+              {allComments.length ? (
+                allComments?.map((item) => (
+                  <CommentContent key={item.id} isInternalComment={item.isInternal}>
+                    {item.text}
+                  </CommentContent>
+                ))
+              ) : (
+                <Typography variant="body_1">Здесь пока нет комментариев</Typography>
+              )}
             </DropdownCard>
           </div>
         </div>

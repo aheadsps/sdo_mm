@@ -3,7 +3,7 @@ import { selectCourse } from '@services/slices'
 import { useAppSelector } from '@services/store'
 import { Button, EditableText, Select, Typography } from '@shared/components'
 import { DatePickerCustom } from '@shared/components/datePicker/DatePickerCustom'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { NavLink } from 'react-router-dom'
 
 import s from './aboutCourse.module.scss'
@@ -28,9 +28,17 @@ const teachers: Option[] = [
 
 export const AboutCourse = () => {
   const currentCourse = useAppSelector(selectCourse)
-  const [description, setDescription] = useState(currentCourse.description)
+  const [description, setDescription] = useState('')
   const [isEditMode, setIsEditMode] = useState(false)
-  const [date, setDate] = useState<Date | null>(new Date(currentCourse.create_date))
+  const [date, setDate] = useState<Date | null>(null)
+
+  useEffect(() => {
+    if (currentCourse) {
+      setDescription(currentCourse.description)
+      setDate(new Date(currentCourse.create_date))
+    }
+  }, [currentCourse])
+
   const toggleEditMode = () => setIsEditMode((prev) => !prev)
 
   return (

@@ -17,7 +17,7 @@ import s from './lessonComponent.module.scss'
 import { LessonTest } from './test/Tests'
 
 const LessonComponent = () => {
-  const { isOpen: isOffcanvasOpen, close: closeOffcanvas, toggle: toggleOffCanvas } = useToggle()
+  const { isOpen: isOffcanvasOpen, close: closeOffcanvas, open: openOffCanvas } = useToggle()
   const [isMaterialsButtonClicked, setIsMaterialsButtonClicked] = useState(false)
   const [isTest, setIsTest] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(true)
@@ -40,8 +40,6 @@ const LessonComponent = () => {
   const [selectedStep, setSelectedStep] = useState(lesson?.steps[0])
 
   const txt = lesson?.name
-  const btn1 = <AiIcon />
-  const btn2 = 'Обсуждение урока'
   const navigate = useNavigate()
 
   const handleNavigate = async () => {
@@ -76,12 +74,12 @@ const LessonComponent = () => {
             <BackToPage>Вернуться на общую страницу курса</BackToPage>
             <Title
               txt={txt}
-              btn1={btn1}
-              btn2={btn2}
-              fstBtn={toggleOffCanvas}
-              disabled={true}
+              btn1={<AiIcon />}
+              btn2="Обсуждение урока"
+              fstBtn={openOffCanvas}
               disabledAi={false}
-              isIconAi={false}
+              disabled={true}
+              isIconAi={true}
             />
             <div className={s.content}>
               <div className={s.leftBox}>

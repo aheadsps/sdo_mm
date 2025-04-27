@@ -4,17 +4,22 @@
   color: var(--color-text-primary);
   text-align: center;
   text-decoration: none;
+  display: flex;
+  justify-content: center;
 
-  &:hover {
+  &:hover,
+  &:focus,
+  &:visited {
+    text-decoration: none;
     cursor: pointer;
   }
 
   &:disabled {
     color: var(--color-text-disabled);
+    pointer-events: none;
   }
 }
 
-/* styles for disabled button/link */
 .buttonsSpan {
   display: flex;
   justify-content: center;
@@ -29,6 +34,7 @@
 
   &:hover {
     background-color: var(--color-bg-red700);
+    color: var(--color-text-button);
   }
 
   &:focus {
@@ -48,6 +54,7 @@
 
   &:hover {
     border-color: var(--color-bg-red700);
+    color: var(--color-text-primary);
   }
 
   &:focus {

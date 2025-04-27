@@ -82,11 +82,13 @@
   align-items: flex-end;
   padding: 10px;
   border-bottom: 1px solid var(--color-additional-border100);
+  font-size: var(--font-size-s);
+  font-family: var(--font-family-secondary);
 
-  textarea {
+  /* textarea {
     border: none;
     resize: vertical;
-  }
+  } */
 
   svg {
     cursor: pointer;
@@ -97,8 +99,8 @@
 .inputComment {
   border: none;
   padding: 0;
-  font-size: var(--font-size-s);
-  font-family: var(--font-family-secondary);
+  /* font-size: var(--font-size-s);
+  font-family: var(--font-family-secondary); */
 }
 
 .dropdownWrapper {
@@ -166,4 +168,12 @@
   color: var(--color-text-secondary);
 }
 
-
+.showPlaceholder {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--color-text-secondary);
+  z-index: 1;
+  display: flex;
+  gap: 5px;
+}

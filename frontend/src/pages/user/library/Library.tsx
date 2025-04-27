@@ -1,11 +1,12 @@
 import { AiIcon, ArrowUpDownIcon, ArticleIcon, FilterIcon } from '@assets/icons'
-import { Search, TabsButtons, Typography } from '@shared/components'
+import { AiComponent, Search, TabsButtons, Typography } from '@shared/components'
 import { withLayout } from '@shared/HOC'
+import { useToggle } from '@shared/hooks'
 import clsx from 'clsx'
 import { useState } from 'react'
 
 import s from './library.module.scss'
-import { isNew, categoryColors, formatDateString } from './libraryUtils'
+import { isNew, categoryColors, displayCurrentArticles } from './libraryUtils'
 import { articles } from './mockData'
 
 const buttons: string[] = [
@@ -19,18 +20,8 @@ const buttons: string[] = [
 
 const LibraryComp: React.FC = () => {
   const [mode, setMode] = useState<string>('Все')
-
-  const displayCurrentArticles = () => {
-    if (mode === 'Все') {
-      return [...articles].sort(
-        (a, b) => formatDateString(b.date).getTime() - formatDateString(a.date).getTime()
-      )
-    }
-    if (mode === 'Обновления') {
-      return articles.filter((article) => isNew(article.date))
-    }
-    return articles.filter((article) => article.category === mode)
-  }
+  const displayArticles = displayCurrentArticles(mode, articles)
+  const { isOpen, open, close } = useToggle()
 
   return (
     <>
@@ -44,14 +35,14 @@ const LibraryComp: React.FC = () => {
         <div className={s.library__toolbar}>
           <Search />
           <div className={s.library__icons}>
-            <AiIcon width="24px" height="24px" className={s.library__icon} />
+            <AiIcon width="24px" height="24px" className={s.library__icon} onClick={open} />
             <FilterIcon width="15px" height="16px" className={s.library__icon} />
             <ArrowUpDownIcon width="16px" height="16px" className={s.library__icon} />
           </div>
         </div>
         <div className={s.library__articles}>
-          {displayCurrentArticles()?.length > 0 ? (
-            displayCurrentArticles().map((article) => (
+          {displayArticles?.length > 0 ? (
+            displayArticles.map((article) => (
               <div key={article.id}>
                 <div className={s.library__article}>
                   <div className={s.library__articleLeft}>
@@ -84,6 +75,7 @@ const LibraryComp: React.FC = () => {
           )}
         </div>
       </div>
+      <AiComponent close={close} isOpen={isOpen} />
     </>
   )
 }
