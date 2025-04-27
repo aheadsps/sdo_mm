@@ -4,8 +4,8 @@ import { ReactNode } from 'react'
 import s from './lesson-plan.item.module.scss'
 
 type Props = {
-  children: ReactNode
-  onClick: () => void
+  children?: ReactNode
+  onClick?: () => void
   checked: boolean
 }
 export const LessonPlanItem = ({ children, onClick, checked }: Props) => {
