@@ -1,9 +1,8 @@
 import { AiIcon } from '@assets/icons'
 import { LessonTest } from '@features/user/lesson/test/Tests'
-import { Course, Lesson } from '@services/api'
-import { selectCourse } from '@services/slices'
-import { useAppSelector } from '@services/store'
+import { Lesson, useGetCourseQuery } from '@services/api'
 import { useToggle } from '@shared/hooks'
+import { useParams } from 'react-router-dom'
 
 import { AiComponent } from '../ai'
 import { BackToPage } from '../back-to-page'
@@ -15,7 +14,8 @@ type Props = {
   lesson: Lesson
 }
 export const Scorm = ({ lesson }: Props) => {
-  const course: Course = useAppSelector(selectCourse)
+  const { id } = useParams()
+  const { data: course } = useGetCourseQuery(Number(id))
   const { isOpen: isOffcanvasOpen, close: closeOffcanvas, toggle: toggleOffCanvas } = useToggle()
   const txt = lesson.name
   const btn1 = <AiIcon />
@@ -34,7 +34,7 @@ export const Scorm = ({ lesson }: Props) => {
         isIconAi={false}
       />
       <Typography variant="header_3" children={lesson.name} />
-      <img className={s.scorms} src={course.image} />
+      {course && <img className={s.scorms} src={course.image} />}
       <AiComponent isOpen={isOffcanvasOpen} close={closeOffcanvas} />
       <LessonTest />
     </div>

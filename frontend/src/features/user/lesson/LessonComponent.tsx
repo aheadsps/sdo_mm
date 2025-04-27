@@ -62,6 +62,8 @@ const LessonComponent = () => {
     if (lesson) setSelectedStep(lesson?.steps[0])
   }, [lesson])
 
+  console.log(lesson)
+
   return isLoading ? (
     <Loader />
   ) : (
