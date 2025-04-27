@@ -12,6 +12,7 @@
   left: 0;
   z-index: 1000;
   height: 93px;
+  text-decoration: none;
 
   &__content {
     display: flex;
@@ -22,21 +23,12 @@
     margin: 0 auto;
   }
 
-  &__logoContainer {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    gap: 10px;
-    cursor: pointer;
-    margin-right: 140px;
-  }
-
   &__logoText {
     color: var(--color-accent-red500);
     font-weight: 900;
     line-height: 1.2;
     font-size: 14px;
+    text-decoration: none;
   }
 
   &__titleContainer {
@@ -80,6 +72,20 @@
     &__titleText {
       font-size: 16px;
     }
+  }
+}
+
+.logoContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  margin-right: 140px;
+
+  &:hover {
+    text-decoration: none;
   }
 }
 

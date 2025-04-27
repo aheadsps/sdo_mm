@@ -4,14 +4,27 @@
   color: var(--color-text-primary);
   text-align: center;
   text-decoration: none;
-
-  &:hover {
+  display: flex;
+  justify-content: center;
+  
+  &:hover,
+  &:focus,
+  &:visited {
+    text-decoration: none;
     cursor: pointer;
   }
 
   &:disabled {
     color: var(--color-text-disabled);
+    pointer-events: none;
   }
+}
+
+.buttonsSpan {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
 }
 
 .primary {
@@ -21,6 +34,7 @@
 
   &:hover {
     background-color: var(--color-bg-red700);
+    color: var(--color-text-button);
   }
 
   &:focus {
@@ -40,6 +54,7 @@
 
   &:hover {
     border-color: var(--color-bg-red700);
+    color: var(--color-text-primary);
   }
 
   &:focus {
@@ -49,6 +64,9 @@
   &:disabled {
     border-color: var(--color-bg-gray200);
   }
+  .borderNone {
+    border: none;
+  }
 }
 
 .text {
@@ -57,4 +75,18 @@
   &:hover {
     background: var(--color-bg-1);
   }
+}
+
+.disabledPrimary,
+.disabledPrimary:hover,
+.disabledPrimary:visited {
+  background-color: var(--color-bg-gray200);
+  color: var(--color-text-disabled);
+}
+
+.disabledSecondary,
+.disabledSecondary:hover,
+.disabledSecondary:visited {
+  border-color: var(--color-bg-gray200);
+  color: var(--color-text-disabled);
 }

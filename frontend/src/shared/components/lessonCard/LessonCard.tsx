@@ -12,8 +12,6 @@ import { Typography } from '../typography'
 
 import s from './lessonCard.module.scss'
 
-// import noDataImg from '@/public/img/noDataImg.png'
-
 interface Props {
   cover: CoverCurrent
 }
@@ -23,8 +21,7 @@ export const LessonCard: React.FC<Props> = ({ cover }: Props) => {
   const course = cover.event.course
   const daysLeft = course.beginner === true ? undefined : getDaysLeft(cover.event.end_date)
   const deadlineColor = getBackgroundColor(daysLeft)
-  // const dispatch = useAppDispatch()
-  // const hendleClick = () => {}
+
   return (
     <div className={s.container}>
       <div className={s.container__top}>
@@ -74,7 +71,7 @@ export const LessonCard: React.FC<Props> = ({ cover }: Props) => {
                 <div className={s.container__param}>
                   <HourglassIcon />
                   <Typography variant="body_2" className={s.container__paramTxt}>
-                    {Math.floor(Math.random() * 200) + 1}
+                    80
                   </Typography>
                 </div>
                 <div className={s.container__param}>

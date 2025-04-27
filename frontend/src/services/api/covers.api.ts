@@ -1,11 +1,11 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
-import { CoversResponse, CurrentCoversResponse } from './types.api'
+import { CoversResponse, CurrentCoversResponse, favToggleResponse } from './types.api'
 import { baseUrl, getToken } from './variables'
 
 export const coversApi = createApi({
   reducerPath: 'coversApi',
-  tagTypes: ['Profile', 'Covers'],
+  tagTypes: ['Profile', 'Covers', 'Covers'],
   baseQuery: fetchBaseQuery({ baseUrl }),
   endpoints: (build) => ({
     getCovers: build.query<CoversResponse, void>({
@@ -29,6 +29,16 @@ export const coversApi = createApi({
       }),
       providesTags: () => ['Covers'],
     }),
+    postFavCover: build.mutation<favToggleResponse, number>({
+      query: (id) => ({
+        url: `/covers/${id}/toggle-favorite`,
+        method: 'Post',
+        headers: {
+          Authorization: `Token ${getToken()}`,
+        },
+      }),
+      invalidatesTags: () => ['Covers'],
+    }),
   }),
 })
 
@@ -37,4 +47,5 @@ export const {
   useLazyGetCoversQuery,
   useGetCurrentCoversQuery,
   useLazyGetCurrentCoversQuery,
+  usePostFavCoverMutation,
 } = coversApi
