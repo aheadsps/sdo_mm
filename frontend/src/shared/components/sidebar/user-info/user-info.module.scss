@@ -22,5 +22,7 @@
 
   &:hover {
     transform: var(--transform-effect);
+    text-decoration: none;
+    color: var(--color-additional-red800);
   }
 }

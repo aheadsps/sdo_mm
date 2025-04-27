@@ -9,28 +9,57 @@ import s from './title.module.scss'
 interface Props {
   txt: string
   btn0?: string | ReactNode
-  btn1: string
+  btn1: string | ReactNode
   btn2: string
   nullBtn?: () => void
   fstBtn?: () => void
   scndBtn?: () => void
   children?: ReactNode
   className?: string
+  disabled?: boolean
+  disabledAi?: boolean
+  isIconAi?: boolean
+  border?: boolean
 }
-export const Title = ({ txt, btn0, btn1, btn2, nullBtn, fstBtn, scndBtn, className }: Props) => {
+export const Title = ({
+  txt,
+  btn0,
+  btn1,
+  btn2,
+  nullBtn,
+  fstBtn,
+  scndBtn,
+  className,
+  disabled,
+  disabledAi,
+  isIconAi,
+  border = false,
+}: Props) => {
   return (
     <div className={s.titleBlock}>
       <Typography variant="header_4" className={s.title}>
         {txt}
       </Typography>
       <div className={s.buttonsBlock}>
-        <Button variant="secondary" className={clsx(s.hidden, className)} onClick={nullBtn}>
+        <Button
+          variant="secondary"
+          className={clsx(s.hidden, className)}
+          onClick={nullBtn}
+          disabled={disabled}
+        >
           {btn0}
         </Button>
-        <Button variant="secondary" className={s.button} onClick={fstBtn}>
+        <Button
+          variant="secondary"
+          className={s.button}
+          onClick={fstBtn}
+          disabled={isIconAi ? disabledAi : disabled}
+          isIcon={isIconAi}
+          border={border}
+        >
           {btn1}
         </Button>
-        <Button variant="primary" className={s.button} onClick={scndBtn}>
+        <Button variant="primary" className={s.button} onClick={scndBtn} disabled={disabled} isIcon>
           {btn2}
         </Button>
       </div>

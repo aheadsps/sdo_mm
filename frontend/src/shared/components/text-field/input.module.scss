@@ -5,4 +5,8 @@
   border-bottom: 2px solid var(--color-bg-red700);
   border-radius: 2px;
   padding: 9px 12px;
+
+  &::placeholder {
+    color: var(--color-text-secondary);
+  }
 }

@@ -25,8 +25,13 @@ export type LessonType = {
   version: string | null //???
 } & {
   expanded: boolean
-} //Responses типизация ответов с сервера
+}
 
+//Responses типизация ответов с сервера
+export type favToggleResponse = {
+  cover_id: number
+  favorite: boolean
+}
 export type ProfileResponse = {
   id: number
   email: string
@@ -50,7 +55,6 @@ export type CurrentCoversResponse = {
   results: CoverCurrent[]
 }
 // ?? Приблизительный ответ на GET /events/${event_id}/users
-// ?? По документации это строка, а по логике должен быть массив юзеров
 export type usersEventsResponse = {
   count: number
   next: null

@@ -1,26 +1,22 @@
 import { SendIcon } from '@assets/icons'
 import { Button } from '@shared/components/button'
 import { InputWithIcon } from '@shared/components/input-with-icon'
-// import { useToggle } from '@shared/hooks'
 
 import s from './addComment.module.scss'
 import { Comment } from './comment'
 import { comments } from './data'
 
 export const AddComment = () => {
-  //   const { isOpen: isOpeninput, toggle: toggleInput } = useToggle()
   return (
     <div className={s.box}>
       <InputWithIcon
         icon={<SendIcon />}
-        //   onClick={toggleInput}
         className={s.textareaBox}
         placeholder="Оставить комментарий"
-        //   isOpen={isOpeninput} variant?: 'primary' | 'secondary'
       />
       <div className={s.btnBox}>
-        <Button variant="secondary" children="Добавить задачу" className={s.btn} />
-        <Button variant="primary" children="Написать студенту" className={s.btn} />
+        <Button variant="secondary" children="Добавить задачу" className={s.btn} disabled isIcon />
+        <Button variant="primary" children="Написать студенту" className={s.btn} disabled isIcon />
       </div>
       <div className={s.content}>
         <div className={s.messageBox}>

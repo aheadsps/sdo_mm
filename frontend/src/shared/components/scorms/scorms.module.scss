@@ -1,10 +1,11 @@
 .scormBox {
+   position: relative;
    width: 100%;
    height: fit-content;
    display: flex;
    flex-direction: column;
    gap: 20px;
-
+   z-index: 0;
 }
 .scorm {
    width: 100%;
