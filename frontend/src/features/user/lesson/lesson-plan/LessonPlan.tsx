@@ -1,4 +1,4 @@
-import { StepView, Test } from '@services/api'
+import { StepView } from '@services/api'
 import { DropdownCard, Button } from '@shared/components'
 import { useToggle } from '@shared/hooks'
 import { useState } from 'react'
@@ -8,7 +8,7 @@ import s from './lesson-plan.module.scss'
 
 type Props = {
   steps: StepView[]
-  tests: Test
+  tests: number
   setIsMaterialsButtonClicked: (isMaterialsButtonClicked: boolean) => void
   onTestClick: (arg: boolean) => void
   onClick: (item: StepView) => void
@@ -20,7 +20,6 @@ export const LessonPlan = ({
   onClick,
   onTestClick,
 }: Props) => {
-  console.log(tests)
   const [completedSteps, setCompletedSteps] = useState<number[]>([steps[0].id])
   const { isOpen, toggle } = useToggle()
   const onItemClick = (item: StepView) => {
@@ -54,24 +53,13 @@ export const LessonPlan = ({
           </LessonPlanItem>
         ))}
         <LessonPlanItem
-          key={tests.id}
-          onClick={() => hendleTestClick(tests.id)}
-          checked={completedSteps.includes(tests.id)}
+          key={tests}
+          onClick={() => hendleTestClick(tests)}
+          checked={completedSteps.includes(tests)}
         >
           Тестирование
         </LessonPlanItem>
       </ul>
-      {/*<ul>
-         {tests.questions?.map((item) => (
-          <LessonPlanItem
-            key={Math.floor(Math.random() * 1000) + 1}
-            onClick={() => onItemClick(item)}
-            checked={completedSteps.includes(item.id)}
-          >
-            Тест
-          </LessonPlanItem>
-        ))}
-      </ul> */}
       <Button variant="secondary" className={s.btn} onClick={onMaterialsButtonClicked}>
         Материалы урока
       </Button>
