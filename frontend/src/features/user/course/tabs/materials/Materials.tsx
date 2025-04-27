@@ -7,7 +7,6 @@ import { MaterialsDropdown } from './MaterialsDropdown'
 export const Materials = () => {
   const course = useAppSelector(selectCourse)
   const isScorm = course.is_scorm
-  console.log(course.materials)
   return (
     <div className={s.courseMaterials}>
       {isScorm ? (
