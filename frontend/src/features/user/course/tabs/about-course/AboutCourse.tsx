@@ -18,7 +18,6 @@ export const AboutCourse = () => {
   const hendleClick = async (id: number, lessonId: number) => {
     await navigate(`/learning/course/${id}/lesson/${lessonId}`)
   }
-  // console.log(course)
   return (
     <div className={s.container}>
       <Card className={s.progress}>

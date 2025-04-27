@@ -55,7 +55,6 @@ export type CurrentCoversResponse = {
   results: CoverCurrent[]
 }
 // ?? Приблизительный ответ на GET /events/${event_id}/users
-// ?? По документации это строка, а по логике должен быть массив юзеров
 export type usersEventsResponse = {
   count: number
   next: null

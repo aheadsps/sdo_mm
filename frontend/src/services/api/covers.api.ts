@@ -31,7 +31,7 @@ export const coversApi = createApi({
     }),
     postFavCover: build.mutation<favToggleResponse, number>({
       query: (id) => ({
-        url: `/covers/${id}//toggle-favorite`,
+        url: `/covers/${id}/toggle-favorite`,
         method: 'Post',
         headers: {
           Authorization: `Token ${getToken()}`,

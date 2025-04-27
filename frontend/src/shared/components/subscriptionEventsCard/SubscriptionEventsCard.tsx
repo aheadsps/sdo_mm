@@ -15,8 +15,6 @@ interface Props {
 export const SubscriptionEventsCard: React.FC<Props> = ({ event }: Props) => {
   const course = event.course
   const [isFav, setIsFav] = useState<boolean>(false)
-  // const dispatch = useAppDispatch()
-  // const hendleClick = () => {}  onClick={() => hendleClick()}
   return (
     <div className={s.container}>
       <div className={s.container__top}>
@@ -48,13 +46,7 @@ export const SubscriptionEventsCard: React.FC<Props> = ({ event }: Props) => {
             </Typography>
           </div>
         </div>
-        <Button
-          variant="secondary"
-          className={s.container__btn}
-          children="Записаться на курс"
-          // as={NavLink}
-          // to={`${routes.course}/${course.id}`}
-        />
+        <Button variant="secondary" className={s.container__btn} children="Записаться на курс" />
       </div>
     </div>
   )
