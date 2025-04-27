@@ -12,8 +12,6 @@ import { Typography } from '../typography'
 
 import s from './lessonCard.module.scss'
 
-// import noDataImg from '@/public/img/noDataImg.png'
-
 interface Props {
   cover: CoverCurrent
 }

@@ -25,8 +25,13 @@ export type LessonType = {
   version: string | null //???
 } & {
   expanded: boolean
-} //Responses типизация ответов с сервера
+}
 
+//Responses типизация ответов с сервера
+export type favToggleResponse = {
+  cover_id: number
+  favorite: boolean
+}
 export type ProfileResponse = {
   id: number
   email: string
